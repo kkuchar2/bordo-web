@@ -1,9 +1,9 @@
-import Hello from "layouts/Hello.jsx";
-import Hi from "layouts/Hi.jsx";
+import RegistrationPage from "layouts/RegistrationPage.jsx";
+import RegistrationConfirmationPage from "layouts/RegistrationConfirmationPage.jsx";
 
 const indexRoutes = [
-    {path: "/hello", component: Hello},
-    {path: "/hi", component: Hi},
+    {path: "/register", component: RegistrationPage},
+    {path: "/api/activate/:uid/:token", component: RegistrationConfirmationPage},
 ];
 
 export default indexRoutes;

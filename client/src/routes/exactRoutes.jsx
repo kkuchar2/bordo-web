@@ -1,7 +1,7 @@
-import App from "layouts/App.jsx";
+import HomePage from "layouts/HomePage.jsx";
 
 const exactIndexRoutes = [
-    {path: "/", component: App},
+    {path: "/", component: HomePage},
 ];
 
 export default exactIndexRoutes;
