@@ -114,10 +114,10 @@ class LoginForm extends Component {
 
                         </Grid>
 
-                        <Grid className={"rememberForgot"} style={{padding: 0}} item>
+                        <Grid className={"rememberForgot"} style={{padding: 20, margin: 0}} item>
                             <CheckBox text={"Remember me"} />
                             <div className={"forget"}>
-                                <a className={"forgotPasswordLink"} href={"/"}>Forgot password?</a>
+                                <Link to="/" className={"forgotPasswordLink"}>Forgot password?</Link>
                             </div>
                         </Grid>
 
