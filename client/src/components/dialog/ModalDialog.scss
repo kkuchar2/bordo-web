@@ -1,0 +1,108 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans');
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+
+.ModalDialog {
+
+  .background {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.63);
+  }
+
+  .dialog {
+
+
+    @media (max-width: 600px) {
+      width: 400px;
+      height: 400px;
+      position: absolute;
+      left: calc(50% - 200px);
+      top: calc(50% - 200px);
+    }
+
+    @media (min-width: 600px) {
+      width: 700px;
+      height: 500px;
+      position: absolute;
+      left: calc(50% - 350px);
+      top: calc(50% - 250px);
+    }
+
+    @media (min-width: 960px) {
+      width: 800px;
+      height: 500px;
+      position: absolute;
+      left: calc(50% - 400px);
+      top: calc(50% - 250px);
+    }
+
+    .closeButton {
+      background-color: transparent;
+      color: rgba(0, 0, 0, 0.47);
+      position: absolute;
+      margin: 0;
+      right: 10px;
+      top: 10px;
+      width: 40px;
+      height: 40px;
+
+      &:active {
+        transform: scale(.9);
+      }
+
+      &:hover {
+        transform: scale(1.2);
+      }
+
+      .Image {
+        margin-left: 12px;
+        margin-top: 9px;
+        width: 15px;
+        height: 15px;
+      }
+    }
+
+    .mailIcon {
+      width: auto;
+      height: auto;
+
+      .Image {
+
+        position: absolute;
+        left: calc(50% - (512px * 0.4) / 2);
+        top: calc(30% - (384px * 0.4) / 2);
+        width: calc(512px * 0.4);
+        height: calc(401px * 0.4);
+      }
+    }
+
+    .dialog-content-text {
+      text-align: center;
+      margin-left: 150px;
+      margin-right: 150px;
+      font-family: "Roboto", sans-serif;
+
+      .confirm-title {
+        font-size: 2em;
+        margin-top: 250px;
+        color: #525252;
+      }
+
+      .confirm-message {
+        margin-top: 30px;
+        color: #7a7a7a;
+      }
+    }
+
+    background-color: white;
+
+    border-radius: 10px;
+    box-shadow: 0 8px 20px 0 rgba(0, 0, 0, .15);
+
+    top: 0;
+    left: 0;
+  }
+}

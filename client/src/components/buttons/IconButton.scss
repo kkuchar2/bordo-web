@@ -1,0 +1,44 @@
+.IconButton {
+  background: black;
+  width: 80%;
+  height: 50px;
+  line-height: 50px;
+  border: none;
+  color: rgb(255, 255, 255);
+  font-size: 19px;
+  margin: 15px 15px 0;
+  padding: 0;
+  font-family: "Roboto", sans-serif;
+  display: inline-block;
+
+  &:active {
+    background-color: #c2ceff;
+    color: white;
+    cursor: pointer;
+  }
+
+  &:hover {
+    background-color: #ec1900;
+    color: white;
+    cursor: pointer;
+  }
+
+
+  .group {
+
+    display: flex;
+    justify-content: center;
+
+    .buttonText {
+      flex-grow: 0;
+      width: 100%;
+    }
+
+    .Image {
+      margin-left: 30px;
+      margin-bottom: 8px;
+      width: 30px;
+      height: 30px;
+    }
+  }
+}

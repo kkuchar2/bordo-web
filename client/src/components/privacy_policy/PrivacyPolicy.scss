@@ -1,0 +1,20 @@
+.policy {
+    text-align: center;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 15px;
+    color: #3c3c3c;
+    margin: 20px 10px 10px;
+
+    a {
+      margin-left: 5px;
+      line-height: 25px;
+      justify-content: center;
+      text-decoration: none;
+      font-family: 'Open Sans', sans-serif;
+      color: #196BE7;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }

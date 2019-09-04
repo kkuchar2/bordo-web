@@ -1,0 +1,38 @@
+.SubmitButton {
+  background: black;
+  width: 80%;
+  height: 50px;
+  border: none;
+  color: rgb(255, 255, 255);
+  font-size: 19px;
+  margin: 15px;
+  font-family: "Roboto", sans-serif;
+  padding: 0;
+  position: relative;
+
+
+  &:active {
+    background-color: #c2ceff;
+    color: white;
+    cursor: pointer;
+  }
+
+  &:hover {
+    background-color: #ec1900;
+    color: white;
+    cursor: pointer;
+  }
+}
+
+.hidden {
+
+  opacity: 0;
+  background-color: transparent;
+  transition: all 0.2s ease-in-out;
+}
+.visible {
+  background-color: red;
+  transform: scale(1);
+  opacity: 1;
+  transition: all 0.3s ease-out;
+}

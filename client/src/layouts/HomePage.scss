@@ -1,0 +1,24 @@
+@import "../components/common/responsive";
+
+
+.loginPage {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  overflow: auto;
+
+  background-image: url("../images/background.png");
+  background-size: cover;
+}
+
+.containerMain {
+
+
+  height: 100%;
+
+  .gridMainLogin {
+    @include responsive_width(100%, 370px, 370px, 370px, 370px);
+  }
+}
