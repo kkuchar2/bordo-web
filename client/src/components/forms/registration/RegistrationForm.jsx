@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { withRouter} from 'react-router-dom'
+import {Link, withRouter} from 'react-router-dom'
 
 import Grid from "@material-ui/core/Grid";
 
@@ -156,7 +156,7 @@ class RegistrationForm extends Component {
                         <Grid className={"alreadymemeber"} style={{padding: 0}} item>
                             <div className={"question"}>Already a member?</div>
                             <div className={"signInReturn"}>
-                                <a href={"/"}>Sign in</a>
+                                <Link to='/'>Sign in</Link>
                             </div>
                         </Grid>
 

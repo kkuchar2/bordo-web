@@ -17,6 +17,7 @@ import CheckBox from "components/checkbox/CheckBox.jsx";
 import Cookies from 'universal-cookie';
 
 import "./LoginForm.scss"
+import {Link} from "react-router-dom";
 
 const cookies = new Cookies();
 
@@ -132,7 +133,7 @@ class LoginForm extends Component {
 
 
                         <div className={"createAccount"}>
-                            <a className={"createAccountLink"} href={"/register"}>Register</a>
+                            <Link to='/register' className={"createAccountLink"}>Register</Link>
                         </div>
 
 
