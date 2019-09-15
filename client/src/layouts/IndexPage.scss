@@ -12,7 +12,7 @@
 * * * * * * * * * { background-color: rgba(0,0,255,.2); }
 */
 
-.homePage {
+.indexPage {
   position: fixed;
   top: 0;
   left: 0;
@@ -20,4 +20,14 @@
   right: 0;
   overflow: auto;
   background: #0088FF;
+}
+
+.containerMain {
+
+
+  height: 100%;
+
+  .gridMainLogin {
+    @include responsive_width(100%, 370px, 350px, 350px, 350px);
+  }
 }

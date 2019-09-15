@@ -1,0 +1,10 @@
+Django
+mysqlclient
+django-mysql
+django-cors-headers
+djangorestframework
+markdown
+django-filter
+django-sendgrid-v5
+django-rest-auth
+django-allauth

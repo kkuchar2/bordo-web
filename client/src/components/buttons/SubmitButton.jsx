@@ -8,10 +8,7 @@ class SubmitButton extends Component {
     render() {
         return (
             <button
-                className={[
-                    "SubmitButton",
-                    this.props.className,
-                    this.props.processing ? 'hidden':'visible'].join(" ")}
+                className={["SubmitButton", this.props.className].join(" ")}
                 type={"submit"}
                 onClick={this.props.onClick}>
                 <div className={"content"}>
