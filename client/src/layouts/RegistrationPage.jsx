@@ -7,6 +7,9 @@ import ModalDialog from "components/dialog/ModalDialog.jsx";
 import RegistrationForm from "components/forms/registration/RegistrationForm.jsx";
 
 import "./RegistrationPage.scss"
+import {userActions} from "../redux/actions";
+import {connect} from "react-redux";
+import {withRouter} from "react-router-dom";
 
 class RegistrationPage extends Component {
 
@@ -38,6 +41,12 @@ class RegistrationPage extends Component {
         }
     }
 
+    renderContent() {
+        if (this.props.registrationComplete) {
+
+        }
+    }
+
     render() {
         return (
             <div className={"registrationPage"}>
@@ -53,4 +62,13 @@ class RegistrationPage extends Component {
     }
 }
 
-export default RegistrationPage;
+const mapStateToProps = state => {
+    const {registrationComplete} = state.authentication;
+    return {registrationComplete};
+};
+
+const mapDispatchToProps = {
+
+};
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(RegistrationPage));

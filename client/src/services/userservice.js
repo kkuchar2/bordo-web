@@ -26,28 +26,38 @@ function createErrorInfo(status, data) {
 function login(username, password) {
     const requestOptions = {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({username, password})
     };
 
     return fetch(`${config.apiUrl}/login/`, requestOptions)
         .then(handleResponse)
         .then(response => {
-            console.log("Setting token in cookie:");
             console.log(response["key"]);
-            cookies.set('access_token', response["key"],
-                {
-                    path: '',
-                    secure: true,
-                    httpOnly: true
-                });
+            cookies.set('access_token', response["key"], { path: '/',  secure: true,  httpOnly: true });
             return response;
         })
         .catch((data) => {
             if (data instanceof TypeError) {
                 return Promise.reject(createErrorInfo(-1, "Could not connect to: " + `${config.apiUrl}/login/`));
+            }
+
+            return Promise.reject(data);
+        });
+}
+
+function register(email, username, password1, password2) {
+    const requestOptions = {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({email, username, password1, password2})
+    };
+
+    return fetch(`${config.apiUrl}/register/`, requestOptions)
+        .then(handleResponse)
+        .catch((data) => {
+            if (data instanceof TypeError) {
+                return Promise.reject(createErrorInfo(-1, "Could not connect to: " + `${config.apiUrl}/register/`));
             }
 
             return Promise.reject(data);
@@ -75,16 +85,6 @@ function getById(id) {
     };
 
     return fetch(`${config.apiUrl}/users/${id}`, requestOptions).then(handleResponse);
-}
-
-function register(user) {
-    const requestOptions = {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(user)
-    };
-
-    return fetch(`${config.apiUrl}/users/register`, requestOptions).then(handleResponse);
 }
 
 function update(user) {

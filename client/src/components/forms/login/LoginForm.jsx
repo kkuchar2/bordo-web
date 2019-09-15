@@ -8,8 +8,6 @@ import SubmitButton from "components/buttons/SubmitButton.jsx";
 import FacebookButton from "components/buttons/social/FacebookButton.jsx";
 import GoogleButton from "components/buttons/social/GoogleButton.jsx";
 
-import Loader from "components/loaders/Loader.jsx";
-
 import {connect} from "react-redux";
 
 import {Link, withRouter} from "react-router-dom";
@@ -119,7 +117,7 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = {
-    login: userActions.login,
+    login: userActions.login
 };
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(LoginForm));

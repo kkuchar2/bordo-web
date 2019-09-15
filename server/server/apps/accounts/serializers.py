@@ -108,8 +108,6 @@ class LoginSerializer(serializers.Serializer):
 
         return user
 
-
-
     def update(self, instance, validated_data):
         pass
 

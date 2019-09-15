@@ -9,6 +9,10 @@ import SubmitButton from "components/buttons/SubmitButton.jsx";
 import PrivacyPolicy from "components/privacy_policy/PrivacyPolicy.jsx";
 import Loader from "components/loaders/Loader.jsx";
 
+
+import {connect} from "react-redux";
+import {userActions} from "../../../redux/actions";
+
 import "./RegistrationForm.scss"
 
 class RegistrationForm extends Component {
@@ -18,9 +22,9 @@ class RegistrationForm extends Component {
 
         this.state = {
             email: '',
+            username: '',
             password1: '',
-            password2: '',
-            processing: false
+            password2: ''
         };
 
         this.onEmailChange = this.onEmailChange.bind(this);
@@ -31,24 +35,29 @@ class RegistrationForm extends Component {
     }
 
     onEmailChange(event) {
-        this.setState({emailError: "", email: event.target.value});
+        this.setState({ email: event.target.value});
     }
 
     onUsernameChange(event) {
-        this.setState({usernameError: "", username: event.target.value})
+        this.setState({ username: event.target.value})
     }
 
     onPassword1Change(event) {
-        this.setState({password1Error: "", password1: event.target.value});
+        this.setState({ password1: event.target.value});
     }
 
     onPassword2Change(event) {
-        this.setState({password2Error: "", password2: event.target.value});
+        this.setState({ password2: event.target.value});
     }
 
     onSubmitForm(event) {
         event.preventDefault();
-        // TODO: register
+        this.props.register(
+            this.state.email,
+            this.state.username,
+            this.state.password1,
+            this.state.password2
+        );
     }
 
     render() {
@@ -67,7 +76,7 @@ class RegistrationForm extends Component {
                                     name={"email"}
                                     placeholder={"E-mail"}
                                     onChange={this.onEmailChange}
-                                    errorText={this.state.emailError}>
+                                    errorText={""}>
                                 </TextInputField>
 
                             </Grid>
@@ -79,7 +88,7 @@ class RegistrationForm extends Component {
                                     name={"username"}
                                     placeholder={"Username"}
                                     onChange={this.onUsernameChange}
-                                    errorText={this.state.usernameError}>
+                                    errorText={""}>
                                 </TextInputField>
 
                             </Grid>
@@ -91,7 +100,7 @@ class RegistrationForm extends Component {
                                     id={"password1"}
                                     name={"password1"}
                                     placeholder={"Password"}
-                                    errorText={this.state.password1Error}
+                                    errorText={""}
                                     onChange={this.onPassword1Change}>
                                 </PasswordInputField>
 
@@ -104,7 +113,7 @@ class RegistrationForm extends Component {
                                     id={"password2"}
                                     name={"password2"}
                                     placeholder={"Password (confirm)"}
-                                    errorText={this.state.password2Error}
+                                    errorText={""}
                                     onChange={this.onPassword2Change}>
                                 </PasswordInputField>
 
@@ -137,4 +146,13 @@ class RegistrationForm extends Component {
     }
 }
 
-export default withRouter(RegistrationForm);
+const mapStateToProps = state => {
+    const {registering, registrationComplete} = state.registration;
+    return {registering, registrationComplete};
+};
+
+const mapDispatchToProps = {
+    register: userActions.register
+};
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(RegistrationForm));

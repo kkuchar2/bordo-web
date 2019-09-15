@@ -8,3 +8,4 @@ django-filter
 django-sendgrid-v5
 django-rest-auth
 django-allauth
+sendgrid

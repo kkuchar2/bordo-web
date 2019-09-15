@@ -2,8 +2,6 @@ import {userService} from "../../services/userservice";
 import {userConstants} from "../../constants/constants";
 import {alertActions} from "./alert.actions";
 
-import { push } from 'react-router-redux'
-
 export const userActions = {
     login,
     logout,
@@ -14,12 +12,10 @@ export const userActions = {
 
 function login(username, password) {
     return (dispatch) => {
-        dispatch(request({ username }));
-
         userService.login(username, password)
             .then(
-                user => {
-                    dispatch(success(user));
+                response => {
+                    dispatch(success(response));
                 },
                 error => {
                     dispatch(failure(error));
@@ -28,59 +24,50 @@ function login(username, password) {
             );
     };
 
-    function request(user) {
-        console.log("Returning action type: LOGIN REQUEST");
-        return { type: userConstants.LOGIN_REQUEST, user }
-    }
-    function success(user) {
+    function success(response) {
         console.log("Login success");
-        console.log(user); // <--- authentication token
-
-        /**
-         * Authentication token ideally should have expiration time on server side.
-         *
-         * 1. Get access token - short lived, we can store it in cookie or localStorage
-         * 2. Get bearer token - long lived (for access token refresh request) - store it in secure cookie
-         *
-         * 3. Whenever access token is going to be expired, request new one
-         *    using bearer token stored in cookie
-         */
-
-        return { type: userConstants.LOGIN_SUCCESS, user }
+        console.log(response);
+        return { type: userConstants.LOGIN_SUCCESS, response }
     }
-    function failure(data) {
-        console.log("Response: ");
-        console.log(data);
-        return { type: userConstants.LOGIN_FAILURE, data }
+
+    function failure(response) {
+        console.log("Login failure");
+        console.log(response);
+        return { type: userConstants.LOGIN_FAILURE, response }
+    }
+}
+
+function register(email, username, password1, password2) {
+    return dispatch => {
+
+        userService.register(email, username, password1, password2)
+            .then(
+                response => {
+                    dispatch(success(response));
+                    dispatch(alertActions.success('Registration successful'));
+                },
+                error => {
+                    dispatch(failure(error));
+                    dispatch(alertActions.error(error.toString()));
+                }
+            );
+    };
+
+    function success(response) {
+        console.log("Registration success");
+        console.log(response);
+        return { type: userConstants.REGISTER_SUCCESS, response }
+    }
+    function failure(response) {
+        console.log("Registration failure");
+        console.log(response);
+        return { type: userConstants.REGISTER_FAILURE, response }
     }
 }
 
 function logout() {
     userService.logout();
     return { type: userConstants.LOGOUT };
-}
-
-function register(user) {
-    return dispatch => {
-        dispatch(request(user));
-
-        userService.register(user)
-            .then(
-                user => {
-                    dispatch(success());
-                    // TODO: redirect to '/' or login page
-                    dispatch(alertActions.success('Registration successful'));
-                },
-                error => {
-                    dispatch(failure(error.toString()));
-                    dispatch(alertActions.error(error.toString()));
-                }
-            );
-    };
-
-    function request(user) { return { type: userConstants.REGISTER_REQUEST, user } }
-    function success(user) { return { type: userConstants.REGISTER_SUCCESS, user } }
-    function failure(error) { return { type: userConstants.REGISTER_FAILURE, error } }
 }
 
 function getAll() {
