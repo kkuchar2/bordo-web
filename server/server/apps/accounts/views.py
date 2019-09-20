@@ -2,6 +2,7 @@ import json
 import os
 import urllib.parse
 
+from allauth.account.models import EmailAddress
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse
@@ -151,6 +152,15 @@ class ApiAccountConfirmationView(GenericAPIView):
         if token_valid:
             user.is_active = True
             user.save()
+
+            email_verify_obj = EmailAddress.objects.get(user=user)
+
+            if email_verify_obj is None:
+                return False
+
+            email_verify_obj.verified = True
+            email_verify_obj.save()
+
             return True
         else:
             return False
