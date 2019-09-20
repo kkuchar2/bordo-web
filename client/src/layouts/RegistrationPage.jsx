@@ -7,7 +7,6 @@ import ModalDialog from "components/dialog/ModalDialog.jsx";
 import RegistrationForm from "components/forms/registration/RegistrationForm.jsx";
 
 import "./RegistrationPage.scss"
-import {userActions} from "../redux/actions";
 import {connect} from "react-redux";
 import {withRouter} from "react-router-dom";
 

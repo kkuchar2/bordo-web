@@ -1,19 +1,13 @@
 import config from 'config';
 
-import {authHeader} from "../helpers/auth-header";
-
 import Cookies from "universal-cookie";
 
 const cookies = new Cookies();
 
 export const userService = {
     login,
-    logout,
     register,
-    getAll,
-    getById,
-    update,
-    delete: _delete
+    confirmAccount
 };
 
 function createErrorInfo(status, data) {
@@ -64,47 +58,30 @@ function register(email, username, password1, password2) {
         });
 }
 
-function logout() {
-    // remove user from local storage to log user out
-    localStorage.removeItem('user');
-}
+function confirmAccount(uid, token) {
 
-function getAll() {
     const requestOptions = {
-        method: 'GET',
-        headers: authHeader()
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({uid, token})
     };
 
-    return fetch(`${config.apiUrl}/users`, requestOptions).then(handleResponse);
-}
+    console.log("Request options:");
+    console.log(requestOptions);
 
-function getById(id) {
-    const requestOptions = {
-        method: 'GET',
-        headers: authHeader()
-    };
+    return fetch(`${config.apiUrl}/confirm/`, requestOptions)
+        .then(handleResponse)
+        .then(response => {
+            console.log(response);
+            return response;
+        })
+        .catch((data) => {
+            if (data instanceof TypeError) {
+                return Promise.reject(createErrorInfo(-1, "Could not connect to: " + `${config.apiUrl}/login/`));
+            }
 
-    return fetch(`${config.apiUrl}/users/${id}`, requestOptions).then(handleResponse);
-}
-
-function update(user) {
-    const requestOptions = {
-        method: 'PUT',
-        headers: {...authHeader(), 'Content-Type': 'application/json'},
-        body: JSON.stringify(user)
-    };
-
-    return fetch(`${config.apiUrl}/users/${user.id}`, requestOptions).then(handleResponse);
-}
-
-// prefixed function name with underscore because delete is a reserved word in javascript
-function _delete(id) {
-    const requestOptions = {
-        method: 'DELETE',
-        headers: authHeader()
-    };
-
-    return fetch(`${config.apiUrl}/users/${id}`, requestOptions).then(handleResponse);
+            return Promise.reject(data);
+        });
 }
 
 function handleResponse(response) {

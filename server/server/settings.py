@@ -10,20 +10,14 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET', None)
 
 print("Secret key: {}".format(SECRET_KEY))
 
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-# TODO: investigate
 ALLOWED_HOSTS = ['*']
 
-# Application definition
 INSTALLED_APPS = [
 
     # Accounts management
     'accounts',
-
-    # External API
-    'api',
 
     # Django applications
     'django.contrib.sites',
@@ -133,51 +127,42 @@ else:
     }
 
 # Password validation
-
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
+    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
 # Internationalization
-
 LANGUAGE_CODE = 'en-us'
-
 TIME_ZONE = 'UTC'
-
 USE_I18N = True
-
 USE_L10N = True
-
 USE_TZ = True
 
-# Static files (CSS, JavaScript, Images)
-
+# Static files
 STATIC_URL = '/static/'
 
-# TODO: Investigate
-SECURE_SSL_REDIRECT = False
-
-# E-mail configuration
-
+# Sendgrid
 SENDGRID_API_KEY = os.environ.get('SENDGRID_API_KEY', None)
-
 SENDGRID_ECHO_TO_STDOUT = True
 SENDGRID_SANDBOX_MODE_IN_DEBUG = False
 
+# Email
 EMAIL_BACKEND = "sendgrid_backend.SendgridBackend"
 EMAIL_HOST = 'smtp.sendgrid.net'
 EMAIL_HOST_USER = os.environ.get('SENDGRID_USER', None)
 EMAIL_HOST_PASSWORD = SENDGRID_API_KEY
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
+
+# Frontend URL
+if DEBUG:
+    FRONTEND_URL = "http://127.0.0.1:8080"
+else:
+    FRONTEND_URL = "https://kkuchar2.github.io/public-page"
+
+# Cors
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_CREDENTIALS = True

@@ -6,6 +6,8 @@ from django.contrib.auth import get_user_model, authenticate
 from django.utils.translation import ugettext_lazy as _
 from rest_framework import serializers, exceptions
 
+UserModel = get_user_model()
+
 
 class RegisterSerializer(serializers.Serializer):
     username = serializers.CharField(
@@ -64,9 +66,6 @@ class RegisterSerializer(serializers.Serializer):
         pass
 
 
-UserModel = get_user_model()
-
-
 class LoginSerializer(serializers.Serializer):
     username = serializers.CharField(required=True, allow_blank=False)
     password = serializers.CharField(required=True, allow_blank=False, style={'input_type': 'password'})
@@ -107,6 +106,24 @@ class LoginSerializer(serializers.Serializer):
             raise exceptions.ValidationError("Username does not exist or wrong credentials")
 
         return user
+
+    def update(self, instance, validated_data):
+        pass
+
+    def create(self, validated_data):
+        pass
+
+
+class ConfirmationSerializer(serializers.Serializer):
+    uid = serializers.CharField(required=True, allow_blank=False)
+    token = serializers.CharField(required=True, allow_blank=False)
+
+    def validate(self, attrs):
+        token = attrs.get('token')
+        uid = attrs.get('uid')
+        self.token = token
+        self.uid = uid
+        return attrs
 
     def update(self, instance, validated_data):
         pass

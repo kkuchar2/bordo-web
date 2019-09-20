@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
 
-import "./HomePage.scss"
 import {withRouter} from "react-router-dom";
+
+import "./HomePage.scss"
 
 class HomePage extends Component {
 
