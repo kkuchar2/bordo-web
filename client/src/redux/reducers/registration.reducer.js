@@ -1,7 +1,9 @@
 import {userConstants} from "../constants";
 
 const initialState =  {
-    registrationIdle : true
+    registrationIdle : true,
+    registering: false,
+    registrationSubmitted: false,
 };
 
 export function registration(state = initialState, action) {
@@ -10,11 +12,13 @@ export function registration(state = initialState, action) {
             return {
                 registering: true,
                 registrationSubmitted: false,
-                email_confirmed: false
+                registrationIdle: false
             };
         case userConstants.ACCOUNT_CONFIRMATION_SUCCESS:
             return {
-                email_confirmed: true
+                registering: false,
+                registrationSubmitted: false,
+                registrationIdle: true
             };
         case userConstants.REGISTER_SUCCESS:
             return {
