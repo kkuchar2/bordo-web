@@ -85,8 +85,7 @@ class ApiRegistrationView(CreateAPIView):
     def get_response_data(self, user):
         return TokenSerializer(user.auth_token).data
 
-    def perform_create(self, serializer):
-        user = serializer.save(self.request)
+    def send_activation_email(self, user, serializer):
 
         create_token(self.token_model, user, serializer)
 
@@ -116,6 +115,20 @@ class ApiRegistrationView(CreateAPIView):
             print(response.headers)
         except Exception as e:
             print(e)
+
+    def perform_create(self, serializer):
+        if settings.BYPASS_ACCOUNT_REGISTRATION:
+            return None
+
+        user = serializer.save(self.request)
+
+        if settings.SEND_ACCOUNT_ACTIVATION_EMAIL:
+            self.send_activation_email(user, serializer)
+        else:
+            # Activate immediately
+            email_verify_obj = EmailAddress.objects.get(user=user)
+            email_verify_obj.verified = True
+            email_verify_obj.save()
 
         return user
 
@@ -154,10 +167,6 @@ class ApiAccountConfirmationView(GenericAPIView):
             user.save()
 
             email_verify_obj = EmailAddress.objects.get(user=user)
-
-            if email_verify_obj is None:
-                return False
-
             email_verify_obj.verified = True
             email_verify_obj.save()
 

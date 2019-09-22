@@ -36,6 +36,7 @@ class RegistrationForm extends Component {
 
     onEmailChange(event) {
         this.setState({ email: event.target.value});
+        this.props.onEmailChange(event.target.value);
     }
 
     onUsernameChange(event) {
@@ -147,8 +148,8 @@ class RegistrationForm extends Component {
 }
 
 const mapStateToProps = state => {
-    const {registering, registrationComplete} = state.registration;
-    return {registering, registrationComplete};
+    const {registering, registrationSubmitted} = state.registration;
+    return {registering, registrationSubmitted};
 };
 
 const mapDispatchToProps = {

@@ -19,11 +19,9 @@ class LoginForm extends Component {
 
     constructor(props) {
         super(props);
-
         this.onUsernameEmailChange = this.onUsernameEmailChange.bind(this);
         this.onPasswordChange = this.onPasswordChange.bind(this);
         this.onSubmitForm = this.onSubmitForm.bind(this);
-
         this.state = {usernameEmail: '', password: ''};
     }
 
@@ -96,8 +94,6 @@ class LoginForm extends Component {
                         <div className={"createAccount"}>
                             <Link to='/register' className={"createAccountLink"}>Register</Link>
                         </div>
-
-                        <div className={"jazda"}/>
 
                         <div className={"bottomSection"}>
                             <GoogleButton/>

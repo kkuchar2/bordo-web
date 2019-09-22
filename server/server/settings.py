@@ -166,3 +166,8 @@ else:
 # Cors
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
+
+# Debug options
+
+SEND_ACCOUNT_ACTIVATION_EMAIL = False
+BYPASS_ACCOUNT_REGISTRATION = True  # Do not create account on registration

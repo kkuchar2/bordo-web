@@ -17,4 +17,8 @@
   .gridMainRegistration {
     @include responsive_width(95%, 350px, 350px, 380px, 380px);
   }
+
+  .gridMainRegistrationComplete {
+    @include responsive_width(95%, 700px, 600px, 600px, 600px);
+  }
 }

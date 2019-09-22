@@ -1,30 +1,38 @@
 import {userConstants} from "../../constants/constants";
 
-export function registration(state = {}, action) {
+const initialState =  {
+    registrationIdle : true
+};
+
+export function registration(state = initialState, action) {
     switch (action.type) {
         case userConstants.REGISTER_REQUEST:
             return {
                 registering: true,
-                registrationComplete: false,
+                registrationSubmitted: false,
                 email_confirmed: false
             };
         case userConstants.ACCOUNT_CONFIRMATION_SUCCESS:
             return {
-                registering: false,
-                registrationComplete: false,
                 email_confirmed: true
             };
         case userConstants.REGISTER_SUCCESS:
             return {
                 registering: false,
-                registrationComplete: true,
-                email_confirmed: false
+                registrationSubmitted: true,
+                registrationIdle: false
+            };
+        case userConstants.REGISTER_IDLE:
+            return {
+                registering: false,
+                registrationSubmitted: false,
+                registrationIdle: true
             };
         case userConstants.REGISTER_FAILURE:
             return {
                 registering: false,
-                registrationComplete: false,
-                email_confirmed: false
+                registrationSubmitted: false,
+                registrationIdle: true
             };
         default:
             return state

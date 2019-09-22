@@ -9,11 +9,6 @@ import NotFound from "layouts/NotFound.jsx";
 import {Provider} from "react-redux";
 import {store} from "./redux/store";
 
-/**
- * TODO: Login user automatically if already logged in.
- * If cookies are cleared redirect to login page.
- */
-
 ReactDOM.render(
     <Provider store={store}>
         <HashRouter>

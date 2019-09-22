@@ -2,47 +2,42 @@ import React, {Component} from 'react';
 
 import Grid from "@material-ui/core/Grid";
 
-import ModalDialog from "components/dialog/ModalDialog.jsx";
-
 import RegistrationForm from "components/forms/registration/RegistrationForm.jsx";
-
-import "./RegistrationPage.scss"
 import {connect} from "react-redux";
 import {withRouter} from "react-router-dom";
+import RegistrationCompleteDialog from "../dialogs/RegistrationCompleteDialog";
+
+import "./RegistrationPage.scss"
 
 class RegistrationPage extends Component {
 
     constructor(props) {
         super(props);
-
-        this.state = {
-            showDialog: false,
-            uid: '',
-            token: '',
-            lastCookie: '',
-        };
-
-        this.closeDialog = this.closeDialog.bind(this);
-        this.showDialog = this.showDialog.bind(this);
+        this.state = {email: ""};
+        this.onEmailChange = this.onEmailChange.bind(this);
     }
 
-    showDialog() {
-        this.setState({showDialog: true})
+    onEmailChange(email) {
+        this.setState({email: email})
     }
 
-    closeDialog() {
-        this.setState({showDialog: false})
-    }
-
-    renderDialog() {
-        if (this.state.showDialog) {
-            return <ModalDialog onClose={this.closeDialog}/>;
+    renderRegistrationForm() {
+        if (this.props.registrationIdle) {
+            return (
+                <Grid className={"gridMainRegistration"} zeroMinWidth item>
+                    <RegistrationForm onEmailChange={this.onEmailChange}/>
+                </Grid>
+            );
         }
     }
 
-    renderContent() {
-        if (this.props.registrationComplete) {
-
+    renderRegistrationCompleteDialog() {
+        if (this.props.registrationSubmitted) {
+            return (
+                <Grid className={"gridMainRegistrationComplete"} zeroMinWidth item>
+                    <RegistrationCompleteDialog email={this.state.email}/>
+                </Grid>
+            );
         }
     }
 
@@ -51,23 +46,17 @@ class RegistrationPage extends Component {
             <div className={"registrationPage"}>
                 <div className={"background"}/>
                 <Grid className={"containerMain"} justify="center" alignItems="center" container>
-                    <Grid className={"gridMainRegistration"} zeroMinWidth item>
-                        <RegistrationForm />
-                    </Grid>
+                    {this.renderRegistrationForm()}
+                    {this.renderRegistrationCompleteDialog()}
                 </Grid>
-                {this.renderDialog()}
             </div>
         );
     }
 }
 
 const mapStateToProps = state => {
-    const {registrationComplete} = state.authentication;
-    return {registrationComplete};
+    const {registrationIdle, registrationSubmitted} = state.registration;
+    return {registrationIdle, registrationSubmitted};
 };
 
-const mapDispatchToProps = {
-
-};
-
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(RegistrationPage));
+export default withRouter(connect(mapStateToProps, {})(RegistrationPage));
