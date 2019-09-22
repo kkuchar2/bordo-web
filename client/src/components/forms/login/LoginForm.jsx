@@ -48,60 +48,62 @@ class LoginForm extends Component {
 
     render() {
         return (
-            <Grid className={"loginFormContentGrid"} container>
+            <Grid className={"gridMainLogin"} zeroMinWidth item>
+                <Grid className={"loginFormContentGrid"} container>
 
-                <form onSubmit={this.onSubmitForm}>
+                    <form onSubmit={this.onSubmitForm}>
 
-                    <Grid spacing={2} style={{padding: 0, margin: 0, width: "100%"}} container>
+                        <Grid spacing={2} style={{padding: 0, margin: 0, width: "100%"}} container>
 
-                        <div className={"loginFields"}>
-                            <Grid className={"field"} style={{padding: 0}} item>
-                                <TextInputField
-                                    className={"emailUsernameField"}
-                                    name={"username"}
-                                    placeholder={"E-mail or username"}
-                                    onChange={this.onUsernameEmailChange}
-                                    errorText={this.state.usernameEmailError}>
-                                </TextInputField>
+                            <div className={"loginFields"}>
+                                <Grid className={"field"} style={{padding: 0}} item>
+                                    <TextInputField
+                                        className={"emailUsernameField"}
+                                        name={"username"}
+                                        placeholder={"E-mail or username"}
+                                        onChange={this.onUsernameEmailChange}
+                                        errorText={this.state.usernameEmailError}>
+                                    </TextInputField>
 
+                                </Grid>
+
+                                <Grid className={"field"} style={{padding: 0}} item>
+
+                                    <PasswordInputField
+                                        className={"passwordField"}
+                                        name={"password"}
+                                        placeholder={"Password"}
+                                        onChange={this.onPasswordChange}
+                                        errorText={this.state.passwordError}>
+                                    </PasswordInputField>
+
+                                </Grid>
+                            </div>
+
+                            <Grid className={"forgotPassword"} style={{padding: 20, margin: 0}} item>
+                                <Link to="/" className={"forgotPasswordLink"}>Forgot password?</Link>
                             </Grid>
 
-                            <Grid className={"field"} style={{padding: 0}} item>
-
-                                <PasswordInputField
-                                    className={"passwordField"}
-                                    name={"password"}
-                                    placeholder={"Password"}
-                                    onChange={this.onPasswordChange}
-                                    errorText={this.state.passwordError}>
-                                </PasswordInputField>
-
+                            <Grid className={"signIn"} style={{padding: 0, width: "100%", textAlign: "center"}} item>
+                                <SubmitButton
+                                    className={"signInButton"}
+                                    onClick={this.onSubmitForm}
+                                    text={"Log in"}>s
+                                </SubmitButton>
                             </Grid>
-                        </div>
 
-                        <Grid className={"forgotPassword"} style={{padding: 20, margin: 0}} item>
-                            <Link to="/" className={"forgotPasswordLink"}>Forgot password?</Link>
+                            <div className={"createAccount"}>
+                                <Link to='/register' className={"createAccountLink"}>Register</Link>
+                            </div>
+
+                            <div className={"bottomSection"}>
+                                <GoogleButton/>
+                                <FacebookButton/>
+                            </div>
+
                         </Grid>
-
-                        <Grid className={"signIn"} style={{padding: 0, width: "100%", textAlign: "center"}} item>
-                            <SubmitButton
-                                className={"signInButton"}
-                                onClick={this.onSubmitForm}
-                                text={"Log in"}>s
-                            </SubmitButton>
-                        </Grid>
-
-                        <div className={"createAccount"}>
-                            <Link to='/register' className={"createAccountLink"}>Register</Link>
-                        </div>
-
-                        <div className={"bottomSection"}>
-                            <GoogleButton/>
-                            <FacebookButton/>
-                        </div>
-
-                    </Grid>
-                </form>
+                    </form>
+                </Grid>
             </Grid>
         );
     }

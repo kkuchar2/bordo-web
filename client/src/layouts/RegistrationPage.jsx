@@ -1,13 +1,11 @@
 import React, {Component} from 'react';
-
-import Grid from "@material-ui/core/Grid";
-
 import RegistrationForm from "components/forms/registration/RegistrationForm.jsx";
 import {connect} from "react-redux";
-import {withRouter} from "react-router-dom";
-import RegistrationCompleteDialog from "../dialogs/RegistrationCompleteDialog";
+import {onCondition} from "../helpers/util";
 
-import "./RegistrationPage.scss"
+import RegistrationCompleteDialog from "../dialogs/RegistrationCompleteDialog.jsx";
+import PageWithCenteredContent from "./common/PageWithCenteredContent.jsx";
+
 
 class RegistrationPage extends Component {
 
@@ -21,35 +19,12 @@ class RegistrationPage extends Component {
         this.setState({email: email})
     }
 
-    renderRegistrationForm() {
-        if (this.props.registrationIdle) {
-            return (
-                <Grid className={"gridMainRegistration"} zeroMinWidth item>
-                    <RegistrationForm onEmailChange={this.onEmailChange}/>
-                </Grid>
-            );
-        }
-    }
-
-    renderRegistrationCompleteDialog() {
-        if (this.props.registrationSubmitted) {
-            return (
-                <Grid className={"gridMainRegistrationComplete"} zeroMinWidth item>
-                    <RegistrationCompleteDialog email={this.state.email}/>
-                </Grid>
-            );
-        }
-    }
-
     render() {
         return (
-            <div className={"registrationPage"}>
-                <div className={"background"}/>
-                <Grid className={"containerMain"} justify="center" alignItems="center" container>
-                    {this.renderRegistrationForm()}
-                    {this.renderRegistrationCompleteDialog()}
-                </Grid>
-            </div>
+            <PageWithCenteredContent>
+                { onCondition(this.props.registrationIdle, <RegistrationForm onEmailChange={this.onEmailChange}/>) }
+                { onCondition(this.props.registrationSubmitted, <RegistrationCompleteDialog email={this.state.email}/>) }
+            </PageWithCenteredContent>
         );
     }
 }
@@ -59,4 +34,4 @@ const mapStateToProps = state => {
     return {registrationIdle, registrationSubmitted};
 };
 
-export default withRouter(connect(mapStateToProps, {})(RegistrationPage));
+export default connect(mapStateToProps, {})(RegistrationPage);

@@ -1,4 +1,4 @@
-import {userConstants} from "../../constants/constants";
+import {userConstants} from "../constants";
 
 const initialState =  {
     registrationIdle : true

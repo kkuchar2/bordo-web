@@ -159,7 +159,7 @@ EMAIL_USE_TLS = True
 
 # Frontend URL
 if DEBUG:
-    FRONTEND_URL = "http://127.0.0.1:8080"
+    FRONTEND_URL = "http://127.0.0.1:4567"
 else:
     FRONTEND_URL = "https://kkuchar2.github.io/public-page"
 
@@ -169,5 +169,5 @@ CORS_ALLOW_CREDENTIALS = True
 
 # Debug options
 
-SEND_ACCOUNT_ACTIVATION_EMAIL = False
-BYPASS_ACCOUNT_REGISTRATION = True  # Do not create account on registration
+SEND_ACCOUNT_ACTIVATION_EMAIL = True
+BYPASS_ACCOUNT_REGISTRATION = False  # Do not create account on registration

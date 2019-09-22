@@ -4,11 +4,11 @@ import Cookies from "universal-cookie";
 
 const cookies = new Cookies();
 
-export const userService = {
-    login,
-    register,
-    confirmAccount
-};
+const LOGIN_URL = `${config.apiUrl}/login/`;
+const REGISTER_URL = `${config.apiUrl}/register/`;
+const CONFIRM_URL = `${config.apiUrl}/confirm/`;
+
+export const userService = { login, register, confirmAccount };
 
 function createErrorInfo(status, data) {
     let errorInfo = {};
@@ -17,71 +17,49 @@ function createErrorInfo(status, data) {
     return errorInfo;
 }
 
-function login(username, password) {
-    const requestOptions = {
+function createRequest(data) {
+    return {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({username, password})
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(data)
     };
+}
 
-    return fetch(`${config.apiUrl}/login/`, requestOptions)
+function handleError(data, url) {
+    if (data instanceof TypeError) {
+        return Promise.reject(createErrorInfo(-1, "Could not connect to: " + url));
+    }
+
+    return Promise.reject(data);
+}
+
+function callApi(url, data) {
+    return fetch(url, createRequest(data));
+}
+
+function login(username, password) {
+    return callApi(LOGIN_URL, {username, password})
         .then(handleResponse)
-        .then(response => {
-            console.log(response["key"]);
-            cookies.set('access_token', response["key"], { path: '/',  secure: true,  httpOnly: true });
-            return response;
-        })
-        .catch((data) => {
-            if (data instanceof TypeError) {
-                return Promise.reject(createErrorInfo(-1, "Could not connect to: " + `${config.apiUrl}/login/`));
-            }
+        .then(onLoginResponse)
+        .catch(data => handleError(data, LOGIN_URL));
 
-            return Promise.reject(data);
-        });
+    function onLoginResponse(response) {
+        console.log(response["key"]);
+        cookies.set('access_token', response["key"], { path: '/',  secure: true,  httpOnly: true });
+        return response;
+    }
 }
 
 function register(email, username, password1, password2) {
-    const requestOptions = {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({email, username, password1, password2})
-    };
-
-    return fetch(`${config.apiUrl}/register/`, requestOptions)
+    return callApi(REGISTER_URL, {email, username, password1, password2})
         .then(handleResponse)
-        .catch((data) => {
-            if (data instanceof TypeError) {
-                return Promise.reject(createErrorInfo(-1, "Could not connect to: " + `${config.apiUrl}/register/`));
-            }
-
-            return Promise.reject(data);
-        });
+        .catch(data => handleError(data, REGISTER_URL));
 }
 
 function confirmAccount(uid, token) {
-
-    const requestOptions = {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({uid, token})
-    };
-
-    console.log("Request options:");
-    console.log(requestOptions);
-
-    return fetch(`${config.apiUrl}/confirm/`, requestOptions)
+    return callApi(CONFIRM_URL, {uid, token})
         .then(handleResponse)
-        .then(response => {
-            console.log(response);
-            return response;
-        })
-        .catch((data) => {
-            if (data instanceof TypeError) {
-                return Promise.reject(createErrorInfo(-1, "Could not connect to: " + `${config.apiUrl}/login/`));
-            }
-
-            return Promise.reject(data);
-        });
+        .catch(data => handleError(data, CONFIRM_URL));
 }
 
 function handleResponse(response) {
@@ -90,8 +68,8 @@ function handleResponse(response) {
         if (!response.ok) {
             if (response.status === 401) {
                 // auto logout if 401 response returned from api
-                logout();
-                location.reload(true);
+                //logout();
+                //location.reload(true);
             }
 
             return Promise.reject(createErrorInfo(response.status, text));

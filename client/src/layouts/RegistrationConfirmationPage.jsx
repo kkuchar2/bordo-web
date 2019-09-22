@@ -2,7 +2,10 @@ import React, {Component} from 'react';
 import {connect} from "react-redux";
 import {withRouter} from "react-router-dom";
 import {userActions} from "../redux/actions";
+import AccountConfirmedDialog from "../dialogs/AccountConfirmedDialog.jsx";
 const queryString = require('query-string');
+
+import PageWithCenteredContent from "./common/PageWithCenteredContent.jsx";
 
 class RegistrationConfirmationPage extends Component {
 
@@ -18,13 +21,10 @@ class RegistrationConfirmationPage extends Component {
     }
 
     render() {
-
-        console.log(this.props.emailConfirmed);
-
         return (
-            <div>
-                <div>Account confirmed, token: {this.state.token}, uid: {this.state.uid}</div>
-            </div>
+            <PageWithCenteredContent>
+                <AccountConfirmedDialog/>
+            </PageWithCenteredContent>
         );
     }
 }
