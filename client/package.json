@@ -14,6 +14,7 @@
   "devDependencies": {
     "@babel/core": "^7.6.0",
     "@babel/plugin-proposal-class-properties": "^7.5.5",
+    "@babel/plugin-transform-runtime": "^7.6.2",
     "@babel/preset-env": "^7.6.0",
     "@babel/preset-react": "^7.0.0",
     "@material-ui/core": "latest",
@@ -24,6 +25,7 @@
     "html-webpack-plugin": "^3.2.0",
     "node-sass": "^4.12.0",
     "prop-types": "^15.7.2",
+    "react-hooks-worker": "^0.9.0",
     "redux": "^4.0.4",
     "sass-loader": "^8.0.0",
     "style-loader": "^1.0.0",
@@ -33,13 +35,20 @@
     "webpack-dev-server": "^3.8.1"
   },
   "dependencies": {
+    "plotly.js": "^1.51.1",
     "query-string": "^6.8.3",
     "react": "^16.9.0",
+    "react-charts": "^2.0.0-beta.4",
+    "react-countdown-clock": "^2.7.0",
     "react-dom": "^16.9.0",
+    "react-plotly.js": "^2.4.0",
     "react-redux": "^7.1.1",
     "react-router-dom": "^5.0.1",
     "react-router-redux": "^4.0.8",
     "redux-logger": "^3.0.6",
-    "redux-thunk": "^2.3.0"
+    "redux-thunk": "^2.3.0",
+    "victory": "^33.1.2",
+    "worker-loader": "^2.0.0",
+    "worker-plugin": "^3.2.0"
   }
 }

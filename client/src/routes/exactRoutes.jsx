@@ -1,12 +1,14 @@
 import IndexPage from "layouts/IndexPage.jsx";
 import HomePage from "layouts/HomePage.jsx";
 import RegistrationConfirmationPage from "layouts/RegistrationConfirmationPage.jsx";
+import SortDemonstrationPage from "layouts/SortDemonstrationPage.jsx";
 import TestPage from "../test/TestLayout.jsx";
 
 const exactIndexRoutes = [
     {path: "/", component: IndexPage},
     {path: "/home", component: HomePage},
     {path: "/confirm", component: RegistrationConfirmationPage},
+    {path: "/sort", component: SortDemonstrationPage},
     {path: "/test", component: TestPage}
 ];
 

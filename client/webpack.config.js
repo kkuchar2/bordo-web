@@ -1,4 +1,6 @@
 const HtmlWebPackPlugin = require("html-webpack-plugin");
+const WorkerPlugin = require('worker-plugin');
+
 const path = require('path');
 
 module.exports = {
@@ -17,7 +19,8 @@ module.exports = {
         new HtmlWebPackPlugin({
             template: "./src/index.html",
             filename: "./index.html"
-        })
+        }),
+        new WorkerPlugin(),
     ],
     module: {
         rules: [
@@ -74,9 +77,14 @@ module.exports = {
                             sourceMap: true,
                         }
                     }]
+            },
+            {
+                test: /\.tsx?/,
+                loader: 'ts-loader',
             }
         ]
     },
+
     externals: {
         config: JSON.stringify({
             apiUrl: 'http://0.0.0.0:5000'
