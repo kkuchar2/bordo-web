@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import RegistrationForm from "components/forms/registration/RegistrationForm.jsx";
 import {connect} from "react-redux";
-import {onCondition} from "../helpers/util";
+import {onCondition} from "../helpers/util.jsx";
 
 import RegistrationCompleteDialog from "../dialogs/RegistrationCompleteDialog.jsx";
 import PageWithCenteredContent from "./common/PageWithCenteredContent.jsx";
