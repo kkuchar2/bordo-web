@@ -29,7 +29,7 @@
     <a href="https://www.youtube.com/watch?v=kPRA0W1kECg">https://www.youtube.com/watch?v=kPRA0W1kECg</a>  
     <br />  
     <br />  
-    Realtime rendering of sorting is achevied throug webworker and data swaps notifications with certain delay and frequency.  
+    Realtime rendering of sorting is achevied through webworker and data swaps notifications with certain delay and frequency.  
     Chart is rendered only in 60 fps and reflecting current state of data not dependent on data update frequency itself.  
     <br />  
     <br />  
