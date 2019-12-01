@@ -11,11 +11,7 @@
 <!-- PROJECT LOGO -->
 <br />
 <p align="center">
-  <img width="400" height="400" src="https://github.com/kkuchar2/reactjs_webgl_sorting_chart/blob/master/doc/img/pic1.png" />
-
-  <br />
-  <br />
-    
+   
   <a href="https://github.com/kkuchar2/reactjs_webgl_sorting_chart">
       📊
   </a>
