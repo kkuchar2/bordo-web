@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import PageWithCenteredContent from "./common/PageWithCenteredContent.jsx";
+import PageWithCenteredContent from "../layouts/PageWithCenteredContent.jsx";
 import OverlayGradient from "../components/overlay/OverlayGradient.jsx";
 import Chart from "../components/chart/MyChart.jsx";
 import Grid from "@material-ui/core/Grid";
