@@ -1,9 +1,14 @@
-.SubmitButton {
-  width: 250px;
+.algorithmSelection {
+  width: 50%;
+}
+
+.chartButton {
+  width: 150px;
   height: 47px;
   color: white;
   font-size: 16px;
   border: none;
+  border-radius: 3px;
 
   &:active {
     outline: none;
@@ -14,8 +19,8 @@
   }
 }
 
-.SubmitButton.enabled {
-  background: black;
+.chartButton.enabled {
+  background: rgba(0, 0, 0, 0.3);
 
   .Text {
     color: white;
@@ -26,8 +31,8 @@
   }
 }
 
-.SubmitButton.disabled {
-  background: rgba(0, 0, 0, 0.54);
+.chartButton.disabled {
+  background: rgba(0, 0, 0, 0.1);
 
   .Text {
     color: rgba(255, 255, 255, 0.44);

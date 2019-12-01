@@ -1,16 +1,31 @@
-const SLOWDOWN_FACTOR_MS = 16;
+const SLOWDOWN_FACTOR_MS = 1;
 
 let oldTime = 0;
 
-function notify_with_sleep(data, pos=1) {
+function getRandomInt(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    let value = Math.floor(Math.random() * (max - min + 1)) + min;
+    return value;
+}
+
+
+function shuffle(size, maxValue) {
+    let values = new Array(size);
+
+    for (let i = 0; i < size; i++) {
+        values[i] = getRandomInt(1, maxValue);
+        notify("shuffle", values, i + 1);
+    }
+}
+
+function notify(type, data, pos=1) {
     let currentTime = new Date().getTime();
     let diff = currentTime - oldTime;
 
     // notify no faster than 60fps
-    if (diff > 0) {
-        self.postMessage([data, pos]);
-        oldTime = currentTime;
-    }
+    self.postMessage([type, data, pos]);
+    oldTime = currentTime;
 
     // sleep 1ms
     while(new Date().getTime() - currentTime < SLOWDOWN_FACTOR_MS) {}
@@ -25,12 +40,12 @@ async function bubbleSort(arr) {
                 let tmp = arr[j];
                 arr[j] = arr[j + 1];
                 arr[j + 1] = tmp;
-                notify_with_sleep(arr, j + 1);
+                notify("sort", arr, j + 1);
             }
         }
     }
 
-    return [arr, -1];
+    return ["sort", arr, -1];
 }
 
 function partition(arr, left, right) {
@@ -50,7 +65,7 @@ function partition(arr, left, right) {
             i++;
             j--;
         }
-        notify_with_sleep(arr, i);
+        notify("sort", arr, i);
     }
     return i;
 }
@@ -61,20 +76,24 @@ function swap(arr, leftIndex, rightIndex){
     arr[rightIndex] = temp;
 }
 
-async function quickSort(arr, left, right) {
+async function quickSortImpl(arr, left, right) {
     let index;
     if (arr.length > 1) {
         index = partition(arr, left, right); //index returned from partition
 
         if (left < index - 1) { //more elements on the left side of the pivot
-            await quickSort(arr, left, index - 1);
+            await quickSortImpl(arr, left, index - 1);
         }
         if (index < right) { //more elements on the right side of the pivot
-            await quickSort(arr, index, right);
+            await quickSortImpl(arr, index, right);
         }
     }
 
-    return [arr, -1];
+    return ["sort", arr, 0];
+}
+
+async function quickSort(arr) {
+    return quickSortImpl(arr, 0, arr.length - 1);
 }
 
 async function insertionSort(arr) {
@@ -85,19 +104,34 @@ async function insertionSort(arr) {
         while (j >= 0 && arr[j] > key) {
             arr[j + 1] = arr[j];
             j = j - 1;
-            notify_with_sleep(arr, j)
+            notify("sort", arr, j)
         }
         arr[j + 1] = key;
     }
 
-    return [arr, -1];
+    return ["sort", arr, -1];
 }
 
-self.onmessage = (e) => {
-    let arr = e.data[0];
-    oldTime = new Date().getTime();
-    bubbleSort(arr).then(self.postMessage);
-    //insertionSort(arr).then(self.postMessage);
-    //quickSort(arr, 0, arr.length - 1).then(self.postMessage);
+
+const algorithmMap = {
+    0: arr => quickSort(arr),
+    1: arr => bubbleSort(arr),
+    2: arr => insertionSort(arr),
 };
 
+self.onmessage = (e) => {
+    let payload = e.data;
+    let operationType = payload[0];
+
+    if (operationType === "sort") {
+        let sortType = e.data[1];
+        let dataToSort = e.data[2];
+        oldTime = new Date().getTime();
+        algorithmMap[sortType](dataToSort).then(self.postMessage);
+    }
+    else if (operationType === "shuffle") {
+        let shuffleSize = e.data[1];
+        let shuffleMaxValue = e.data[2];
+        shuffle(shuffleSize, shuffleMaxValue);
+    }
+};

@@ -8,7 +8,11 @@ class SubmitButton extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {text: "Submit"}
+
+        this.onClick = this.onClick.bind(this);
+        this.getAdditionalClassName = this.getAdditionalClassName.bind(this);
+
+        this.state = { text: "Submit" }
     }
 
     componentDidMount() {
@@ -17,12 +21,26 @@ class SubmitButton extends Component {
         }
     }
 
+    onClick() {
+        if (this.props.disabled) return;
+        this.props.onClick();
+    }
+
+    getAdditionalClassName() {
+        if (this.props.disabled) {
+            return "disabled";
+        }
+        else {
+            return "enabled";
+        }
+    }
+
     render() {
         return (
             <button
-                className={["SubmitButton", this.props.className].join(" ")}
+                className={["SubmitButton", this.props.className, this.getAdditionalClassName()].join(" ")}
                 type={"submit"}
-                onClick={this.props.onClick}>
+                onClick={this.onClick}>
                 <div className={"content"}>
                     <Text
                         visible={!this.props.processing}
