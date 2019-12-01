@@ -21,8 +21,7 @@ class SortDemonstrationPage extends Component {
         this.refreshState = this.refreshState.bind(this);
         this.onSelectedAlgorithmChange = this.onSelectedAlgorithmChange.bind(this);
 
-        this.worker = new Worker('./../workers/sort.worker', {type: 'module'});
-        this.worker.onmessage = this.onMessageReceived;
+        this.initWorker();
 
         this.samples = 200;
         this.maxValue = 500;
@@ -85,8 +84,17 @@ class SortDemonstrationPage extends Component {
     }
 
     onShuffleRequest() {
+        this.initWorker();
         this.setState({shuffling: true});
         this.worker.postMessage(["shuffle", this.samples, this.maxValue]);
+    }
+
+    initWorker() {
+        if (this.worker !== undefined) {
+            this.worker.terminate();
+        }
+        this.worker = new Worker('./../workers/sort.worker', {type: 'module'});
+        this.worker.onmessage = this.onMessageReceived;
     }
 
     refreshState() {
@@ -132,7 +140,7 @@ class SortDemonstrationPage extends Component {
                                 <SubmitButton
                                     className={"chartButton"}
                                     onClick={this.onShuffleRequest}
-                                    disabled={this.state.shuffling}
+                                    disabled={false}
                                     text={"Shuffle"}>
                                 </SubmitButton>
                             </Grid>
