@@ -1,0 +1,193 @@
+$break-small: 400px;
+
+*:focus {
+  outline: none;
+}
+
+* {
+  user-select: none;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.brd {
+  border: 1px solid #e2eded;
+}
+
+.appCover {
+  width: 300px;
+
+  @media screen and (max-width: $break-small) {
+    width: 90%;
+  }
+
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+
+  height: 40px;
+  margin: 50px auto 0 auto;
+}
+
+.select-button {
+  position: relative;
+  height: 40px;
+  background-color: #ffffff;
+  color: black;
+  border: none;
+  border-radius: 5px;
+
+  span {
+    font-size: 0.8em;
+    line-height: 40px;
+    margin-left: 20px;
+  }
+
+}
+
+.options-view-button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+  z-index: 3;
+}
+
+.selected-value {
+  font-size: 16px;
+  line-height: 1;
+  margin-right: 26px;
+}
+
+.option, .label {
+  color: #2d3667;
+  font-size: 16px;
+}
+
+.options {
+  position: absolute;
+  top: 44px;
+  right: 0;
+  left: 0;
+  width: 298px;
+
+  @media screen and (max-width: $break-small) {
+    width: 100%;
+  }
+
+  border: 1px solid #e2eded;
+  animation: fadein 0.2s;
+  -moz-animation: fadein 0.2s; /* Firefox */
+  -webkit-animation: fadein 0.2s; /* Safari and Chrome */
+  -o-animation: fadein 0.2s; /* Opera */
+
+  margin: 0 auto;
+  background-color: #fff;
+}
+
+@keyframes fadein {
+  from {
+    opacity: 0;
+    top: 30px;
+  }
+  to {
+    opacity: 1;
+    top: 44px;
+  }
+}
+
+.option {
+  position: relative;
+  line-height: 40px;
+  transition: 0.1s ease all;
+  z-index: 2;
+  height: 40px;
+
+  &:hover {
+    background: #383838;
+    cursor: pointer;
+  }
+
+  i {
+    position: absolute;
+    left: 14px;
+    padding: 0;
+    display: none;
+  }
+}
+
+
+.options .option i {
+  display: block;
+  padding: 12px 0;
+}
+
+.label {
+  padding: 0;
+  margin-left: 27px;
+}
+
+~ .options .label {
+  display: block;
+  padding: 12px 14px;
+}
+
+.label {
+  transition: 0.1s ease all;
+}
+
+.opt-val {
+  position: absolute;
+  left: 14px;
+  width: 217px;
+  height: 21px;
+  opacity: 0;
+  background-color: #fff;
+  transform: scale(0);
+}
+
+.option:hover .label {
+  color: #fff;
+  cursor: pointer;
+}
+
+.chevron::before {
+  position: absolute;
+  top: 1.1em;
+  right: 1.7em;
+  width: 0.35em;
+  height: 0.35em;
+  border-style: solid;
+  border-color: #646464;
+  border-width: 0.1em 0.1em 0 0;
+  content: '';
+  display: inline-block;
+
+  transform: rotate(-45deg);
+  vertical-align: top;
+
+}
+
+.chevron.right:before {
+  left: 0;
+  transform: rotate(45deg);
+}
+
+.chevron.bottom:before {
+  top: 1.7em;
+  transform: rotate(135deg);
+}
+
+.chevron.left:before {
+  left: 0.25em;
+  transform: rotate(-135deg);
+}

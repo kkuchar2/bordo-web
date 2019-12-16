@@ -1,7 +1,5 @@
 import React, {Component} from 'react';
 
-import Grid from "@material-ui/core/Grid";
-
 import "./PageWithCenteredContent.scss"
 
 class PageWithCenteredContent extends Component {
@@ -14,8 +12,7 @@ class PageWithCenteredContent extends Component {
     getStyle() {
         if (this.props.horizontalOnly) {
             return {};
-        }
-        else {
+        } else {
             return {height: "100%"};
         }
     }
@@ -23,9 +20,7 @@ class PageWithCenteredContent extends Component {
     render() {
         return (
             <div className={"pageWithCenteredContent"}>
-                <Grid style={this.getStyle()} justify="center" alignItems="center" container>
-                    {this.props.children}
-                </Grid>
+                {this.props.children}
             </div>
         );
     }

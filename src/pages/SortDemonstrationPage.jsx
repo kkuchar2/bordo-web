@@ -1,12 +1,10 @@
 import React, {Component} from 'react';
-import PageWithCenteredContent from "../layouts/PageWithCenteredContent.jsx";
-import OverlayGradient from "../components/overlay/OverlayGradient.jsx";
 import Chart from "../components/chart/MyChart.jsx";
-import Grid from "@material-ui/core/Grid";
 import SubmitButton from "../components/buttons/SubmitButton.jsx";
-import Select from 'react-select';
+import SelectControl from "../components/select/SelectControl.jsx";
 
 import "./SortDemonstrationPage.scss"
+import OverlayGradient from "../components/overlay/OverlayGradient.jsx";
 
 class SortDemonstrationPage extends Component {
 
@@ -23,28 +21,40 @@ class SortDemonstrationPage extends Component {
 
         this.initWorker();
 
-        this.samples = 200;
-        this.maxValue = 500;
+        this.samples = 100;
+        this.maxValue = 1000;
 
-        this.sortingAlgorithms = [
-            {value: 0, label: "QuickSort"},
-            {value: 1, label: "BubbleSort"},
-            {value: 2, label: "InsertionSort"}
-        ];
+        this.contentWidth = 600;
+
+        this.sortingAlgorithms = ["QuickSort", "BubbleSort", "InsertionSort"];
 
         this.state = {
+            windowWidth: 0,
+            windowHeight: 0,
             data: [],
             markIdx: 0,
             sorting: false,
             shuffling: false,
+            renderOverlay: false,
             dirty: false,
-            selectedAlgorithm: this.sortingAlgorithms[0]
+            selectedAlgorithm: 0
         };
     }
 
+    updateDimensions = () => {
+        console.log("SortDemonstrationPage() updating dimensions: " + window.innerWidth + " " + window.innerHeight);
+        this.setState({windowWidth: window.innerWidth, windowHeight: window.innerHeight});
+    };
+
     componentDidMount() {
+        window.addEventListener('resize', this.updateDimensions);
+        this.updateDimensions();
         setInterval(this.refreshState, 16);
         this.onShuffleRequest();
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('resize', this.updateDimensions);
     }
 
     onMessageReceived(e) {
@@ -80,7 +90,7 @@ class SortDemonstrationPage extends Component {
 
     onSortRequest() {
         this.setState({sorting: true});
-        this.worker.postMessage(["sort", this.state.selectedAlgorithm.value, new Uint32Array(this.state.data)]);
+        this.worker.postMessage(["sort", this.state.selectedAlgorithm, new Uint32Array(this.state.data)]);
     }
 
     onShuffleRequest() {
@@ -104,64 +114,71 @@ class SortDemonstrationPage extends Component {
         }
     }
 
+    onOpenSelect = () => {
+        this.setState({renderOverlay: true});
+    };
+
+    onClosedSelect = () => {
+        this.setState({renderOverlay: false});
+    };
+
     onSelectedAlgorithmChange(option) {
+        this.setState({renderOverlay: false});
         this.setState({selectedAlgorithm: option});
     }
+
+    renderOverlay = () => {
+        if (this.state.renderOverlay) {
+            return <OverlayGradient startColor={"#000000ee"} endColor={"#000000ee"}/>;
+        }
+        else {
+            return <OverlayGradient startColor={"#000000aa"} endColor={"#000000aa"}/>;
+        }
+    };
 
     render() {
         return (
             <div>
-                <OverlayGradient startColor={"#9E00FF"} endColor={"#0078ffff"}/>
-                <PageWithCenteredContent>
 
-                    <Grid style={{width: 1200, height: 800}} container>
-
-                        <Grid justify="center" alignItems="center" style={{padding: 0, margin: 0}} spacing={5} container>
-                            <Grid className="algorithmSelection" item>
-                                <Select
-                                    options={this.sortingAlgorithms}
-                                    value={this.state.selectedAlgorithm}
-                                    onChange={this.onSelectedAlgorithmChange}
-                                />
-                            </Grid>
-                        </Grid>
-
-                        <Grid justify="center" alignItems="center" style={{padding: 0, margin: 0}} spacing={5} container>
-                            <Grid item>
-                                <SubmitButton
-                                    className={"chartButton"}
-                                    onClick={this.onSortRequest}
-                                    disabled={this.state.sorting}
-                                    text={"Sort"}>s
-                                </SubmitButton>
-                            </Grid>
-
-                            <Grid item>
-                                <SubmitButton
-                                    className={"chartButton"}
-                                    onClick={this.onShuffleRequest}
-                                    disabled={false}
-                                    text={"Shuffle"}>
-                                </SubmitButton>
-                            </Grid>
-                        </Grid>
-
-                        <Grid className={"field"} style={{padding: 0}} item>
-                            <Chart
-                                samples={this.samples}
-                                maxValue={this.maxValue}
-                                data={this.state.data}
-                                markIdx={this.state.markIdx}>
-                            </Chart>
-                        </Grid>
+                <div className={"pageComponents"}>
+                    {this.renderOverlay()}
 
 
-                    </Grid>
+                    <SelectControl
+                        className={"sortingAlgorithmSelection"}
+                        options={this.sortingAlgorithms}
+                        value={this.state.selectedAlgorithm}
+                        onOpen={this.onOpenSelect}
+                        onClosed={this.onClosedSelect}
+                        onChange={this.onSelectedAlgorithmChange}>
+                    </SelectControl>
+
+                    <div className={"actionButtons"}>
+                        <SubmitButton
+                            className={"sortButton chartButton"}
+                            onClick={this.onSortRequest}
+                            disabled={this.state.sorting}
+                            text={"Sort"}>
+                        </SubmitButton>
+
+                        <SubmitButton
+                            className={"shuffleButton chartButton"}
+                            onClick={this.onShuffleRequest}
+                            disabled={false}
+                            text={"Shuffle"}>
+                        </SubmitButton>
+                    </div>
 
 
-                </PageWithCenteredContent>
-            </div>
-        );
+                    <Chart
+                        samples={this.samples}
+                        maxValue={this.maxValue}
+                        data={this.state.data}
+                        markIdx={this.state.markIdx}>
+                    </Chart>
+
+                </div>
+            </div>);
     }
 }
 
