@@ -4,8 +4,11 @@ import {BrowserRouter, Route, Switch} from "react-router-dom";
 
 import exactIndexRoutes from "routes/exactRoutes.jsx";
 import NotFound from "../src/pages/NotFound.jsx";
+import removeFbclid from "remove-fbclid";
 
 import "./index.scss"
+
+removeFbclid();
 
 ReactDOM.render(
     <div className="commonPage">
