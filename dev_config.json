@@ -1,0 +1,10 @@
+{
+	"apps": [
+	    {
+		    "name": "personal_website_dev",
+		    "script": "npm",
+		    "args": "start"
+	    }
+	]
+}
+

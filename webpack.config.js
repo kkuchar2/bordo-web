@@ -13,7 +13,8 @@ module.exports = {
         modules: [path.resolve(__dirname, 'src'), 'node_modules']
     },
     devServer: {
-        historyApiFallback: true
+        historyApiFallback: true,
+        disableHostCheck: true,
     },
     plugins: [
         new HtmlWebPackPlugin({

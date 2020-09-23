@@ -132,7 +132,7 @@ class SortDemonstrationPage extends Component {
             return <OverlayGradient startColor={"#000000ee"} endColor={"#000000ee"}/>;
         }
         else {
-            return <OverlayGradient startColor={"#000000aa"} endColor={"#000000aa"}/>;
+            return <OverlayGradient startColor={"#f69ac5aa"} endColor={"#000000aa"}/>;
         }
     };
 
@@ -142,40 +142,6 @@ class SortDemonstrationPage extends Component {
 
                 <div className={"pageComponents"}>
                     {this.renderOverlay()}
-
-
-                    <SelectControl
-                        className={"sortingAlgorithmSelection"}
-                        options={this.sortingAlgorithms}
-                        value={this.state.selectedAlgorithm}
-                        onOpen={this.onOpenSelect}
-                        onClosed={this.onClosedSelect}
-                        onChange={this.onSelectedAlgorithmChange}>
-                    </SelectControl>
-
-                    <div className={"actionButtons"}>
-                        <SubmitButton
-                            className={"sortButton chartButton"}
-                            onClick={this.onSortRequest}
-                            disabled={this.state.sorting}
-                            text={"Sort"}>
-                        </SubmitButton>
-
-                        <SubmitButton
-                            className={"shuffleButton chartButton"}
-                            onClick={this.onShuffleRequest}
-                            disabled={false}
-                            text={"Shuffle"}>
-                        </SubmitButton>
-                    </div>
-
-
-                    <Chart
-                        samples={this.samples}
-                        maxValue={this.maxValue}
-                        data={this.state.data}
-                        markIdx={this.state.markIdx}>
-                    </Chart>
 
                 </div>
             </div>);

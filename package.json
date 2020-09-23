@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack --mode production --display-modules",
     "start": "webpack-dev-server --host localhost --port 4567 --open --mode development",
-    "start-production": "webpack-dev-server --host localhost --port 4567 --open --mode production"
+    "startprod": "webpack-dev-server --host localhost --port 4567 --open --mode production"
   },
   "keywords": [],
   "author": "",
