@@ -1,7 +1,7 @@
-import SortDemonstrationPage from "../pages/SortDemonstrationPage.jsx";
+import MainPage from "../pages/MainPage.jsx";
 
 const exactIndexRoutes = [
-    {path: "/", component: SortDemonstrationPage},
+    {path: "/", component: MainPage},
 ];
 
 export default exactIndexRoutes;
