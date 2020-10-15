@@ -1,10 +1,13 @@
 const HtmlWebPackPlugin = require("html-webpack-plugin");
 const WorkerPlugin = require('worker-plugin');
+const { SourceMapDevToolPlugin } = require("webpack");
 
 const path = require('path');
 
 module.exports = {
-    entry: './src/index.js',
+    entry: [
+        "./src/index.js"
+    ],
     output: {
         path: __dirname,
         filename: 'bundle.js',
@@ -13,7 +16,6 @@ module.exports = {
         modules: [path.resolve(__dirname, 'src'), 'node_modules']
     },
     devServer: {
-        historyApiFallback: true,
         disableHostCheck: true,
     },
     plugins: [
@@ -22,9 +24,21 @@ module.exports = {
             filename: "./index.html"
         }),
         new WorkerPlugin(),
+        new SourceMapDevToolPlugin({
+            filename: "[file].map"
+        }),
     ],
     module: {
         rules: [
+             {
+                test: /\.js$/,
+                enforce: 'pre',
+                use: [
+                    {
+                        loader: 'source-map-loader'
+                    }
+                ],
+              },
             {
                 test: /\.(js|jsx)$/,
                 include: path.resolve(__dirname, 'src'),
@@ -88,7 +102,7 @@ module.exports = {
 
     externals: {
         config: JSON.stringify({
-            apiUrl: 'http://0.0.0.0:5000'
+            apiUrl: 'http://0.0.0.0:8000'
         })
     }
-};
+}
