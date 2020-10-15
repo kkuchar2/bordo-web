@@ -6,8 +6,8 @@
   "scripts": {
     "test": "echo \"No tests available\"",
     "build": "webpack --mode production --display-modules",
-    "start": "webpack-dev-server --host localhost --port 4567 --open --mode development",
-    "startprod": "webpack-dev-server --host localhost --port 4567 --open --mode production"
+    "start": "webpack-dev-server --host localhost --port 4567 --open --mode development --inline=false",
+    "startprod": "webpack-dev-server --host localhost --port 4567 --open --mode production --inline=false"
   },
   "keywords": [],
   "author": "",
