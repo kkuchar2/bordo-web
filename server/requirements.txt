@@ -1,6 +1,0 @@
-Django
-mysqlclient
-django-mysql
-djangorestframework
-markdown
-django-filter
