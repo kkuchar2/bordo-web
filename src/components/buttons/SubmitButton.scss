@@ -12,24 +12,11 @@
   &:focus {
     outline: none;
   }
-}
 
-.SubmitButton.enabled {
-  background: black;
-
-  .Text {
-    color: white;
-  }
-
-  &:hover {
-    cursor: pointer;
+  .content {
+    display: flex;
+    align-items: center;
+    justify-content: left;
   }
 }
 
-.SubmitButton.disabled {
-  background: rgba(0, 0, 0, 0.54);
-
-  .Text {
-    color: rgba(255, 255, 255, 0.44);
-  }
-}

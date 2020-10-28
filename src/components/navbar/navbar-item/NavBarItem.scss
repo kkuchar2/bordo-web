@@ -1,0 +1,29 @@
+.navbar-item {
+  margin-left: 40px;
+  box-sizing: border-box;
+  display: flex;
+  height: 100%;
+
+  .navbar-item-text {
+    box-sizing: border-box;
+    text-decoration: none;
+    color: #9B9B9B;
+    text-align: center;
+    display: inline-block;
+    font-weight: 600;
+    font-size: 14px;
+    height: 100%;
+
+    &:hover {
+      color: #1abc9c;
+    }
+  }
+
+  .navbar-item-icon {
+    margin-left: 5px;
+    box-sizing: border-box;
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+}

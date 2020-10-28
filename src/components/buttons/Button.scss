@@ -1,14 +1,9 @@
 .Button {
   background: black;
-  width: 80%;
-  height: 50px;
-  line-height: 50px;
-  border: none;
   color: rgb(255, 255, 255);
   font-size: 19px;
-  margin: 20px 15px 15px;
   border-radius: 5px;
-  font-family: "Roboto", sans-serif;
+  border: none;
 
   &:active {
     background-color: #c2ceff;

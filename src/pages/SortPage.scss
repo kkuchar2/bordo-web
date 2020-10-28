@@ -1,0 +1,164 @@
+$break-small: 400px;
+
+@keyframes fadein {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+body {
+  margin: 0;
+}
+
+.pageComponents2 {
+  height: 100%;
+  width: 100%;
+  animation: fadein 0.3s;
+  background: #1c1c1c;
+
+  .actions {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: left;
+    min-height: 70px;
+    background: #1c1c1c;
+
+    .titleContainer {
+      width: 100px;
+      min-width: 80px;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .title {
+      font-family: "Lato", Helvetica, Arial, sans-serif;
+      text-decoration: none;
+      color: #9B9B9B;
+      font-size: 17px;
+      font-weight: 400;
+
+      &:hover {
+        cursor: auto;
+      }
+    }
+
+    .methodSection {
+      opacity: 0;
+      padding: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: left;
+      animation: fadein 0.5s;
+      animation-fill-mode: forwards;
+      animation-delay: 0.1s;
+    }
+
+    .sampleCountSection {
+      padding: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: left;
+
+      opacity: 0;
+      animation: fadein 0.5s;
+      animation-fill-mode: forwards;
+      animation-delay: 0.2s;
+    }
+
+    .buttonsSection {
+      padding: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      animation: fadein 0.5s;
+      animation-fill-mode: forwards;
+      animation-delay: 0.5s;
+    }
+
+    .sorting-algorithm-select {
+      min-width: 210px;
+      height: 50px;
+      margin-left: 20px;
+      margin-right: 20px;
+      width: 250px;
+
+      .options-view-button {
+        border: none;
+        padding: 0;
+      }
+    }
+
+    .line-break {
+      width: 100%;
+    }
+
+    .chartButton {
+      display: inline-block;
+      position: relative;
+      margin: 0 0 0 10px;
+
+      width: 120px;
+      height: 35px;
+      font-size: 16px;
+      line-height: 35px;
+      padding: 0 0 0 20px;
+      background: #252525;
+      color: #9B9B9B;
+      border-radius: 5px;
+
+      &:active {
+        outline: none;
+      }
+
+      &:focus {
+        outline: none;
+      }
+
+      img {
+        position: absolute;
+        right: 15px;
+      }
+    }
+
+    .chartButton.enabled {
+
+      .Text {
+        color: white;
+      }
+
+      &:hover {
+        cursor: pointer;
+      }
+    }
+
+    .chartButton.disabled {
+      background: #1a1a1acc;
+
+      .Text {
+        color: rgba(255, 255, 255, 0.34);
+      }
+
+      img {
+        opacity: 0.3;
+      }
+    }
+
+    .stopButton {
+      width: 40px;
+
+      img {
+        position: absolute;
+        right: 14px;
+      }
+    }
+  }
+
+}
+
+
+
+

@@ -12,7 +12,7 @@ class SubmitButton extends Component {
         this.onClick = this.onClick.bind(this);
         this.getAdditionalClassName = this.getAdditionalClassName.bind(this);
 
-        this.state = { text: "Submit" }
+        this.state = {text: undefined}
     }
 
     componentDidMount() {
@@ -22,7 +22,9 @@ class SubmitButton extends Component {
     }
 
     onClick() {
-        if (this.props.disabled) return;
+        if (this.props.disabled) {
+            return;
+        }
         this.props.onClick();
     }
 
@@ -35,6 +37,10 @@ class SubmitButton extends Component {
         }
     }
 
+    renderButtonContent = () => {
+
+    };
+
     render() {
         return (
             <button
@@ -44,11 +50,13 @@ class SubmitButton extends Component {
                 <div className={"content"}>
                     <Text
                         visible={!this.props.processing}
-                        text={this.state.text}
+                        text={this.props.text}
                         onClick={this.state.onTextClick}
                     >
                     </Text>
+                    {this.props.children}
                 </div>
+
             </button>
         )
     }

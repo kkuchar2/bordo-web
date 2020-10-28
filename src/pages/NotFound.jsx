@@ -1,10 +1,14 @@
 import React, {Component} from 'react';
 
+import "./NotFound.scss"
+
 class NotFound extends Component {
 
     render() {
         return (
-            <div>Page not found.</div>
+            <div className={"notFound"}>
+                <div className={"notFoundText"}>Page not found.</div>
+            </div>
         );
     }
 }

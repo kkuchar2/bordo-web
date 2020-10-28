@@ -1,0 +1,17 @@
+
+.notFound {
+  position: absolute;
+  height: calc(100% - 60px);
+  width: 100%;
+
+  .notFoundText {
+    color: white;
+    position: relative;
+    float: left;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: "3270Narrow Nerd Font", sans-serif;
+    font-size: 3em;
+  }
+}

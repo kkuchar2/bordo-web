@@ -21,25 +21,18 @@ class SelectControl extends Component {
     }
 
     onClick = () => {
-        this.toggleDropdown();
-
-        if (!this.state.open) {
-            this.props.onOpen();
-        }
-        else {
-            this.props.onClosed();
+        if (!this.props.disabled) {
+            this.toggleDropdown();
         }
     };
 
     toggleDropdown = () => {
-         this.setState({open: !this.state.open});
+        this.setState({open: !this.state.open});
     };
 
     handleClickOutside(event) {
         if (this.wrapperRef && !this.wrapperRef.contains(event.target)) {
             this.setState({open: false});
-            this.props.onClosed();
-            console.log('You clicked outside of me!');
         }
     }
 
@@ -58,6 +51,15 @@ class SelectControl extends Component {
         this.props.onChange(index);
         this.setState({open: !this.state.open});
     };
+
+    getAdditionalClassName() {
+        if (this.props.disabled) {
+            return "disabled";
+        }
+        else {
+            return "enabled";
+        }
+    }
 
     renderOption = (option, index) => {
         return (
@@ -83,11 +85,12 @@ class SelectControl extends Component {
 
     render() {
         return (
-            <div ref={this.setWrapperRef} className="appCover">
+            <div ref={this.setWrapperRef}
+                 className={["select-control", this.props.className, this.getAdditionalClassName()].join(" ")}>
                 <input type="button" onClick={this.onClick} className="options-view-button"/>
                 <div className="brd select-button">
                     <div className="selected-value">
-                        <span>{this.getTopValue()}</span>
+                        <div>{this.getTopValue()}</div>
                     </div>
                     <div id="chevrons">
                         <span className="chevron top"/>

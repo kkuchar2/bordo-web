@@ -5,5 +5,23 @@
   bottom: 0;
   right: 0;
   overflow: auto;
-  z-index: -1;
+  z-index: 10;
+  //-webkit-animation: fadeInFromNone 0.2s ease-out;
+}
+
+@-webkit-keyframes fadeInFromNone {
+  0% {
+    display: none;
+    opacity: 0;
+  }
+
+  1% {
+    display: block;
+    opacity: 0;
+  }
+
+  100% {
+    display: block;
+    opacity: 1;
+  }
 }
