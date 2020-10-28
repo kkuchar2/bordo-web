@@ -46,14 +46,10 @@ body {
     }
 
     .methodSection {
-      opacity: 0;
       padding: 5px;
       display: flex;
       align-items: center;
       justify-content: left;
-      animation: fadein 0.5s;
-      animation-fill-mode: forwards;
-      animation-delay: 0.1s;
     }
 
     .sampleCountSection {
