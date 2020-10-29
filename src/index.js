@@ -23,10 +23,6 @@ ReactDOM.render(
     <div className="commonPage">
         <OverlayGradient startColor={"rgba(174,77,129,0.67)"} endColor={"rgba(215,83,65, 0.8)"} zindex={-10}/>
         <NavBar>
-            <div className={"titleContainer"}>
-                <a href={'/'} className={"title"}>Krzysztof Kucharski</a>
-            </div>
-
             <NavBarItem iconSrc={'src/images/sort_icon.png'}  href={'/sort'}>Sorting algorithms</NavBarItem>
             {/*<NavBarItem iconSrc={'src/images/germ_icon.png'} href={'/covid'}>COVID-19</NavBarItem>*/}
 

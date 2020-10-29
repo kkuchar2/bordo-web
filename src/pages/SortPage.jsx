@@ -183,10 +183,6 @@ class SortPage extends Component {
                 <div className={"actions"}>
 
                     <div className={"methodSection"}>
-                        <div className={"titleContainer"}>
-                            <div className={"title"}>Method:</div>
-                        </div>
-
                         <SelectControl
                             className={"sorting-algorithm-select"}
                             options={this.sortingAlgorithms}
@@ -204,6 +200,7 @@ class SortPage extends Component {
                         <Input
                             id="fname"
                             name="fname"
+                            disabled={true}
                             value={this.state.sampleCount}
                             active={this.state.sorting}
                             onChange={this.onSampleCountInputChange}/>
