@@ -1,4 +1,4 @@
-import {state, CheckPause, notifySort} from "workers/worker.utils.js";
+import {state, CheckPause, notifyDataUpdate} from "workers/worker.utils.js";
 
 function partition(left, right) {
     const pivot = state.data[Math.floor((right + left) / 2)];
@@ -17,7 +17,7 @@ function partition(left, right) {
             i++;
             j--;
         }
-        notifySort();
+        notifyDataUpdate();
     }
     return i;
 }

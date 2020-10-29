@@ -74,6 +74,22 @@ module.exports = {
                     }
                 ]
             },
+            // Files
+            {
+                test: /\.(json)$/,
+                use: [
+                    {
+                        loader: 'file-loader',
+                        options: {
+                            name: '[name].[ext]',
+                            include: path.resolve(__dirname, 'src/config'),
+                            outputPath: 'config/',
+                            context: 'src/config',
+                            useRelativePaths: true
+                        }
+                    }
+                ]
+            },
             // SCSS
             {
                 test: /\.(scss)$/,

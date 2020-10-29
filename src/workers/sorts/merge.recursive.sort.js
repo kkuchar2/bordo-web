@@ -1,4 +1,4 @@
-import {state, CheckPause, notifySort} from "workers/worker.utils.js";
+import {state, CheckPause, notifyDataUpdate} from "workers/worker.utils.js";
 
 async function merge(start, mid, end) {
     if (state.abort) {
@@ -32,7 +32,7 @@ async function merge(start, mid, end) {
 
     for (let i = 0; i < merged.length; i++) {
         state.data[start + i] = merged[i];
-        notifySort();
+        notifyDataUpdate();
     }
 
     await CheckPause();

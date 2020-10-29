@@ -21,6 +21,12 @@ class SortPage extends Component {
         selectedAlgorithm: 0
     };
 
+    messageHandlersMap = {
+        "sort": payload => this.onSortDataReceived(payload),
+        "shuffle": payload => this.onShuffleDataReceived(payload),
+        "sortFinished": payload => this.onSortFinished(payload.sorted)
+    };
+
     sortingAlgorithms = ["MergeSort", "BubbleSort", "InsertionSort", "QuickSort"];
 
     maxValue = 1000;
@@ -47,20 +53,7 @@ class SortPage extends Component {
     }
 
     onMessageReceived = e => {
-        let type = e.data[0];
-
-        if (type === "sort") {
-            this.onSortDataReceived(e.data[1]);
-        }
-        else if (type === "shuffle") {
-            this.onShuffleDataReceived(e.data[1]);
-        }
-        else if (type === "not_sorted") {
-            this.onSortFinished(false);
-        }
-        else if (type === "sorted") {
-            this.onSortFinished(true);
-        }
+        this.messageHandlersMap[e.data.type](e.data.payload);
     }
 
     onShuffleDataReceived = data => {
@@ -86,24 +79,27 @@ class SortPage extends Component {
         }
         else {
             this.setState({sorting: true});
-            this.worker.postMessage(["sort",
-                this.sortingAlgorithms[this.state.selectedAlgorithm], new Uint32Array(this.state.data)]);
+            this.sendMessage("sort", {algorithm_type: this.sortingAlgorithms[this.state.selectedAlgorithm]});
         }
     }
 
     onStopButtonPressed = () => {
         console.log("Requesting stop")
-        this.worker.postMessage(["stop"]);
+        this.sendMessage("stop");
     }
 
     onPauseRequest = () => {
         this.setState({paused: !this.state.paused});
-        this.worker.postMessage(["pause"]);
+        this.sendMessage("pause");
     }
 
     onShuffleRequest = sampleCount => {
         this.setState({sorting: false});
-        this.worker.postMessage(["shuffle", sampleCount, this.maxValue]);
+        this.sendMessage("shuffle", {sampleCount : sampleCount, maxValue: this.maxValue});
+    }
+
+    sendMessage = (type, payload = []) => {
+        this.worker.postMessage({type: type, payload : payload});
     }
 
     refreshState = () => {
