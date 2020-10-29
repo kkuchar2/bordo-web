@@ -29,9 +29,6 @@ frontend_build:
   artifacts:
     paths:
       - node_modules/
-  only:
-    - tags
-    - master
 
 frontend_test:
   stage: frontend_test
