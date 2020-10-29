@@ -29,6 +29,10 @@ $navbar-height: 100px;
     height: 100%;
     background: rgba(21, 21, 21, 0.95);
 
+    @media (min-width: 600px) {
+      display: none;
+    }
+
     @media (max-width: 600px) {
       width: 100%;
       top: 100px;
