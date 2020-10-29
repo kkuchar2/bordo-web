@@ -38,5 +38,5 @@ frontend_test:
 deploy:
   stage: deploy
   script:
-    - rsync -avuz --exclude=".*" $CI_PROJECT_DIR/dist/ $SERVER_USER@$SERVER_IP:/home/kuchkr
+    - rsync --itemize-changes --verbose --human-readable --times --checksum --recursive --delete --exclude-from=/etc/rsyncignore --delete-excluded . $SERVER_USER@$SERVER_IP:/home/kuchkr
     - ssh $SERVER_USER@$SERVER_IP '. /etc/profile; pm2 reload all'
