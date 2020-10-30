@@ -19,7 +19,7 @@ before_script:
   - ssh-keyscan $SERVER_IP >> ~/.ssh/known_hosts
   - chmod 644 ~/.ssh/known_hosts
 
-frontend_build:
+build:
   stage: build
   script:
     - npm install
@@ -27,7 +27,7 @@ frontend_build:
     paths:
       - node_modules/
 
-frontend_test:
+test:
   stage: test
   script:
     - npm test
