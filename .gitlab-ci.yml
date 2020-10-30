@@ -38,5 +38,5 @@ frontend_test:
 deploy:
   stage: deploy
   script:
-    - rsync --itemize-changes --verbose --human-readable --times --checksum --recursive . $SERVER_USER@$SERVER_IP:/home/kuchkr/personal_website
+    - rsync --itemize-changes --verbose --human-readable --times --checksum --recursive . $SERVER_USER@$SERVER_IP:/home/kuchkr/frontend_main
     - ssh $SERVER_USER@$SERVER_IP '. /etc/profile; pm2 reload all'
