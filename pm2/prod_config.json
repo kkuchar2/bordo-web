@@ -3,7 +3,7 @@
 	    {
 		    "name": "personal_website_prod",
 		    "script": "npm",
-		    "args": "startprod"
+		    "args": "run startprod"
 	    }
 	]
 }

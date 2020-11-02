@@ -24,10 +24,6 @@ ReactDOM.render(
         <OverlayGradient startColor={"rgba(174,77,129,0.67)"} endColor={"rgba(215,83,65, 0.8)"} zindex={-10}/>
         <NavBar>
             <NavBarItem iconSrc={'src/images/sort_icon.png'}  href={'/sort'}>Sorting algorithms</NavBarItem>
-            {/*<NavBarItem iconSrc={'src/images/germ_icon.png'} href={'/covid'}>COVID-19</NavBarItem>*/}
-
-            {/*<NavBarItem iconSrc={'src/images/canvas_icon.png'} href={'/canvas'}>Canvas playground</NavBarItem>*/}
-            {/*<NavBarItem iconSrc={'src/images/unity_icon.png'} href={'/'}>Unity</NavBarItem>*/}
         </NavBar>
         <BrowserRouter>
             <Switch>
