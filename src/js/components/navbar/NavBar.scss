@@ -1,0 +1,132 @@
+$navbar-height: 100px;
+
+@import '../../../scss/style/responsive';
+
+@keyframes fadeout {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes fadein {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.navbar-group {
+  width: 100%;
+
+  .navbar-items-list {
+    z-index: 2;
+    position: absolute;
+    height: 100%;
+    background: rgba(21, 21, 21, 0.95);
+
+    @media (min-width: 600px) {
+      display: none;
+    }
+
+    @media (max-width: 600px) {
+      width: 100%;
+      top: 100px;
+
+      .navbar-item {
+        height: 70px;
+        display: flex;
+        align-items: center;
+        justify-content: left;
+        margin-left: 0;
+        padding-left: 10px;
+      }
+    }
+  }
+
+  .navbar-items-list .visible {
+
+  }
+
+  .navbar-items-list .hidden {
+
+  }
+
+  .navbar {
+    box-sizing: border-box;
+    background: #232323;
+    height: $navbar-height;
+    width: 100%;
+    display: flex;
+
+    .titleContainer {
+      margin-left: 20px;
+
+      @media (max-width: 600px) {
+        margin-left: 60px;
+      }
+
+      width: 200px;
+      padding: 10px;
+      box-sizing: border-box;
+      display: flex;
+      align-items: center;
+      justify-content: left;
+      height: 100%;
+      -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+      font-family: "Lato", Helvetica, Arial, sans-serif;
+      text-decoration: none;
+      white-space: nowrap;
+      color: #9B9B9B;
+      text-align: center;
+      font-weight: 600;
+      font-size: 20px;
+
+      &:hover {
+        color: #40931f;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .hamburger {
+        display: flex;
+        position: absolute;
+        left: 0;
+        cursor: pointer;
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        background: none;
+        width: 50px;
+        align-items: center;
+        justify-content: center;
+        margin-top: 25px;
+        margin-left: 10px;
+        opacity: 0.5;
+      }
+    }
+
+    .navbar-items {
+      margin-left: 40px;
+
+      @media (max-width: 600px) {
+          display: none;
+      }
+      width: 100%;
+      display: flex;
+      box-sizing: border-box;
+      position: relative;
+
+      .navbar-item {
+        line-height: $navbar-height;
+      }
+    }
+  }
+
+
+  .hamburger {
+    display: none;
+  }
+}

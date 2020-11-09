@@ -1,0 +1,36 @@
+.navbar-item {
+  padding: 10px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: left;
+  height: 100%;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  color: transparent;
+
+  .navbar-item-text {
+    font-family: "Lato", Helvetica, Arial, sans-serif;
+    box-sizing: border-box;
+    text-decoration: none;
+    white-space: nowrap;
+    color: #9B9B9B;
+    text-align: center;
+    display: inline-block;
+    font-weight: 600;
+    font-size: 14px;
+  }
+
+  .navbar-item-icon {
+    margin-left: 15px;
+    box-sizing: border-box;
+  }
+
+  &:hover {
+    background-color: rgba(49, 49, 49, 0.75);
+    cursor: pointer;
+
+    .navbar-item-text {
+      color: #ffffff;
+    }
+  }
+}

@@ -1,16 +1,22 @@
-html{
-  background: url("images/background.jpg") no-repeat center 15% fixed;
+html {
+  height: 100%;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
-  height: 100%;
-  width: 100%;
+  background: #4ac29a;
+  background-repeat: no-repeat;
+  background: -webkit-linear-gradient(to left top, #4ac29a, #bdfff3);
+  background: -moz-linear-gradient(to left top, #4ac29a, #bdfff3);
+  background: -ms-linear-gradient(to left top, #4ac29a, #bdfff3);
+  background: -o-linear-gradient(to left top, #4ac29a, #bdfff3);
+  background: linear-gradient(to left top, #4ac29a, #bdfff3);
 }
 
 body {
   height: 100%;
   width: 100%;
+  margin: 0;
 }
 
 #root {

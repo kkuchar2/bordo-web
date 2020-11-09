@@ -1,15 +1,16 @@
 const HtmlWebPackPlugin = require("html-webpack-plugin");
 const WorkerPlugin = require('worker-plugin');
-const { SourceMapDevToolPlugin } = require("webpack");
+const CompressionPlugin = require('compression-webpack-plugin');
+const CopyPlugin = require('copy-webpack-plugin');
 
 const path = require('path');
 
 module.exports = {
     entry: [
-        "./src/index.js"
+        "index.js"
     ],
     output: {
-        path: __dirname,
+        path: path.resolve(__dirname, 'build'),
         filename: 'bundle.js',
     },
     resolve: {
@@ -25,13 +26,19 @@ module.exports = {
             filename: "./index.html"
         }),
         new WorkerPlugin(),
-        new SourceMapDevToolPlugin({
-            filename: "[file].map"
+        new CompressionPlugin({
+            algorithm: 'gzip',
+            test: /\.js$|\.css$|\.html$/
+        }),
+        new CopyPlugin({
+            patterns: [
+                { from: path.resolve(__dirname, 'src/images'), to: path.resolve(__dirname, 'build/images') },
+            ],
         }),
     ],
     module: {
         rules: [
-             {
+            {
                 test: /\.js$/,
                 enforce: 'pre',
                 use: [
@@ -39,7 +46,7 @@ module.exports = {
                         loader: 'source-map-loader'
                     }
                 ],
-              },
+            },
             {
                 test: /\.(js|jsx)$/,
                 include: path.resolve(__dirname, 'src'),
@@ -65,26 +72,11 @@ module.exports = {
                     {
                         loader: 'file-loader',
                         options: {
-                            name: '[name].[ext]',
-                            include: path.resolve(__dirname, 'src/images'),
-                            outputPath: 'images/',
-                            context: 'src/images',
-                            useRelativePaths: true
-                        }
-                    }
-                ]
-            },
-            // Files
-            {
-                test: /\.(json)$/,
-                use: [
-                    {
-                        loader: 'file-loader',
-                        options: {
-                            name: '[name].[ext]',
-                            include: path.resolve(__dirname, 'src/config'),
-                            outputPath: 'config/',
-                            context: 'src/config',
+                            name: '[path][name].[ext]',
+                            context: path.resolve(__dirname, "src/"),
+                            useRelativePath: true,
+                            outputPath: '/',
+                            publicPath: '../',
                             useRelativePaths: true
                         }
                     }

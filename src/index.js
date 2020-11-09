@@ -1,11 +1,10 @@
-import React from 'react';
+import React, {Suspense} from 'react';
 import ReactDOM from 'react-dom';
 import {BrowserRouter, Route, Switch} from "react-router-dom";
-import OverlayGradient from "../src/components/overlay/OverlayGradient.jsx";
-import exactIndexRoutes from "routes/exactRoutes.jsx";
-import NotFound from "../src/pages/NotFound.jsx";
-import NavBar from "../src/components/navbar/NavBar.jsx";
-import NavBarItem from "components/navbar/navbar-item/NavBarItem.jsx";
+import exactIndexRoutes from "js/routes/exactRoutes.jsx";
+import NotFound from "./js/pages/NotFound.jsx";
+import NavBar from "./js/components/navbar/NavBar.jsx";
+import NavBarItem from "js/components/navbar/navbar-item/NavBarItem.jsx";
 
 import removeFbclid from "remove-fbclid";
 
@@ -21,13 +20,15 @@ function mapRoutes() {
 
 ReactDOM.render(
     <div className="commonPage">
-        <OverlayGradient startColor={"rgba(174,77,129,0.67)"} endColor={"rgba(215,83,65, 0.8)"} zindex={-10}/>
-        <NavBar>
-            <NavBarItem iconSrc={'src/images/sort_icon.png'}  href={'/sort'}>Sorting algorithms</NavBarItem>
-        </NavBar>
         <BrowserRouter>
+            <NavBar>
+                <NavBarItem iconSrc={'images/sort_icon.png'} href={'/sort'}>Sorting algorithms</NavBarItem>
+                <NavBarItem iconSrc={'images/grid_icon.png'} href={'/grid'}>Grid</NavBarItem>
+            </NavBar>
             <Switch>
-                {mapRoutes()}
+                <Suspense fallback={null}>
+                    {mapRoutes()}
+                </Suspense>
                 <Route component={NotFound} key={0}/>
             </Switch>
         </BrowserRouter>
