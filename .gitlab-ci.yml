@@ -35,6 +35,10 @@ deploy:
     - ssh-keyscan $SERVER_IP >> ~/.ssh/known_hosts
     - chmod 644 ~/.ssh/known_hosts
   script:
-    - ssh $SERVER_USER@$SERVER_IP 'cd frontend_main && git fetch --all && git pull'
+    - |
+      ssh $SERVER_USER@$SERVER_IP /bin/zsh -s << EOT 
+      cd frontend_main && git fetch --all && git pull
+      rm -rf build
+      npm run build
   only:
     - master
