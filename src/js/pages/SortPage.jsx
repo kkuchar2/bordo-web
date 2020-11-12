@@ -57,7 +57,6 @@ class SortPage extends Component {
             this.worker.terminate();
         }
         clearInterval(this.state.intervalId);
-        console.log("Clearing interval: " + this.state.intervalId);
     }
 
     onMessageReceived = e => {

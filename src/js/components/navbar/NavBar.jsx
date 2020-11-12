@@ -1,32 +1,48 @@
 import React, {Component} from 'react';
-
+import {connect} from "react-redux";
+import {Link} from "react-router-dom";
 import SubmitButton from "js/components/buttons/SubmitButton.jsx";
+import {navbarActions} from "js/redux/actions";
+import NavBarItem from "js/components/navbar/navbar-item/NavBarItem.jsx";
 
 import "js/components/navbar/NavBar.scss"
 
-import {Link} from "react-router-dom";
-
 class NavBar extends Component {
-
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            menuVisible: false
+    onMenuClick = e => {
+        if (this.props.opened) {
+            this.props.close();
+        }
+        else {
+            this.props.open();
         }
     }
 
-    renderMenu() {
-        if (this.state.menuVisible) {
+    onLinkClick = e => {
+        this.props.close();
+    }
+
+    renderItems() {
+        return <>
+            <NavBarItem onClick={this.onLinkClick} iconSrc={'images/sort_icon.png'} href={'/sort'}>Sorting algorithms</NavBarItem>
+            <NavBarItem onClick={this.onLinkClick} iconSrc={'images/grid_icon.png'} href={'/grid'}>Grid</NavBarItem>
+        </>
+    }
+
+    renderResponsiveMenu() {
+        if (this.props.opened) {
             return <div className={"navbar-items-list"}>
-                {this.props.children}
+                {this.renderItems()}
             </div>
         }
     }
 
-    onMenuClick = e => {
-        this.setState({menuVisible: !this.state.menuVisible})
-    };
+    renderClassicMenu() {
+        if (!this.props.opened) {
+            return <div className={"navbar-items"}>
+                {this.renderItems()}
+            </div>
+        }
+    }
 
     render() {
         return (
@@ -36,16 +52,25 @@ class NavBar extends Component {
                         <img src={"images/hamburger_icon.png"} alt={""} width={20} height={20}/>
                     </SubmitButton>
 
-                    <Link to={'/'} className={"titleContainer"}>Krzysztof Kucharski</Link>
+                    <Link to={'/'} onClick={this.onLinkClick} className={"titleContainer"}>Krzysztof Kucharski</Link>
 
-                    <div className={"navbar-items"}>
-                        {this.props.children}
-                    </div>
+                    {this.renderClassicMenu()}
+
                 </div>
-                { this.renderMenu() }
+                {this.renderResponsiveMenu()}
             </div>
         );
     }
 }
 
-export default NavBar;
+const mapStateToProps = state => {
+    return state.navbarReducer;
+};
+
+
+const mapDispatchToProps = {
+    open: navbarActions.open,
+    close: navbarActions.close
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(NavBar);

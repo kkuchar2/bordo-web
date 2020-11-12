@@ -6,7 +6,7 @@ import "js/components/navbar/navbar-item/NavBarItem.scss"
 class NavBarItem extends Component {
     render() {
         return (
-            <Link to={this.props.href} className={"navbar-item"}>
+            <Link onClick={this.props.onClick} to={this.props.href} className={"navbar-item"}>
                 <div className={"navbar-item-text"}>
                     {this.props.children}
                 </div>

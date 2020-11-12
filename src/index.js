@@ -4,7 +4,8 @@ import {BrowserRouter, Route, Switch} from "react-router-dom";
 import exactIndexRoutes from "js/routes/exactRoutes.jsx";
 import NotFound from "./js/pages/NotFound.jsx";
 import NavBar from "./js/components/navbar/NavBar.jsx";
-import NavBarItem from "js/components/navbar/navbar-item/NavBarItem.jsx";
+import {store} from "./js/redux/store.jsx";
+import {Provider} from "react-redux";
 
 import removeFbclid from "remove-fbclid";
 
@@ -20,18 +21,17 @@ function mapRoutes() {
 
 ReactDOM.render(
     <div className="commonPage">
-        <BrowserRouter>
-            <NavBar>
-                <NavBarItem iconSrc={'images/sort_icon.png'} href={'/sort'}>Sorting algorithms</NavBarItem>
-                <NavBarItem iconSrc={'images/grid_icon.png'} href={'/grid'}>Grid</NavBarItem>
-            </NavBar>
-            <Switch>
-                <Suspense fallback={null}>
-                    {mapRoutes()}
-                </Suspense>
-                <Route component={NotFound} key={0}/>
-            </Switch>
-        </BrowserRouter>
+        <Provider store={store}>
+            <BrowserRouter>
+                <NavBar />
+                <Switch>
+                    <Suspense fallback={null}>
+                        {mapRoutes()}
+                    </Suspense>
+                    <Route component={NotFound} key={0}/>
+                </Switch>
+            </BrowserRouter>
+        </Provider>
     </div>,
     document.getElementById('root')
 );

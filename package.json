@@ -19,15 +19,16 @@
     "@babel/plugin-proposal-class-properties": "^7.12.1",
     "@babel/plugin-transform-runtime": "^7.12.1",
     "@babel/preset-env": "^7.12.1",
-    "@babel/preset-react": "^7.12.1",
-    "babel-loader": "^8.1.0",
-    "compression-webpack-plugin": "^6.0.5",
+    "@babel/preset-react": "^7.12.5",
+    "babel-loader": "^8.2.1",
+    "compression-webpack-plugin": "^6.1.0",
     "css-loader": "^3.6.0",
     "file-loader": "^4.2.0",
     "html-loader": "^0.5.5",
     "html-webpack-plugin": "^3.2.0",
     "node-sass": "^4.14.1",
     "prop-types": "^15.7.2",
+    "redux": "^4.0.4",
     "remove-fbclid": "^0.9.6",
     "sass-loader": "^8.0.2",
     "source-map-loader": "^1.0.0",
@@ -41,13 +42,16 @@
     "worker-plugin": "^3.2.0"
   },
   "dependencies": {
-    "@types/react": "^16.9.53",
+    "@types/react": "^16.9.56",
     "copy-webpack-plugin": "^6.3.0",
     "lighthouse": "^6.4.1",
     "react": "^16.14.0",
     "react-dom": "^16.14.0",
+    "react-redux": "^7.2.2",
     "react-router-dom": "^5.2.0",
     "react-router-redux": "^4.0.8",
+    "redux-logger": "^3.0.6",
+    "redux-thunk": "^2.3.0",
     "three": "latest"
   }
 }

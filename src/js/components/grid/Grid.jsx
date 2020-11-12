@@ -73,11 +73,6 @@ class Grid extends Component {
 
     componentWillUnmount() {
         clearInterval(this.state.intervalId);
-        console.log("Clearing interval: " + this.state.intervalId);
-    }
-
-    update = () => {
-        console.log("Up[dateing");
     }
 
     updateDimensions = () => {
