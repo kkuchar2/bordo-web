@@ -45,6 +45,7 @@ deploy:
         cd frontend_main 
         git fetch --all 
         git pull 
+        npm install
         npm run build
 
   only:
