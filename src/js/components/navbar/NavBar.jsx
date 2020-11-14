@@ -46,8 +46,8 @@ class NavBar extends Component {
 
     render() {
         return (
-            <div className={"navbar-group"}>
-                <div className={"navbar"}>
+            <div className={"navbar"}>
+                <div className={"navbar-group"}>
                     <SubmitButton onClick={this.onMenuClick} className={"hamburger"}>
                         <img src={"images/hamburger_icon.png"} alt={""} width={20} height={20}/>
                     </SubmitButton>

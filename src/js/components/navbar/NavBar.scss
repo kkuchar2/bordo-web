@@ -1,5 +1,3 @@
-$navbar-height: 100px;
-
 @import '../../../scss/style/responsive';
 
 @keyframes fadeout {
@@ -20,20 +18,21 @@ $navbar-height: 100px;
   }
 }
 
-.navbar-group {
+$stop-width: 800px;
+
+.navbar {
   width: 100%;
 
   .navbar-items-list {
     z-index: 2;
     position: absolute;
-    height: 100%;
     background: rgba(21, 21, 21, 0.95);
 
-    @media (min-width: 600px) {
+    @media (min-width: $stop-width) {
       display: none;
     }
 
-    @media (max-width: 600px) {
+    @media (max-width: $stop-width) {
       width: 100%;
       top: 100px;
 
@@ -56,17 +55,17 @@ $navbar-height: 100px;
 
   }
 
-  .navbar {
+  .navbar-group {
     box-sizing: border-box;
     background: #232323;
-    height: $navbar-height;
+    height: 100%;
     width: 100%;
     display: flex;
 
     .titleContainer {
       margin-left: 20px;
 
-      @media (max-width: 600px) {
+      @media (max-width: $stop-width) {
         margin-left: 60px;
       }
 
@@ -91,7 +90,7 @@ $navbar-height: 100px;
       }
     }
 
-    @media (max-width: 600px) {
+    @media (max-width: $stop-width) {
       .hamburger {
         display: flex;
         position: absolute;
@@ -111,17 +110,13 @@ $navbar-height: 100px;
     .navbar-items {
       margin-left: 40px;
 
-      @media (max-width: 600px) {
+      @media (max-width: $stop-width) {
           display: none;
       }
       width: 100%;
       display: flex;
       box-sizing: border-box;
       position: relative;
-
-      .navbar-item {
-        line-height: $navbar-height;
-      }
     }
   }
 

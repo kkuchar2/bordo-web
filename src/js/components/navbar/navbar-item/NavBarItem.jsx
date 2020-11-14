@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Link} from "react-router-dom";
-import "js/components/navbar/navbar-item/NavBarItem.scss"
 
+import "./NavBarItem.scss"
 
 class NavBarItem extends Component {
     render() {

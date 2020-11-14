@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 
-import "js/components/chart/Chart.scss"
+import "./BarsView.scss"
 
 import {
     Color, Mesh,
@@ -11,7 +11,7 @@ import {
     WebGLRenderer
 } from "three";
 
-Array.prototype.max = function() {
+Array.prototype.max = function () {
     return Math.max.apply(null, this);
 };
 
@@ -38,88 +38,54 @@ const fragmentShader = `
     }
 `;
 
-class Chart extends Component {
+class BarsView extends Component {
 
     samples = 0;
     maxValue = 0;
-    spacing = 20.0;
 
     near = -500;
     far = 1000;
 
-    state = {
-        windowWidth: 0,
-        windowHeight: 0
-    }
-
     constructor(props) {
         super(props);
-
         this.renderer = new WebGLRenderer({alpha: true});
         this.renderer.setClearColor(0x000000, 0.0);
     }
 
-    updateDimensions = () => {
-        this.setState({windowWidth: window.innerWidth, windowHeight: window.innerHeight});
-        this.recalculateGeometry();
-    };
-
     componentDidMount = () => {
-        window.addEventListener('resize', this.updateDimensions);
-        this.updateDimensions();
-
-        if (this.renderer !== undefined) {
-            const gl = this.renderer.getContext();
-            gl.enable(gl.BLEND);
-            gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
-            return;
-        }
-
         let intervalId = setInterval(this.refreshState, 16);
-        this.setState({ intervalId: intervalId })
+        this.setState({intervalId: intervalId});
+        const gl = this.renderer.getContext();
+        gl.enable(gl.BLEND);
+        gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
     }
 
-    componentWillUnmount(){
+    componentWillUnmount() {
         clearInterval(this.state.intervalId);
     }
 
     componentDidUpdate = () => {
-        let dirtyGeometry = false;
-
         const regex = /^([1-9][0-9]{0,3}|10000)$/;
 
         if (this.props.samples === undefined) {
             this.samples = this.props.data.length;
-            dirtyGeometry = true;
         }
         else {
             if (this.samples !== this.props.samples && regex.test(this.props.samples)) {
                 this.samples = this.props.samples;
-                dirtyGeometry = true;
             }
         }
 
         if (this.props.maxValue === undefined) {
             this.maxValue = this.props.data.max();
-            dirtyGeometry = true;
         }
         else {
             if (this.maxValue !== this.props.maxValue) {
                 this.maxValue = this.props.maxValue;
-                dirtyGeometry = true;
             }
         }
 
-        if (dirtyGeometry) {
-            this.recalculateGeometry();
-        }
-
-
-        for (let i = 0; i < this.samples; i++) {
-            this.scaleBar(i, this.props.data[i] / this.maxValue);
-            this.bars[i].material = i % 2 === 0 ? this.material1 : this.material3;
-        }
-
+        this.recalculateGeometry();
         this.renderGL();
     }
 
@@ -132,8 +98,8 @@ class Chart extends Component {
     }
 
     recalculateGeometry = () => {
-        this.width = this.state.windowWidth; // minus padding
-        this.height = this.state.windowHeight - 300; // minus padding
+        this.width = this.props.width;
+        this.height = this.props.height;
 
         this.barWidth = this.width / this.samples;
         this.barHeight = this.height;
@@ -151,6 +117,7 @@ class Chart extends Component {
 
         // Create renderer
         if (this.width <= 0 || this.height <= 0) {
+            console.log("errr, width: " + this.width + " height: " + this.height);
             return;
         }
 
@@ -161,8 +128,7 @@ class Chart extends Component {
         this.geometry.computeBoundingBox();
 
         this.material1 = this.createMaterial(0xaaff00, 0.2);
-        this.material2 = this.createMaterial(0xaaff00, 0.5);
-        this.material3 = this.createMaterial(0xff2200, 0.5);
+        this.material2 = this.createMaterial(0xff2200, 0.5);
 
         this.bars = [];
 
@@ -170,10 +136,16 @@ class Chart extends Component {
         this.scene = new Scene();
 
         // Add elements to scene
+
         for (let i = 0; i < this.samples; i++) {
             let bar = this.createBar(i);
             this.bars.push(bar);
             this.scene.add(bar);
+        }
+
+        for (let i = 0; i < this.samples; i++) {
+            this.scaleBar(i, this.props.data[i] / this.maxValue);
+            this.bars[i].material = i % 2 === 0 ? this.material1 : this.material2;
         }
     }
 
@@ -204,10 +176,8 @@ class Chart extends Component {
     }
 
     render = () => {
-        return (
-            <div className={"chart"} ref={ref => (this.mount = ref)}/>
-        )
+        return (<div className={"glView"} ref={ref => (this.mount = ref)}/>)
     }
 }
 
-export default Chart;
+export default BarsView;

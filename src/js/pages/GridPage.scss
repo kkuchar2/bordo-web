@@ -1,11 +1,16 @@
-body {
-  overflow: hidden;
+.glView {
+  height: 100%;
+  transform: scaleY(-1);
 }
 
-.draw-canvas {
-  padding-left: 0;
-  padding-right: 0;
-  margin-left: auto;
-  margin-right: auto;
-  display: block;
+.glWrapper {
+  height: calc(100%);
+}
+
+.field {
+  width: 100%;
+}
+
+canvas {
+  cursor: pointer;
 }

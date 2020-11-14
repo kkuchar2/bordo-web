@@ -1,12 +1,7 @@
-import React, {Component} from 'react';
+import React from 'react';
 
-import "js/pages/MainPage.scss"
+import "./MainPage.scss"
 
-class MainPage extends Component {
-
-    render() {
-        return (<div className={"pageComponents"} />);
-    }
+export default function MainPage() {
+    return <div />;
 }
-
-export default MainPage;

@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"No tests available\"",
-    "build": "webpack --mode production --display-modules",
-    "start": "webpack-dev-server --host 0.0.0.0 --port 4567 --open --mode development --inline=true",
+    "build": "webpack --mode production && node ./update-build.js",
+    "start": "node ./update-build.js && webpack-dev-server --host 0.0.0.0 --port 4567 --open --mode development --inline=true",
     "startprod": "webpack-dev-server --host 0.0.0.0 --port 4567 --open --mode production --inline=false",
     "lighthouse": "lighthouse http://192.168.0.101:8080 --quiet --chrome-flags=\"--headless\" --view",
     "upgrade": "update --save/--save-dev -f"
@@ -45,6 +45,7 @@
     "@types/react": "^16.9.56",
     "copy-webpack-plugin": "^6.3.0",
     "lighthouse": "^6.4.1",
+    "moment": "^2.29.1",
     "react": "^16.14.0",
     "react-dom": "^16.14.0",
     "react-redux": "^7.2.2",
@@ -53,5 +54,6 @@
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.3.0",
     "three": "latest"
-  }
+  },
+  "buildDate": "2020-11-14T01:50:28.326Z"
 }
