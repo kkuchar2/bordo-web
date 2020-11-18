@@ -11,7 +11,7 @@ module.exports = {
     ],
     output: {
         path: path.resolve(__dirname, 'build'),
-        filename: 'bundle.js',
+        filename: '[name].[contenthash].js',
     },
     resolve: {
         modules: [path.resolve(__dirname, 'src'), 'node_modules']
@@ -23,7 +23,8 @@ module.exports = {
     plugins: [
         new HtmlWebPackPlugin({
             template: "./src/index.html",
-            filename: "./index.html"
+            filename: "./index.html",
+            hash: true
         }),
         new WorkerPlugin(),
         new CompressionPlugin({

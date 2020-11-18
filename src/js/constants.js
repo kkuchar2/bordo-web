@@ -1,2 +1,4 @@
-export const navbar_height = 100;
-export const footer_height = 50;
+import styles from './../scss/constants.scss'
+
+export const footerHeight = parseInt(styles["footerHeight"], 10);
+export const navbarHeight = parseInt(styles["navbarHeight"], 10);

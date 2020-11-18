@@ -1,0 +1,8 @@
+$bcg: #1c1c1c;
+$footer-height: 50px;
+$navbar-height: 100px;
+
+:export {
+  footerHeight: $footer-height;
+  navbarHeight: $navbar-height;
+}

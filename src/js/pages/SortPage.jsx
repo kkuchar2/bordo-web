@@ -5,14 +5,15 @@ import SelectControl from "js/components/select/SelectControl.jsx";
 import Spinner from "js/components/spinner/Spinner.jsx";
 import Input from "js/components/input/Input.jsx";
 
+
+import {getContentHeight} from "js/util/Util.jsx";
+
 import "./SortPage.scss"
-import {footer_height, navbar_height} from "js/constants.js";
 
 class SortPage extends Component {
 
     state = {
-        windowWidth: 0,
-        windowHeight: 0,
+        actionsHeight: 0,
         data: [],
         sorted: false,
         sorting: false,
@@ -30,7 +31,7 @@ class SortPage extends Component {
 
     sortingAlgorithms = ["MergeSort", "BubbleSort", "InsertionSort", "QuickSort"];
 
-    maxValue = 1000;
+    maxValue = 100;
 
     constructor(props) {
         super(props);
@@ -46,11 +47,7 @@ class SortPage extends Component {
     }
 
     updateDimensions = () => {
-        const actionsRect = this.actionsWrapper.getBoundingClientRect();
-        this.setState({
-            parentWidth: window.innerWidth,
-            parentHeight: window.innerHeight - navbar_height  - footer_height - actionsRect.height
-        });
+        this.setState({actionsHeight: this.actionsRef.getBoundingClientRect().height});
     };
 
     componentWillUnmount() {
@@ -132,10 +129,6 @@ class SortPage extends Component {
         this.setState({sampleCount: v});
     };
 
-    getSortButtonClassName = () => {
-        return ["sortButton chartButton"];
-    };
-
     getSpinnerClassName = () => {
         return ["startAnimate"];
     };
@@ -149,15 +142,13 @@ class SortPage extends Component {
     }
 
     renderStopButton = () => {
-        if (this.state.sorting && !this.state.paused) {
-            return <SubmitButton
-                className={"chartButton"}
-                onClick={this.onStopButtonPressed}
-                disabled={false}
-                text={"Abort"}>
-                <img src={'/images/stop_icon.png'} width={12} height={12} alt={""}/>
-            </SubmitButton>;
-        }
+        return <SubmitButton
+            className={"chartButton"}
+            onClick={this.onStopButtonPressed}
+            disabled={!this.state.sorting || this.state.paused}
+            text={"Abort"}>
+            <img src={'/images/stop_icon.png'} width={12} height={12} alt={""}/>
+        </SubmitButton>;
     }
 
     getPlayPauseIcon = () => {
@@ -183,20 +174,11 @@ class SortPage extends Component {
 
     render() {
         return (
-            <div ref={mainWrapper => (this.mainWrapper = mainWrapper)} className={"sortPage"}>
-                <div className={"actionsWrapper"} ref={actionsWrapper => (this.actionsWrapper = actionsWrapper)}>
+            <div className={"sortPage"}>
+                <div ref={actionsRef => (this.actionsRef = actionsRef)}>
                     <div className={"actions"}>
-                        <SelectControl
-                            className={"sorting-algorithm-select"}
-                            options={this.sortingAlgorithms}
-                            value={this.state.selectedAlgorithm}
-                            disabled={this.state.sorting}
-                            onChange={this.onSelectedAlgorithmChange}>
-                        </SelectControl>
-
-
                         <div className={"sampleCountSection"}>
-                            <div className={"titleContainer"}>
+                            <div className={"textContainer"}>
                                 <p className={"title"}>Samples:</p>
                             </div>
 
@@ -210,6 +192,14 @@ class SortPage extends Component {
                                     onChange={this.onSampleCountInputChange}/>
                             </div>
                         </div>
+
+                        <SelectControl
+                            className={"sorting-algorithm-select"}
+                            options={this.sortingAlgorithms}
+                            value={this.state.selectedAlgorithm}
+                            disabled={this.state.sorting}
+                            onChange={this.onSelectedAlgorithmChange}>
+                        </SelectControl>
 
 
                         <div className={"buttonsSection"}>
@@ -234,11 +224,12 @@ class SortPage extends Component {
 
                     </div>
                 </div>
-                <div style={{height: this.state.parentHeight }}
-                     className={"glWrapper"} ref={glWrapper => (this.glWrapper = glWrapper)}>
+
+                <div className={"chart"} style={{width: window.innerWidth, height: getContentHeight(this.state.actionsHeight)}}>
                     <BarsView
-                        width={this.state.parentWidth}
-                        height={this.state.parentHeight}
+
+                        width={window.innerWidth}
+                        height={getContentHeight(this.state.actionsHeight)}
                         samples={this.state.sampleCount}
                         maxValue={this.maxValue}
                         data={this.state.data}/>

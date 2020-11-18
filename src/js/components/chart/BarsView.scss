@@ -1,0 +1,18 @@
+$anim_time: 1s;
+
+.visible {
+  -webkit-animation: fadein $anim_time; /* Safari, Chrome and Opera > 12.1 */
+  -moz-animation: fadein $anim_time; /* Firefox < 16 */
+  -ms-animation: fadein $anim_time; /* Internet Explorer */
+  -o-animation: fadein $anim_time; /* Opera < 12.1 */
+  animation: fadein $anim_time;
+}
+
+.not_visible {
+  opacity: 0;
+}
+
+@keyframes fadein {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}

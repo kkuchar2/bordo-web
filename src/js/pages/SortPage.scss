@@ -3,6 +3,7 @@ $break-small: 400px;
 .sortPage {
   height: 100%;
 
+  overflow: hidden;
   .actions {
     padding: 10px;
     min-height: 70px;
@@ -10,16 +11,15 @@ $break-small: 400px;
     flex-wrap: wrap;
     align-items: center;
     justify-content: center;
-
     background: #1c1c1c;
 
-    .titleContainer {
+    .textContainer {
       width: 100px;
       min-width: 80px;
       height: 100%;
       display: flex;
       align-items: center;
-      justify-content: center;
+      justify-content: left;
     }
 
     .title {
@@ -35,14 +35,20 @@ $break-small: 400px;
     }
 
     .sampleCountSection {
-
+      margin: 5px;
       display: flex;
+      box-sizing: border-box;
+      width: 310px;
       align-items: center;
       justify-content: left;
       opacity: 0.5;
 
       .input-field {
-        padding: 20px;
+        flex: 1 1 10px;
+        .input {
+          width: calc(100% - 5px - 10px);
+          margin: 0;
+        }
       }
     }
 
@@ -50,15 +56,16 @@ $break-small: 400px;
       display: flex;
       align-items: center;
       justify-content: center;
+      box-sizing: border-box;
+      flex-wrap: wrap;
+      margin-bottom: 5px;
     }
 
     .sorting-algorithm-select {
       min-width: 300px;
       height: 50px;
-      margin-left: 20px;
-      margin-right: 20px;
       width: 310px;
-
+      margin: 5px;
       .options-view-button {
         border: none;
         padding: 0;
@@ -81,6 +88,8 @@ $break-small: 400px;
       background: #252525;
       color: #9B9B9B;
       border-radius: 5px;
+      margin-left: 5px;
+      margin-top: 5px;
 
       &:active {
         outline: none;
@@ -131,6 +140,10 @@ $break-small: 400px;
         right: 14px;
       }
     }
+  }
+
+  .chart {
+    background: #1c1c1c;
   }
 }
 

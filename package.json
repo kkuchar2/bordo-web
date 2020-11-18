@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"No tests available\"",
-    "build": "webpack --mode production && node ./update-build.js",
+    "build": "node ./update-build.js && webpack --mode production",
     "start": "node ./update-build.js && webpack-dev-server --host 0.0.0.0 --port 4567 --open --mode development --inline=true",
     "startprod": "webpack-dev-server --host 0.0.0.0 --port 4567 --open --mode production --inline=false",
     "lighthouse": "lighthouse http://192.168.0.101:8080 --quiet --chrome-flags=\"--headless\" --view",
@@ -55,5 +55,5 @@
     "redux-thunk": "^2.3.0",
     "three": "latest"
   },
-  "buildDate": "2020-11-14T01:50:28.326Z"
+  "buildDate": "2020-11-18T15:18:12.043Z"
 }

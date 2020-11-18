@@ -1,4 +1,4 @@
-$bcg: #232323;
+@import "./../scss/constants.scss";
 
 html {
   height: 100%;
@@ -16,22 +16,26 @@ body {
   .root {
     width: 100%;
     height: 100%;
-    display: flex;
-    flex-flow: column;
     margin: 0;
     padding: 0;
 
     .navbar {
-      min-height: 100px;
-      flex: 0 1 100px;
+      position: absolute;
+      top: 0;
+      height: $navbar-height;
     }
 
     .page {
-      flex: 1 1 auto;
+      position: absolute;
+      top: $navbar-height;
+
     }
 
     .footer {
-      flex: 0 1 50px;
+      position: absolute;
+      bottom: 0;
+      height: 50px;
+      width: 100%;
       display: flex;
       align-items: center;
       justify-content: right;

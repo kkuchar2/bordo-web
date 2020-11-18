@@ -13,7 +13,15 @@ const jsonData = {
 
 const jsonContent = JSON.stringify(jsonData);
 
-fs.writeFile("./meta.json", jsonContent, "utf8", function (error) {
+console.log("Writing last build date to build/meta.json");
+
+const dir = './build';
+
+if (!fs.existsSync(dir)){
+    fs.mkdirSync(dir);
+}
+
+fs.writeFile("build/meta.json", jsonContent, "utf8", function (error) {
     if (error) {
         console.log("An error occured while saving build date and time to meta.json");
         return console.log(error);

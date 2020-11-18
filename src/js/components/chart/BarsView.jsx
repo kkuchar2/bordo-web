@@ -1,183 +1,150 @@
-import React, {Component} from "react";
+import React, {useEffect, useRef, useState} from "react";
+
+import {
+    createMaterial,
+    createOrthoCamera,
+    createRenderer,
+    createBars,
+    enableTransparency,
+    createPlaneGeometry,
+    createScene,
+    removeChildrenFromScene
+} from "js/util/GLUtil.jsx";
 
 import "./BarsView.scss"
 
-import {
-    Color, Mesh,
-    OrthographicCamera,
-    PlaneGeometry,
-    Scene,
-    ShaderMaterial,
-    WebGLRenderer
-} from "three";
+let material1 = createMaterial( 0x00eeff, 0.3);
+let material2 = createMaterial(0x00eeff, 0.4);
+let geometry;
 
-Array.prototype.max = function () {
-    return Math.max.apply(null, this);
-};
+function BarsView(props) {
 
-const vertexShader = `
-    uniform vec3 bboxMin;
-    uniform vec3 bboxMax;
+    const mount = useRef(null);
 
-    varying vec2 vUv;
+    const [renderer, setRenderer] = useState(null);
+    const [scene, setScene] = useState(null);
+    const [camera, setCamera] = useState(null);
+    const [initialized, setInitialized] = useState(false);
+    const [firstFrameRendered, setFristFrameRendered] = useState(false);
 
-    void main() {
-      vUv.y = (position.y - bboxMin.y) / (bboxMax.y - bboxMin.y);
-      gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0);
-    }
-`;
+    useEffect(() => {
+        setCamera(createOrthoCamera(props.width, props.height, -500, 1000, -5));
+        setRenderer(createRenderer(props.width, props.height, '#1c1c1c'));
+        setScene(createScene());
+        setInitialized(true);
+    }, []);
 
-const fragmentShader = `
-    uniform vec3 color;
-    uniform float alpha;
-    
-    varying vec2 vUv;
-    
-    void main() {
-      gl_FragColor = vec4(color, alpha);
-    }
-`;
+    useEffect(() => {
+        if (!initialized) return;
 
-class BarsView extends Component {
+        enableTransparency(renderer);
 
-    samples = 0;
-    maxValue = 0;
+        mount.current.appendChild(renderer.domElement);
 
-    near = -500;
-    far = 1000;
+        let frameId;
 
-    constructor(props) {
-        super(props);
-        this.renderer = new WebGLRenderer({alpha: true});
-        this.renderer.setClearColor(0x000000, 0.0);
-    }
-
-    componentDidMount = () => {
-        let intervalId = setInterval(this.refreshState, 16);
-        this.setState({intervalId: intervalId});
-        const gl = this.renderer.getContext();
-        gl.enable(gl.BLEND);
-        gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
-    }
-
-    componentWillUnmount() {
-        clearInterval(this.state.intervalId);
-    }
-
-    componentDidUpdate = () => {
-        const regex = /^([1-9][0-9]{0,3}|10000)$/;
-
-        if (this.props.samples === undefined) {
-            this.samples = this.props.data.length;
-        }
-        else {
-            if (this.samples !== this.props.samples && regex.test(this.props.samples)) {
-                this.samples = this.props.samples;
+        const renderScene = () => {
+            renderer.render(scene, camera);
+            if (!firstFrameRendered) {
+                setFristFrameRendered(true);
             }
         }
 
-        if (this.props.maxValue === undefined) {
-            this.maxValue = this.props.data.max();
+        const animate = () => {
+            renderScene();
+            frameId = window.requestAnimationFrame(animate)
         }
-        else {
-            if (this.maxValue !== this.props.maxValue) {
-                this.maxValue = this.props.maxValue;
+
+        const dispose = () => {
+            cancelAnimationFrame(frameId);
+            frameId = null;
+            removeChildrenFromScene(scene);
+            geometry?.dispose();
+            mount.current.removeChild(renderer.domElement);
+        }
+
+        const start = () => {
+            if (!frameId) {
+                requestAnimationFrame(animate);
             }
         }
 
-        this.recalculateGeometry();
-        this.renderGL();
-    }
+        start();
+        return () => {
+            dispose();
+        }
+    }, [initialized]);
 
-    renderGL = () => {
-        if (this.renderer === undefined || this.scene === undefined || this.camera === undefined) {
-            return;
+    useEffect(() => {
+        if (!initialized) return;
+
+        function updateBars() {
+            for (let i = 0; i < props.samples; i++) {
+                scene.children[i].scale.y = props.data[i] / props.maxValue;
+            }
         }
 
-        this.renderer.render(this.scene, this.camera);
-    }
-
-    recalculateGeometry = () => {
-        this.width = this.props.width;
-        this.height = this.props.height;
-
-        this.barWidth = this.width / this.samples;
-        this.barHeight = this.height;
-
-        // Create camera
-        this.camera = new OrthographicCamera(
-            this.width / -2,
-            this.width / 2,
-            this.height / 2,
-            this.height / -2,
-            this.near,
-            this.far);
-
-        this.camera.position.z = -5;
-
-        // Create renderer
-        if (this.width <= 0 || this.height <= 0) {
-            console.log("errr, width: " + this.width + " height: " + this.height);
-            return;
+        function createOrUpdateBars() {
+            if (scene.children.length === 0) {
+                createBars(scene, material1, material2, props.width, props.height, props.data, props.maxValue);
+            }
+            else {
+                updateBars();
+            }
         }
 
-        this.renderer.setSize(this.width, this.height);
-        this.mount.appendChild(this.renderer.domElement);
+        createOrUpdateBars();
 
-        this.geometry = new PlaneGeometry(this.barWidth, this.barHeight, 1);
-        this.geometry.computeBoundingBox();
+    }, [props.data])
 
-        this.material1 = this.createMaterial(0xaaff00, 0.2);
-        this.material2 = this.createMaterial(0xff2200, 0.5);
+    useEffect(() => {
+        if (!initialized) return;
 
-        this.bars = [];
-
-        // Create scene
-        this.scene = new Scene();
-
-        // Add elements to scene
-
-        for (let i = 0; i < this.samples; i++) {
-            let bar = this.createBar(i);
-            this.bars.push(bar);
-            this.scene.add(bar);
+        function updateCamera() {
+            camera.left = 0;
+            camera.right = props.width;
+            camera.top = props.height;
+            camera.bottom = 0;
+            camera.updateProjectionMatrix();
         }
 
-        for (let i = 0; i < this.samples; i++) {
-            this.scaleBar(i, this.props.data[i] / this.maxValue);
-            this.bars[i].material = i % 2 === 0 ? this.material1 : this.material2;
+        function udpateRenderer() {
+            renderer.setSize(props.width, props.height);
         }
+
+        function updateBars() {
+            let barWidth = props.width / props.samples;
+            let barHeight = props.height;
+            let geometry = createPlaneGeometry(barWidth, barHeight);
+
+            for (let i = 0; i < props.samples; i++) {
+                const bar = scene.children[i];
+                bar.geometry = geometry;
+                bar.scale.y = props.data[i] / props.maxValue;
+                bar.position.x =  barWidth / 2 + barWidth * i;
+                bar.position.y = barHeight / 2;
+            }
+        }
+
+        function createOrUpdateBars() {
+            if (scene.children.length === 0) {
+                createBars(scene, material1, material2, props.width, props.height, props.data, props.maxValue);
+            }
+            else {
+                updateBars();
+            }
+        }
+
+        updateCamera();
+        udpateRenderer();
+        createOrUpdateBars();
+    }, [props.width, props.height]);
+
+    function getClassName() {
+        return firstFrameRendered ? "visible" : "not_visible"
     }
 
-    createMaterial = (color, alpha) => {
-        return new ShaderMaterial({
-            uniforms: {
-                color: {value: new Color(color)},
-                alpha: {value: alpha},
-                bboxMin: {value: this.geometry.boundingBox.min},
-                bboxMax: {value: this.geometry.boundingBox.max}
-            },
-            vertexShader: vertexShader,
-            fragmentShader: fragmentShader,
-            wireframe: false
-        });
-    };
-
-    scaleBar = (index, scale) => {
-        this.bars[index].scale.y = scale;
-        this.bars[index].position.y = -((1.0 - scale) / 2.0) * this.barHeight;
-    }
-
-    createBar = idx => {
-        const bar = new Mesh(this.geometry, this.material1);
-        bar.scale.y = 0.001;
-        bar.position.x = -this.width / 2 + this.barWidth / 2 + this.barWidth * idx;
-        return bar;
-    }
-
-    render = () => {
-        return (<div className={"glView"} ref={ref => (this.mount = ref)}/>)
-    }
+    return <div ref={mount} className={getClassName()}/>
 }
 
 export default BarsView;

@@ -4,8 +4,15 @@ import {Link} from "react-router-dom";
 import SubmitButton from "js/components/buttons/SubmitButton.jsx";
 import {navbarActions} from "js/redux/actions";
 import NavBarItem from "js/components/navbar/navbar-item/NavBarItem.jsx";
+import {routes} from "js/routes/Routes.jsx";
 
 import "js/components/navbar/NavBar.scss"
+
+const mapRoutes = (actionOnClick) => {
+    return routes.filter(v => v.navbar).map((p, k) => {
+        return <NavBarItem onClick={actionOnClick} iconSrc={p.icon} href={p.path} key={k}>{p.title}</NavBarItem>
+    });
+};
 
 class NavBar extends Component {
     onMenuClick = e => {
@@ -21,12 +28,7 @@ class NavBar extends Component {
         this.props.close();
     }
 
-    renderItems() {
-        return <>
-            <NavBarItem onClick={this.onLinkClick} iconSrc={'images/sort_icon.png'} href={'/sort'}>Sorting algorithms</NavBarItem>
-            <NavBarItem onClick={this.onLinkClick} iconSrc={'images/grid_icon.png'} href={'/grid'}>Grid</NavBarItem>
-        </>
-    }
+    renderItems = () => <>{mapRoutes(this.onLinkClick)}</>;
 
     renderResponsiveMenu() {
         if (this.props.opened) {
@@ -52,7 +54,7 @@ class NavBar extends Component {
                         <img src={"images/hamburger_icon.png"} alt={""} width={20} height={20}/>
                     </SubmitButton>
 
-                    <Link to={'/'} onClick={this.onLinkClick} className={"titleContainer"}>Krzysztof Kucharski</Link>
+                    <Link to={'/'} onClick={this.onLinkClick} className={"textContainer"}>Krzysztof Kucharski</Link>
 
                     {this.renderClassicMenu()}
 
@@ -63,10 +65,7 @@ class NavBar extends Component {
     }
 }
 
-const mapStateToProps = state => {
-    return state.navbarReducer;
-};
-
+const mapStateToProps = state => state.navbarReducer;
 
 const mapDispatchToProps = {
     open: navbarActions.open,

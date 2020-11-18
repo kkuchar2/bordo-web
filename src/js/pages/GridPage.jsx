@@ -1,87 +1,48 @@
 import React, {Component} from "react";
+import {footerHeight, navbarHeight} from "js/constants.js";
 
 import {
-    Color,
     Mesh, MeshBasicMaterial, OrthographicCamera,
     PlaneGeometry,
-    Scene, ShaderMaterial, Vector2, WebGLRenderer
+    Scene, Vector2, WebGLRenderer
 } from "three";
 
 import "./GridPage.scss"
 
-
-const vertexShader = `
-    uniform vec3 bboxMin;
-    uniform vec3 bboxMax;
-
-    varying vec2 vUv;
-
-    void main() {
-      vUv.y = (position.y - bboxMin.y) / (bboxMax.y - bboxMin.y);
-      gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0);
-    }
-`;
-
-const fragmentShader = `
-    uniform vec3 color;
-    uniform float alpha;
-    
-    varying vec2 vUv;
-    
-    void main() {
-      gl_FragColor = vec4(color, alpha);
-    }
-`;
-
-
 class GridPage extends Component {
+
+    canvasRef = React.createRef();
 
     near = -100;
     far = 100;
     spacing = 0;
     a = 0;
-    coords = new Vector2(-1, -1);
     nnx = 21;
     nny = 20;
     oldIdx = 0;
+    coords = new Vector2(-1, -1);
 
-    state = {
-        windowWidth: 0,
-        windowHeight: 0
-    }
-
-    constructor(props) {
-        super(props);
-        this.renderer = new WebGLRenderer({alpha: true});
+    componentDidMount = () => {
+        this.renderer = new WebGLRenderer({canvas: this.canvasRef.current, alpha: true});
         this.renderer.setClearColor(0x000000, 0.0);
+        let intervalId = setInterval(this.refreshState, 16);
+        this.setState({intervalId: intervalId});
+        const gl = this.renderer.getContext();
+        gl.enable(gl.BLEND);
+        gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+        window.addEventListener('resize', this.updateDimensions);
     }
 
     updateDimensions = () => {
-        this.setState({windowWidth: window.innerWidth, windowHeight: this.wrapper.clientHeight});
+        this.forceUpdate();
     };
 
-    componentDidMount = () => {
-        window.addEventListener('resize', this.updateDimensions);
-        this.updateDimensions();
-
-        if (this.renderer !== undefined) {
-            const gl = this.renderer.getContext();
-            gl.enable(gl.BLEND);
-            gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
-            return;
-        }
-
-        this.setState({intervalId: setInterval(this.refreshState, 16)})
-    }
-
     componentWillUnmount() {
-        window.removeEventListener('resize', this.updateDimensions);
         clearInterval(this.state.intervalId);
     }
 
     componentDidUpdate = () => {
         this.recalculateGeometry();
-        this.renderGL();
     }
 
     renderGL = () => {
@@ -96,8 +57,9 @@ class GridPage extends Component {
         let idxyy = Math.floor(y / (this.cellSizeY + this.spacing));
         let idxP = idxxx + idxyy * this.nnx;
 
+        console.log("Cells size: " + this.cells.length + " old idx: " + this.oldIdx);
 
-        if (idxP > 0) {
+        if (idxP > 0 && idxP < this.cells.length) {
             this.cells[this.oldIdx].material.color.set(this.oldIdx % 2 === 0 ? 0x333333 : 0x313131);
             this.cells[this.oldIdx].scale.x = 1.0;
             this.cells[this.oldIdx].scale.y = 1.0;
@@ -116,8 +78,8 @@ class GridPage extends Component {
 
         this.scene = new Scene();
 
-        this.width = this.state.windowWidth;
-        this.height = this.state.windowHeight;
+        this.width = window.innerWidth;
+        this.height = window.innerHeight - navbarHeight - footerHeight;
 
         this.camera = new OrthographicCamera(
             this.width / -2,
@@ -134,38 +96,29 @@ class GridPage extends Component {
         }
 
         this.renderer.setSize(this.width, this.height);
-        this.mount.appendChild(this.renderer.domElement);
 
         this.cellSizeX = (this.width - 2 * this.a - (this.nnx - 1) * this.spacing) / this.nnx;
         this.cellSizeY = (this.height - 2 * this.a - (this.nnx - 1) * this.spacing) / this.nny;
 
         this.cells = [];
 
+        let i = 0;
         for (let y = 0; y < this.nny; y++) {
             for (let x = 0; x < this.nnx; x++) {
-                let cell = this.createCell(x, y);
+                let cell = this.createCell(x, y, i);
                 this.cells.push(cell);
                 this.scene.add(cell);
+                i++;
             }
         }
 
-
-        for (let i = 0; i < this.cells.length; i++) {
-            const cell = this.cells[i];
-            if (i % 2 === 0) {
-                cell.material.color.set(0x333333);
-            }
-            else {
-                cell.material.color.set(0x313131);
-            }
-        }
+        this.renderGL()
     };
 
-    createCell = (x, y) => {
-        let width = this.state.windowWidth;
-        let height = this.state.windowHeight;
-
-        let material = new MeshBasicMaterial({color: 0x00ff00});
+    createCell = (x, y, index) => {
+        let width = window.innerWidth;
+        let height = window.innerHeight - navbarHeight - footerHeight;
+        let material = new MeshBasicMaterial({color: index % 2 === 0 ? 0x333333 : 0x313131});
         let geometry = new PlaneGeometry(this.cellSizeX, this.cellSizeY, 1);
         const cell = new Mesh(geometry, material);
         cell.position.x = -width / 2 + this.a + x * this.cellSizeX + (x - 1) * this.spacing + this.cellSizeX / 2 + this.spacing;
@@ -173,19 +126,6 @@ class GridPage extends Component {
         return cell;
     };
 
-    createMaterial = (color, alpha) => {
-        return new ShaderMaterial({
-            uniforms: {
-                color: {value: new Color(color)},
-                alpha: {value: alpha},
-                bboxMin: {value: this.geometry.boundingBox.min},
-                bboxMax: {value: this.geometry.boundingBox.max}
-            },
-            vertexShader: vertexShader,
-            fragmentShader: fragmentShader,
-            wireframe: false
-        });
-    };
     handleClick = event => {
         event.preventDefault();
         this.coords.x = event.clientX;
@@ -200,9 +140,8 @@ class GridPage extends Component {
 
     render = () => {
         return (
-            <div className={"glWrapper"} ref={wrapper => (this.wrapper = wrapper)}>
-                <div onClick={this.handleClick} onMouseMove={this.handleMouseMove} className={"glView"}
-                     ref={ref => (this.mount = ref)}/>
+            <div className={"glView"} style={{height: this.props.height}}>
+                <canvas onClick={this.handleClick} onMouseMove={this.handleMouseMove}  ref={this.canvasRef}/>
             </div>
         )
     }

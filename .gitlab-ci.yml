@@ -46,6 +46,7 @@ deploy:
         git fetch --all 
         git pull 
         npm install
+        rm -rf build
         npm run build
 
   only:

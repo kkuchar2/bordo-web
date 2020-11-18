@@ -25,9 +25,17 @@ export const algorithmMap = {
     "MergeSort": mergeSortRecursive
 }
 
+let previousTime = new Date().getTime();
+let firstTime = true;
+
 export function notify(type, payload) {
     let currentTime = new Date().getTime();
-    postMessage({type: type, payload: payload});
+
+    if (currentTime - previousTime > 16 || firstTime) {
+        firstTime = false;
+        postMessage({type: type, payload: payload});
+        previousTime = currentTime;
+    }
     while (new Date().getTime() - currentTime < SLOWDOWN_FACTOR_MS) {}
 }
 

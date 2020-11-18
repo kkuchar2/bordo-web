@@ -52,6 +52,8 @@ async function mergeSort(start, end) {
     await mergeSort(start, middle);
     await mergeSort(middle + 1, end);
     await merge(start, middle, end);
+
+    notifyDataUpdate();
 }
 
 export async function mergeSortRecursive() {
