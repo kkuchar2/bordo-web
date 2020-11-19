@@ -9,9 +9,10 @@
     "start": "node ./update-build.js && webpack-dev-server --host 0.0.0.0 --port 4567 --open --mode development --inline=true",
     "startprod": "webpack-dev-server --host 0.0.0.0 --port 4567 --open --mode production --inline=false",
     "lighthouse": "lighthouse http://192.168.0.101:8080 --quiet --chrome-flags=\"--headless\" --view",
-    "upgrade": "update --save/--save-dev -f"
+    "upgrade": "update --save/--save-dev -f",
+    "cypress:open": "cypress open"
   },
-  "keywords": [],
+  "keywords": ["personal_website"],
   "author": "Krzysztof Kucharski",
   "license": "ISC",
   "devDependencies": {
@@ -21,8 +22,9 @@
     "@babel/preset-env": "^7.12.1",
     "@babel/preset-react": "^7.12.5",
     "babel-loader": "^8.2.1",
-    "compression-webpack-plugin": "^6.1.0",
+    "compression-webpack-plugin": "^6.1.1",
     "css-loader": "^3.6.0",
+    "cypress": "^5.6.0",
     "file-loader": "^4.2.0",
     "html-loader": "^0.5.5",
     "html-webpack-plugin": "^3.2.0",
@@ -43,7 +45,7 @@
   },
   "dependencies": {
     "@types/react": "^16.9.56",
-    "copy-webpack-plugin": "^6.3.0",
+    "copy-webpack-plugin": "^6.3.2",
     "lighthouse": "^6.4.1",
     "moment": "^2.29.1",
     "react": "^16.14.0",
