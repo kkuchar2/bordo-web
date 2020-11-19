@@ -9,13 +9,9 @@ import {
 
 /* -------------- Main message handler ------------------ */
 
-self.onmessage = handleMessage;
+self.onmessage = message => requestMap[message.data.type](message.data.payload);
 
 /* ------------------------------------------------------ */
-
-function handleMessage(message) {
-    requestMap[message.data.type](message.data.payload);
-}
 
 const requestMap = {
     "sort": e => onSortRequest(e),
@@ -24,20 +20,15 @@ const requestMap = {
     "stop": e => onAbortRequest(e)
 };
 
-function onSortRequest(message_data) {
+const onSortRequest = message_data => {
     resetState();
     getSortMethod(message_data.algorithm_type)().then(onSortMethodExit);
 }
 
-function onShuffleRequest(message_data) {
+const onShuffleRequest = message_data => {
     resetState();
     shuffle(message_data.sampleCount, message_data.maxValue).then(notifyDataShuffled);
 }
 
-function onPauseRequest() {
-    state.pause = !state.pause;
-}
-
-function onAbortRequest() {
-    state.abort = true;
-}
+const onPauseRequest = () => state.pause = !state.pause;
+const onAbortRequest = () => state.abort = true;

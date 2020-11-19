@@ -1,6 +1,6 @@
 import {state, CheckPause, notifyDataUpdate} from "js/workers/worker.utils.js";
 
-async function merge(start, mid, end) {
+const merge = async (start, mid, end) => {
     if (state.abort) {
         return;
     }
@@ -38,7 +38,7 @@ async function merge(start, mid, end) {
     await CheckPause();
 }
 
-async function mergeSort(start, end) {
+const mergeSort = async (start, end) => {
     if (state.abort) {
         return;
     }
@@ -56,6 +56,4 @@ async function mergeSort(start, end) {
     notifyDataUpdate();
 }
 
-export async function mergeSortRecursive() {
-    await mergeSort(0, state.data.length - 1);
-}
+export const mergeSortRecursive = async () => await mergeSort(0, state.data.length - 1);

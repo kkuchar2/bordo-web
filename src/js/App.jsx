@@ -8,14 +8,11 @@ import {getPageContent} from "js/routes/Routes.jsx";
 
 import "./App.scss"
 
-export default function App() {
-    return (
-        <Provider store={store}>
-            <BrowserRouter>
-                <NavBar/>
-                {getPageContent()}
-                <Footer/>
-            </BrowserRouter>
-        </Provider>
-    );
-}
+export default () =>
+    <Provider store={store}>
+        <BrowserRouter>
+            <NavBar/>
+            {getPageContent()}
+            <Footer/>
+        </BrowserRouter>
+    </Provider>

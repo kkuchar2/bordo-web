@@ -1,10 +1,10 @@
 import {state, CheckPause, notifyDataUpdate} from "js/workers/worker.utils.js";
 
-function partition(left, right) {
+const partition = (left, right) => {
     const pivot = state.data[Math.floor((right + left) / 2)];
-    let //middle element
-        i = left, //left pointer/**/
-        j = right; //right pointer
+    let // Middle element
+        i = left, // Left pointer/**/
+        j = right; // Right pointer
     while (i <= j) {
         while (state.data[i] < pivot) {
             i++;
@@ -13,7 +13,7 @@ function partition(left, right) {
             j--;
         }
         if (i <= j) {
-            swap(i, j); //swap two elements
+            swap(i, j); // Swap two elements
             i++;
             j--;
         }
@@ -22,13 +22,13 @@ function partition(left, right) {
     return i;
 }
 
-function swap(leftIndex, rightIndex) {
+const swap = (leftIndex, rightIndex) => {
     const temp = state.data[leftIndex];
     state.data[leftIndex] = state.data[rightIndex];
     state.data[rightIndex] = temp;
 }
 
-async function quickSortImpl(left, right) {
+const quickSortImpl = async (left, right) => {
     await CheckPause();
 
     if (state.abort) {
@@ -37,18 +37,16 @@ async function quickSortImpl(left, right) {
 
     let index;
     if (state.data.length > 1) {
-        index = partition(left, right); //index returned from partition
+        index = partition(left, right); // Index returned from partition
 
-        if (left < index - 1) { //more elements on the left side of the pivot
+        if (left < index - 1) { // More elements on the left side of the pivot
             await quickSortImpl(left, index - 1);
         }
-        if (index < right) { //more elements on the right side of the pivot
+        if (index < right) { // More elements on the right side of the pivot
             await quickSortImpl(index, right);
         }
     }
 }
 
-export async function quickSort() {
-    return quickSortImpl(0, state.data.length - 1);
-}
+export const quickSort = async () => quickSortImpl(0, state.data.length - 1);
 

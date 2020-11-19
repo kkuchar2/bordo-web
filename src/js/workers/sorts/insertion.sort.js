@@ -1,6 +1,6 @@
 import {state, CheckPause, notifyDataUpdate} from "js/workers/worker.utils.js";
 
-export async function insertionSort() {
+export const insertionSort = async () => {
     let length = state.data.length;
     for (let i = 1; i < length; i++) {
 

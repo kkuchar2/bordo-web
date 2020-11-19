@@ -6,7 +6,7 @@ const initialState = navbar ? {
     opened: false, navbar
 } : {};
 
-export function navbarReducer(state = initialState, action) {
+export const navbarReducer = (state = initialState, action) => {
     switch (action.type) {
         case navbarConstants.OPEN:
             return {
