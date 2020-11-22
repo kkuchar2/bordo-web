@@ -1,4 +1,4 @@
-import {state, CheckPause, notifyDataUpdate} from "js/workers/worker.utils.js";
+import {state, CheckPause, notifyDataUpdate} from "workers/worker.utils.js";
 
 const merge = async (start, mid, end) => {
     if (state.abort) {

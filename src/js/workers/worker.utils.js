@@ -3,7 +3,7 @@ import {
     insertionSort,
     mergeSortRecursive,
     quickSort
-} from "js/workers/sorts";
+} from "workers/sorts";
 
 export const SLOWDOWN_FACTOR_MS = 1;
 

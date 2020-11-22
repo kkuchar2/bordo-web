@@ -1,6 +1,9 @@
-import {GridPage, MainPage, NotFound, SortPage} from "js/pages";
 import {Route, Switch} from "react-router-dom";
-import React, {Suspense} from "react";
+import React, {lazy, Suspense} from "react";
+
+const MainPage = lazy(() => import (/* webpackChunkName: "main-page" */ "pages/MainPage.jsx"));
+const NotFound = lazy(() => import (/* webpackChunkName: "not-found" */ "pages/NotFound.jsx"));
+const SortPage = lazy(() => import (/* webpackChunkName: "sort-page" */ "pages/SortPage.jsx"));
 
 export const routes = [
     {
@@ -18,14 +21,6 @@ export const routes = [
         title: "Sorting algorithms",
         enabled: true,
         navbar: true
-    },
-    {
-        path: "/grid",
-        component: GridPage,
-        icon: 'images/grid_icon.png',
-        title: "Grid",
-        enabled: false,
-        navbar: false
     }
 ];
 

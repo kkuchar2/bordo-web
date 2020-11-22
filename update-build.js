@@ -3,7 +3,7 @@ const moment = require('moment')
 const filePath = "./package.json";
 const packageJson = JSON.parse(fs.readFileSync(filePath).toString());
 
-packageJson.buildDate = moment();
+packageJson.buildDate = moment().format("DD-MM-YYYY HH:mm:SS");
 
 fs.writeFileSync(filePath, JSON.stringify(packageJson, null, 2));
 

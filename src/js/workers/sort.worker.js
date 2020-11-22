@@ -5,7 +5,7 @@ import {
     notifyDataShuffled,
     onSortMethodExit,
     getSortMethod,
-} from "js/workers/worker.utils.js";
+} from "workers/worker.utils.js";
 
 /* -------------- Main message handler ------------------ */
 

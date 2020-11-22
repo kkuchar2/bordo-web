@@ -1,0 +1,44 @@
+@import "common/constants";
+
+html {
+  height: 100%;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  background: $bcg;
+}
+
+body {
+  height: 100%;
+  margin: 0;
+
+  .root {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+
+    .navbar {
+      position: absolute;
+      top: 0;
+      height: $navbar-height;
+    }
+
+    .page {
+      position: absolute;
+      top: $navbar-height;
+
+    }
+
+    .footer {
+      position: absolute;
+      bottom: 0;
+      height: 50px;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: right;
+    }
+  }
+}

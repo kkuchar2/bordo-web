@@ -1,6 +1,6 @@
 import React from 'react';
 
-import "js/pages/NotFound.scss"
+import "styles/pages/NotFound.scss"
 
 export default () =>
     <div className={"notFound"}>

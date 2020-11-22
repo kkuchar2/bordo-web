@@ -1,5 +1,5 @@
 import React from 'react';
 
-import "./MainPage.scss"
+import "styles/pages/MainPage.scss"
 
 export default () => <></>;

@@ -8,7 +8,7 @@ import {
     WebGLRenderer
 } from "three";
 
-import {fragmentShader, vertexShader} from "js/shaders/shaders.js";
+import {fragmentShader, vertexShader} from "shaders/shaders.js";
 
 export const createMaterial = (color, alpha) => {
     return new ShaderMaterial({

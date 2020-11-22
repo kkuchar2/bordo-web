@@ -1,14 +1,14 @@
 import React, {Component} from 'react';
-import BarsView from "js/components/chart/BarsView.jsx";
-import SubmitButton from "js/components/buttons/SubmitButton.jsx";
-import SelectControl from "js/components/select/SelectControl.jsx";
-import Spinner from "js/components/spinner/Spinner.jsx";
-import Input from "js/components/input/Input.jsx";
+import BarsView from "components/BarsView.jsx";
+import SubmitButton from "components/SubmitButton.jsx";
+import SelectControl from "components/SelectControl.jsx";
+import Spinner from "components/Spinner.jsx";
+import Input from "components/Input.jsx";
 
 
-import {getContentHeight} from "js/util/Util.jsx";
+import {getContentHeight} from "util/Util.jsx";
 
-import "./SortPage.scss"
+import "styles/pages/SortPage.scss"
 
 class SortPage extends Component {
 
@@ -227,7 +227,6 @@ class SortPage extends Component {
 
                 <div className={"chart"} style={{width: window.innerWidth, height: getContentHeight(this.state.actionsHeight)}}>
                     <BarsView
-
                         width={window.innerWidth}
                         height={getContentHeight(this.state.actionsHeight)}
                         samples={this.state.sampleCount}
