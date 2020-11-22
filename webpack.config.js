@@ -32,10 +32,7 @@ module.exports = {
             cacheGroups: {
                 reactVendor: {
                     test: /[\\/]node_modules[\\/](react|react-dom)[\\/]/,
-                    name(module) {
-                        const packageName = module.context.match(/[\\/]node_modules[\\/](.*?)([\\/]|$)/)[1];
-                        return `npm.${packageName.replace('@', '')}`;
-                    }
+                    name: "react-vendor"
                 },
                 utilityVendor: {
                     test: /[\\/]node_modules[\\/](lodash|moment|moment-timezone)[\\/]/,
