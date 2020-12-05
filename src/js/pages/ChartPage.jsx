@@ -3,29 +3,46 @@ import {useSelector} from "react-redux";
 import {selectAllCovid} from "redux/features/covidDataSlice.js";
 import * as d3 from 'd3';
 
-import {
-    fetchAsyncGET
-} from "redux/api/api.js";
+import {fetchAsyncGET} from "redux/api/api.js";
+
+import {getParentHeight, getParentWidth, useEffectInit, useEffectWithNonNull} from "util/Util.jsx";
 
 import {
-    getParentWidth,
-    getParentHeight,
-    useEffectInit,
-    useEffectWithNonNull
-} from "util/Util.jsx";
-
-import {
-    createLinearScaleX,
-    createLinearScaleY,
+    addAreaToSvg,
+    addAxisToSvg,
+    addPathToSvg,
     createArea,
     createLine,
-    pointsFromData,
-    addPathToSvg,
-    addAreaToSvg,
-    addAxisToSvg
+    createLinearScaleX,
+    createLinearScaleY,
+    pointsFromData
 } from "util/D3Util.jsx";
 
+import {
+    VictoryChart,
+    VictoryLegend,
+    VictoryLine,
+    VictoryZoomContainer,
+    VictoryTheme,
+    VictoryScatter,
+    createContainer,
+    VictoryTooltip
+} from 'victory';
+
 import "styles/pages/ChartPage.scss"
+
+const formatDate = d => {
+    let month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+
+    if (month.length < 2)
+        month = '0' + month;
+    if (day.length < 2)
+        day = '0' + day;
+
+    return [year, month, day].join('-');
+}
 
 export default () => {
 
@@ -38,6 +55,7 @@ export default () => {
     const [casesTotalLine, setCasesTotalLine] = useState(0);
     const [casesDailyArea, setCasesDailyArea] = useState(0);
     const [casesTotalArea, setCasesTotalArea] = useState(0);
+    const [selectedDomain, setSelectedDomain] = useState(0);
 
     let data = useSelector(selectAllCovid)
 
@@ -48,6 +66,7 @@ export default () => {
         let h = getParentHeight(mount);
 
         const updateSize = () => {
+            console.log("setting width" + getParentWidth(mount));
             setWidth(getParentWidth(mount))
             setHeight(getParentHeight(mount));
         }
@@ -61,7 +80,7 @@ export default () => {
 
         window.addEventListener('resize', updateSize);
         updateSize();
-        initSvg();
+        //initSvg();
         fetchAsyncGET("covid");
         return () => window.removeEventListener('resize', updateSize);
     }, [])
@@ -80,7 +99,7 @@ export default () => {
 
         let targetData = [];
 
-        data.forEach(function(d) {
+        data.forEach(function (d) {
             let elem = {
                 date: parseTime(d.date),
                 count: d.count
@@ -91,11 +110,11 @@ export default () => {
         const x = d3.scaleTime().range([padding, width - padding]);
         x.domain(d3.extent(targetData, d => d.date));
 
-        const y = d3.scaleLinear().range([height, 0]);
-        y.domain([0, 40000])
+        const y = d3.scaleLinear().range([height, 100]);
+        y.domain([0, 50000])
 
         let casesDailyData = targetData.map(element => element.count);
-        let casesDailyTotal =  casesDailyData.map((elem, index) =>
+        let casesDailyTotal = casesDailyData.map((elem, index) =>
             casesDailyData.slice(0, index + 1).reduce((a, b) => a + b));
 
         let casesDailyPoints = pointsFromData(width, casesDailyData, 0);
@@ -103,19 +122,19 @@ export default () => {
 
         d3.select("#casesDailyLine")
             .attr("d", casesDailyLine(casesDailyPoints))
-            .attr("transform", "translate(" + width / 2 + "," + (-100) +")");
+            .attr("transform", "translate(" + width / 2 + "," + (-100) + ")");
 
         d3.select("#casesTotalLine")
             .attr("d", casesTotalLine(casesTotalPoints))
-            .attr("transform", "translate(" + width / 2 + "," + 0 +")");
+            .attr("transform", "translate(" + width / 2 + "," + 0 + ")");
 
         d3.select("#casesDailyArea")
             .attr("d", casesDailyArea(casesDailyPoints))
-            .attr("transform", "translate(" + width / 2 + "," + (-100) +")");
+            .attr("transform", "translate(" + width / 2 + "," + (-100) + ")");
 
         d3.select("#casesTotalArea")
             .attr("d", casesTotalArea(casesTotalPoints))
-            .attr("transform", "translate(" + width / 2 + "," + 0 +")");
+            .attr("transform", "translate(" + width / 2 + "," + 0 + ")");
 
         d3.select("#axisX")
             .attr("class", "axis")
@@ -130,21 +149,21 @@ export default () => {
 
         d3.select("#axisY")
             .attr("class", "axis")
-            .attr("transform", "translate(" + 100 + "," + (-100) +")")
-            .call(d3.axisLeft(y).ticks(10))
+            .attr("transform", "translate(" + 100 + "," + (-100) + ")")
+            .call(d3.axisLeft(y).ticks(11))
             .selectAll("text")
             .style("text-anchor", "end")
             .style("text-anchor", "end")
             .attr("dx", "-.3em")
-            .attr("dy", "-.55em")
+            .attr("dy", "1.05em")
 
     }, [casesDailyLine, casesTotalLine, casesDailyArea, casesTotalArea, data]);
 
     useEffectWithNonNull(() => {
         const scaleX1 = createLinearScaleX(width - padding * 2, padding, width - padding);
         const scaleX2 = createLinearScaleX(width - padding * 2, padding, width - padding);
-        const scaleY1 = createLinearScaleY(height, 0, 40000);
-        const scaleY2 = createLinearScaleY(height, 0, 500000);
+        const scaleY1 = createLinearScaleY(height, 0, 50000);
+        const scaleY2 = createLinearScaleY(height, 0, 50000);
 
         setCasesDailyLine(() => createLine(scaleX1, scaleY1));
         setCasesTotalLine(() => createLine(scaleX2, scaleY2));
@@ -154,7 +173,56 @@ export default () => {
         svg.attr("width", "100%").attr("height", "100%");
     }, [width, height, svg]);
 
-    return <div className={"chartPage"}>
-        <div className={"chart"} ref={mount}/>
+    const mappedData = data.map(d => {
+        return {
+            x: new Date(d.date),
+            y: d.count
+        }
+    });
+
+    const VictoryZoomVoronoiContainer = createContainer("zoom", "voronoi");
+
+    return <div className={"chartPage"} ref={mount}>
+        <VictoryChart
+            width={width > 50 ? width - 50 : width}
+            height={height > 100 ? height - 100 : height}
+            theme={VictoryTheme.material}
+            domainPadding={50}
+            scale={{x: "time"}}
+            containerComponent={<VictoryZoomVoronoiContainer
+                mouseFollowTooltips
+                labels={({ datum }) => `Date: ${formatDate(datum.x)} \n Cases: ${datum.y}`}
+                voronoiBlacklist={["line1"]}
+                labelComponent={<VictoryTooltip
+                    style={{ fontSize: "20px", color: "red" }}
+                    cornerRadius={0}
+                    flyoutStyle={{
+                        fill: "#333333"
+                    }}
+                />}
+                responsive={true}
+                zoomDimension="x"/>}>
+            <VictoryLegend x={width} y={0}
+                           title="COVID-19 w Polsce"
+                           centerTitle
+                           orientation="horizontal"
+                           style={{ border: { stroke: "#555555" }, title: {fontSize: 20 } }}
+                           colorScale={[ "orange" ]}
+                           data={[
+                               { name: "Liczba dziennych zakażeń" }
+                           ]}
+            />
+            <VictoryScatter
+                style={{ data: { fill: "green" }, labels: { fill: "red" } }}
+                data={mappedData}
+            />
+            <VictoryLine
+                name="line1"
+                style={{
+                    data: {stroke: "green"}
+                }}
+                data={mappedData}
+            />
+        </VictoryChart>
     </div>
 }

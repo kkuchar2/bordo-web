@@ -5,12 +5,9 @@ import NavBarItem from "components/NavBarItem.jsx";
 import {routes} from "routes/Routes.jsx";
 
 import {useDispatch, useSelector } from "react-redux";
-import {navbarConstants} from "redux/constants.jsx";
 
 
 import { useCallback } from "react";
-
-
 
 import "componentStyles/NavBar.scss"
 import {navbarActions} from "redux/actions";
