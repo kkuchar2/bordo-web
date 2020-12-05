@@ -37,16 +37,13 @@ class SubmitButton extends Component {
         }
     }
 
-    renderButtonContent = () => {
-
-    };
-
     render() {
         return (
             <button
                 className={["SubmitButton", this.props.className, this.getAdditionalClassName()].join(" ")}
                 type={"submit"}
-                onClick={this.onClick}>
+                onClick={this.onClick}
+                aria-label={"submit-button"}>
                 <div className={"content"}>
                     <Text
                         visible={!this.props.processing}

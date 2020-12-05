@@ -4,17 +4,18 @@ import SubmitButton from "components/SubmitButton.jsx";
 import SelectControl from "components/SelectControl.jsx";
 import Spinner from "components/Spinner.jsx";
 import Input from "components/Input.jsx";
-
-
-import {getContentHeight} from "util/Util.jsx";
+import {registerSortWorker, unregister} from "workers/workers.jsx";
 
 import "styles/pages/SortPage.scss"
+
+const sortingAlgorithms = ["MergeSort", "BubbleSort", "InsertionSort", "QuickSort"];
 
 class SortPage extends Component {
 
     state = {
         actionsHeight: 0,
         data: [],
+        height: 0,
         sorted: false,
         sorting: false,
         paused: false,
@@ -29,32 +30,20 @@ class SortPage extends Component {
         "sortFinished": payload => this.onSortFinished(payload.sorted)
     };
 
-    sortingAlgorithms = ["MergeSort", "BubbleSort", "InsertionSort", "QuickSort"];
-
-    maxValue = 100;
+    maxValue = 10000;
 
     constructor(props) {
         super(props);
-        this.worker = new Worker('./../workers/sort.worker', {type: 'module'});
-        this.worker.onmessage = this.onMessageReceived;
+        this.worker = registerSortWorker(this.onMessageReceived);
     }
 
     componentDidMount() {
-        this.updateDimensions();
-        window.addEventListener('resize', this.updateDimensions);
         this.setState({intervalId: setInterval(this.refreshState, 16)});
         this.onShuffleRequest(this.state.sampleCount);
     }
 
-    updateDimensions = () => {
-        this.setState({actionsHeight: this.actionsRef.getBoundingClientRect().height});
-    };
-
     componentWillUnmount() {
-        window.removeEventListener('resize', this.updateDimensions);
-        if (this.worker !== undefined) {
-            this.worker.terminate();
-        }
+        unregister(this.worker);
         clearInterval(this.state.intervalId);
     }
 
@@ -85,7 +74,7 @@ class SortPage extends Component {
         }
         else {
             this.setState({sorting: true});
-            this.sendMessage("sort", {algorithm_type: this.sortingAlgorithms[this.state.selectedAlgorithm]});
+            this.sendMessage("sort", {algorithm_type: sortingAlgorithms[this.state.selectedAlgorithm]});
         }
     }
 
@@ -175,60 +164,55 @@ class SortPage extends Component {
     render() {
         return (
             <div className={"sortPage"}>
-                <div ref={actionsRef => (this.actionsRef = actionsRef)}>
-                    <div className={"actions"}>
-                        <div className={"sampleCountSection"}>
-                            <div className={"textContainer"}>
-                                <p className={"title"}>Samples:</p>
-                            </div>
-
-                            <div className={"input-field"}>
-                                <Input
-                                    id="fname"
-                                    name="fname"
-                                    disabled={true}
-                                    value={this.state.sampleCount}
-                                    active={this.state.sorting}
-                                    onChange={this.onSampleCountInputChange}/>
-                            </div>
+                <div className={"actions"}>
+                    <div className={"sampleCountSection"}>
+                        <div className={"textContainer"}>
+                            <p className={"title"}>Samples:</p>
                         </div>
 
-                        <SelectControl
-                            className={"sorting-algorithm-select"}
-                            options={this.sortingAlgorithms}
-                            value={this.state.selectedAlgorithm}
+                        <div className={"input-field"}>
+                            <Input
+                                id="fname"
+                                name="fname"
+                                disabled={true}
+                                value={this.state.sampleCount}
+                                active={this.state.sorting}
+                                onChange={this.onSampleCountInputChange}/>
+                        </div>
+                    </div>
+
+                    <SelectControl
+                        className={"sorting-algorithm-select"}
+                        options={sortingAlgorithms}
+                        value={this.state.selectedAlgorithm}
+                        disabled={this.state.sorting}
+                        onChange={this.onSelectedAlgorithmChange}>
+                    </SelectControl>
+
+
+                    <div className={"buttonsSection"}>
+                        <SubmitButton
+                            className={"chartButton"}
+                            onClick={() => this.onShuffleRequest(this.state.sampleCount)}
                             disabled={this.state.sorting}
-                            onChange={this.onSelectedAlgorithmChange}>
-                        </SelectControl>
+                            text={"Shuffle"}>
+                        </SubmitButton>
 
+                        <SubmitButton
+                            className={"chartButton playButton"}
+                            onClick={this.onSortButtonPressed}
+                            disabled={this.state.sorted}
+                            text={this.getSortText()}>
+                            <img src={this.getPlayPauseIcon()} width={12} height={12} alt={""}/>
+                        </SubmitButton>
 
-                        <div className={"buttonsSection"}>
-                            <SubmitButton
-                                className={"chartButton"}
-                                onClick={() => this.onShuffleRequest(this.state.sampleCount)}
-                                disabled={this.state.sorting}
-                                text={"Shuffle"}>
-                            </SubmitButton>
-
-                            <SubmitButton
-                                className={"chartButton playButton"}
-                                onClick={this.onSortButtonPressed}
-                                disabled={this.state.sorted}
-                                text={this.getSortText()}>
-                                <img src={this.getPlayPauseIcon()} width={12} height={12} alt={""}/>
-                            </SubmitButton>
-
-                            {this.renderStopButton()}
-                            {this.renderSpinner()}
-                        </div>
-
+                        {this.renderStopButton()}
+                        {this.renderSpinner()}
                     </div>
                 </div>
 
-                <div className={"chart"} style={{width: window.innerWidth, height: getContentHeight(this.state.actionsHeight)}}>
+                <div className={"chart"}>
                     <BarsView
-                        width={window.innerWidth}
-                        height={getContentHeight(this.state.actionsHeight)}
                         samples={this.state.sampleCount}
                         maxValue={this.maxValue}
                         data={this.state.data}/>

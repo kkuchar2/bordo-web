@@ -1,4 +1,9 @@
 export const navbarConstants = {
-    OPEN: 'OPEN',
+    PRESS: 'PRESS',
     CLOSE: 'CLOSE'
 };
+
+export const connectionConstants = {
+    CONNECTED: 'CONNECTED',
+    DISCONNECTED: 'DISCONNECTED'
+}

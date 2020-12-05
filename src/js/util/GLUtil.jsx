@@ -5,7 +5,7 @@ import {
     OrthographicCamera,
     PlaneGeometry,
     ShaderMaterial,
-    WebGLRenderer
+    WebGLRenderer, InstancedMesh
 } from "three";
 
 import {fragmentShader, vertexShader} from "shaders/shaders.js";
@@ -65,6 +65,8 @@ export const createBars = (scene, material1, material2, width, height, data, max
     let barHeight = height;
 
     let geometry = new PlaneGeometry(barWidth, barHeight, 1);
+
+    const instancedBar = new InstancedMesh(geometry, material1, data.length);
 
     for (let i = 0; i < data.length; i++) {
         const bar = new Mesh(geometry, i % 2 === 0 ? material1 : material2);

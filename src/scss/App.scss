@@ -18,17 +18,17 @@ body {
     height: 100%;
     margin: 0;
     padding: 0;
+    display: flex;
+    flex-flow: column;
 
     .navbar {
-      position: absolute;
-      top: 0;
-      height: $navbar-height;
+      min-height: $navbar-height;
+      flex: 0 1 100px;
     }
 
     .page {
-      position: absolute;
-      top: $navbar-height;
-
+      min-height: 0;
+      flex: 1;
     }
 
     .footer {
@@ -41,4 +41,8 @@ body {
       justify-content: right;
     }
   }
+}
+
+.Toastify__toast--error {
+  background: #ad0f00;
 }

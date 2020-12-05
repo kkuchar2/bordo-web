@@ -7,9 +7,7 @@ packageJson.buildDate = moment().format("DD-MM-YYYY HH:mm:SS");
 
 fs.writeFileSync(filePath, JSON.stringify(packageJson, null, 2));
 
-const jsonData = {
-    buildDate: packageJson.buildDate,
-};
+const jsonData = {buildDate: packageJson.buildDate};
 
 const jsonContent = JSON.stringify(jsonData);
 
@@ -17,11 +15,11 @@ console.log("Writing last build date to build/meta.json");
 
 const dir = './build';
 
-if (!fs.existsSync(dir)){
+if (!fs.existsSync(dir)) {
     fs.mkdirSync(dir);
 }
 
-fs.writeFile("build/meta.json", jsonContent, "utf8", function (error) {
+fs.writeFile("build/meta.json", jsonContent, "utf8", error => {
     if (error) {
         console.log("An error occured while saving build date and time to meta.json");
         return console.log(error);

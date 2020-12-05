@@ -1,21 +1,14 @@
-import React, {Component} from "react";
+import React from "react";
 
 import "componentStyles/Input.scss"
 
-class Input extends Component {
-
-    render() {
-        return (
-            <input
-                className={["input", this.props.className].join(" ")}
-                type="text"
-                id={this.props.id}
-                name={this.props.name}
-                value={this.props.value}
-                disabled={this.props.disabled}
-                onChange={this.props.onChange}/>
-        );
-    }
+export default props => {
+    return <input
+        className={["input", props.className].join(" ")}
+        type="text"
+        id={props.id}
+        name={props.name}
+        value={props.value}
+        disabled={props.disabled}
+        onChange={props.onChange}/>
 }
-
-export default Input;

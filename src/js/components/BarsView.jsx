@@ -11,9 +11,11 @@ import {
     removeChildrenFromScene
 } from "util/GLUtil.jsx";
 
+import {useEffectOnTrue, getParentHeight, getParentWidth} from "util/Util.jsx";
+
 import "componentStyles/BarsView.scss"
 
-let material1 = createMaterial( 0x00eeff, 0.3);
+let material1 = createMaterial(0x00eeff, 0.3);
 let material2 = createMaterial(0x00eeff, 0.4);
 let geometry;
 
@@ -26,16 +28,31 @@ export default props => {
     const [camera, setCamera] = useState(null);
     const [initialized, setInitialized] = useState(false);
     const [firstFrameRendered, setFristFrameRendered] = useState(false);
+    const [width, setWidth] = useState(0);
+    const [height, setHeight] = useState(0);
 
     useEffect(() => {
-        setCamera(createOrthoCamera(props.width, props.height, -500, 1000, -5));
-        setRenderer(createRenderer(props.width, props.height, '#1c1c1c'));
+        const updateSize = () => {
+            setHeight(getParentHeight(mount));
+            setWidth(getParentWidth(mount));
+        }
+
+        let h = getParentHeight(mount);
+        let w = getParentWidth(mount);
+
+        console.log(w + " " + h);
+
+        setCamera(createOrthoCamera(w, h, -500, 1000, -5));
+        setRenderer(createRenderer(w, h, '#1c1c1c'));
         setScene(createScene());
+        setWidth(w);
+        setHeight(h);
         setInitialized(true);
+        window.addEventListener('resize', updateSize);
+        return () => window.removeEventListener('resize', updateSize);
     }, []);
 
-    useEffect(() => {
-        if (!initialized) return;
+    useEffectOnTrue(initialized, () => {
 
         enableTransparency(renderer);
 
@@ -75,18 +92,18 @@ export default props => {
         }
     }, [initialized]);
 
-    useEffect(() => {
-        if (!initialized) return;
+    useEffectOnTrue(initialized, () => {
 
-        function updateBars() {
+        const updateBars = () => {
+
             for (let i = 0; i < props.samples; i++) {
                 scene.children[i].scale.y = props.data[i] / props.maxValue;
             }
         }
 
-        function createOrUpdateBars() {
+        const createOrUpdateBars = () => {
             if (scene.children.length === 0) {
-                createBars(scene, material1, material2, props.width, props.height, props.data, props.maxValue);
+                createBars(scene, material1, material2, width, height, props.data, props.maxValue);
             }
             else {
                 updateBars();
@@ -97,38 +114,37 @@ export default props => {
 
     }, [props.data])
 
-    useEffect(() => {
-        if (!initialized) return;
+    useEffectOnTrue(initialized, () => {
 
-        function updateCamera() {
+        const updateCamera = () => {
             camera.left = 0;
-            camera.right = props.width;
-            camera.top = props.height;
+            camera.right = width;
+            camera.top = height;
             camera.bottom = 0;
             camera.updateProjectionMatrix();
         }
 
-        function udpateRenderer() {
-            renderer.setSize(props.width, props.height);
+        const udpateRenderer = () => {
+            renderer.setSize(width, height);
         }
 
-        function updateBars() {
-            let barWidth = props.width / props.samples;
-            let barHeight = props.height;
+        const updateBars = () => {
+            let barWidth = width / props.samples;
+            let barHeight = height;
             let geometry = createPlaneGeometry(barWidth, barHeight);
 
             for (let i = 0; i < props.samples; i++) {
                 const bar = scene.children[i];
                 bar.geometry = geometry;
                 bar.scale.y = props.data[i] / props.maxValue;
-                bar.position.x =  barWidth / 2 + barWidth * i;
+                bar.position.x = barWidth / 2 + barWidth * i;
                 bar.position.y = barHeight / 2;
             }
         }
 
-        function createOrUpdateBars() {
+        const createOrUpdateBars = () => {
             if (scene.children.length === 0) {
-                createBars(scene, material1, material2, props.width, props.height, props.data, props.maxValue);
+                createBars(scene, material1, material2, width, height, props.data, props.maxValue);
             }
             else {
                 updateBars();
@@ -138,11 +154,10 @@ export default props => {
         updateCamera();
         udpateRenderer();
         createOrUpdateBars();
-    }, [props.width, props.height]);
+        renderer.render(scene, camera);
+    }, [width, height]);
 
-    function getClassName() {
-        return firstFrameRendered ? "visible" : "not_visible"
-    }
+    const getClassName = () => firstFrameRendered ? "visible" : "not_visible";
 
     return <div ref={mount} className={getClassName()}/>
 }

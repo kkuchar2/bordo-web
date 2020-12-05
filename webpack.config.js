@@ -7,7 +7,11 @@ const MomentLocalesPlugin = require('moment-locales-webpack-plugin');
 const path = require('path');
 
 module.exports = {
-    entry: [ "index.js" ],
+    entry: ["index.js"],
+    watchOptions: {
+        aggregateTimeout: 200,
+        poll: 1000
+    },
     output: {
         path: path.resolve(__dirname, 'build'),
         filename: 'chunk-[name]-[contenthash].js',
@@ -19,6 +23,7 @@ module.exports = {
         alias: {
             images: path.resolve(__dirname, 'src/images/'),
             components: path.resolve(__dirname, 'src/js/components/'),
+            workers: path.resolve(__dirname, 'src/js/workers/'),
             styles: path.resolve(__dirname, 'src/scss/'),
             componentStyles: path.resolve(__dirname, 'src/scss/components/')
         }
@@ -71,7 +76,7 @@ module.exports = {
         }),
         new CopyPlugin({
             patterns: [
-                { from: path.resolve(__dirname, 'src/images'), to: path.resolve(__dirname, 'build/images') },
+                {from: path.resolve(__dirname, 'src/images'), to: path.resolve(__dirname, 'build/images')},
             ],
         }),
     ],
@@ -81,7 +86,7 @@ module.exports = {
                 test: /\.(js|jsx)$/,
                 include: path.resolve(__dirname, 'src'),
                 exclude: /node_modules/,
-                use: [ { loader: 'babel-loader' } ]
+                use: [{loader: 'babel-loader'}]
             },
             { // Files
                 test: /\.(png|jpg|gif|ico|svg)$/,
@@ -102,9 +107,17 @@ module.exports = {
             { // SCSS
                 test: /\.(scss)$/,
                 use: [
-                    { loader: "style-loader" },
-                    { loader: "css-loader" },
-                    { loader: "sass-loader" }
+                    {loader: "style-loader"},
+                    {loader: "css-loader"},
+                    {loader: "sass-loader"}
+                ]
+            },
+            { // CSS
+                test: /\.(css)$/,
+                use: [
+                    {loader: "style-loader"},
+                    {loader: "css-loader"},
+                    {loader: "sass-loader"}
                 ]
             }
         ]

@@ -1,7 +1,6 @@
 import {navbarConstants} from "../constants.jsx";
 
-const open = () => dispatch => dispatch({ type: navbarConstants.OPEN });
+const press = dispatch => dispatch({ type: navbarConstants.PRESS });
+const close = dispatch => dispatch({ type: navbarConstants.CLOSE });
 
-const close = () => dispatch => dispatch({ type: navbarConstants.CLOSE });
-
-export const navbarActions = { open, close };
+export const navbarActions = { press, close };

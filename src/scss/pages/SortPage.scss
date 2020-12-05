@@ -2,15 +2,17 @@ $break-small: 400px;
 
 .sortPage {
   height: 100%;
-
+  display: flex;
+  flex-flow: column;
   overflow: hidden;
+
   .actions {
     padding: 10px;
-    min-height: 70px;
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     justify-content: center;
+    flex: 0 1 70px;
     background: #1c1c1c;
 
     .textContainer {
@@ -143,6 +145,8 @@ $break-small: 400px;
   }
 
   .chart {
+    min-height: 0;
+    flex: 1;
     background: #1c1c1c;
   }
 }

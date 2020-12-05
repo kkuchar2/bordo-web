@@ -1,23 +1,17 @@
-import {navbarConstants} from "../constants.jsx";
+import {navbarConstants} from "redux/constants.jsx";
 
-let navbar = JSON.parse(localStorage.getItem('navbar'));
+const initialState =  { opened: false }
 
-const initialState = navbar ? {
-    opened: false, navbar
-} : {};
-
-export const navbarReducer = (state = initialState, action) => {
+export const navbarReducer = (state = initialState, action)  => {
     switch (action.type) {
-        case navbarConstants.OPEN:
+        case navbarConstants.PRESS:
             return {
-                opened: true,
-                navbar: action.navbar
+                opened: !state.opened,
             };
         case navbarConstants.CLOSE:
             return {
                 opened: false,
-                navbar: action.navbar
-            };
+            }
         default:
             return state
     }
