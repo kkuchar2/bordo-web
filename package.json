@@ -47,8 +47,9 @@
   "dependencies": {
     "@reduxjs/toolkit": "^1.5.0",
     "@types/react": "^17.0.0",
-    "copy-webpack-plugin": "^6.3.2",
-    "d3": "^6.2.0",
+    "copy-webpack-plugin": "^6.4.0",
+    "d3": "^6.3.0",
+    "echarts": "^5.0.0",
     "lighthouse": "^6.5.0",
     "moment": "^2.29.1",
     "react": "^16.14.0",
@@ -59,7 +60,6 @@
     "react-toastify": "^6.1.0",
     "redux-thunk": "^2.3.0",
     "three": "^0.123.0",
-    "victory": "^35.4.2",
     "webpack-dev-server": "^3.11.0"
   },
   "buildDate": "22-11-2020 11:28:92"

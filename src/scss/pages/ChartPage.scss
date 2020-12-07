@@ -1,41 +1,8 @@
-@-webkit-keyframes fadeIn {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
-}
-
 .chartPage {
   height: 100%;
-
+  overflow: hidden;
   .chart {
     width: 100%;
     height: 100%;
-
-    svg {
-
-      box-sizing: border-box;
-      //border: 5px solid #545454;
-
-      .line {
-        shape-rendering: geometricPrecision;
-        animation: fadeIn 0.5s ease-in-out 0s 1
-      }
-
-      .area {
-        animation: fadeIn 0.5s ease-in-out 0s 1
-      }
-
-      .axis {
-        color: #707070;
-        font: 1.0em sans-serif;
-      }
-    }
   }
-}
-
-tspan {
-  fill: whitesmoke !important;
 }

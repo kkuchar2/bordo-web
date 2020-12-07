@@ -1,7 +1,7 @@
 import {client} from "redux/api/client.js";
 import {createAsyncThunk, createEntityAdapter, createSlice} from "@reduxjs/toolkit";
 
-const BASE_API_URL_DEVELOPMENT = "https://127.0.0.1:8000/api/"
+const BASE_API_URL_DEVELOPMENT = "http://192.168.0.104:5000/api/"
 
 const BASE_API_URL_PRODUCTION = "https://klkucharski-api.com/api/"
 

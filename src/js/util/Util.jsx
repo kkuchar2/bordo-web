@@ -31,7 +31,7 @@ export const useEffectWithNonNull = (func, deps) =>
     useEffect(() => {
         for (let i = 0; i < deps.length; i++) {
             let dep = deps[i];
-            if (dep === null || dep === undefined || dep == 0) {
+            if (dep === null || dep === undefined || dep == 0 || dep == null || dep === 0) {
                 return;
             }
         }
