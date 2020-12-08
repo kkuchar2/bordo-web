@@ -65,7 +65,20 @@ export default () => {
         }
     }, [])
 
-    useEffectWithNonNull(() => chartInstance.setOption(getConfig(mapData(data))), [data])
+    useEffectWithNonNull(() => {
+        chartInstance.showLoading({
+            maskColor: 'rgba(24,24,24,0.8)',
+            color: 'rgba(128,128,128,0.8)',
+            fontSize: "40px",
+            text: ' Loading',
+            textColor: 'rgb(255,255,255)',
+            showSpinner: true,
+            spinnerRadius: 40,
+            lineWidth: 8
+        });
+        chartInstance.setOption(getConfig(mapData(data)))
+        chartInstance.hideLoading();
+    }, [data])
 
     useEffectWithNonNull(() => {
         chartInstance.setOption(getConfig(mapData(data)));
