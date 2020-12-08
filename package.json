@@ -11,7 +11,6 @@
   "scripts": {
     "test": "echo \"No tests available\"",
     "build": "node ./update-build.js && webpack --mode production",
-    "lighthouse": "lighthouse http://192.168.0.104:8080 --quiet --chrome-flags=\"--headless\" --view",
     "cypress:open": "cypress open",
     "watch": "webpack --watch --progress",
     "start": "webpack-dev-server --open --mode development"
@@ -42,15 +41,14 @@
     "webpack-bundle-analyzer": "^3.9.0",
     "webpack-cli": "^3.3.12",
     "worker-loader": "^2.0.0",
-    "worker-plugin": "^3.2.0"
+    "worker-plugin": "^3.2.0",
+    "webpack-dev-server": "^3.11.0"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.5.0",
     "@types/react": "^17.0.0",
     "copy-webpack-plugin": "^6.4.0",
-    "d3": "^6.3.0",
     "echarts": "^5.0.0",
-    "lighthouse": "^6.5.0",
     "moment": "^2.29.1",
     "react": "^16.14.0",
     "react-dom": "^16.14.0",
@@ -59,8 +57,7 @@
     "react-router-redux": "^4.0.8",
     "react-toastify": "^6.1.0",
     "redux-thunk": "^2.3.0",
-    "three": "^0.123.0",
-    "webpack-dev-server": "^3.11.0"
+    "three": "^0.123.0"
   },
   "buildDate": "22-11-2020 11:28:92"
 }
