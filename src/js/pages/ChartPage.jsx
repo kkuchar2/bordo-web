@@ -30,6 +30,7 @@ export default () => {
     const [height, setHeight] = useState(0);
     const [todayCases, setTodayCases] = useState(0);
     const [todayDate, setTodayDate] = useState(0);
+    const [increase, setIncrease] = useState(0);
 
     const config = getConfig([]);
 
@@ -77,8 +78,13 @@ export default () => {
         chartInstance.setOption(getConfig(mapData(data)))
         chartInstance.hideLoading();
 
-        setTodayCases(data[data.length - 1].count)
+        const previous = data[data.length - 2].count;
+        const today = data[data.length - 1].count;
+        const inc = 100 * (previous - today) / previous;
+
+        setTodayCases(today)
         setTodayDate(data[data.length - 1].date)
+        setIncrease(Math.round((inc + Number.EPSILON) * 100) / 100)
     }, [data])
 
     useEffectWithNonNull(() => {
@@ -86,9 +92,20 @@ export default () => {
         chartInstance.resize();
     }, [width, height]);
 
+    const getIncreaseText = () => {
+        if (increase > 0) {
+            return `+${increase}%`
+        }
+        else {
+            return `${increase}%`
+        }
+    }
+
     return <div className={"chartPage"} ref={chartPageMount}>
         <div className={"latestTextWrapper"}>
-            <Text className="latestCasesText" text={`New cases today: ${todayCases}`}/>
+            <Text className="latestCasesText" text={`New cases today: ${todayCases}`}>
+                <div className={"percent"}>{getIncreaseText()}</div>
+            </Text>
             <Text className="latestCasesDateText" text={todayDate}/>
         </div>
         <div className={"chartWrapper"} ref={chartPageMount}>

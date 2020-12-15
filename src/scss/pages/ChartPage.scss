@@ -17,6 +17,7 @@
     justify-content: center;
     flex-direction: column;
 
+
     @media (max-width: 600px) {
       margin: 0 auto;
     }
@@ -31,6 +32,19 @@
       text-align: center;
       font-family: 'Rubik', cursive;
       font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      .percent {
+        margin-left: 10px;
+        font-size: 15px;
+        width: 50px;
+        padding: 7px 10px;
+        background: #2d2d2d;
+        color: #ffffff;
+        border-radius: 3px;
+      }
     }
 
     .latestCasesDateText {
