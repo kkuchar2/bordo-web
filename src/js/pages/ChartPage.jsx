@@ -10,6 +10,7 @@ import * as echarts from "echarts";
 import {getParentHeight, getParentWidth, useEffectInit, useEffectWithNonNull} from "util/Util.jsx";
 
 import "styles/pages/ChartPage.scss"
+import Text from "components/Text.jsx";
 
 const mapData = data => data.map(d => {
     return {
@@ -27,6 +28,8 @@ export default () => {
 
     const [width, setWidth] = useState(0);
     const [height, setHeight] = useState(0);
+    const [todayCases, setTodayCases] = useState(0);
+    const [todayDate, setTodayDate] = useState(0);
 
     const config = getConfig([]);
 
@@ -73,6 +76,9 @@ export default () => {
         });
         chartInstance.setOption(getConfig(mapData(data)))
         chartInstance.hideLoading();
+
+        setTodayCases(data[data.length - 1].count)
+        setTodayDate(data[data.length - 1].date)
     }, [data])
 
     useEffectWithNonNull(() => {
@@ -81,6 +87,12 @@ export default () => {
     }, [width, height]);
 
     return <div className={"chartPage"} ref={chartPageMount}>
-        <div className={"chart"} ref={mount}/>
+        <div className={"latestTextWrapper"}>
+            <Text className="latestCasesText" text={`New cases today: ${todayCases}`}/>
+            <Text className="latestCasesDateText" text={todayDate}/>
+        </div>
+        <div className={"chartWrapper"} ref={chartPageMount}>
+            <div className={"chart"} ref={mount}/>
+        </div>
     </div>
 }

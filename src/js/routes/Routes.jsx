@@ -27,7 +27,7 @@ export const routes = [
         path: "/chart",
         component: ChartPage,
         icon: 'images/area-chart.png',
-        title: "COVID-19",
+        title: "COVID-19 in Poland",
         enabled: true,
         navbar: true
     }

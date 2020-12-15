@@ -3,30 +3,71 @@
 @import '../common/theme';
 
 .chartPage {
+  display: flex;
+  flex-direction: column;
+
   height: 100%;
-  overflow: hidden;
+
   background: linear-gradient(105deg, rgba(86, 63, 255, 0.80), rgba(120, 180, 150, 1) 100%, #418dff);
 
-  .chart {
+  .latestTextWrapper {
     margin-top: 50px;
-    width: 100%;
-    height: calc(100% - 50px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
 
     @media (max-width: 600px) {
       margin: 0 auto;
-      height: 100%;
     }
 
     @media (max-height: 600px) {
-      width: 80%;
       margin: 0 auto;
-      height: 100%;
     }
 
+    .latestCasesText {
+      font-size: 35px;
+      color: #e7e7e7;
+      text-align: center;
+      font-family: 'Rubik', cursive;
+      font-weight: bold;
+    }
 
-    @media (max-height: 400px) {
-      width: 80%;
-      margin: 0 auto;
+    .latestCasesDateText {
+      margin-top: 10px;
+      font-size: 25px;
+      color: #e7e7e7;
+      text-align: center;
+      font-family: 'Rubik', cursive;
+      font-weight: bold;
+    }
+  }
+
+  .chartWrapper {
+    flex: 1;
+    overflow: hidden;
+
+    .chart {
+      margin-top: 50px;
+      width: 100%;
+      height: calc(100% - 50px);
+
+      @media (max-width: 600px) {
+        margin: 0 auto;
+        height: 100%;
+      }
+
+      @media (max-height: 600px) {
+        width: 80%;
+        margin: 0 auto;
+        height: 100%;
+      }
+
+
+      @media (max-height: 400px) {
+        width: 80%;
+        margin: 0 auto;
+      }
     }
   }
 }

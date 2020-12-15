@@ -14,16 +14,6 @@ export const getConfig = d => {
             position: pt => [pt[0], '10%'],
             confine: true
         },
-        title: {
-            left: 'center',
-            text: 'Covid cases in Poland',
-            textStyle: {
-                color: 'white',
-                fontSize: 28,
-                fontFamily: "Rubik",
-                fontWeight: 400
-            }
-        },
         xAxis: {
             type: 'category',
             boundaryGap: false,
