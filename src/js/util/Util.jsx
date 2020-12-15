@@ -1,4 +1,4 @@
-import React, {lazy, useEffect} from "react";
+import React, {lazy, useCallback, useEffect} from "react";
 import packageJson from "../../../package.json";
 import {toast} from "react-toastify";
 
@@ -72,3 +72,12 @@ export const notifyError = msg => {
         progress: undefined,
     });
 }
+
+export const callbackOf = (dispatch, func) => useCallback(() => func(dispatch), [dispatch]);
+
+export const withCondition = (variable, func) => {
+    if (variable) {
+        return func();
+    }
+}
+

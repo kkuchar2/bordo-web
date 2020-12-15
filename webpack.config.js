@@ -21,8 +21,10 @@ module.exports = {
     resolve: {
         modules: ['node_modules', path.resolve(__dirname, 'src/js')],
         alias: {
-            images: path.resolve(__dirname, 'src/images/'),
+            images: path.resolve(__dirname, 'images/'),
+            fonts: path.resolve(__dirname, 'fonts/'),
             components: path.resolve(__dirname, 'src/js/components/'),
+            util: path.resolve(__dirname, 'src/js/util/'),
             workers: path.resolve(__dirname, 'src/js/workers/'),
             styles: path.resolve(__dirname, 'src/scss/'),
             componentStyles: path.resolve(__dirname, 'src/scss/components/')
@@ -76,7 +78,8 @@ module.exports = {
         }),
         new CopyPlugin({
             patterns: [
-                {from: path.resolve(__dirname, 'src/images'), to: path.resolve(__dirname, 'build/images')},
+                {from: path.resolve(__dirname, 'images'), to: path.resolve(__dirname, 'build/images')},
+                {from: path.resolve(__dirname, 'fonts'), to: path.resolve(__dirname, 'build/fonts')},
             ],
         }),
     ],
@@ -89,7 +92,7 @@ module.exports = {
                 use: [{loader: 'babel-loader'}]
             },
             { // Files
-                test: /\.(png|jpg|gif|ico|svg)$/,
+                test: /\.(png|jpg|gif|ico|svg|ttf|otf)$/,
                 use: [
                     {
                         loader: 'file-loader',

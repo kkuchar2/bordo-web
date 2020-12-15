@@ -1,10 +1,10 @@
 import {
-    state,
-    shuffle,
-    resetState,
+    getSortMethod,
     notifyDataShuffled,
     onSortMethodExit,
-    getSortMethod,
+    resetState,
+    shuffle,
+    state,
 } from "workers/worker.utils.js";
 
 /* -------------- Main message handler ------------------ */

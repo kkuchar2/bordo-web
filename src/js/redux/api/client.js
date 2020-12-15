@@ -1,7 +1,7 @@
 import {notifyError} from "util/Util.jsx";
 
-export const client = async (endpoint, { body, ...customConfig } = {}) => {
-    const headers = { 'Content-Type': 'application/json' }
+export const client = async (endpoint, {body, ...customConfig} = {}) => {
+    const headers = {'Content-Type': 'application/json'}
 
     const config = {
         method: body ? 'POST' : 'GET',
@@ -24,12 +24,13 @@ export const client = async (endpoint, { body, ...customConfig } = {}) => {
             return data
         }
         throw new Error(response.statusText)
-    } catch (err) {
+    }
+    catch (err) {
         notifyError("Error: could not connect to server.");
         return Promise.reject(err.message ? err.message : data)
     }
 }
 
-client.get = (endpoint, customConfig = {})  => client(endpoint, { ...customConfig, method: 'GET' })
+client.get = (endpoint, customConfig = {}) => client(endpoint, {...customConfig, method: 'GET'})
 
-client.post = (endpoint, body, customConfig = {}) => client(endpoint, { ...customConfig, body })
+client.post = (endpoint, body, customConfig = {}) => client(endpoint, {...customConfig, body})

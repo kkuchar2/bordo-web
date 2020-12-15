@@ -1,4 +1,4 @@
-import {state, CheckPause, notifyDataUpdate} from "workers/worker.utils.js";
+import {CheckPause, notifyDataUpdate, state} from "workers/worker.utils.js";
 
 export const insertionSort = async () => {
     let length = state.data.length;

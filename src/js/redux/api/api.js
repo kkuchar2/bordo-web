@@ -5,7 +5,7 @@ import {fetchCovidData} from "redux/features/covidDataSlice.js";
  * Map of supported API calls
  */
 const apiMapGET = {
-    "covid" : fetchCovidData
+    "covid": fetchCovidData
 }
 
 export const startServerPing = () => store.dispatch(startServerPing)

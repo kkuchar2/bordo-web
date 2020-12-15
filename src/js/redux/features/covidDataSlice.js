@@ -1,10 +1,6 @@
 const NAME = 'covid/';
 
-import {
-    buildDefaultAsyncThunk,
-    buildDefaultSlice,
-    createDefaultEntityAdapter
-} from "redux/util.js";
+import {buildDefaultAsyncThunk, buildDefaultSlice, createDefaultEntityAdapter} from "redux/util.js";
 
 /*
  * Create adapter for covid data

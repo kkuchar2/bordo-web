@@ -1,6 +1,6 @@
 import {connectionConstants} from "redux/constants.jsx";
 
-const initialState = { connected: false }
+const initialState = {connected: false}
 
 export const connectionReducer = (state = initialState, action) => {
     switch (action.type) {

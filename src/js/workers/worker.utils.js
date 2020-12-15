@@ -1,9 +1,4 @@
-import {
-    bubbleSort,
-    insertionSort,
-    mergeSortRecursive,
-    quickSort
-} from "workers/sorts";
+import {bubbleSort, insertionSort, mergeSortRecursive, quickSort} from "workers/sorts";
 
 export const SLOWDOWN_FACTOR_MS = 1;
 
@@ -13,7 +8,7 @@ export const state = {
     data: []
 }
 
-export const resetState = ()  => {
+export const resetState = () => {
     state.pause = false;
     state.abort = false;
 }
@@ -28,7 +23,7 @@ export const algorithmMap = {
 let previousTime = new Date().getTime();
 let firstTime = true;
 
-export const notify = (type, payload)  => {
+export const notify = (type, payload) => {
     let currentTime = new Date().getTime();
 
     if (currentTime - previousTime > 16 || firstTime) {
@@ -36,14 +31,15 @@ export const notify = (type, payload)  => {
         postMessage({type: type, payload: payload});
         previousTime = currentTime;
     }
-    while (new Date().getTime() - currentTime < SLOWDOWN_FACTOR_MS) {}
+    while (new Date().getTime() - currentTime < SLOWDOWN_FACTOR_MS) {
+    }
 }
 
 export const notifyDataShuffled = () => notify("shuffle", state.data);
 
 export const notifyDataUpdate = () => notify("sort", state.data);
 
-export const onSortMethodExit = ()  => postMessage({type: "sortFinished", payload: {"sorted" : !state.abort}});
+export const onSortMethodExit = () => postMessage({type: "sortFinished", payload: {"sorted": !state.abort}});
 
 export const getSortMethod = (sort_type) => algorithmMap[sort_type];
 

@@ -17,21 +17,35 @@ export const getConfig = d => {
         title: {
             left: 'center',
             text: 'Covid cases in Poland',
+            textStyle: {
+                color: 'white',
+                fontSize: 28,
+                fontFamily: "Sofia Pro",
+                fontWeight: 400
+            }
         },
         xAxis: {
             type: 'category',
             boundaryGap: false,
-            data: dates
+            data: dates,
+            axisLabel: {
+                show: true,
+                textStyle: {
+                    color: 'white'
+                }
+            }
         },
         yAxis: {
             type: 'value',
             boundaryGap: false,
-            splitLine: {
-                lineStyle: {
-                    color: 'rgba(255,255,255,0.3)'
+            splitLine: {show: false},
+            axisLabel: {
+                show: true,
+                textStyle: {
+                    color: 'white'
                 }
             }
-        },
+            },
         dataZoom: [
             {
                 type: 'inside',
@@ -45,7 +59,7 @@ export const getConfig = d => {
                 handleStyle: {
                     color: '#fff',
                     shadowBlur: 3,
-                    shadowColor: 'rgba(0, 0, 0, 0.6)',
+                    shadowColor: 'rgba(0, 0, 0, 1)',
                     shadowOffsetX: 2,
                     shadowOffsetY: 2
                 }
@@ -58,7 +72,7 @@ export const getConfig = d => {
                 symbol: 'none',
                 sampling: 'average',
                 itemStyle: {
-                    color: 'rgba(56,125,255, 0.5)'
+                    color: 'rgba(255,255,255,0.7)'
                 },
                 areaStyle: {},
                 data: values

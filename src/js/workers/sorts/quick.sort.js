@@ -1,4 +1,4 @@
-import {state, CheckPause, notifyDataUpdate} from "workers/worker.utils.js";
+import {CheckPause, notifyDataUpdate, state} from "workers/worker.utils.js";
 
 const partition = (left, right) => {
     const pivot = state.data[Math.floor((right + left) / 2)];

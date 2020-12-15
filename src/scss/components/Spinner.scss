@@ -6,14 +6,21 @@ $loader-keyframe: 1 / (length($loader-colors) * 2) * 100;
 
 .loader {
   animation: loader-turn $loader-duration-alt linear infinite;
-  padding: 1rem;
-  max-width: 20px;
+  max-width: 30px;
   width: 100%;
-
+  margin: 10px auto 0;
   @keyframes loader-turn {
     50% { transform: rotate(180deg) }
     100% { transform: rotate(720deg) }
   }
+}
+
+.loader-visible {
+  visibility: visible;
+}
+
+.loader-hidden {
+  visibility: hidden;
 }
 
 .loader__value {

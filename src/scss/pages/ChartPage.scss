@@ -1,18 +1,29 @@
+@import '../common/responsive';
+@import '../common/constants';
+@import '../common/theme';
+
 .chartPage {
   height: 100%;
   overflow: hidden;
   .chart {
+    margin-top: 50px;
     width: 100%;
-    height: 100%;
+    height: calc(100% - 50px);
+
+    @media (max-width: 600px) {
+      margin: 0 auto;
+      height: 100%;
+    }
 
     @media (max-height: 600px) {
-      width: 600px;
+      width: 80%;
       margin: 0 auto;
+      height: 100%;
     }
 
 
     @media (max-height: 400px) {
-      width: 30%;
+      width: 80%;
       margin: 0 auto;
     }
   }

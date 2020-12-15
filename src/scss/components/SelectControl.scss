@@ -1,3 +1,8 @@
+@import '../common/responsive';
+@import '../common/constants';
+@import '../common/theme';
+@import '../common/fonts';
+
 $break-small: 400px;
 
 *:focus {
@@ -12,190 +17,124 @@ body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.brd {
-  border: 1px solid #e2eded;
-}
-
 .select-control {
-  position: relative;
-  display: inline-block;
-  width: 200px;
-  margin: 0;
 
-  .button {
-    width: 100px;
-    height: 100px;
+  @media (max-height: 400px) {
+    width: 100%;
   }
 
-  .select-button {
-    position: relative;
+  width: 250px;
+  height: 50px;
+  margin: 0;
+
+  .select-control-button {
+    @include theme-aware('background', 'select-background');
     height: 100%;
-    background-color: #252525;
-    color: #9B9B9B;
-    border: none;
-    border-radius: 5px;
+    margin: 0;
+    cursor: pointer;
+    display: flex;
+    border-radius: 4px;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+
+    &:hover {
+      filter: brightness(120%);
+    }
 
     .selected-value {
+      margin-left: 10px;
+      margin-right: 10px;
+      @include theme-aware('color', 'select-text-color');
       font-size: 18px;
+      font-family: "Sofia Pro", sans-serif;
       height: 100%;
       display: flex;
       align-items: center;
-      justify-content: left;
-      margin-left: 30px;
+      justify-content: center;
+      flex: 1;
 
       span {
         font-size: 14px;
         font-weight: 700;
         position: absolute;
         left: 20px;
-        font-family: "Lato", Helvetica, Arial, sans-serif;
+        font-family: "Sofia Pro", sans-serif;
       }
     }
-  }
 
-  &.disabled {
-    .select-button {
-      background-color: rgba(153, 153, 153, 0.13);
-      color: #ffffff33;
-    }
-
-    .options-view-button {
-      cursor: auto;
+    .arrowDown {
+      max-width: 50px;
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      @include theme-aware('color', 'select-text-color');
     }
   }
-}
 
-.options-view-button {
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  opacity: 0;
-  cursor: pointer;
-  z-index: 1;
-}
+  .options {
+    box-sizing: border-box;
+    position: relative;
+    left: 0;
+    top: 10px;
+    max-height: 400px;
+    overflow: scroll;
 
-.option, .label {
-  color: white;
-  font-size: 16px;
-}
+    margin: 0 auto;
+    border-radius: 5px;
 
-.options {
-  position: absolute;
-  top: 70px;
-  right: 0;
-  left: 0;
-  width: 250px;
+    .option, .label {
+      color: white;
+      font-size: 16px;
+    }
 
-  @media screen and (max-width: $break-small) {
-    width: 100%;
+    .option {
+      @include theme-aware('background', 'select-options-background');
+      position: relative;
+      line-height: 50px;
+      transition: 0.1s ease all;
+      z-index: 2;
+      height: 50px;
+
+      &:hover {
+        filter: brightness(120%);
+        cursor: pointer;
+      }
+
+      i {
+        position: absolute;
+        left: 14px;
+        padding: 0;
+        display: none;
+      }
+    }
+
+    .option:hover .label {
+      color: #fff;
+      cursor: pointer;
+    }
+
+    .label {
+      padding: 0;
+      margin-left: 27px;
+    }
+
+    .label {
+      transition: 0.1s ease all;
+    }
   }
 
-
-  margin: 0 auto;
-  background-color: #252525dd;
-  border-radius: 5px;
-}
-
-@keyframes fadein {
-  from {
-    opacity: 0;
-    top: 40px;
-  }
-  to {
-    opacity: 1;
-    top: 70px;
-  }
-}
-
-.option {
-  position: relative;
-  line-height: 50px;
-  transition: 0.1s ease all;
-  z-index: 2;
-  height: 50px;
-  background: #1c1c1c;
-
-  &:hover {
-    background: #363636;
-    cursor: pointer;
+  ~ .options .label {
+    display: block;
+    padding: 12px 14px;
   }
 
-  i {
-    position: absolute;
-    left: 14px;
-    padding: 0;
-    display: none;
+  .options .option i {
+    display: block;
+    padding: 12px 0;
   }
-}
 
-
-.options .option i {
-  display: block;
-  padding: 12px 0;
-}
-
-.label {
-  padding: 0;
-  margin-left: 27px;
-}
-
-~ .options .label {
-  display: block;
-  padding: 12px 14px;
-}
-
-.label {
-  transition: 0.1s ease all;
-}
-
-.opt-val {
-  position: absolute;
-  left: 14px;
-  width: 217px;
-  height: 21px;
-  opacity: 0;
-  background-color: #fff;
-  transform: scale(0);
-}
-
-.option:hover .label {
-  color: #fff;
-  cursor: pointer;
-}
-
-.chevron::before {
-  position: absolute;
-  top: 1.2em;
-  right: 1.7em;
-  width: 0.35em;
-  height: 0.35em;
-  border-style: solid;
-
-  border-width: 0.1em 0.1em 0 0;
-  content: '';
-  display: inline-block;
-
-  transform: rotate(-45deg);
-  vertical-align: top;
-
-}
-
-.chevron.right:before {
-  left: 0;
-  transform: rotate(45deg);
-}
-
-.chevron.bottom:before {
-  top: 1.7em;
-  transform: rotate(135deg);
-}
-
-.chevron.left:before {
-  left: 0.5em;
-  transform: rotate(-135deg);
+  .options::-webkit-scrollbar { /* WebKit */
+    width: 0;
+    height: 0;
+  }
 }

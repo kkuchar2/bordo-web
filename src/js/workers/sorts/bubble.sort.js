@@ -1,4 +1,4 @@
-import {state, CheckPause, notifyDataUpdate} from "workers/worker.utils.js";
+import {CheckPause, notifyDataUpdate, state} from "workers/worker.utils.js";
 
 export const bubbleSort = async () => {
     let len = state.data.length;

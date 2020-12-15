@@ -1,0 +1,51 @@
+@import '../common/fonts';
+
+.mainPage {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .profileSection {
+    align-self: flex-start;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    margin-top: 4vh;
+    width: 100%;
+
+    .profileImage {
+      background: linear-gradient(rgba(0, 45, 103, 0.5), rgba(0, 0, 0, 0.2)), url("/images/profile.png");
+      background-size: 100% 100%;
+      width: 120px;
+      height: 120px;
+      border-radius: 120px;
+    }
+
+    .profileText {
+      font-size: 3.5vh;
+      font-weight: lighter;
+      opacity: 0.75;
+      margin-top: 50px;
+      color: #e7e7e7;
+      text-align: center;
+      font-family: 'Sofia Pro', cursive;
+    }
+
+    .line {
+      position: relative;
+      margin: 0 auto;
+      top: 20px;
+      height: 5px;
+      width: 75%;
+      border-radius: 10px;
+      background: linear-gradient(to right,
+              rgba(255, 255, 255, 0) 0%,
+              rgba(255, 255, 255, 0.5) 49%,
+              rgba(255, 255, 255, 0) 100%);
+    }
+  }
+}

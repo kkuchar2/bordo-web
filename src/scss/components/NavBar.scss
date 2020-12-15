@@ -1,127 +1,125 @@
 @import '../common/responsive';
+@import '../common/constants';
+@import '../common/theme';
 
-@keyframes fadeout {
-  from {
-    opacity: 1;
-  }
-  to {
-    opacity: 0;
-  }
-}
-
-@keyframes fadein {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
+$font-color: rgba(238, 236, 235, 1);
 
 $stop-width: 800px;
 
 .navbar {
+  @include theme-aware('background', 'navbar-background');
+  min-height: $navbar-height;
+  flex: 0 1 $navbar-height;
   width: 100%;
 
-  .navbar-items-list {
-    z-index: 2;
-    position: absolute;
-    background: rgba(21, 21, 21, 0.95);
-
-    @media (min-width: $stop-width) {
-      display: none;
-    }
-
-    @media (max-width: $stop-width) {
-      width: 100%;
-      top: 100px;
-
-      .navbar-item {
-        height: 70px;
-        display: flex;
-        align-items: center;
-        justify-content: left;
-        margin-left: 0;
-        padding-left: 10px;
-      }
-    }
-  }
-
-  .navbar-items-list .visible {
-
-  }
-
-  .navbar-items-list .hidden {
-
-  }
-
-  .navbar-group {
-    box-sizing: border-box;
-    background: #232323;
-    height: 100%;
-    width: 100%;
+  .main-buttons {
     display: flex;
+    align-items: center;
+    justify-content: left;
+    height: 100%;
 
-    .textContainer {
-      margin-left: 20px;
-
-      @media (max-width: $stop-width) {
-        margin-left: 60px;
-      }
-
-      width: 200px;
-      padding: 10px;
-      box-sizing: border-box;
+    .homeIcon {
+      color: white;
+      height: 100%;
       display: flex;
       align-items: center;
-      justify-content: left;
-      height: 100%;
-      -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-      font-family: "Lato", Helvetica, Arial, sans-serif;
-      text-decoration: none;
-      white-space: nowrap;
-      color: #9B9B9B;
-      text-align: center;
-      font-weight: 600;
-      font-size: 20px;
+      justify-content: center;
+      width: 50px;
 
+      .navbar-item-text {
+        font-size: 20px;
+      }
       &:hover {
-        color: #40931f;
+        background: none;
+      }
+    }
+  }
+
+  @media (min-width: $stop-width) {
+    flex-direction: row;
+    display: flex;
+
+    .main-buttons {
+      .hamburger {
+        display: none;
       }
     }
 
-    @media (max-width: $stop-width) {
-      .hamburger {
+    .navbar-group {
+      height: 100%;
+      display: flex;
+
+      .navbar-items {
         display: flex;
-        position: absolute;
-        left: 0;
+        flex-direction: row;
+      }
+    }
+
+    .theme-switch {
+      display: none;
+      margin-left: auto;
+    }
+  }
+
+  @media (max-width: $stop-width) {
+    flex-direction: column;
+
+    .main-buttons {
+      .hamburger {
+        height: 100%;
         cursor: pointer;
         -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
         background: none;
         width: 50px;
         align-items: center;
         justify-content: center;
-        margin-top: 14px;
-        margin-left: 10px;
         opacity: 0.5;
       }
     }
 
-    .navbar-items {
-      margin-left: 40px;
 
-      @media (max-width: $stop-width) {
-          display: none;
-      }
-      width: 100%;
-      display: flex;
+    .navbar-group {
+      width: 50%;
+      height: calc(100% - #{$navbar-height});
+      z-index: 100;
+      display: none;
+      @include theme-aware('background', 'navbar-mobile-background');
+      position: absolute;
+      top: $navbar-height;
       box-sizing: border-box;
-      position: relative;
+
+      .navbar-items {
+        width: 100%;
+
+        z-index: 2;
+        display: flex;
+        flex-direction: column;
+
+        .navbar-item {
+          height: 70px;
+          display: flex;
+          align-items: center;
+          justify-content: left;
+          margin-left: 0;
+          padding-left: 10px;
+        }
+      }
     }
-  }
+    .navbar-group.opened-false {
+      display: none;
+    }
 
+    .navbar-group.opened-true {
+      transform: translate(0, 0);
+      display: flex;
+    }
 
-  .hamburger {
-    display: none;
+    .theme-switch {
+      display: none;
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: $navbar-height;
+    }
   }
 }

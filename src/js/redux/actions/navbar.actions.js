@@ -1,6 +1,8 @@
 import {navbarConstants} from "../constants.jsx";
+import {callbackOf} from "util/Util.jsx";
 
-const press = dispatch => dispatch({ type: navbarConstants.PRESS });
-const close = dispatch => dispatch({ type: navbarConstants.CLOSE });
+export const setOpened = dispatch =>
+    callbackOf(dispatch, dispatch => dispatch({type: navbarConstants.SET_OPENED}))
 
-export const navbarActions = { press, close };
+export const setClosed = dispatch =>
+    callbackOf(dispatch, dispatch => dispatch({type: navbarConstants.SET_CLOSED}));

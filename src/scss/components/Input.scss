@@ -1,11 +1,18 @@
+@import '../common/responsive';
+@import '../common/constants';
+@import '../common/theme';
+
 .input {
-  padding: 10px 5px 10px 10px;
-  height: 30px;
-  border-radius: 7px;
-  border: none;
-  margin-left: 10px;
-  width: 150px;
-  font-size: 17px;
-  background: #373737;
-  color: #9B9B9B;
+  box-sizing: border-box;
+  background: #fff;
+  width: 100px;
+  height: 50px;
+  margin: 0;
+  color: #a3a3a3;
+  font: 1rem "PT Sans", sans-serif;
+  outline: 0;
+  border-radius: 3px;
+  padding-left: 12px;
+  @include theme-aware('border', 'input-border');
+  @include theme-aware('background', 'input-background');
 }

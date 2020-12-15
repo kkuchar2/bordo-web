@@ -1,6 +1,10 @@
 export const navbarConstants = {
-    PRESS: 'PRESS',
-    CLOSE: 'CLOSE'
+    SET_OPENED: 'SET_OPENED',
+    SET_CLOSED: 'SET_CLOSED'
+};
+
+export const themeConstants = {
+    SWITCH: 'SWITCH',
 };
 
 export const connectionConstants = {

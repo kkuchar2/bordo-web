@@ -1,14 +1,14 @@
 import {navbarConstants} from "redux/constants.jsx";
 
-const initialState =  { opened: false }
+const initialState = {opened: false}
 
-export const navbarReducer = (state = initialState, action)  => {
+export const navbarReducer = (state = initialState, action) => {
     switch (action.type) {
-        case navbarConstants.PRESS:
+        case navbarConstants.SET_OPENED:
             return {
-                opened: !state.opened,
+                opened: true
             };
-        case navbarConstants.CLOSE:
+        case navbarConstants.SET_CLOSED:
             return {
                 opened: false,
             }

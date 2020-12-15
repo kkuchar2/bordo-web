@@ -1,107 +1,75 @@
-import React, {Component} from "react";
+import React, {useRef, useState} from "react";
+import {useEffectInit, useEffectWithNonNull} from "util/Util.jsx";
 
 import "componentStyles/SelectControl.scss"
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faChevronDown} from "@fortawesome/free-solid-svg-icons";
 
-class SelectControl extends Component {
+export default props => {
 
-    constructor(props) {
-        super(props);
+    const wrapper = useRef(null);
 
-        this.setWrapperRef = this.setWrapperRef.bind(this);
-        this.handleClickOutside = this.handleClickOutside.bind(this);
+    const [selectedOption, setSelectedOption] = useState(0);
+    const [open, setOpen] = useState(false);
 
-        this.state = {
-            selectedOption: -1,
-            open: false
-        };
-    }
+    useEffectInit(() => {
+        const handleClickOutside = (event) => {
+            if (wrapper && !wrapper.current.contains(event.target)) {
+                setOpen(false);
+            }
+        }
 
-    setWrapperRef(node) {
-        this.wrapperRef = node;
-    }
+        document.addEventListener('mousedown', handleClickOutside);
+        setSelectedOption(props.value);
 
-    onClick = () => {
-        if (!this.props.disabled) {
-            this.toggleDropdown();
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        }
+    })
+
+    useEffectWithNonNull(() => props.onChange(selectedOption), [selectedOption])
+
+    const onClick = () => {
+        if (!props.disabled) {
+            toggleDropdown();
         }
     };
 
-    toggleDropdown = () => {
-        this.setState({open: !this.state.open});
-    };
 
-    handleClickOutside(event) {
-        if (this.wrapperRef && !this.wrapperRef.contains(event.target)) {
-            this.setState({open: false});
-        }
-    }
+    const toggleDropdown = () => setOpen(!open);
 
-    componentDidMount() {
-        document.addEventListener('mousedown', this.handleClickOutside);
-        this.setState({selectedOption: this.props.value});
-    }
-
-    componentWillUnmount() {
-        document.removeEventListener('mousedown', this.handleClickOutside);
-    }
-
-    onOptionSelected = (e) => {
+    const onOptionSelected = e => {
         let index = e.currentTarget.getAttribute("data-index");
-        this.setState({selectedOption: index});
-        this.props.onChange(index);
-        this.setState({open: !this.state.open});
+        setSelectedOption(index);
+        setOpen(!open);
     };
 
-    getAdditionalClassName() {
-        if (this.props.disabled) {
-            return "disabled";
-        }
-        else {
-            return "enabled";
-        }
-    }
+    const getAdditionalClassName = () => props.disabled ? "disabled" : "enabled";
 
-    renderOption = (option, index) => {
-        return (
-            <div key={index} data-index={index} onClick={this.onOptionSelected} className="option">
-                <span className="label">{option}</span>
-            </div>
-        );
-    };
+    const renderOption = (option, index) => <div
+        key={index} data-index={index} onClick={onOptionSelected} className="option">
+        <span className="label">{option}</span>
+    </div>;
 
-    renderOptions = () => {
-        return (this.state.open &&
+    const renderOptions = () => {
+        return (open &&
             <div className={"options"}>
-                {this.props.options.map((item, index) => this.renderOption(item, index))}
+                {props.options.map((item, index) => renderOption(item, index))}
             </div>
         );
     };
 
-    getTopValue = () => {
-        let selectedOption = this.state.selectedOption;
-        let options = this.props.options;
-        return selectedOption === -1 ? "Select sorting algorithm" : options[selectedOption];
-    };
+    const getTopValue = () => selectedOption === -1 ? "Select sorting algorithm" : props.options[selectedOption];
 
-    render() {
-        return (
-            <div ref={this.setWrapperRef}
-                 className={["select-control", this.props.className, this.getAdditionalClassName()].join(" ")}>
-                <input type="button" onClick={this.onClick} className="options-view-button"/>
-                <div className="brd select-button">
-                    <div className="selected-value">
-                        <div>{this.getTopValue()}</div>
-                    </div>
-                    <div id="chevrons">
-                        <span className="chevron top"/>
-                        <span className="chevron bottom"/>
-                    </div>
-                </div>
-
-                {this.renderOptions()}
+    return <div ref={wrapper} className={["select-control", props.className, getAdditionalClassName()].join(" ")}>
+        <div onClick={onClick} className="select-control-button">
+            <div className="selected-value">
+                <div>{getTopValue()}</div>
             </div>
-        )
-    }
+            <div className={"arrowDown"}>
+                <FontAwesomeIcon icon={faChevronDown}/>
+            </div>
+        </div>
+        {renderOptions()}
+    </div>;
 }
-
-export default SelectControl;

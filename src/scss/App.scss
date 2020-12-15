@@ -1,12 +1,19 @@
+@import "common/_theme";
+@import "common/animations/_mixins";
+@import "common/animations/fade_in";
 @import "common/constants";
+@import "common/fonts";
 
 html {
   height: 100%;
+  font-family: "Sofia Pro", sans-serif;
+  background: linear-gradient(to top, transparent, #000000 100%),
+  linear-gradient(105deg, rgba(86, 63, 255, 0.90), rgba(120, 180, 150, 0.95) 100%, #418dff),
+  url("https://i.pinimg.com/originals/ca/af/19/caaf198372f936563d2198e22780131c.jpg") no-repeat center center fixed;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
-  background: $bcg;
 }
 
 body {
@@ -20,15 +27,27 @@ body {
     padding: 0;
     display: flex;
     flex-flow: column;
+    background: none;
 
-    .navbar {
-      min-height: $navbar-height;
-      flex: 0 1 $navbar-height;
+    .Toastify__toast--error {
+      background: #ad0f00;
     }
 
     .page {
       min-height: 0;
       flex: 1;
+      @include timed_animation(fadein, 2s);
+    }
+
+    .pageOverlay {
+      z-index: 50;
+      background: black;
+      width: 100%;
+      height: calc(100% - #{$navbar-height});
+      opacity: 0.7;
+      position: absolute;
+      top: $navbar-height;
+      left: 0;
     }
 
     .footer {
@@ -41,8 +60,4 @@ body {
       justify-content: right;
     }
   }
-}
-
-.Toastify__toast--error {
-  background: #ad0f00;
 }

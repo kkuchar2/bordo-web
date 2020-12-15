@@ -1,151 +1,190 @@
+@import '../common/responsive';
+@import '../common/constants';
+@import '../common/theme';
+@import '../common/fonts';
+
+
 .sortPage {
   height: 100%;
   display: flex;
-  flex-flow: column;
-  overflow: hidden;
+  flex-direction: column;
 
-  .actions {
-    padding: 10px;
+  @media (max-height: 400px) {
+    flex-direction: row;
+  }
+
+  .left {
+    min-height: 100px;
     display: flex;
-    flex-wrap: wrap;
     align-items: center;
     justify-content: center;
-    flex: 0 1 70px;
-    background: #1c1c1c;
+    flex-direction: column;
+    box-sizing: border-box;
 
-    .textContainer {
-      width: 100px;
-      min-width: 80px;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: left;
+    @media (max-height: 400px) {
+      justify-content: unset;
     }
 
-    .title {
-      font-family: "Lato", Helvetica, Arial, sans-serif;
-      text-decoration: none;
-      color: #9B9B9B;
-      font-size: 17px;
-      font-weight: 400;
-
-      &:hover {
-        cursor: auto;
-      }
-    }
-
-    .sampleCountSection {
-      margin: 5px;
-      display: flex;
-      box-sizing: border-box;
-      width: 310px;
-      align-items: center;
-      justify-content: left;
-      opacity: 0.5;
-
-      .input-field {
-        flex: 1 1 10px;
-        .input {
-          width: calc(100% - 5px - 10px);
-          margin: 0;
-        }
-      }
-    }
-
-    .buttonsSection {
+    .actions {
+      padding: 10px;
+      flex-wrap: wrap;
       display: flex;
       align-items: center;
       justify-content: center;
       box-sizing: border-box;
-      flex-wrap: wrap;
-      margin-bottom: 5px;
-    }
 
-    .sorting-algorithm-select {
-      min-width: 300px;
-      height: 50px;
-      width: 310px;
-      margin: 5px;
-      .options-view-button {
-        border: none;
-        padding: 0;
+
+      > * {
+        margin: 5px;
+      }
+
+      .sampleCountSection {
+        box-sizing: border-box;
+        display: flex;
+        align-items: center;
+        justify-content: left;
+        height: 50px;
+
+        @media (max-width: 400px) {
+          width: 100%;
+        }
+
+        .samplesTitle {
+          display: flex;
+          align-items: center;
+          justify-content: left;
+          height: 100%;
+          width: 60px;
+
+          .title {
+            font-family: "Sofia Pro", sans-serif;
+            text-decoration: none;
+            @include theme-aware('color', 'text-color');
+            font-size: 17px;
+            font-weight: 400;
+
+            &:hover {
+              cursor: auto;
+            }
+          }
+        }
+
+        .input-field {
+          margin-left: 20px;
+
+          @media (max-width: 400px) {
+            flex: 1;
+
+            input {
+              width: 100%;
+            }
+          }
+
+        }
+      }
+
+      .buttonsSection {
+        box-sizing: border-box;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+
+        @media (max-height: 400px) {
+          flex-direction: row;
+          flex-wrap: nowrap;
+        }
+
+        .chartButton {
+          @include theme-aware('background', 'sort-page-buttons-background');
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          position: relative;
+          padding: 0;
+          width: 50px;
+          height: 50px;
+          font-size: 16px;
+          line-height: 35px;
+          color: #9B9B9B;
+          border-radius: 3px;
+
+          &:active {
+            outline: none;
+          }
+
+          &:focus {
+            outline: none;
+          }
+        }
+
+        .playButton {
+          margin-left: 10px;
+        }
+
+        .chartButton.enabled {
+
+          .Text {
+            color: white;
+          }
+
+          &:hover {
+            cursor: pointer;
+          }
+        }
+
+        .chartButton.disabled {
+          @include theme-aware('background', 'sort-page-buttons-disabled-background');
+
+          .Text {
+            color: rgba(255, 255, 255, 0.34);
+          }
+
+          img {
+            opacity: 0.3;
+          }
+        }
+
+        .stopButton {
+          margin-left: 10px;
+        }
       }
     }
 
-    .line-break {
-      width: 100%;
-    }
+    .descriptionContainer {
+      box-sizing: border-box;
+      min-height: 0;
+      max-height: 600px;
+      overflow-y: scroll;
+      -ms-overflow-style: none; /* Internet Explorer 10+ */
+      overflow-x: auto;
+      padding: 10px 20px 20px;
+      @include theme-aware('color', 'text-color');
 
-    .chartButton {
-      display: inline-block;
-      position: relative;
-
-      width: 150px;
-      height: 50px;
-      font-size: 16px;
-      line-height: 35px;
-      padding: 0 0 0 20px;
-      background: #252525;
-      color: #9B9B9B;
-      border-radius: 5px;
-      margin-left: 5px;
-      margin-top: 5px;
-
-      &:active {
-        outline: none;
+      .text {
+        font-size: 1em;
       }
 
-      &:focus {
-        outline: none;
-      }
-
-      img {
-        position: absolute;
-        right: 15px;
+      .text.titleSort {
+        font-size: 1.5em;
+        margin-bottom: 20px;
       }
     }
 
-    .playButton {
-      margin-left: 10px;
-    }
-
-    .chartButton.enabled {
-
-      .Text {
-        color: white;
-      }
-
-      &:hover {
-        cursor: pointer;
-      }
-    }
-
-    .chartButton.disabled {
-      background: #1a1a1acc;
-
-      .Text {
-        color: rgba(255, 255, 255, 0.34);
-      }
-
-      img {
-        opacity: 0.3;
-      }
-    }
-
-    .stopButton {
-      width: 40px;
-
-      img {
-        position: absolute;
-        right: 14px;
-      }
+    .descriptionContainer::-webkit-scrollbar { /* WebKit */
+      width: 0;
+      height: 0;
     }
   }
 
   .chart {
     min-height: 0;
+    @media (min-width: 1200px) {
+      min-width: 800px;
+    }
+
     flex: 1;
-    background: #1c1c1c;
+    box-sizing: border-box;
   }
 }
 

@@ -1,22 +1,22 @@
 import React, {useEffect, useRef, useState} from "react";
 
 import {
+    createBars,
     createMaterial,
     createOrthoCamera,
-    createRenderer,
-    createBars,
-    enableTransparency,
     createPlaneGeometry,
+    createRenderer,
     createScene,
+    enableTransparency,
     removeChildrenFromScene
 } from "util/GLUtil.jsx";
 
-import {useEffectOnTrue, getParentHeight, getParentWidth} from "util/Util.jsx";
+import {getParentHeight, getParentWidth, useEffectOnTrue} from "util/Util.jsx";
 
 import "componentStyles/BarsView.scss"
 
-let material1 = createMaterial(0x00eeff, 0.3);
-let material2 = createMaterial(0x00eeff, 0.4);
+let material1 = createMaterial("#ffffff", 0.5);
+let material2 = createMaterial("#ffffff", 1);
 let geometry;
 
 export default props => {
@@ -33,6 +33,8 @@ export default props => {
 
     useEffect(() => {
         const updateSize = () => {
+            const pw = getParentWidth(mount);
+            console.log("Parent width: " + pw);
             setHeight(getParentHeight(mount));
             setWidth(getParentWidth(mount));
         }
@@ -43,7 +45,7 @@ export default props => {
         console.log(w + " " + h);
 
         setCamera(createOrthoCamera(w, h, -500, 1000, -5));
-        setRenderer(createRenderer(w, h, '#1c1c1c'));
+        setRenderer(createRenderer(w, h, 0x00000));
         setScene(createScene());
         setWidth(w);
         setHeight(h);
@@ -97,7 +99,7 @@ export default props => {
         const updateBars = () => {
 
             for (let i = 0; i < props.samples; i++) {
-                scene.children[i].scale.y = props.data[i] / props.maxValue;
+                scene.children[i].scale.y = (props.data[i] / props.maxValue) * 0.8;
             }
         }
 
@@ -129,6 +131,7 @@ export default props => {
         }
 
         const updateBars = () => {
+            console.log("uUpdateing bars for width: " + width);
             let barWidth = width / props.samples;
             let barHeight = height;
             let geometry = createPlaneGeometry(barWidth, barHeight);
@@ -136,7 +139,7 @@ export default props => {
             for (let i = 0; i < props.samples; i++) {
                 const bar = scene.children[i];
                 bar.geometry = geometry;
-                bar.scale.y = props.data[i] / props.maxValue;
+                bar.scale.y = (props.data[i] / props.maxValue) * 0.8;
                 bar.position.x = barWidth / 2 + barWidth * i;
                 bar.position.y = barHeight / 2;
             }

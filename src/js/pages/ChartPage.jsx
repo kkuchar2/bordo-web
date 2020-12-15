@@ -1,4 +1,4 @@
-import React, {useRef, useState, useEffect} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {useSelector} from "react-redux";
 import {selectAllCovid} from "redux/features/covidDataSlice.js";
 
@@ -7,12 +7,7 @@ import {fetchAsyncGET} from "redux/api/api.js";
 
 import * as echarts from "echarts";
 
-import {
-    getParentHeight,
-    getParentWidth,
-    useEffectInit,
-    useEffectWithNonNull
-} from "util/Util.jsx";
+import {getParentHeight, getParentWidth, useEffectInit, useEffectWithNonNull} from "util/Util.jsx";
 
 import "styles/pages/ChartPage.scss"
 

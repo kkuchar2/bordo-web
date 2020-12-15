@@ -4,10 +4,17 @@ import {Link} from "react-router-dom";
 import "componentStyles/NavBarItem.scss"
 
 export default props => {
-    return <Link onClick={props.onClick} to={props.href} className={"navbar-item"}>
+
+    const renderIcon = () => {
+        if (props.iconSrc) {
+            return  <img className={"navbar-item-icon"} src={props.iconSrc} width={30} height={30} alt={""}/>;
+        }
+    }
+
+    return <Link onClick={props.onClick} to={props.href} className={[props.className, "navbar-item"].join(' ')}>
         <div className={"navbar-item-text"}>
             {props.children}
         </div>
-        <img className={"navbar-item-icon"} src={props.iconSrc} width={30} height={30} alt={""}/>
+        {renderIcon()}
     </Link>
 }
