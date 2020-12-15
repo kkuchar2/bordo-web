@@ -20,7 +20,7 @@ export const getConfig = d => {
             textStyle: {
                 color: 'white',
                 fontSize: 28,
-                fontFamily: "Sofia Pro",
+                fontFamily: "Rubik",
                 fontWeight: 400
             }
         },

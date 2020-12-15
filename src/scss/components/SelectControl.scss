@@ -45,7 +45,7 @@ body {
       margin-right: 10px;
       @include theme-aware('color', 'select-text-color');
       font-size: 18px;
-      font-family: "Sofia Pro", sans-serif;
+      font-family: "Rubik", sans-serif;
       height: 100%;
       display: flex;
       align-items: center;
@@ -57,7 +57,7 @@ body {
         font-weight: 700;
         position: absolute;
         left: 20px;
-        font-family: "Sofia Pro", sans-serif;
+        font-family: "Rubik", sans-serif;
       }
     }
 

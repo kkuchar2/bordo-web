@@ -80,4 +80,3 @@ export const withCondition = (variable, func) => {
         return func();
     }
 }
-

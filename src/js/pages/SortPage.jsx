@@ -164,10 +164,7 @@ export default () => {
                         disabled={!sorting || paused}>
                         <img src={'/images/stop_icon.png'} width={12} height={12} alt={""}/>
                     </Button>
-
-
                 </div>
-
             </div>
         </div>
         <div className={"chart"}>

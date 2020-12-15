@@ -5,6 +5,7 @@
 
 
 .sortPage {
+  background: linear-gradient(105deg, rgba(86, 63, 255, 0.80), rgba(120, 180, 150, 1) 100%, #418dff);
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -57,7 +58,7 @@
           width: 60px;
 
           .title {
-            font-family: "Sofia Pro", sans-serif;
+            font-family: "Rubik", sans-serif;
             text-decoration: none;
             @include theme-aware('color', 'text-color');
             font-size: 17px;
