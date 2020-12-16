@@ -80,7 +80,7 @@ export default () => {
 
         const previous = data[data.length - 2].count;
         const today = data[data.length - 1].count;
-        const inc = 100 * (previous - today) / previous;
+        const inc = 100 * (today - previous) / previous;
 
         setTodayCases(today)
         setTodayDate(data[data.length - 1].date)
