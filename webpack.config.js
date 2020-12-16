@@ -1,10 +1,12 @@
 const HtmlWebPackPlugin = require("html-webpack-plugin");
 const WorkerPlugin = require('worker-plugin');
+const MomentLocalesPlugin = require('moment-locales-webpack-plugin');
 const CompressionPlugin = require('compression-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
-const MomentLocalesPlugin = require('moment-locales-webpack-plugin');
 
 const path = require('path');
+
+const resolvePath = name => path.resolve(__dirname, name);
 
 module.exports = {
     entry: ["index.js"],
@@ -13,21 +15,22 @@ module.exports = {
         poll: 1000
     },
     output: {
-        path: path.resolve(__dirname, 'build'),
+        path: resolvePath('build'),
         filename: 'chunk-[name]-[contenthash].js',
         globalObject: "(typeof self!='undefined'?self:this)",
         pathinfo: false
     },
     resolve: {
-        modules: ['node_modules', path.resolve(__dirname, 'src/js')],
+        modules: ['node_modules', resolvePath('src/js')],
         alias: {
-            images: path.resolve(__dirname, 'images/'),
-            fonts: path.resolve(__dirname, 'fonts/'),
-            components: path.resolve(__dirname, 'src/js/components/'),
-            util: path.resolve(__dirname, 'src/js/util/'),
-            workers: path.resolve(__dirname, 'src/js/workers/'),
-            styles: path.resolve(__dirname, 'src/scss/'),
-            componentStyles: path.resolve(__dirname, 'src/scss/components/')
+            images: resolvePath('images/'),
+            fonts: resolvePath('fonts/'),
+            configs: resolvePath('configs/'),
+            components: resolvePath('src/js/components/'),
+            util: resolvePath('src/js/util/'),
+            workers: resolvePath('src/js/workers/'),
+            styles: resolvePath('src/scss/'),
+            componentStyles: resolvePath('src/scss/components/')
         }
     },
     optimization: {
@@ -64,22 +67,14 @@ module.exports = {
         historyApiFallback: true
     },
     plugins: [
-        new HtmlWebPackPlugin({
-            template: "./src/index.html",
-            filename: "./index.html",
-        }),
-        new MomentLocalesPlugin({
-            localesToKeep: ['es-us', 'pl'],
-        }),
+        new HtmlWebPackPlugin({template: "./src/index.html", filename: "./index.html"}),
+        new MomentLocalesPlugin({localesToKeep: ['es-us', 'pl']}),
         new WorkerPlugin(),
-        new CompressionPlugin({
-            algorithm: 'gzip',
-            test: /\.js$/,
-        }),
+        new CompressionPlugin({algorithm: 'gzip', test: /\.js$/}),
         new CopyPlugin({
             patterns: [
-                {from: path.resolve(__dirname, 'images'), to: path.resolve(__dirname, 'build/images')},
-                {from: path.resolve(__dirname, 'fonts'), to: path.resolve(__dirname, 'build/fonts')},
+                {from: resolvePath('images'), to: resolvePath('build/images')},
+                {from: resolvePath('fonts'), to: resolvePath('build/fonts')},
             ],
         }),
     ],
@@ -87,7 +82,7 @@ module.exports = {
         rules: [
             { // JS + JSX
                 test: /\.(js|jsx)$/,
-                include: path.resolve(__dirname, 'src'),
+                include: resolvePath('src'),
                 exclude: /node_modules/,
                 use: [{loader: 'babel-loader'}]
             },
@@ -98,7 +93,7 @@ module.exports = {
                         loader: 'file-loader',
                         options: {
                             name: '[path][name].[ext]',
-                            context: path.resolve(__dirname, "src/"),
+                            context: resolvePath('src/'),
                             useRelativePath: true,
                             outputPath: '/',
                             publicPath: '../',

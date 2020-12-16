@@ -2,7 +2,7 @@ import React, {useEffect, useRef, useState} from 'react';
 import {useSelector} from "react-redux";
 import {selectAllCovid} from "redux/features/covidDataSlice.js";
 
-import {getConfig} from "pages/config.jsx";
+import {getConfig} from "configs/config.js";
 import {fetchAsyncGET} from "redux/api/api.js";
 
 import * as echarts from "echarts";
