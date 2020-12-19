@@ -17,5 +17,5 @@ export const unregister = (worker) => {
     }
 }
 
-export const registerSortWorker = handler => register(new Worker("workers/sort.worker", {type: 'module'}), handler);
+export const registerSortWorker = handler => register(new Worker(new URL('sort.worker.js', import.meta.url)), handler);
 

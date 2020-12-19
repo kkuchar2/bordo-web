@@ -1,6 +1,7 @@
 @import '../common/responsive';
 @import '../common/constants';
 @import '../common/theme';
+@import '../common/mixins';
 
 $font-color: rgba(238, 236, 235, 1);
 
@@ -66,9 +67,9 @@ $stop-width: 800px;
 
     .main-buttons {
       .hamburger {
+        @include disable_mobile_tap_color();
         height: 100%;
         cursor: pointer;
-        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
         background: none;
         width: 50px;
         align-items: center;

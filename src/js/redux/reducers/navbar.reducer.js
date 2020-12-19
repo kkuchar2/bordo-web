@@ -1,4 +1,4 @@
-import {navbarConstants} from "redux/constants.jsx";
+import {navbarConstants} from "redux/constants.js";
 
 const initialState = {opened: false}
 

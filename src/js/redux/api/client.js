@@ -1,4 +1,4 @@
-import {notifyError} from "util/Util.jsx";
+import {notifyError} from "util/util.js";
 
 export const client = async (endpoint, {body, ...customConfig} = {}) => {
     const headers = {'Content-Type': 'application/json'}

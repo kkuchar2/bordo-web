@@ -9,9 +9,9 @@ import {
     createScene,
     enableTransparency,
     removeChildrenFromScene
-} from "util/GLUtil.jsx";
+} from "util/GLUtil.js";
 
-import {getParentHeight, getParentWidth, useEffectOnTrue} from "util/Util.jsx";
+import {getParentHeight, getParentWidth, useEffectOnTrue} from "util/util.js";
 
 import "componentStyles/BarsView.scss"
 
@@ -20,6 +20,8 @@ let material2 = createMaterial("#ffffff", 1);
 let geometry;
 
 export default props => {
+
+
 
     const mount = useRef(null);
 
@@ -33,16 +35,12 @@ export default props => {
 
     useEffect(() => {
         const updateSize = () => {
-            const pw = getParentWidth(mount);
-            console.log("Parent width: " + pw);
             setHeight(getParentHeight(mount));
             setWidth(getParentWidth(mount));
         }
 
         let h = getParentHeight(mount);
         let w = getParentWidth(mount);
-
-        console.log(w + " " + h);
 
         setCamera(createOrthoCamera(w, h, -500, 1000, -5));
         setRenderer(createRenderer(w, h, 0x00000));
@@ -51,6 +49,7 @@ export default props => {
         setHeight(h);
         setInitialized(true);
         window.addEventListener('resize', updateSize);
+        updateSize();
         return () => window.removeEventListener('resize', updateSize);
     }, []);
 
@@ -89,9 +88,7 @@ export default props => {
         }
 
         start();
-        return () => {
-            dispose();
-        }
+        return dispose
     }, [initialized]);
 
     useEffectOnTrue(initialized, () => {

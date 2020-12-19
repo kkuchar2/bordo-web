@@ -1,4 +1,4 @@
-import {connectionConstants} from "../constants.jsx";
+import {connectionConstants} from "../constants.js";
 
 const connected = () => dispatch => dispatch({type: connectionConstants.CONNECTED});
 const disconnected = () => dispatch => dispatch({type: connectionConstants.DISCONNECTED});

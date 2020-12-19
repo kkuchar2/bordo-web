@@ -7,7 +7,7 @@ import {fetchAsyncGET} from "redux/api/api.js";
 
 import * as echarts from "echarts";
 
-import {getParentHeight, getParentWidth, useEffectInit, useEffectWithNonNull} from "util/Util.jsx";
+import {getParentHeight, getParentWidth, useEffectInit, useEffectWithNonNull} from "util/util.js";
 
 import "styles/pages/ChartPage.scss"
 import Text from "components/Text.jsx";

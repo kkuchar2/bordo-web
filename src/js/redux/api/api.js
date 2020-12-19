@@ -1,4 +1,4 @@
-import {store} from "redux/store.jsx";
+import {store} from "redux/store.js";
 import {fetchCovidData} from "redux/features/covidDataSlice.js";
 
 /**

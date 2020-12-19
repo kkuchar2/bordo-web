@@ -1,11 +1,8 @@
-$anim_time: 1s;
+@import "../common/animations/_mixins";
+@import "../common/animations/fade_in";
 
 .visible {
-  -webkit-animation: fadein $anim_time; /* Safari, Chrome and Opera > 12.1 */
-  -moz-animation: fadein $anim_time; /* Firefox < 16 */
-  -ms-animation: fadein $anim_time; /* Internet Explorer */
-  -o-animation: fadein $anim_time; /* Opera < 12.1 */
-  animation: fadein $anim_time;
+  @include timed_animation(fadein, 2s);
   width: 100%;
   height: 100%;
 }

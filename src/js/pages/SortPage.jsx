@@ -2,8 +2,8 @@ import React, {useEffect, useState} from 'react';
 import BarsView from "components/BarsView.jsx";
 import Button from "components/Button.jsx";
 import SelectControl from "components/SelectControl.jsx";
-import {registerSortWorker, unregister} from "workers/workers.jsx";
-import {useEffectWithNonNull} from "util/Util.jsx";
+import {registerSortWorker, unregister} from "workers/workers.js";
+import {useEffectWithNonNull} from "util/util.js";
 
 import "styles/pages/SortPage.scss"
 

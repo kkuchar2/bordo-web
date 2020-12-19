@@ -1,5 +1,5 @@
 import React from "react";
-import {lazyImport} from "util/Util.jsx";
+import {lazyImport} from "util/util.js";
 
 const MainPage = lazyImport(() => import (/* webpackChunkName: "main-page" */ "pages/MainPage.jsx"));
 const NotFound = lazyImport(() => import (/* webpackChunkName: "not-found" */ "pages/NotFound.jsx"));

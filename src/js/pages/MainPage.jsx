@@ -2,7 +2,7 @@ import React, {useEffect, useRef, useState} from "react";
 
 import Text from "components/Text.jsx";
 import Wave from "react-wavify";
-import {getParentHeight, getParentWidth} from "util/Util.jsx";
+import {getParentHeight, getParentWidth} from "util/util.js";
 
 import "styles/pages/MainPage.scss"
 

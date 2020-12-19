@@ -4,3 +4,7 @@
   -moz-user-select: none; /* Firefox */
   -ms-user-select: none; /* Internet Explorer/Edge */
 }
+
+@mixin disable_mobile_tap_color() {
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+}

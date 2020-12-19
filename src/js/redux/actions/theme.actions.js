@@ -1,4 +1,4 @@
-import {themeConstants} from "../constants.jsx";
+import {themeConstants} from "../constants.js";
 import {useCallback} from "react";
 
 export const switchThemeRedux = dispatch =>

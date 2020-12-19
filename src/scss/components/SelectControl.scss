@@ -19,13 +19,13 @@
   .select-control-button {
     @include theme-aware('background', 'select-background');
     @include disable_selection();
+    @include disable_mobile_tap_color();
 
     height: 100%;
     margin: 0;
     cursor: pointer;
     display: flex;
     border-radius: 4px;
-    -webkit-tap-highlight-color: rgba(0,0,0,0);
 
     &:hover {
       filter: brightness(120%);

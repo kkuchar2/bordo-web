@@ -1,4 +1,4 @@
-import {themeConstants} from "redux/constants.jsx";
+import {themeConstants} from "redux/constants.js";
 import {getCookie, setCookie} from "util/CookieManager.js";
 
 const getThemeFromCookies = () => {

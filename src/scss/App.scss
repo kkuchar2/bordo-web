@@ -35,7 +35,7 @@ body {
     .page {
       min-height: 0;
       flex: 1;
-      @include timed_animation(fadein, 2s);
+      @include timed_animation(fadein, 1s);
     }
 
     .pageOverlay {

@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 
-import {routes} from "routes/Routes.jsx";
+import {routes} from "routes/routes.js";
 import {useDispatch, useSelector} from "react-redux";
 import {setClosed, setOpened, switchThemeRedux} from "redux/actions";
 

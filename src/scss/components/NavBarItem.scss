@@ -1,7 +1,9 @@
 @import '../common/theme';
 @import '../common/fonts';
+@import '../common/mixins';
 
 .navbar-item {
+  @include disable_mobile_tap_color();
   padding-left: 10px;
   padding-right: 10px;
   box-sizing: border-box;
@@ -10,7 +12,6 @@
   justify-content: left;
   width: 200px;
   height: 100%;
-  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   color: transparent;
 
   .navbar-item-text {

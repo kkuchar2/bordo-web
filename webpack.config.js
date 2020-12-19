@@ -1,21 +1,49 @@
 const HtmlWebPackPlugin = require("html-webpack-plugin");
-const WorkerPlugin = require('worker-plugin');
 const MomentLocalesPlugin = require('moment-locales-webpack-plugin');
 const CompressionPlugin = require('compression-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 
 const path = require('path');
 
-const resolvePath = name => path.resolve(__dirname, name);
+const resolvePath = pathSegments => path.resolve(__dirname, pathSegments);
+
+const optimization = {
+    runtimeChunk: 'single',
+    splitChunks: {
+        chunks: 'all',
+        maxInitialRequests: Infinity,
+        minSize: 0,
+        cacheGroups: {
+            reactVendor: {
+                test: /[\\/]node_modules[\\/](react|react-dom)[\\/]/,
+                name: "react-vendor"
+            },
+            utilityVendor: {
+                test: /[\\/]node_modules[\\/](lodash|moment|moment-timezone)[\\/]/,
+                name: "utility-vendor"
+            },
+            bootstrapVendor: {
+                test: /[\\/]node_modules[\\/](react-bootstrap)[\\/]/,
+                name: "bootstrap-vendor"
+            },
+            threeVendor: {
+                test: /[\\/]node_modules[\\/](three)[\\/]/,
+                name: "three-vendor"
+            },
+            vendor: {
+                test: /[\\/]node_modules[\\/](!react-bootstrap)(!lodash)(!moment)(!moment-timezone)[\\/]/,
+                name: "vendor"
+            },
+        },
+    }
+}
 
 module.exports = {
-    entry: ["index.js"],
     watchOptions: {
         aggregateTimeout: 200,
         poll: 1000
     },
     output: {
-        path: resolvePath('build'),
         filename: 'chunk-[name]-[contenthash].js',
         globalObject: "(typeof self!='undefined'?self:this)",
         pathinfo: false
@@ -28,53 +56,23 @@ module.exports = {
             configs: resolvePath('configs/'),
             components: resolvePath('src/js/components/'),
             util: resolvePath('src/js/util/'),
-            workers: resolvePath('src/js/workers/'),
+            workers: resolvePath('src/js/workers'),
             styles: resolvePath('src/scss/'),
             componentStyles: resolvePath('src/scss/components/')
         }
     },
-    optimization: {
-        runtimeChunk: 'single',
-        splitChunks: {
-            chunks: 'all',
-            maxInitialRequests: Infinity,
-            minSize: 0,
-            cacheGroups: {
-                reactVendor: {
-                    test: /[\\/]node_modules[\\/](react|react-dom)[\\/]/,
-                    name: "react-vendor"
-                },
-                utilityVendor: {
-                    test: /[\\/]node_modules[\\/](lodash|moment|moment-timezone)[\\/]/,
-                    name: "utility-vendor"
-                },
-                bootstrapVendor: {
-                    test: /[\\/]node_modules[\\/](react-bootstrap)[\\/]/,
-                    name: "bootstrap-vendor"
-                },
-                threeVendor: {
-                    test: /[\\/]node_modules[\\/](three)[\\/]/,
-                    name: "three-vendor"
-                },
-                vendor: {
-                    test: /[\\/]node_modules[\\/](!react-bootstrap)(!lodash)(!moment)(!moment-timezone)[\\/]/,
-                    name: "vendor"
-                },
-            },
-        },
-    },
+    optimization: optimization,
     devServer: {
         historyApiFallback: true
     },
     plugins: [
-        new HtmlWebPackPlugin({template: "./src/index.html", filename: "./index.html"}),
+        new HtmlWebPackPlugin({template: resolvePath("src/index.html")}),
         new MomentLocalesPlugin({localesToKeep: ['es-us', 'pl']}),
-        new WorkerPlugin(),
         new CompressionPlugin({algorithm: 'gzip', test: /\.js$/}),
         new CopyPlugin({
             patterns: [
-                {from: resolvePath('images'), to: resolvePath('build/images')},
-                {from: resolvePath('fonts'), to: resolvePath('build/fonts')},
+                {from: resolvePath('images'), to: resolvePath('dist/images')},
+                {from: resolvePath('fonts'), to: resolvePath('dist/fonts')},
             ],
         }),
     ],
@@ -93,11 +91,8 @@ module.exports = {
                         loader: 'file-loader',
                         options: {
                             name: '[path][name].[ext]',
-                            context: resolvePath('src/'),
-                            useRelativePath: true,
-                            outputPath: '/',
-                            publicPath: '../',
-                            useRelativePaths: true
+                            context: path.resolve(__dirname),
+                            useRelativePath: true
                         }
                     }
                 ]

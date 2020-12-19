@@ -1,4 +1,4 @@
-import {connectionConstants} from "redux/constants.jsx";
+import {connectionConstants} from "redux/constants.js";
 
 const initialState = {connected: false}
 

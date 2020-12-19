@@ -1,5 +1,5 @@
 import React, {useRef, useState} from "react";
-import {useEffectInit, useEffectWithNonNull} from "util/Util.jsx";
+import {useEffectInit, useEffectWithNonNull} from "util/util.js";
 
 import "componentStyles/SelectControl.scss"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";

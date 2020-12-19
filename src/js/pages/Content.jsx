@@ -2,8 +2,8 @@ import {Route, Switch} from "react-router-dom";
 import React, {Suspense} from "react";
 import {useSelector} from "react-redux";
 import NotFound from "./NotFound.jsx";
-import {routes} from "../routes/Routes.jsx";
-import {withCondition} from "util/Util.jsx";
+import {routes} from "../routes/routes.js";
+import {withCondition} from "util/util.js";
 
 export default () => {
 
