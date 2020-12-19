@@ -24,7 +24,6 @@ export default () => {
     let chartInstance = null;
 
     const mount = useRef(null);
-    const chartPageMount = useRef(null);
 
     const [width, setWidth] = useState(0);
     const [height, setHeight] = useState(0);
@@ -52,8 +51,8 @@ export default () => {
 
     useEffectInit(() => {
         const updateSize = () => {
-            setWidth(getParentWidth(chartPageMount))
-            setHeight(getParentHeight(chartPageMount));
+            setWidth(getParentWidth(mount))
+            setHeight(getParentHeight(mount));
         }
         window.addEventListener('resize', updateSize);
         updateSize();
@@ -101,14 +100,14 @@ export default () => {
         }
     }
 
-    return <div className={"chartPage"} ref={chartPageMount}>
+    return <div className={"chartPage"}>
         <div className={"latestTextWrapper"}>
             <Text className="latestCasesText" text={`New cases today: ${todayCases}`}>
                 <div className={"percent"}>{getIncreaseText()}</div>
             </Text>
             <Text className="latestCasesDateText" text={todayDate}/>
         </div>
-        <div className={"chartWrapper"} ref={chartPageMount}>
+        <div className={"chartWrapper"}>
             <div className={"chart"} ref={mount}/>
         </div>
     </div>
