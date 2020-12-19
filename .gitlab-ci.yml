@@ -43,8 +43,19 @@ deploy:
         ssh $SERVER_USER@$SERVER_IP /bin/zsh -s << EOT
         source ~/.zshrc
         cd frontend_main 
-        git fetch --all 
-        git pull 
+        git clean -f -d
+        git checkout master
+        git fetch origin master
+        git reset --hard origin/master
+        git pull
+        git submodule update
+        git submodule update --init --recursive
+        git submodule foreach git reset --hard HEAD
+        git submodule foreach git clean -f -d
+        git submodule foreach git submodule update --init --recursive
+        git submodule foreach git fetch
+        git submodule foreach git pull
+        git status
         npm install
         rm -rf build
         npm run build
