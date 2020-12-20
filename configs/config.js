@@ -36,12 +36,7 @@ export const getConfig = d => {
                 }
             }
             },
-        dataZoom: [
-            {
-                type: 'inside',
-                start: 50,
-                end: 100
-            }, {
+        dataZoom: [{
                 start: 50,
                 end: 100,
                 handleIcon: 'M24 14c0 6.625-5.375 12-12 12s-12-5.375-12-12 5.375-12 12-12 12 5.375 12 12z',
