@@ -6,55 +6,58 @@
   display: flex;
   flex-direction: column;
 
+  @media (max-height: 400px) {
+    flex-direction: row;
+  }
+
   height: 100%;
 
   background: linear-gradient(105deg, rgba(86, 63, 255, 0.80), rgba(120, 180, 150, 1) 100%, #418dff);
 
-  .latestTextWrapper {
-    margin-top: 50px;
+  .latestTextRow {
+    padding: 5px;
     display: flex;
-    align-items: center;
-    justify-content: center;
+    align-items: flex-start;
+    justify-content: flex-start;
     flex-direction: column;
+    font-size: 20px;
 
+    font-family: 'Rubik', cursive;
 
-    @media (max-width: 600px) {
-      margin: 0 auto;
-    }
-
-    @media (max-height: 600px) {
-      margin: 0 auto;
-    }
-
-    .latestCasesText {
-      font-size: 35px;
-      color: #e7e7e7;
-      text-align: center;
-      font-family: 'Rubik', cursive;
-      font-weight: bold;
+    .latestTextWrapper {
+      box-sizing: border-box;
       display: flex;
-      flex-wrap: wrap;
-      align-items: center;
+      align-items: flex-start;
       justify-content: center;
+      flex-direction: column;
+      background: #1c1c1c55;
+      padding: 10px;
+      border-radius: 5px;
 
-      .percent {
-        margin-left: 10px;
-        font-size: 15px;
-        width: 50px;
-        padding: 7px 10px;
-        background: #2d2d2d;
-        color: #ffffff;
-        border-radius: 3px;
+      @media (max-width: 600px) {
+        width: 100%;
       }
-    }
 
-    .latestCasesDateText {
-      margin-top: 10px;
-      font-size: 25px;
-      color: #e7e7e7;
-      text-align: center;
-      font-family: 'Rubik', cursive;
-      font-weight: bold;
+      .latestCasesText {
+        margin-top: 20px;
+        color: #e7e7e7;
+        text-align: center;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: left;
+
+        .percent {
+          font-size: 15px;
+          width: 50px;
+          margin-left: 20px;
+          color: #ffffff;
+        }
+      }
+
+      .latestCasesDateText {
+        color: #e7e7e7;
+      }
     }
   }
 
@@ -67,6 +70,17 @@
       width: 100%;
       height: calc(100% - 50px);
 
+      /* Due to Echarts issues with additional canvas components */
+      div:first-child {
+        height: 100% !important;
+        width: 100%  !important;
+
+        canvas {
+          height: 100% !important;
+          width: 100% !important;
+        }
+      }
+
       @media (max-width: 600px) {
         margin: 0 auto;
         height: 100%;
@@ -77,7 +91,6 @@
         margin: 0 auto;
         height: 100%;
       }
-
 
       @media (max-height: 400px) {
         width: 80%;

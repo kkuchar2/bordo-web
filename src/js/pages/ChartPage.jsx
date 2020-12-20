@@ -101,11 +101,13 @@ export default () => {
     }
 
     return <div className={"chartPage"}>
-        <div className={"latestTextWrapper"}>
-            <Text className="latestCasesText" text={`New cases today: ${todayCases}`}>
-                <div className={"percent"}>{getIncreaseText()}</div>
-            </Text>
-            <Text className="latestCasesDateText" text={todayDate}/>
+        <div className={"latestTextRow"}>
+            <div className={"latestTextWrapper"}>
+                <Text className="latestCasesDateText" text={todayDate}/>
+                <Text className="latestCasesText" text={`New cases: ${todayCases}`}>
+                    <div className={"percent"}>{getIncreaseText()}</div>
+                </Text>
+            </div>
         </div>
         <div className={"chartWrapper"}>
             <div className={"chart"} ref={mount}/>

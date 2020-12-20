@@ -13,7 +13,7 @@
     "build": "node ./update-build.js && webpack --mode production",
     "cypress:open": "cypress open",
     "watch": "webpack --watch --progress",
-    "start": "webpack-cli serve --mode production"
+    "start": "webpack-cli serve --mode development"
   },
   "devDependencies": {
     "@babel/core": "^7.12.10",
