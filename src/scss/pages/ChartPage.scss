@@ -5,10 +5,7 @@
 .chartPage {
   display: flex;
   flex-direction: column;
-
-  @media (max-height: 400px) {
-    flex-direction: row;
-  }
+  
 
   height: 100%;
 
