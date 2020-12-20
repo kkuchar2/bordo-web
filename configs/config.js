@@ -7,7 +7,7 @@ export const getConfig = d => {
         grid: {
             top: '10',
             right: '20',
-            left: '50',
+            left: '80',
         },
         tooltip: {
             trigger: 'axis',

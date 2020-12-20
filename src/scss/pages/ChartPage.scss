@@ -20,7 +20,7 @@
     align-items: flex-start;
     justify-content: flex-start;
     flex-direction: column;
-    font-size: 20px;
+    font-size: 15px;
 
     font-family: 'Rubik', cursive;
 
@@ -32,7 +32,6 @@
       flex-direction: column;
       background: #1c1c1c55;
       padding: 10px;
-      border-radius: 5px;
 
       @media (max-width: 600px) {
         width: 100%;
@@ -62,8 +61,7 @@
   }
 
   .chartWrapper {
-    flex: 1;
-    overflow: hidden;
+    min-height: 400px;
 
     .chart {
       margin-top: 50px;
@@ -73,7 +71,7 @@
       /* Due to Echarts issues with additional canvas components */
       div:first-child {
         height: 100% !important;
-        width: 100%  !important;
+        width: 100% !important;
 
         canvas {
           height: 100% !important;
