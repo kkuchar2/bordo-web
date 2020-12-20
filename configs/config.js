@@ -27,8 +27,11 @@ export const getConfig = d => {
         },
         yAxis: {
             type: 'value',
-            boundaryGap: false,
-            splitLine: {show: false},
+            splitLine: {
+                lineStyle: {
+                    color: '#ffffff66'
+                }
+            },
             axisLabel: {
                 show: true,
                 textStyle: {
@@ -58,7 +61,7 @@ export const getConfig = d => {
         series: [
             {
                 name: 'Covid cases in Poland:',
-                type: 'line',
+                type: 'bar',
                 smooth: false,
                 symbol: 'none',
                 sampling: 'average',
