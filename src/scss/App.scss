@@ -5,6 +5,7 @@
 @import "common/fonts";
 
 html {
+  width: 100%;
   height: 100%;
   font-family: "Rubik", sans-serif;
   background: linear-gradient(105deg, rgba(86, 63, 255, 0.9), rgba(120, 180, 150, 0.9) 100%, #418dff) no-repeat center center fixed,
@@ -13,6 +14,7 @@ html {
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
+  position: fixed;
 }
 
 body {
@@ -33,6 +35,7 @@ body {
     }
 
     .page {
+      overflow-y: auto;
       min-height: 0;
       flex: 1;
       @include timed_animation(fadein, 1s);
