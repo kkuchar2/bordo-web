@@ -6,28 +6,26 @@ import {getParentHeight, getParentWidth, useEffectInit, useEffectWithNonNull} fr
 
 import "styles/components/Chart.scss"
 
+let listener = false;
+
 export default props => {
 
     let chartInstance = null;
     const mount = useRef(null);
     const [width, setWidth] = useState(0);
     const [height, setHeight] = useState(0);
+    const [zoom, setZoom] = useState(0);
 
     const config = props.configFunc([]);
 
-    useEffect(() => {
-        const renderChart = () => {
-            const renderedInstance = echarts.getInstanceByDom(mount.current);
-            if (renderedInstance) {
-                chartInstance = renderedInstance;
-            }
-            else {
-                chartInstance = echarts.init(mount.current);
-            }
-        }
-
-        renderChart()
-    }, [config]);
+    const updateComponentZoom = () => {
+        chartInstance.dispatchAction({
+            type: 'dataZoom',
+            dataZoomIndex: 0,
+            startValue: zoom.startValue,
+            endValue: zoom.endValue
+        });
+    }
 
     useEffectInit(() => {
         const updateSize = () => {
@@ -36,11 +34,40 @@ export default props => {
         }
         window.addEventListener('resize', updateSize);
         updateSize();
+        if (props.zoomCallbackProvider !== undefined && props.name !== undefined) {
+            props.zoomCallbackProvider(props.name, setZoom);
+        }
         return () => {
             window.removeEventListener('resize', updateSize);
             chartInstance && chartInstance.dispose();
         }
     }, [])
+
+    useEffectWithNonNull(() => {
+        const renderChart = () => {
+            const renderedInstance = echarts.getInstanceByDom(mount.current);
+            if (renderedInstance) {
+                chartInstance = renderedInstance;
+            }
+            else {
+                chartInstance = echarts.init(mount.current);
+            }
+
+            if (!listener) {
+                listener = true;
+                chartInstance.on('datazoom', () => {
+                    let zoom = chartInstance.getOption().dataZoom[0]
+                    props.onZoomChange(zoom);
+                    for (const [, listener] of Object.entries(props.zoomListenersMap)) {
+                        listener(zoom)
+                    }
+                });
+            }
+        }
+        renderChart()
+    }, [config]);
+
+    useEffectWithNonNull(updateComponentZoom, [zoom])
 
     useEffectWithNonNull(() => {
         chartInstance.showLoading({
@@ -57,10 +84,7 @@ export default props => {
         chartInstance.hideLoading();
     }, [props.data])
 
-    useEffectWithNonNull(() => {
-        chartInstance.setOption(props.configFunc(props.mapData(props.data)));
-        chartInstance.resize();
-    }, [width, height]);
+    useEffectWithNonNull(() => chartInstance.resize(), [width, height]);
 
     return <div className={"chart"} ref={mount}/>
 }

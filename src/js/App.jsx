@@ -8,7 +8,6 @@ import {ToastContainer} from 'react-toastify';
 import CookieConsent from "react-cookie-consent";
 
 import 'react-toastify/dist/ReactToastify.css';
-import Wave from 'react-wavify'
 
 import "styles/App.scss"
 

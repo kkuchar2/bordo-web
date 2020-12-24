@@ -60,7 +60,6 @@
     "react-router-dom": "^5.2.0",
     "react-router-redux": "^4.0.8",
     "react-toastify": "^6.2.0",
-    "react-wavify": "^1.4.0",
     "redux-thunk": "^2.3.0",
     "three": "^0.123.0",
     "universal-cookie": "^4.0.4"
