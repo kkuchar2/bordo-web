@@ -6,9 +6,9 @@ export const zoomChartConfig = data => {
     return {
 
         grid: {
-            top: '00',
-            right: '120',
-            left: '120',
+            top: '0',
+            right: '20',
+            left: '20',
         },
         xAxis: {
             type: 'category',

@@ -45,7 +45,7 @@ export const zoomComponent = (data, visible) => data.length === 0 || !useZoom ? 
     },
     show: visible,
     textStyle: {
-        color: '#ffffff',
+        color: '#ffffff00',
         fontFamily: 'Rubik',
         fontSize: 15,
     }
