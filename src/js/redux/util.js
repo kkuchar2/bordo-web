@@ -5,7 +5,7 @@ const BASE_API_URL_DEVELOPMENT = "http://0.0.0.0:5000/api/"
 
 const BASE_API_URL_PRODUCTION = "https://klkucharski-api.com/api/"
 
-const buildApiUrl = name => BASE_API_URL_PRODUCTION + name
+const buildApiUrl = name => BASE_API_URL_DEVELOPMENT + name
 
 const buildThunkId = name => name + "/fetch" + name;
 
