@@ -29,37 +29,14 @@ test:
 
 deploy:
   stage: deploy
-  before_script:
-    - "which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y  )"
-    - "which rsync || ( apt-get update -y && apt-get install rsync -y )"
-    - eval $(ssh-agent -s)
-    - ssh-add <(echo "$SSH_PRIVATE_KEY") > /dev/null 2>&1
-    - mkdir -p ~/.ssh
-    - chmod 700 ~/.ssh
-    - ssh-keyscan $SERVER_IP >> ~/.ssh/known_hosts
-    - chmod 644 ~/.ssh/known_hosts
-  script:
-      - |
-        ssh $SERVER_USER@$SERVER_IP /bin/zsh -s << EOT
-        source ~/.zshrc
-        cd frontend_main 
-        git reset --hard HEAD
-        git clean -f -d
-        git checkout master
-        git fetch origin master
-        git reset --hard origin/master
-        git pull
-        git submodule update
-        git submodule update --init --recursive
-        git submodule foreach git reset --hard HEAD
-        git submodule foreach git clean -f -d
-        git submodule foreach git submodule update --init --recursive
-        git submodule foreach git fetch
-        git submodule foreach git pull
-        git status
-        npm install
-        rm -rf build
-        npm run build
-
+    - npm install
+    - npm run build
+    - mkdir .public
+    - cp -r dist/* .public
+    - cp dist/index.html .public/404.html
+    - mv .public public
+  artifacts:
+    paths:
+    - public
   only:
     - master
