@@ -7,8 +7,7 @@ cache:
 stages:
   - build
   - test
-  - deploy
-
+  
 build:
   stage: build
   script:
@@ -25,19 +24,4 @@ test:
   script:
     - npm test
   except:
-    - master
-
-deploy:
-  stage: deploy
-  script:
-    - npm install
-    - npm run build
-    - mkdir .public
-    - cp -r dist/* .public
-    - cp dist/index.html .public/404.html
-    - mv .public public
-  artifacts:
-    paths:
-    - public
-  only:
     - master
