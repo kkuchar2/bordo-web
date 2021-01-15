@@ -3,16 +3,54 @@
 @import '../common/theme';
 
 .input {
-  box-sizing: border-box;
-  background: #fff;
-  width: 100px;
-  height: 50px;
-  margin: 0;
-  color: #a3a3a3;
-  font: 1rem "PT Sans", sans-serif;
-  outline: 0;
-  border-radius: 3px;
-  padding-left: 12px;
-  @include theme-aware('border', 'input-border');
-  @include theme-aware('background', 'input-background');
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .title {
+    width: 150px;
+    @include theme-aware('color', 'text-color');
+  }
+
+  .inputField {
+    width: 100%;
+    box-sizing: border-box;
+    background: #fff;
+    height: 50px;
+    font-family: "Rubik", sans-serif;
+    font-size: 15px;
+    outline: 0;
+    color: #9B9B9B;
+    border-radius: 3px;
+    padding-left: 12px;
+    @include theme-aware('border', 'input-border');
+    @include theme-aware('background', 'input-background');
+    box-shadow: inset 0px 0px 0px 0px red;
+    caret-color: #535353;
+  }
+
+
+  ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: #000000;
+    opacity: 0.3; /* Firefox */
+  }
+
+  :-ms-input-placeholder { /* Internet Explorer 10-11 */
+    color: #000000;
+    opacity: 0.3; /* Firefox */
+  }
+
+  ::-ms-input-placeholder { /* Microsoft Edge */
+    color: #000000;
+    opacity: 0.3; /* Firefox */
+  }
+
+}
+
+.input.noError {
+  border: 1px solid #c1c1c1;
+}
+
+.input.error {
+  border: 2px solid rgb(202, 12, 12);
 }

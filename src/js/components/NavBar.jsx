@@ -8,15 +8,32 @@ import Button from "components/Button.jsx";
 import NavBarItem from "components/NavBarItem.jsx";
 import Switch from "components/Switch.jsx";
 
-import "componentStyles/NavBar.scss"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faHome} from "@fortawesome/free-solid-svg-icons";
 
+import "componentStyles/NavBar.scss"
+
+const getAlignedRoutes = alignment => routes.filter(v => v.navbar).filter(v => v.alignment === alignment)
+
 const mapRoutes = actionOnClick => {
-    return routes.filter(v => v.navbar).map((p, k) => {
+    return getAlignedRoutes('left').map((p, k) => {
         return <NavBarItem onClick={actionOnClick} iconSrc={p.icon} href={p.path} key={k}>{p.title}</NavBarItem>
     });
 };
+
+const mapRightNavbarRoutes = actionOnClick => {
+    return getAlignedRoutes('right').map((p, k) => {
+        return <NavBarItem
+            onClick={actionOnClick}
+            iconSrc={p.icon}
+            customClass={p.customClass}
+            iconComponent={p.iconComponent}
+            href={p.path}
+            key={k}>{p.title}
+        </NavBarItem>
+    });
+};
+
 export default () => {
 
     const [width, setWidth] = useState(0);
@@ -35,6 +52,8 @@ export default () => {
     const switchTheme = switchThemeRedux(dispatch);
 
     const renderItems = () => <>{mapRoutes(onLinkClickAction)}</>;
+
+    const renderRightNavbarItems = () => <>{mapRightNavbarRoutes(onLinkClickAction)}</>;
 
     useEffect(() => {
         const updateSize = () => setWidth(window.innerWidth);
@@ -78,14 +97,17 @@ export default () => {
                     <img src={"images/hamburger_icon.png"} alt={""} width={20} height={20}/>
                 </Button>
 
-                <NavBarItem className={"homeIcon"} onClick={() => {
-                }} href={'/'}>
+                <NavBarItem className={"homeIcon"} onClick={() => {}} href={'/'}>
                     <FontAwesomeIcon className={"icon"} icon={faHome}/>
                 </NavBarItem>
             </div>
 
             <div className={["navbar-group", navbarAnimClass].join(' ')}>
                 <div className={"navbar-items"}>{renderItems()}</div>
+
+                <div className={["right-aligned", navbarAnimClass].join(' ')}>
+                    <div className={"navbar-items"}>{renderRightNavbarItems()}</div>
+                </div>
             </div>
 
             <Switch className={"theme-switch"} value={theme.theme === 'theme-dark'} onValueChange={switchTheme}/>

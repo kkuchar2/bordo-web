@@ -1,0 +1,12 @@
+@import '../common/responsive';
+@import '../common/constants';
+@import '../common/theme';
+
+.loginPage {
+  overflow: hidden;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: space-around;
+}

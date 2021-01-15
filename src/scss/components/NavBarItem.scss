@@ -11,8 +11,22 @@
   align-items: center;
   justify-content: left;
   width: 200px;
-  height: 100%;
   color: transparent;
+
+  .iconComponent {
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+
+    .navbar-item-text {
+      font-size: 20px;
+    }
+    &:hover {
+      background: none;
+    }
+  }
 
   .navbar-item-text {
     font-family: "Rubik", sans-serif;

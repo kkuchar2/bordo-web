@@ -1,5 +1,3 @@
-import {notifyError} from "util/util.js";
-
 export const client = async (endpoint, {body, ...customConfig} = {}) => {
     const headers = {'Content-Type': 'application/json'}
 
@@ -17,17 +15,31 @@ export const client = async (endpoint, {body, ...customConfig} = {}) => {
     }
 
     let data
+
     try {
+
         const response = await window.fetch(endpoint, config)
+
         data = await response.json()
+
+        console.log(data)
+
         if (response.ok) {
-            return data
+            return {
+                httpCode: response.status,
+                json: data
+            }
         }
-        throw new Error(response.statusText)
+        return {
+            httpCode: response.status,
+            json: data
+        };
     }
     catch (err) {
-        notifyError("Error: could not connect to server.");
-        return Promise.reject(err.message ? err.message : data)
+        return {
+            httpCode: response.status,
+            json: []
+        };
     }
 }
 

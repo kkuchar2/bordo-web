@@ -1,6 +1,4 @@
 @import "common/_theme";
-@import "common/animations/_mixins";
-@import "common/animations/fade_in";
 @import "common/constants";
 @import "common/fonts";
 
@@ -27,7 +25,8 @@ body {
     padding: 0;
     display: flex;
     flex-flow: column;
-    background: none;
+    background: black;
+    background-size: auto 150%;
 
     .Toastify__toast--error {
       background: #ad0f00;
@@ -37,12 +36,11 @@ body {
       overflow-y: auto;
       min-height: 0;
       flex: 1;
-      @include timed_animation(fadein, 1s);
     }
 
     .pageOverlay {
       z-index: 50;
-      background: black;
+      background: #291B34;
       width: 100%;
       height: calc(100% - #{$navbar-height});
       opacity: 0.7;

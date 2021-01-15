@@ -3,4 +3,5 @@
   -moz-animation: #{$name} #{$time};
   -o-animation: #{$name} #{$time};
   animation: #{$name} #{$time};
+  animation-timing-function: ease-out;
 }

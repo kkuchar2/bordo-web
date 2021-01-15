@@ -10,7 +10,10 @@ export default props => {
         if (props.disabled) {
             return;
         }
-        props.onClick();
+
+        if (props.onClick) {
+            props.onClick();
+        }
     }
 
     const getAdditionalClassName = () => props.disabled ? "disabled" : "enabled";
@@ -25,7 +28,6 @@ export default props => {
                 <Text text={props.text}/>
                 {props.children}
             </div>
-
         </button>
     )
 }

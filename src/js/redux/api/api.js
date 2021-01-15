@@ -1,20 +1,19 @@
 import {store} from "redux/store.js";
-import {fetchCovidStatsData} from "redux/features/covidStatsDataSlice.js";
-import {fetchCovidCalcsData} from "redux/features/covidCalcsDataSlice.js";
-/**
- * Map of supported API calls
- */
-const apiMapGET = {
-    "covid_stats": fetchCovidStatsData,
-    "covid_calcs": fetchCovidCalcsData
+import {getCovidStatistics} from "redux/features/covidStatisticsSlice.js";
+import {getCovidCalculations} from "redux/features/covidCalculationsSlice.js";
+import {register} from "redux/features/registrationSlice.js";
+import {login} from "redux/features/loginSlice.js";
+
+const availableGetRequests = {
+    "covid_stats": getCovidStatistics,
+    "covid_calcs": getCovidCalculations
 }
 
-export const startServerPing = () => store.dispatch(startServerPing)
-
-export const fetchAsyncGET = url => {
-    if (!(url in apiMapGET)) {
-        console.error(`No key in url map: '${url}'`);
-        return;
-    }
-    return store.dispatch(apiMapGET[url]())
+const availablePostRequests = {
+    "register": register,
+    "login": login
 }
+
+export const asyncGET = url => store.dispatch(availableGetRequests[url]());
+
+export const asyncPOST = (url, data) => store.dispatch(availablePostRequests[url](data))

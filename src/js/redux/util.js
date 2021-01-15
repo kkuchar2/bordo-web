@@ -1,30 +1,17 @@
 import {client} from "redux/api/client.js";
-import {createAsyncThunk, createEntityAdapter, createSlice} from "@reduxjs/toolkit";
+import {createAsyncThunk} from "@reduxjs/toolkit";
 
 const BASE_API_URL_DEVELOPMENT = "http://0.0.0.0:5000/api/"
 
 const BASE_API_URL_PRODUCTION = "https://klkucharski-api.com/api/"
 
-const buildApiUrl = name => BASE_API_URL_PRODUCTION + name
+const buildApiUrl = name => BASE_API_URL_DEVELOPMENT + name
 
-const buildThunkId = name => name + "/fetch" + name;
+export const parseResponse = (action) => {
+    const payload = action.payload;
+    return [payload.httpCode, payload.json]
+}
 
-export const buildAsyncCall = name => async () => await client.get(buildApiUrl(name));
+export const sendGetRequest = name => createAsyncThunk(name, async () => await client.get(buildApiUrl(name)));
 
-export const buildDefaultAsyncThunk = name => createAsyncThunk(buildThunkId(name), buildAsyncCall(name));
-
-export const buildDefaultSlice = (name, thunk) => {
-
-    const adapter = createEntityAdapter();
-
-    return createSlice({
-        name: name,
-        initialState: adapter.getInitialState(),
-        reducers: {},
-        extraReducers: {
-            [thunk.fulfilled]: adapter.setAll,
-        },
-    }).reducer
-};
-
-export const createDefaultEntityAdapter = createEntityAdapter;
+export const sendPostRequest = name => createAsyncThunk(name,  async body => await client.post(buildApiUrl(name), body));

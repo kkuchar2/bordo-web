@@ -11,3 +11,11 @@ export const connectionConstants = {
     CONNECTED: 'CONNECTED',
     DISCONNECTED: 'DISCONNECTED'
 }
+
+export const registrationConstants = {
+    RESET: 'RESET'
+}
+
+export const loginConstants = {
+    RESET: 'RESET'
+}

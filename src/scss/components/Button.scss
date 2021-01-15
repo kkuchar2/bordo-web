@@ -1,7 +1,9 @@
+@import '../common/theme';
+
 .button {
   width: 100px;
   height: 30px;
-  color: white;
+  @include theme-aware('color', 'text-color');
   background: #373737;
   font-size: 16px;
   border: none;

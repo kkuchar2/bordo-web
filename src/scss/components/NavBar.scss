@@ -7,7 +7,30 @@ $font-color: rgba(238, 236, 235, 1);
 
 $stop-width: 800px;
 
+.logInButton {
+  background: #006aff;
+  margin: 10px;
+  height: 35px;
+  border-radius: 4px;
+  width: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.registerButton {
+  border: 1px solid #ffffff55;
+  margin: 10px;
+  height: 35px;
+  border-radius: 4px;
+  width: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .navbar {
+  z-index: 1;
   @include theme-aware('background', 'navbar-background');
   min-height: $navbar-height;
   flex: 0 1 $navbar-height;
@@ -47,14 +70,30 @@ $stop-width: 800px;
     }
 
     .navbar-group {
+      width: 100%;
       height: 100%;
       display: flex;
+
+      .right-aligned {
+        height: 100%;
+        display: flex;
+        margin-left: auto;
+
+        .navbar-items {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-direction: row;
+        }
+      }
 
       .navbar-items {
         display: flex;
         flex-direction: row;
       }
     }
+
+
 
     .theme-switch {
       display: none;
@@ -83,15 +122,25 @@ $stop-width: 800px;
       width: 50%;
       height: calc(100% - #{$navbar-height});
       z-index: 100;
-      display: none;
+      display: flex;
+      flex-direction: column;
       @include theme-aware('background', 'navbar-mobile-background');
       position: absolute;
       top: $navbar-height;
       box-sizing: border-box;
 
+      .right-aligned {
+        display: flex;
+        margin-top: auto;
+
+        .navbar-items {
+          display: flex;
+          flex-direction: row;
+        }
+      }
+
       .navbar-items {
         width: 100%;
-
         z-index: 2;
         display: flex;
         flex-direction: column;
@@ -103,6 +152,28 @@ $stop-width: 800px;
           justify-content: left;
           margin-left: 0;
           padding-left: 10px;
+        }
+
+        .logInButton {
+          background: #006aff;
+          margin: 10px;
+          height: 35px;
+          border-radius: 4px;
+          width: 120px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .registerButton {
+          border: 1px solid #ffffff55;
+          margin: 10px;
+          height: 35px;
+          border-radius: 4px;
+          width: 120px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
         }
       }
     }

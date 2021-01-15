@@ -177,6 +177,7 @@
   }
 
   .chart {
+    transform: scale(0.75);
     min-height: 0;
     @media (min-width: 1200px) {
       min-width: 800px;

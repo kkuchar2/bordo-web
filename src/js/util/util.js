@@ -80,3 +80,8 @@ export const withCondition = (variable, func) => {
         return func();
     }
 }
+
+export const onFieldChange = (consumer, event) => {
+    consumer(event.target.value);
+    event.preventDefault();
+}
