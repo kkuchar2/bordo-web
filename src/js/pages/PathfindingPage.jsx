@@ -4,7 +4,6 @@ import {useDispatch} from "react-redux";
 import {onMousePress, onMouseRelease} from "redux/reducers/application";
 import {registerPathfindingWorker, sendMessage, unregisterWorker} from "workers/workers.js";
 import Button from "components/Button";
-import ToggleButton from "components/ToggleButton";
 import GridView from "components/GridView.jsx";
 import {getParentHeight, getParentWidth, useEffectWithNonNull} from "util/util.js";
 
@@ -36,7 +35,7 @@ function PathfindingPage() {
     const [paused, setPaused] = useState(false);
     const [selectedAlgorithm, setSelectedAlgorithm] = useState(0);
     const [startIndex, setStartIndex] = useState(0);
-    const [endIndex, setEndIndex] = useState(1);
+    const [endIndex, setEndIndex] = useState(2);
 
     const messageHandlersMap = {
         "onPathFindUpdate": payload => onPathFindUpdate(payload),
@@ -80,6 +79,8 @@ function PathfindingPage() {
             "startIndex" : startIndex,
             "endIndex" : endIndex
         });
+        setStartIndex(0);
+        setEndIndex(1);
     }, [width, height, worker]);
 
     const onPathFindUpdate = useCallback(payload => setVisited(payload.visited), []);
@@ -140,15 +141,13 @@ function PathfindingPage() {
 
     const onCellsSelected = useCallback(indices => setObstacles(obstacles => [...obstacles, ...indices]), [obstacles]);
 
-    const onStartChange = useCallback(idx => {
-        sendMessage(worker, "setStart", {id: idx});
-        setStartIndex(idx);
-    }, [worker]);
+    const onStartChange = useCallback(setStartIndex, [worker]);
 
-    const onEndChange = useCallback(idx => {
-        sendMessage(worker, "setEnd", {id: idx});
-        setEndIndex(idx);
-    }, [worker]);
+    const onEndChange = useCallback(setEndIndex, [worker]);
+
+    useEffectWithNonNull(() => sendMessage(worker, "setStart", {id: startIndex}), [startIndex, worker]);
+
+    useEffectWithNonNull(() => sendMessage(worker, "setEnd", {id: endIndex}), [endIndex, worker]);
 
     const onEraserToggled = useCallback(v => {}, [worker]);
 

@@ -50,6 +50,7 @@ function GridView(props) {
     const [initialized, setInitialized] = useState(false);
     const [raycaster, setRaycaster] = useState(null);
     const [cellsCreated, setCellsCreated] = useState(false);
+    const [lineCount, setLineCount] = useState(0);
 
     const { width, height, onCellsSelected, cellSize, cols, rows, data, visited, path, obstacles, onStartChange, onEndChange, startIdx, endIdx } = props;
 
@@ -99,17 +100,31 @@ function GridView(props) {
         }
 
         if (cellsCreated) {
-            updateCells();
+            const cellsCount = scene.children.length - lineCount;
+            const expectedCellsCount = cols * rows;
+
+            if (expectedCellsCount !== cellsCount) {
+                createInitialScene();
+            }
+            else {
+                updateCells();
+            }
         }
         else {
-            createCells(scene, defaultMaterial, startPointMaterial, endPointMaterial, cellSize, cols, rows, data, startIdx, endIdx);
-            createLines(scene, lineMaterial, cellSize, cols, rows, width, height);
-            setCellsCreated(true);
+            createInitialScene();
         }
 
         updateCamera(camera, 0, width, height, 0);
         renderer.setSize(width, height);
-    }, [obstacles, cols, rows, data, visited, path, width, height, cellsCreated]);
+    }, [obstacles, cols, rows, data, visited, path, width, height, cellsCreated, lineCount]);
+
+    const createInitialScene = () => {
+        console.log("Creating initial scene");
+        removeChildrenFromScene(scene);
+        createCells(scene, defaultMaterial, startPointMaterial, endPointMaterial, cellSize, cols, rows, data, startIdx, endIdx);
+        setLineCount(createLines(scene, lineMaterial, cellSize, cols, rows, width, height));
+        setCellsCreated(true);
+    };
 
     const dispose = () => {
         cancelAnimationFrame(frameId);
@@ -175,6 +190,7 @@ function GridView(props) {
     }, [scene]);
 
     const moveStartCell = useCallback((cell) => {
+
         const actions = userActions.current;
         const isStart = cell.userData.isStart;
         const isEnd = cell.userData.isEnd;
@@ -307,7 +323,6 @@ function GridView(props) {
     }, []);
 
     const onMouseLeave = useCallback(() => {
-        console.log("On mouse leave");
         mouseData.current.x = -1;
         mouseData.current.y = -1;
     }, []);

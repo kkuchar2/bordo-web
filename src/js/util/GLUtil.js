@@ -121,6 +121,8 @@ export const createLines = (scene, material, cellSize, cols, rows, width, height
     const geometry = new createPlaneGeometry(thickness, height);
     const geometry2 = new createPlaneGeometry(width, thickness);
 
+    let count = 0;
+
     for (let i = 0; i < cols + 1; i++) {
         const line = new Mesh(geometry, material.clone());
         line.position.z = -1;
@@ -135,6 +137,7 @@ export const createLines = (scene, material, cellSize, cols, rows, width, height
         line.position.y = height / 2;
         line.layers.enable(2);
         scene.add(line);
+        count++;
     }
 
     for (let i = 0; i < rows + 1; i++) {
@@ -150,9 +153,10 @@ export const createLines = (scene, material, cellSize, cols, rows, width, height
         }
         line.layers.enable(2);
         scene.add(line);
+        count++;
     }
 
-    return geometry;
+    return count;
 };
 
 export const createCircle = (scene, material, radius, position) => {

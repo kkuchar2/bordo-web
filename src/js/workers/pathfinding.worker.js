@@ -16,17 +16,9 @@ const requestMap = {
     "initData": e => initDataRequest(e),
     "clearBoard": e => clearBoardRequest(e),
     "findPath": e => onFindPathRequest(e),
-    "sharedData": e => onSharedDataReceived(e),
     "selectCells": e => onCellsSelected(e),
     "setStart": e => setStart(e),
     "setEnd": e => setEnd(e)
-};
-
-const onSharedDataReceived = m => {
-    const arr = new Int32Array(m);
-    console.group('[worker] ->');
-    console.log('[WORKER] Received SharedArrayBuffer. First value is: ' + arr[0]);
-    console.groupEnd();
 };
 
 const onCellsSelected = (m) => {
