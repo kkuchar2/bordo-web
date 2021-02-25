@@ -1,65 +1,119 @@
 import {bubbleSort, insertionSort, mergeSortRecursive, quickSort} from "workers/sorts";
+import {AStarPathfinder} from "workers/pathfinders";
 
 export const SLOWDOWN_FACTOR_MS = 1;
 
-export const state = {
+export const sortState = {
     pause: false,
     abort: false,
     data: []
-}
+};
+
+export const pathFindingState = {
+    pause: false,
+    abort: false,
+    data: [],
+    obstacles: [],
+    new_visited: null,
+    all_visited: [],
+    path: [],
+    to_visit: [],
+    found_path: false
+};
 
 export const resetState = () => {
-    state.pause = false;
-    state.abort = false;
-}
+    sortState.pause = false;
+    sortState.abort = false;
+};
 
-export const algorithmMap = {
+export const sortAlgorithmMap = {
     "QuickSort": quickSort,
     "BubbleSort": bubbleSort,
     "InsertionSort": insertionSort,
     "MergeSort": mergeSortRecursive
-}
+};
+
+export const pathfindingAlgorithmMap = {
+    "aStar": AStarPathfinder
+};
 
 let previousTime = new Date().getTime();
 let firstTime = true;
 
-export const notify = (type, payload) => {
+export const notify = (type, payload, skipMessagesByTime = false, skipTimeInMs = 16) => {
     let currentTime = new Date().getTime();
 
-    if (currentTime - previousTime > 16 || firstTime) {
-        firstTime = false;
-        postMessage({type: type, payload: payload});
-        previousTime = currentTime;
+    if (skipMessagesByTime) {
+        if (currentTime - previousTime > skipTimeInMs || firstTime) {
+            firstTime = false;
+            postMessage({type: type, payload: payload});
+            previousTime = currentTime;
+        }
     }
+    else {
+        postMessage({type: type, payload: payload});
+    }
+
     while (new Date().getTime() - currentTime < SLOWDOWN_FACTOR_MS) {
     }
-}
+};
 
-export const notifyDataShuffled = () => notify("shuffle", state.data);
+export const notifySortDataShuffled = () => notify("shuffle", sortState.data);
 
-export const notifyDataUpdate = () => notify("sort", state.data);
+export const notifySortUpdate = () => notify("sort", sortState.data, true, 16);
 
-export const onSortMethodExit = () => postMessage({type: "sortFinished", payload: {"sorted": !state.abort}});
+export const notifyPathFindUpdate = () => {
+    notify("onPathFindUpdate", {
+        "visited": pathFindingState.new_visited
+    }, false, 1);
+};
 
-export const getSortMethod = (sort_type) => algorithmMap[sort_type];
+export const notifyDataInitForPath = () => {
+    notify("onPathDataInit", {
+        "data": pathFindingState.data,
+        "cols": pathFindingState.cols,
+        "rows": pathFindingState.rows,
+        "obstacles": pathFindingState.obstacles
+    }, false, 1);
+};
+
+export const notifyObstacles = (data = pathFindingState.obstacles) => {
+    notify("onObstacleDataReceived", { "obstacles": data }, false, 1);
+};
+
+export const onSortMethodExit = () => postMessage({type: "sortFinished", payload: {"sorted": !sortState.abort}});
+
+export const onPathfindingFinished = () => postMessage({
+    type: "pathfindingFinished",
+    payload: {
+        "foundPath": pathFindingState.found_path && !pathFindingState.abort,
+        "data": pathFindingState.data,
+        "visited": pathFindingState.new_visited,
+        "path": pathFindingState.path
+    }
+});
+
+export const getSortMethod = (algorithm) => sortAlgorithmMap[algorithm];
+
+export const getPathfindingMethod = (algorithm) => pathfindingAlgorithmMap[algorithm];
 
 export const shuffle = async (size, maxValue) => {
-    state.data = new Array(size);
+    sortState.data = new Array(size);
 
     for (let i = 0; i < size; i++) {
-        state.data[i] = getRandomInt(1, maxValue);
+        sortState.data[i] = getRandomInt(1, maxValue);
     }
-}
+};
 
 export const PromiseTimeout = delay => {
     return new Promise((resolve, reject) => setTimeout(resolve, delay));
-}
+};
 
-export const CheckPause = async () => {
-    await PromiseTimeout(0);
-    while (state.pause) {
-        await PromiseTimeout(0);
+export const CheckPause = async (delay = 0) => {
+    await PromiseTimeout(delay);
+    while (sortState.pause) {
+        await PromiseTimeout(delay);
     }
-}
+};
 
 export const getRandomInt = (min, max) => Math.floor(Math.random() * (Math.floor(max) - Math.ceil(min) + 1)) + min;

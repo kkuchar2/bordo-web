@@ -1,0 +1,24 @@
+.gridView {
+  .mouseCircle {
+    width: 25px;
+    height: 25px;
+    background: #00ff4422;
+    position: absolute;
+    border-radius: 100px;
+  }
+
+  &.isOverStart {
+    cursor: pointer;
+  }
+
+  &.isOverEnd {
+    cursor: pointer;
+  }
+}
+
+canvas {
+  width: 100%;
+  height: 100%;
+  //border: 1px solid white;
+  //box-sizing: border-box;
+}

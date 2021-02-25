@@ -1,12 +1,13 @@
 import React from 'react';
+import LoginForm from "components/LoginForm";
 
-import LoginForm from "components/LoginForm.jsx";
-
-import "styles/pages/LoginPage.scss"
+import "styles/pages/LoginPage.scss";
 
 export default () => {
 
-    return <div className={"loginPage"}>
-        <LoginForm/>
-    </div>;
+    return (<div className={"loginPage"}>
+        <div className={"loginWrapper"}>
+            <LoginForm/>
+        </div>
+    </div>);
 }

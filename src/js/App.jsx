@@ -2,23 +2,21 @@ import React from "react";
 import {BrowserRouter} from "react-router-dom";
 import {Provider} from "react-redux";
 import {store} from "redux/store.js";
-import NavBar from "components/NavBar.jsx";
-import Content from "pages/Content.jsx"
-import {ToastContainer} from 'react-toastify';
+import NavBar from "components/NavBar";
+import Content from "pages/Content";
+
+import Dialogs from "components/Dialogs";
+
+import "styles/App.scss";
+import FPSMeter from "components/FPSMeter.jsx";
 import CookieConsent from "react-cookie-consent";
 
-import 'react-toastify/dist/ReactToastify.css';
-
-import "styles/App.scss"
-
-export default () => {
-
+function App() {
     return <Provider store={store}>
-        <ToastContainer/>
-
         <BrowserRouter>
             <NavBar/>
             <Content/>
+            <Dialogs/>
         </BrowserRouter>
 
         <CookieConsent
@@ -30,5 +28,8 @@ export default () => {
             expires={150}>
             This website uses cookies to enhance the user experience.{" "}
         </CookieConsent>
-    </Provider>
+        {/*<FPSMeter />*/}
+    </Provider>;
 }
+
+export default App;

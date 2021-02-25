@@ -36,7 +36,7 @@ const optimization = {
             },
         },
     }
-}
+};
 
 module.exports = {
     watchOptions: {
@@ -49,6 +49,7 @@ module.exports = {
         pathinfo: false
     },
     resolve: {
+        extensions: [".js", ".jsx"],
         modules: ['node_modules', resolvePath('src/js')],
         alias: {
             images: resolvePath('images/'),
@@ -63,7 +64,11 @@ module.exports = {
     },
     optimization: optimization,
     devServer: {
-        historyApiFallback: true
+        historyApiFallback: true,
+        headers: {
+            // "Cross-Origin-Embedder-Policy": "require-corp",
+            // "Cross-Origin-Opener-Policy": "same-origin"
+        }
     },
     plugins: [
         new HtmlWebPackPlugin({template: resolvePath("src/index.html")}),
@@ -121,4 +126,4 @@ module.exports = {
         })
     },
     //stats: "verbose"
-}
+};

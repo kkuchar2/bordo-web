@@ -1,12 +1,12 @@
 export const workers = [];
 
-const register = (worker, handler) => {
+const registerWorker = (worker, handler) => {
     worker.onmessage = handler;
     workers.push(worker);
     return worker;
-}
+};
 
-export const unregister = (worker) => {
+export const unregisterWorker = (worker) => {
     const registeredWorker = workers.find(w => w === worker);
     if (registeredWorker !== undefined) {
         registeredWorker.terminate();
@@ -15,7 +15,11 @@ export const unregister = (worker) => {
             workers.splice(index, 1);
         }
     }
-}
+};
 
-export const registerSortWorker = handler => register(new Worker(new URL('sort.worker.js', import.meta.url)), handler);
+export const sendMessage = (worker, messageType, payload = []) => {
+    worker.postMessage({ type: messageType, payload: payload });
+};
 
+export const registerSortWorker = handler => registerWorker(new Worker(new URL('sort.worker.js', import.meta.url)), handler);
+export const registerPathfindingWorker = handler => registerWorker(new Worker(new URL('pathfinding.worker.js', import.meta.url)), handler);

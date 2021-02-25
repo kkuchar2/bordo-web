@@ -1,16 +1,17 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useRef, useState} from 'react';
 
 import * as echarts from "echarts";
 
-import {getParentHeight, getParentWidth, useEffectInit, useEffectWithNonNull} from "util/util.js";
+import {getParentHeight, getParentWidth, useEffectWithNonNull} from "util/util.js";
 
-import "styles/components/Chart.scss"
+import "styles/components/Chart.scss";
 
 let listener = false;
 
-export default props => {
+function Chart(props) {
 
     let chartInstance = null;
+
     const mount = useRef(null);
     const [width, setWidth] = useState(0);
     const [height, setHeight] = useState(0);
@@ -25,13 +26,13 @@ export default props => {
             startValue: zoom.startValue,
             endValue: zoom.endValue
         });
-    }
+    };
 
-    useEffectInit(() => {
+    useEffect(() => {
         const updateSize = () => {
-            setWidth(getParentWidth(mount))
+            setWidth(getParentWidth(mount));
             setHeight(getParentHeight(mount));
-        }
+        };
         window.addEventListener('resize', updateSize);
         updateSize();
         if (props.zoomCallbackProvider !== undefined && props.name !== undefined) {
@@ -40,8 +41,8 @@ export default props => {
         return () => {
             window.removeEventListener('resize', updateSize);
             chartInstance && chartInstance.dispose();
-        }
-    }, [])
+        };
+    }, []);
 
     useEffectWithNonNull(() => {
         const renderChart = () => {
@@ -56,18 +57,18 @@ export default props => {
             if (!listener) {
                 listener = true;
                 chartInstance.on('datazoom', () => {
-                    let zoom = chartInstance.getOption().dataZoom[0]
+                    let zoom = chartInstance.getOption().dataZoom[0];
                     props.onZoomChange(zoom);
                     for (const [, listener] of Object.entries(props.zoomListenersMap)) {
-                        listener(zoom)
+                        listener(zoom);
                     }
                 });
             }
-        }
-        renderChart()
+        };
+        renderChart();
     }, [config]);
 
-    useEffectWithNonNull(updateComponentZoom, [zoom])
+    useEffectWithNonNull(updateComponentZoom, [zoom]);
 
     useEffectWithNonNull(() => {
         chartInstance.showLoading({
@@ -80,11 +81,13 @@ export default props => {
             spinnerRadius: 40,
             lineWidth: 8
         });
-        chartInstance.setOption(props.configFunc(props.mapData(props.data)))
+        chartInstance.setOption(props.configFunc(props.mapData(props.data)));
         chartInstance.hideLoading();
-    }, [props.data])
+    }, [props.data]);
 
     useEffectWithNonNull(() => chartInstance.resize(), [width, height]);
 
-    return <div className={"chart"} ref={mount}/>
+    return <div className={"chart"} ref={mount}/>;
 }
+
+export default Chart;

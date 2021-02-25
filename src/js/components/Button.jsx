@@ -1,10 +1,10 @@
 import React from "react";
 
-import Text from "components/Text.jsx";
+import Text from "components/Text";
 
-import "componentStyles/Button.scss"
+import "componentStyles/Button.scss";
 
-export default props => {
+function Button(props) {
 
     const onClick = () => {
         if (props.disabled) {
@@ -14,7 +14,7 @@ export default props => {
         if (props.onClick) {
             props.onClick();
         }
-    }
+    };
 
     const getAdditionalClassName = () => props.disabled ? "disabled" : "enabled";
 
@@ -29,5 +29,7 @@ export default props => {
                 {props.children}
             </div>
         </button>
-    )
+    );
 }
+
+export default Button;

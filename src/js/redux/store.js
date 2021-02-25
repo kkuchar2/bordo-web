@@ -1,24 +1,20 @@
 import thunkMiddleware from 'redux-thunk';
-import {configureStore} from '@reduxjs/toolkit'
+import {configureStore} from '@reduxjs/toolkit';
 
-import {connectionReducer} from "redux/reducers/connection.reducer.js";
-import {navbarReducer} from "redux/reducers/navbar.reducer.js";
-import {themeReducer} from "redux/reducers/theme.reducer.js";
-
-import covidStatisticsReducer from './features/covidStatisticsSlice.js'
-import covidCalcsDataReducer from './features/covidCalculationsSlice.js'
-import registrationReducer from "./features/registrationSlice.js";
-import loginReducer from "./features/loginSlice.js";
+import {mouseReducer, dialogReducer, navbarReducer, themeReducer} from "./reducers/application";
+import {helloReducer} from "./reducers/api";
+import {authReducer, confirmReducer, registrationReducer} from "./reducers/api/account";
 
 export const store = configureStore({
     reducer: {
-        covidStatistics: covidStatisticsReducer,
-        covidCalcsData: covidCalcsDataReducer,
         registration: registrationReducer,
-        login: loginReducer,
-        connection: connectionReducer,
+        auth: authReducer,
+        hello: helloReducer,
+        dialog: dialogReducer,
+        mouse: mouseReducer,
+        confirm: confirmReducer,
         navbar: navbarReducer,
         theme: themeReducer,
     },
     middleware: [thunkMiddleware]
-})
+});

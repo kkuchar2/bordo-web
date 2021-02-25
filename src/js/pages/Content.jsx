@@ -1,24 +1,40 @@
-import {Route, Switch} from "react-router-dom";
-import React, {Suspense} from "react";
-import {useSelector} from "react-redux";
-import NotFound from "./NotFound.jsx";
-import {routes} from "../routes/routes.js";
-import {withCondition} from "util/util.js";
+import {Route, Switch, useHistory} from "react-router-dom";
+import React, {useEffect, useCallback} from "react";
+import NotFound from "./NotFound";
+import {routes, isOnAuthenticatedPage} from "../routes/routes.js";
+import {withSuspense} from "util/withSuspense";
+import {AuthRoute} from "../routes/AuthRoute.js";
+import {useDispatch, useSelector} from "react-redux";
+import {selectorAuth, tryLoginWithAuthKey} from "../redux/reducers/api/account";
 
-export default () => {
+function Content() {
 
-    const navbarState = useSelector(state => state.navbar);
+    const dispatch = useDispatch();
+    const authState = useSelector(selectorAuth);
+    let history = useHistory();
 
-    const mapRoutesToContent = () => routes.filter(v => v.enabled)
-        .map((p, k) => <Route exact path={p.path} component={p.component} key={k}/>);
+    useEffect(() => dispatch(tryLoginWithAuthKey()), []);
+
+    useEffect(() => {
+        if (authState.isUserLoggedIn && isOnAuthenticatedPage()) {
+            history.replace({pathname: "/"});
+        }
+    }, [authState]);
+
+    const mapRoutesToContent = useCallback(() => routes.filter(v => v.enabled)
+        .map((p, k) => {
+            if (p.requireAuth) {
+                return <AuthRoute key={k} exact={p.exact} path={p.path} component={p.component}/>;
+            }
+            else {
+                return <Route key={k} exact={p.exact} path={p.path} component={p.component}/>;
+            }
+        }), []);
 
     return <Switch>
-        <Suspense fallback={null}>
-            {withCondition(navbarState.opened, () => <div className={"pageOverlay"}/>)}
-            <div className={"page"}>
-                {mapRoutesToContent()}
-            </div>
-        </Suspense>
-        <Route component={NotFound} key={0}/>
-    </Switch>
+        {mapRoutesToContent()}
+        <Route component={withSuspense(NotFound)} key={0}/>
+    </Switch>;
 }
+
+export default Content;

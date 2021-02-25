@@ -1,10 +1,10 @@
 import {
     getSortMethod,
-    notifyDataShuffled,
+    notifySortDataShuffled,
     onSortMethodExit,
     resetState,
     shuffle,
-    state,
+    sortState,
 } from "workers/worker.utils.js";
 
 /* -------------- Main message handler ------------------ */
@@ -22,13 +22,13 @@ const requestMap = {
 
 const onSortRequest = message_data => {
     resetState();
-    getSortMethod(message_data.algorithm_type)().then(onSortMethodExit);
-}
+    getSortMethod(message_data.algorithm)().then(onSortMethodExit);
+};
 
 const onShuffleRequest = message_data => {
     resetState();
-    shuffle(message_data.sampleCount, message_data.maxValue).then(notifyDataShuffled);
-}
+    shuffle(message_data.sampleCount, message_data.maxValue).then(notifySortDataShuffled);
+};
 
-const onPauseRequest = () => state.pause = !state.pause;
-const onAbortRequest = () => state.abort = true;
+const onPauseRequest = () => sortState.pause = !sortState.pause;
+const onAbortRequest = () => sortState.abort = true;

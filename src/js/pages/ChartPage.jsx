@@ -1,13 +1,12 @@
 import React, {useState} from 'react';
 import {useSelector} from "react-redux";
-import {getAllStatistics} from "../redux/features/covidStatisticsSlice.js";
-import {getAllCalculations} from "../redux/features/covidCalculationsSlice.js";
+import {getAllStatistics} from "../redux/reducers/api/covidStatisticsSlice.js";
+import {getAllCalculations} from "../redux/reducers/api/covidCalculationsSlice.js";
 
-import {asyncGET} from "redux/api/api.js";
-import {useEffectInit, useEffectWithNonNull} from "util/util.js";
+import { useEffectWithNonNull} from "util/util.js";
 
-import Text from "components/Text.jsx";
-import Chart from "components/Chart.jsx";
+import Text from "components/Text";
+import Chart from "components/Chart";
 
 import {zoomChartConfig} from "configs/chart/zoomChartConfig";
 import {casesRecoveriesConfig} from "configs/chart/casesRecoveriesConfig";
@@ -15,15 +14,15 @@ import {casesCumulativeConfig} from "configs/chart/casesCumulative";
 import {recoveriesConfig} from "configs/chart/recoveriesConfig";
 import {deathsConfig} from "configs/chart/deathsConfig";
 
-import "styles/pages/ChartPage.scss"
+import "styles/pages/ChartPage.scss";
 import {mapDates} from "configs/chart/common";
 
 const mapDate = data => data.map(entry => {
-    return {x: new Date(entry.date)}
+    return {x: new Date(entry.date)};
 });
 
 const mapDateFields = (data, fieldNames) => data.map(entry => {
-    const mapped = {x: new Date(entry.date)}
+    const mapped = {x: new Date(entry.date)};
     fieldNames.forEach(fieldName => mapped[fieldName] = entry[fieldName]);
     return mapped;
 });
@@ -41,20 +40,22 @@ export default () => {
     let statistics = useSelector(getAllStatistics);
     let calculations = useSelector(getAllCalculations);
 
-    useEffectInit(() => asyncGET("covid_stats"), [])
+    useEffect(() => {
+        // Dispatch GET request to get covid data
+    }, []);
 
     useEffectWithNonNull(() => {
-        setTodayDate(statistics[statistics.length - 1].date)
-        setTodayCases(statistics[statistics.length - 1].cases_daily)
+        setTodayDate(statistics[statistics.length - 1].date);
+        setTodayCases(statistics[statistics.length - 1].cases_daily);
         setRangeEnd(statistics.length - 1);
-    }, [statistics])
+    }, [statistics]);
 
     const zoomCallbackProvider = (name, func) => zoomListenersMap[name] = func;
 
     const onZoomChange = zoom => {
         setRangeStart(zoom.startValue);
         setRangeEnd(zoom.endValue);
-    }
+    };
 
     const renderNoData = () => {
         if (statistics.length > 0) {
@@ -62,8 +63,8 @@ export default () => {
         }
         return <div className={"emptyData"}>
             <div>Brak danych</div>
-        </div>
-    }
+        </div>;
+    };
 
     const renderChart = (name, configFunc, fields, data) => {
         if (data.length === 0) {
@@ -74,13 +75,13 @@ export default () => {
                    name={name}
                    mapData={d => mapDateFields(d, fields)} data={data}
                    zoomCallbackProvider={zoomCallbackProvider}/>
-        </div>
-    }
+        </div>;
+    };
 
     const renderInfo = () => <div className={"latestTextWrapper"}>
-            <Text className="latestCasesDateText" text={todayDate}/>
-            <Text className="latestCasesText" text={`Liczba nowych przypadków: ${todayCases}`} />
-        </div>
+        <Text className="latestCasesDateText" text={todayDate}/>
+        <Text className="latestCasesText" text={`Liczba nowych przypadków: ${todayCases}`}/>
+    </div>;
 
     const renderDescriptionRow = () => {
         if (statistics.length === 0) {
@@ -89,8 +90,8 @@ export default () => {
         return <div className={"latestTextRow"}>
             <Text className="title" text={"Koronawirus w Polsce (SARS-CoV-2)"}/>
             {renderInfo()}
-        </div>
-    }
+        </div>;
+    };
 
     const renderDataRange = () => {
         if (statistics.length === 0) {
@@ -99,7 +100,7 @@ export default () => {
         let dates = mapDates(mapDate(statistics));
         return <div className={"dataRangeTextRow"}>
             <Text className="dataRangeText" text={`${dates[rangeStart]} - ${dates[rangeEnd]}`}/>
-        </div>
+        </div>;
     };
 
     const renderZoomControlChart = (configFunc, data) => {
@@ -113,8 +114,8 @@ export default () => {
                        onZoomChange={onZoomChange}
                        zoomListenersMap={zoomListenersMap}/>
             </div>
-        </div>
-    }
+        </div>;
+    };
 
     return <div className={"chartPage"}>
         {renderNoData()}
@@ -125,5 +126,5 @@ export default () => {
         {renderChart("casesCumulative", casesCumulativeConfig, ["cases_cumulative"], statistics)}
         {renderChart("recoveries", recoveriesConfig, ["recoveries_daily"], statistics)}
         {renderChart("deaths", deathsConfig, ["deaths_daily"], statistics)}
-    </div>
-}
+    </div>;
+};

@@ -14,13 +14,13 @@ $common-themes: (
         ),
         dark: (
                 color-background: #291B34,
-                navbar-background: #00000000,
+                navbar-background: #1a1a1acc,
                 navbar-item-background-hover: #2d2d2d,
                 navbar-mobile-background: #181818cc,
                 input-background: rgba(78, 78, 78, 0.2),
                 input-border: none,
-                select-background: rgba(78, 78, 78, 0.2),
-                select-options-background: rgba(93, 93, 93, 0.9),
+                select-background: rgb(45, 45, 45),
+                select-options-background: rgb(45, 45, 45),
                 text-color: #cfcfcf,
                 select-text-color: #cfcfcf
         )
@@ -34,12 +34,12 @@ $components-themes: (
 // Themes for pages
 $sort-page-themes: (
         light: (
-                sort-page-buttons-background: rgba(0, 0, 0, 0.2),
+                sort-page-buttons-background: rgb(0, 0, 0),
                 sort-page-buttons-disabled-background: rgba(255, 255, 255, 0.1),
         ),
         dark: (
-                sort-page-buttons-background: rgba(78, 78, 78, 0.2),
-                sort-page-buttons-disabled-background: rgba(67, 67, 67, 0.1),
+                sort-page-buttons-background: rgb(45, 45, 45),
+                sort-page-buttons-disabled-background: rgba(45, 45, 45, 0.1),
         )
 );
 

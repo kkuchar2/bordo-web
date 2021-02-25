@@ -1,0 +1,120 @@
+@import '../common/responsive';
+@import '../common/constants';
+@import '../common/mixins';
+@import '../common/theme';
+@import '../common/fonts';
+@import "../common/animations/mixins";
+@import "../common/animations/fade_in";
+
+.settingsPage {
+  width: 100%;
+  margin-top: $navbar-height;
+  height: calc(100% - #{$navbar-height});
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  color: #b8b8b8;
+  font-size: 30pt;
+
+  .settingsWindow {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    @include timed_animation(fadein, 0.3s);
+    width: 100%;
+    height: 100%;
+    background: #1a1a1acc;
+
+    .top {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      width: 100%;
+      flex: 0 1 60px;
+      border-bottom: 1px solid #262626;
+
+      .icon {
+        margin-left: 20px;
+        font-size: 15pt;
+        color: #4a4a4a;
+      }
+
+      .title {
+        margin-left: 15px;
+        color: #6e6e6e;
+        font-size: 17pt;
+      }
+    }
+
+    .bottom {
+      display: flex;
+      flex-direction: row;
+      flex: 1;
+
+      .rightPanel {
+        flex: 1 0 auto;
+
+        .profileSettings {
+          font-size: 14pt;
+          height: 100%;
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          justify-content: center;
+          color: #5d5d5d;
+        }
+
+        .accountSettings {
+          padding: 20px;
+          font-size: 14pt;
+
+          .deleteAccountButton {
+            margin-top: 20px;
+            width: 150px;
+            height: 40px;
+            border-radius: 4px;
+            background: #6b0000;
+            color: white;
+
+            .content {
+              .text {
+                font-size: 12pt;
+              }
+            }
+
+            &:hover {
+              background: #860000;
+            }
+          }
+        }
+      }
+
+      .leftPanel {
+        width: 200px;
+        height: calc(100% - 50px);
+        border-right: 1px solid #262626;
+
+        .settingsList {
+          padding: 0;
+          margin: 0;
+          list-style-type: none;
+
+          .settingsItem {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            height: 50px;
+            font-size: 12pt;
+            padding-left: 10px;
+
+            &:hover {
+              cursor: pointer;
+              background: #282828;
+            }
+          }
+        }
+      }
+    }
+  }
+}

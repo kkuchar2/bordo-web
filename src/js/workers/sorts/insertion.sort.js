@@ -1,22 +1,22 @@
-import {CheckPause, notifyDataUpdate, state} from "workers/worker.utils.js";
+import {CheckPause, notifySortUpdate, sortState} from "workers/worker.utils.js";
 
 export const insertionSort = async () => {
-    let length = state.data.length;
+    let length = sortState.data.length;
     for (let i = 1; i < length; i++) {
 
         await CheckPause();
 
-        if (state.abort) {
+        if (sortState.abort) {
             return;
         }
 
-        let key = state.data[i];
+        let key = sortState.data[i];
         let j = i - 1;
-        while (j >= 0 && state.data[j] > key) {
-            state.data[j + 1] = state.data[j];
+        while (j >= 0 && sortState.data[j] > key) {
+            sortState.data[j + 1] = sortState.data[j];
             j = j - 1;
-            notifyDataUpdate();
+            notifySortUpdate();
         }
-        state.data[j + 1] = key;
+        sortState.data[j + 1] = key;
     }
-}
+};

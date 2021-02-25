@@ -1,18 +1,17 @@
 import React from "react";
 import {useDispatch} from "react-redux";
 
-import "componentStyles/EmailSentPopup.scss"
-import Text from "components/Text.jsx";
+import Text from "components/Text";
 import {Link} from "react-router-dom";
-import {registrationConstants} from "../redux/constants";
+import {reset} from "../redux/reducers/api/account";
 
-export default () => {
+import "componentStyles/EmailSentPopup.scss";
+
+function EmailSentPopup() {
 
     const dispatch = useDispatch();
 
-    const onLoginClick = () => {
-        dispatch({ type: registrationConstants.RESET });
-    }
+    const onLoginClick = () => dispatch(reset());
 
     return <div className={'emailSentPopup'}>
         <div className={'popup'}>
@@ -26,5 +25,7 @@ export default () => {
                 <Link onClick={onLoginClick} to={'/login'} className={'button'}>Back to sign in</Link>
             </div>
         </div>
-    </div>
+    </div>;
 }
+
+export default EmailSentPopup;

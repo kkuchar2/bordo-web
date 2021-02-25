@@ -1,40 +1,37 @@
-import React, {useRef, useState} from "react";
-import {useEffectInit, useEffectWithNonNull} from "util/util.js";
+import React, {useRef, useState, useEffect} from "react";
 
-import "componentStyles/SelectControl.scss"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faChevronDown} from "@fortawesome/free-solid-svg-icons";
 
-export default props => {
+import "componentStyles/SelectControl.scss";
+
+function SelectControl(props) {
 
     const wrapper = useRef(null);
 
     const [selectedOption, setSelectedOption] = useState(0);
     const [open, setOpen] = useState(false);
 
-    useEffectInit(() => {
+    useEffect(() => {
         const handleClickOutside = (event) => {
             if (wrapper && !wrapper.current.contains(event.target)) {
                 setOpen(false);
             }
-        }
+        };
 
         document.addEventListener('mousedown', handleClickOutside);
         setSelectedOption(props.value);
 
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
-        }
-    })
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
 
-    useEffectWithNonNull(() => props.onChange(selectedOption), [selectedOption])
+    useEffect(() => props.onChange(selectedOption), [selectedOption]);
 
     const onClick = () => {
         if (!props.disabled) {
             toggleDropdown();
         }
     };
-
 
     const toggleDropdown = () => setOpen(!open);
 
@@ -73,3 +70,5 @@ export default props => {
         {renderOptions()}
     </div>;
 }
+
+export default SelectControl;

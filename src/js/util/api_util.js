@@ -1,5 +1,5 @@
 export const getResponseError = (data, key) => {
-    if (data === null) {
+    if (data === null || data === undefined) {
         return undefined;
     }
 

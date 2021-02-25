@@ -1,4 +1,4 @@
-$loader-colors: dodgerblue, mediumspringgreen, crimson, peachpuff, chocolate, pink;
+$loader-colors: #ffffff;
 $loader-dash: 63;
 $loader-duration: length($loader-colors) * 1s;
 $loader-duration-alt: $loader-duration / length($loader-colors);
@@ -6,7 +6,7 @@ $loader-keyframe: 1 / (length($loader-colors) * 2) * 100;
 
 
 .spinner {
-
+  margin-right: 3px;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -14,14 +14,13 @@ $loader-keyframe: 1 / (length($loader-colors) * 2) * 100;
 
   .text {
     margin-right: 10px;
-    font-family: "Rubik", sans-serif;
     font-size: 16px;
     color: white;
   }
 
   .loader {
     animation: loader-turn $loader-duration-alt linear infinite;
-    max-width: 30px;
+    max-width: 15px;
     width: 100%;
     @keyframes loader-turn {
       50% {

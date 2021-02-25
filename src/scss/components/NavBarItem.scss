@@ -10,8 +10,9 @@
   display: flex;
   align-items: center;
   justify-content: left;
-  width: 200px;
-  color: transparent;
+  font-size: 18px;
+  color: #cdcdcd;
+  text-decoration: none;
 
   .iconComponent {
     color: white;
@@ -20,24 +21,9 @@
     justify-content: center;
     width: 50px;
 
-    .navbar-item-text {
-      font-size: 20px;
-    }
     &:hover {
       background: none;
     }
-  }
-
-  .navbar-item-text {
-    font-family: "Rubik", sans-serif;
-    box-sizing: border-box;
-    text-decoration: none;
-    white-space: nowrap;
-    color: #cdcdcd;
-    text-align: center;
-    display: inline-block;
-    font-weight: 600;
-    font-size: 14px;
   }
 
   .navbar-item-icon {

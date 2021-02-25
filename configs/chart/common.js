@@ -8,7 +8,7 @@ export const axisLabelX = {
     padding: [23, 0, 0, 0],
     textStyle: {
         color: 'white',
-        fontFamily: 'Rubik',
+        fontFamily: 'Raleway',
         fontSize: 14
     },
     position: "top"
@@ -17,7 +17,7 @@ export const axisLabelY = {
     show: true,
     textStyle: {
         color: 'white',
-        fontFamily: 'Rubik',
+        fontFamily: 'Raleway',
         fontSize: 15,
     }
 };
@@ -46,7 +46,7 @@ export const zoomComponent = (data, visible) => data.length === 0 || !useZoom ? 
     show: visible,
     textStyle: {
         color: '#ffffff00',
-        fontFamily: 'Rubik',
+        fontFamily: 'Raleway',
         fontSize: 15,
     }
 }]

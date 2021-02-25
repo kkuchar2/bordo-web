@@ -1,7 +1,7 @@
-import {CheckPause, notifyDataUpdate, state} from "workers/worker.utils.js";
+import {CheckPause, notifySortUpdate, sortState} from "workers/worker.utils.js";
 
 const merge = async (start, mid, end) => {
-    if (state.abort) {
+    if (sortState.abort) {
         return;
     }
 
@@ -10,36 +10,36 @@ const merge = async (start, mid, end) => {
     let rightIdx = mid + 1;
 
     while (leftIdx <= mid && rightIdx <= end) {
-        if (state.data[leftIdx] < state.data[rightIdx]) {
-            merged.push(state.data[leftIdx]);
+        if (sortState.data[leftIdx] < sortState.data[rightIdx]) {
+            merged.push(sortState.data[leftIdx]);
             leftIdx += 1;
         }
         else {
-            merged.push(state.data[rightIdx]);
+            merged.push(sortState.data[rightIdx]);
             rightIdx += 1;
         }
     }
 
     while (leftIdx <= mid) {
-        merged.push(parseInt(state.data[leftIdx]));
-        leftIdx += 1
+        merged.push(parseInt(sortState.data[leftIdx]));
+        leftIdx += 1;
     }
 
     while (rightIdx <= end) {
-        merged.push(state.data[rightIdx]);
+        merged.push(sortState.data[rightIdx]);
         rightIdx += 1;
     }
 
     for (let i = 0; i < merged.length; i++) {
-        state.data[start + i] = merged[i];
-        notifyDataUpdate();
+        sortState.data[start + i] = merged[i];
+        notifySortUpdate();
     }
 
     await CheckPause();
-}
+};
 
 const mergeSort = async (start, end) => {
-    if (state.abort) {
+    if (sortState.abort) {
         return;
     }
 
@@ -53,7 +53,7 @@ const mergeSort = async (start, end) => {
     await mergeSort(middle + 1, end);
     await merge(start, middle, end);
 
-    notifyDataUpdate();
-}
+    notifySortUpdate();
+};
 
-export const mergeSortRecursive = async () => await mergeSort(0, state.data.length - 1);
+export const mergeSortRecursive = async () => await mergeSort(0, sortState.data.length - 1);

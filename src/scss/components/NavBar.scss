@@ -16,7 +16,21 @@ $stop-width: 800px;
   display: flex;
   align-items: center;
   justify-content: center;
+  font-size: 14px;
 }
+
+.logoutButton {
+  background: #670030;
+  margin: 10px;
+  height: 30px;
+  border-radius: 4px;
+  width: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+}
+
 
 .registerButton {
   border: 1px solid #ffffff55;
@@ -27,32 +41,33 @@ $stop-width: 800px;
   display: flex;
   align-items: center;
   justify-content: center;
+  font-size: 14px;
 }
 
 .navbar {
-  z-index: 1;
   @include theme-aware('background', 'navbar-background');
+
+  position: absolute;
   min-height: $navbar-height;
-  flex: 0 1 $navbar-height;
   width: 100%;
+  z-index: 1;
 
   .main-buttons {
     display: flex;
     align-items: center;
     justify-content: left;
-    height: 100%;
+    height: $navbar-height;
+    box-sizing: border-box;
 
-    .homeIcon {
+    .home {
       color: white;
       height: 100%;
       display: flex;
       align-items: center;
       justify-content: center;
       width: 50px;
-
-      .navbar-item-text {
-        font-size: 20px;
-      }
+      font-size: 20px;
+      margin-bottom: 5px;
       &:hover {
         background: none;
       }
@@ -84,6 +99,17 @@ $stop-width: 800px;
           align-items: center;
           justify-content: center;
           flex-direction: row;
+
+          .email {
+            color: #b3b3b3;
+          }
+
+          .navbarButtons {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: row;
+          }
         }
       }
 
@@ -116,15 +142,13 @@ $stop-width: 800px;
         opacity: 0.5;
       }
     }
-
-
     .navbar-group {
+      @include theme-aware('background', 'navbar-mobile-background');
       width: 50%;
       height: calc(100% - #{$navbar-height});
       z-index: 100;
       display: flex;
       flex-direction: column;
-      @include theme-aware('background', 'navbar-mobile-background');
       position: absolute;
       top: $navbar-height;
       box-sizing: border-box;

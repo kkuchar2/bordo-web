@@ -1,15 +1,18 @@
-import React, {useEffect, useState} from 'react';
-import BarsView from "components/BarsView.jsx";
-import Button from "components/Button.jsx";
-import SelectControl from "components/SelectControl.jsx";
-import {registerSortWorker, unregister} from "workers/workers.js";
+import React, {useEffect, useState, useCallback} from 'react';
+import BarsView from "components/BarsView";
+import Button from "components/Button";
+import SelectControl from "components/SelectControl";
+import {registerSortWorker, unregisterWorker, sendMessage} from "workers/workers.js";
 import {useEffectWithNonNull} from "util/util.js";
+import Input from "components/Input";
 
-import "styles/pages/SortPage.scss"
+import "styles/pages/SortPage.scss";
 
 const sortingAlgorithms = ["MergeSort", "BubbleSort", "InsertionSort", "QuickSort"];
 
-export default () => {
+const maxValue = 1000;
+
+function SortPage() {
 
     const [data, setData] = useState([]);
     const [sorted, setSorted] = useState(false);
@@ -17,103 +20,71 @@ export default () => {
     const [paused, setPaused] = useState(false);
     const [selectedAlgorithm, setSelectedAlgorithm] = useState(0);
     const [sampleCount, setSampleCount] = useState(200);
-    const [worker, setWorker] = useState(0);
-    const [maxValue, setMaxValue] = useState(10000);
+    const [worker, setWorker] = useState(null);
+
+    const messageHandlersMap = {
+        "sort": payload => setData(payload),
+        "shuffle": payload => onShuffleDataReceived(payload),
+        "sortFinished": payload => onSortFinished(payload.sorted)
+    };
 
     useEffect(() => {
-
-        const messageHandlersMap = {
-            "sort": payload => setData(payload),
-            "shuffle": payload => onShuffleDataReceived(payload),
-            "sortFinished": payload => onSortFinished(payload.sorted)
-        };
-
         const onMessageReceived = e => messageHandlersMap[e.data.type](e.data.payload);
-
-        const onShuffleDataReceived = data => {
-            setData(data);
-            setSorted(false);
-        }
-
-        const onSortFinished = isSorted => {
-            setSorting(false);
-            setSorted(isSorted);
-        }
-
         setWorker(registerSortWorker(onMessageReceived));
+        return () => unregisterWorker(worker);
+    }, []);
 
-        return () => unregister(worker);
-    }, [])
+    useEffectWithNonNull(() => onShuffleRequest(sampleCount), [worker]);
 
-    useEffectWithNonNull(() => {
-        onShuffleRequest(sampleCount);
-    }, [worker])
+    const onShuffleDataReceived = useCallback(receivedData => {
+        setData(receivedData);
+        setSorted(false);
+    }, []);
 
-    const onSortButtonPressed = () => {
+    const onSortFinished = useCallback(isSorted => {
+        setSorting(false);
+        setSorted(isSorted);
+    }, []);
+
+    const onStartPauseButtonPressed = useCallback(() => {
         if (sorted) {
             return;
         }
 
         if (sorting) {
-            onPauseRequest()
+            setSorting(false);
+            setPaused(!paused);
+            sendMessage(worker, "pause");
         }
         else {
+            setPaused(false);
             setSorting(true);
-            sendMessage("sort", {algorithm_type: sortingAlgorithms[selectedAlgorithm]});
+            sendMessage(worker, "sort", {algorithm: sortingAlgorithms[selectedAlgorithm]});
         }
-    }
+    }, [worker, sorting, sorted, selectedAlgorithm]);
 
-    const onStopButtonPressed = () => sendMessage("stop");
+    const onStopButtonPressed = useCallback(() => sendMessage(worker, "stop"), [worker]);
 
-    const onPauseRequest = () => {
-        setPaused(!paused)
-        sendMessage("pause");
-    }
-
-    const onShuffleRequest = sampleCount => {
+    const onShuffleRequest = useCallback(samples => {
         setSorting(false);
-        sendMessage("shuffle", {sampleCount: sampleCount, maxValue: maxValue});
-    }
+        sendMessage(worker, "shuffle", {sampleCount: samples, maxValue: maxValue});
+    }, [worker]);
 
-    const sendMessage = (type, payload = []) => worker.postMessage({type: type, payload: payload});
-
-    const onSampleCountInputChange = e => {
+    const onSampleCountInputChange = useCallback(e => {
         let v = e.target.value;
         let targetValue = 1;
-        if (/^([1-9][0-9]{0,3}|10000)$/.test(v)) {
+        if ((/^([1-9][0-9]{0,3}|10000)$/).test(v)) {
             targetValue = parseInt(v);
             onShuffleRequest(targetValue);
         }
         setSampleCount(v);
-    };
+    }, [worker]);
 
-    const getPlayPauseIcon = () => {
-        if (!sorting || paused) {
-            return 'images/play_icon.png';
-        }
-        else {
-            return 'images/pause_icon.png';
-        }
-    }
+    const getPlayPauseIcon = useCallback(() => {
+        return !sorting || paused ? 'images/play_icon.png' : 'images/pause_icon.png';
+    }, [sorting, paused]);
 
-    const getSortText = () => {
-        if (!paused && sorting) {
-            return 'Pause';
-        }
-        else if (paused && sorting) {
-            return 'Resume';
-        }
-        else if (!sorting) {
-            return 'Sort';
-        }
-    }
-
-    const getSpinnerClassName = () => {
-        if (sorting && !paused) {
-            return "loader-visible"
-        }
-        return "loader-hidden";
-    }
+    const onSelectedAlgorithmChange = useCallback(setSelectedAlgorithm);
 
     return <div className={"sortPage"}>
         <div className={"left"}>
@@ -124,24 +95,24 @@ export default () => {
                     options={sortingAlgorithms}
                     value={selectedAlgorithm}
                     disabled={sorting}
-                    onChange={setSelectedAlgorithm}>
+                    onChange={onSelectedAlgorithmChange}>
                 </SelectControl>
 
-                {/*<div className={"sampleCountSection"}>*/}
-                {/*    <div className={"samplesTitle"}>*/}
-                {/*        <p className={"title"}>Samples:</p>*/}
-                {/*    </div>*/}
+                <div className={"sampleCountSection"}>
+                    <div className={"samplesTitle"}>
+                        <p className={"title"}>Samples:</p>
+                    </div>
 
-                {/*    <div className={"input-field"}>*/}
-                {/*        <Input*/}
-                {/*            id="fname"*/}
-                {/*            name="fname"*/}
-                {/*            disabled={false}*/}
-                {/*            value={sampleCount}*/}
-                {/*            active={true}*/}
-                {/*            onChange={onSampleCountInputChange}/>*/}
-                {/*    </div>*/}
-                {/*</div>*/}
+                    <div className={"sampleInput"}>
+                        <Input
+                            id="fname"
+                            name="fname"
+                            disabled={false}
+                            value={sampleCount}
+                            active={true}
+                            onChange={onSampleCountInputChange}/>
+                    </div>
+                </div>
 
                 <div className={"buttonsSection"}>
                     <Button
@@ -153,7 +124,7 @@ export default () => {
 
                     <Button
                         className={"chartButton playButton"}
-                        onClick={onSortButtonPressed}
+                        onClick={onStartPauseButtonPressed}
                         disabled={sorted}>
                         <img src={getPlayPauseIcon()} width={12} height={12} alt={""}/>
                     </Button>
@@ -170,5 +141,7 @@ export default () => {
         <div className={"chart"}>
             <BarsView samples={sampleCount} maxValue={maxValue} data={data}/>
         </div>
-    </div>
+    </div>;
 }
+
+export default SortPage;

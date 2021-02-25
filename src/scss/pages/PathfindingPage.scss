@@ -1,0 +1,28 @@
+@import '../common/fonts';
+@import '../common/constants';
+
+$color: rgb(0, 154, 255);
+$color_path: yellow;
+
+.PathfindingPage {
+  height: calc(100% - #{$navbar-height});
+  margin-top: $navbar-height;
+  box-sizing: border-box;
+  background: #262626;
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  user-select: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 100px;
+
+  .buttonsSection {
+    .button {
+      width: 50px;
+      height: 40px;
+      margin: 15px;
+    }
+  }
+}

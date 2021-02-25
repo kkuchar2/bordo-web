@@ -1,0 +1,1 @@
+export {default as helloReducer} from './helloSlice';

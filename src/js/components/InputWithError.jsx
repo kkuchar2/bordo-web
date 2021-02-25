@@ -1,22 +1,25 @@
-import React, {useState} from "react";
+import React, {useState, useCallback} from "react";
 
-
-import Input from "components/Input.jsx";
+import Input from "components/Input";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faExclamationCircle} from "@fortawesome/free-solid-svg-icons";
-import Text from "components/Text.jsx";
+import Text from "components/Text";
 import {getResponseError} from "util/api_util.js";
 import {useEffectWithNonNull} from "util/util.js";
 
-export default props => {
+function InputWithError(props) {
 
     const [error, setError] = useState(undefined);
 
-    useEffectWithNonNull(() => setError(getResponseError(props.data, props.id)), [props.id, props.data])
+    useEffectWithNonNull(() => setError(getResponseError(props.errors, props.id)), [props.id, props.errors]);
 
-    const renderError = () => {
-        if (error === undefined) return;
-        if (error.length === 0) return;
+    const renderError = useCallback(() => {
+        if (error === undefined) {
+            return;
+        }
+        if (error.length === 0) {
+            return;
+        }
 
         let rows = [];
         for (let i = 0; i < error.length; i++) {
@@ -26,22 +29,23 @@ export default props => {
             </div>);
         }
         return <>{rows}</>;
-    }
+    }, [error]);
 
-    const onChange = v => {
-        props.onChange(v);
-    }
+    const onChange = useCallback(props.onChange, []);
 
-    const getClassName = () => error !== undefined ? 'error' : 'noError';
+    const getClassName = useCallback(() => error !== undefined ? 'error' : 'noError', [error]);
 
     return <>
         <Input
             className={getClassName()}
+            title={props.name}
             id={props.id}
             type={props.type}
             onChange={onChange}
             autoComplete={props.autoComplete}
             placeholder={props.placeholder}/>
         {renderError()}
-    </>
+    </>;
 }
+
+export default InputWithError;

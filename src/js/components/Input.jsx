@@ -1,25 +1,33 @@
-import React from "react";
+import React, {useCallback} from "react";
 
-import "componentStyles/Input.scss"
+import Text from "components/Text";
 
-export default props => {
+import "componentStyles/Input.scss";
 
-    const renderTitle = () => {
+function Input(props) {
+
+    const renderTitle = useCallback(() => {
         if (props.title) {
-            return <div className={"title"}>{props.title}</div>
+            return <div className={"title"}>{props.title}</div>;
         }
-    }
+    }, [props.title]);
 
-    return <div className={["input", props.className].join(" ")}>
-        {renderTitle()}
-        <input
-            className={"inputField"}
-            type={props.type}
-            id={props.id}
-            name={props.name}
-            autoComplete={props.autoComplete}
-            placeholder={props.placeholder}
-            disabled={props.disabled}
-            onChange={props.onChange} />
-    </div>
+    return <div className={"inputWrapper"}>
+        <Text className={"formName"}>{renderTitle()}</Text>
+        <div className={["input", props.className].join(" ")}>
+            <input
+                spellCheck="false"
+                className={"inputField"}
+                type={props.type}
+                id={props.id}
+                value={props.value}
+                name={props.name}
+                autoComplete={props.autoComplete}
+                placeholder={props.placeholder}
+                disabled={props.disabled}
+                onChange={props.onChange} required/>
+        </div>
+    </div>;
 }
+
+export default Input;

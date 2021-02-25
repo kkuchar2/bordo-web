@@ -1,15 +1,15 @@
-import {CheckPause, notifyDataUpdate, state} from "workers/worker.utils.js";
+import {CheckPause, notifySortUpdate, sortState} from "workers/worker.utils.js";
 
 const partition = (left, right) => {
-    const pivot = state.data[Math.floor((right + left) / 2)];
+    const pivot = sortState.data[Math.floor((right + left) / 2)];
     let // Middle element
         i = left, // Left pointer/**/
         j = right; // Right pointer
     while (i <= j) {
-        while (state.data[i] < pivot) {
+        while (sortState.data[i] < pivot) {
             i++;
         }
-        while (state.data[j] > pivot) {
+        while (sortState.data[j] > pivot) {
             j--;
         }
         if (i <= j) {
@@ -17,26 +17,26 @@ const partition = (left, right) => {
             i++;
             j--;
         }
-        notifyDataUpdate();
+        notifySortUpdate();
     }
     return i;
-}
+};
 
 const swap = (leftIndex, rightIndex) => {
-    const temp = state.data[leftIndex];
-    state.data[leftIndex] = state.data[rightIndex];
-    state.data[rightIndex] = temp;
-}
+    const temp = sortState.data[leftIndex];
+    sortState.data[leftIndex] = sortState.data[rightIndex];
+    sortState.data[rightIndex] = temp;
+};
 
 const quickSortImpl = async (left, right) => {
     await CheckPause();
 
-    if (state.abort) {
+    if (sortState.abort) {
         return;
     }
 
     let index;
-    if (state.data.length > 1) {
+    if (sortState.data.length > 1) {
         index = partition(left, right); // Index returned from partition
 
         if (left < index - 1) { // More elements on the left side of the pivot
@@ -46,7 +46,6 @@ const quickSortImpl = async (left, right) => {
             await quickSortImpl(index, right);
         }
     }
-}
+};
 
-export const quickSort = async () => quickSortImpl(0, state.data.length - 1);
-
+export const quickSort = async () => quickSortImpl(0, sortState.data.length - 1);

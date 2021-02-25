@@ -1,6 +1,6 @@
 import React, {lazy, useCallback, useEffect} from "react";
+
 import packageJson from "../../../package.json";
-import {toast} from "react-toastify";
 
 export const getBuildDate = () => packageJson.buildDate;
 
@@ -23,9 +23,6 @@ export const retry = (func, retriesLeft = 5, interval = 1000) =>
             }, interval);
         }));
 
-// Trigger init useEffect
-export const useEffectInit = func => useEffect(func, []);
-
 // Trigger hook on deps change only if all deps are not null and not undefined
 export const useEffectWithNonNull = (func, deps) =>
     useEffect(() => {
@@ -37,6 +34,9 @@ export const useEffectWithNonNull = (func, deps) =>
         }
         func();
     }, deps);
+
+// Hook for unmount
+export const useEffectWithUnmount = func => useEffect(() => func, []);
 
 // Trigger hook on deps change only if boolVar is true
 export const useEffectOnTrue = (boolVar, func, deps) =>
@@ -71,7 +71,7 @@ export const notifyError = msg => {
         draggable: true,
         progress: undefined,
     });
-}
+};
 
 export const callbackOf = (dispatch, func) => useCallback(() => func(dispatch), [dispatch]);
 
@@ -79,9 +79,21 @@ export const withCondition = (variable, func) => {
     if (variable) {
         return func();
     }
-}
+};
 
 export const onFieldChange = (consumer, event) => {
     consumer(event.target.value);
     event.preventDefault();
-}
+};
+
+export const withStatus = (status, statusName, func) => {
+    if (status === statusName) {
+        return func();
+    }
+};
+
+export const withNotStatus = (status, statusName, func) => {
+    if (status !== statusName) {
+        return func();
+    }
+};

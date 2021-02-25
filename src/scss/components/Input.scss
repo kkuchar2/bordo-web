@@ -2,55 +2,82 @@
 @import '../common/constants';
 @import '../common/theme';
 
-.input {
+.inputWrapper {
   display: flex;
-  align-items: center;
-  justify-content: center;
+  align-items: flex-start;
+  flex-direction: column;
 
-  .title {
-    width: 150px;
-    @include theme-aware('color', 'text-color');
+  .formName {
+    font-size: 14px;
+    color: #6a6c7c;
+    margin-top: 5px;
   }
 
-  .inputField {
-    width: 100%;
-    box-sizing: border-box;
-    background: #fff;
-    height: 50px;
-    font-family: "Rubik", sans-serif;
-    font-size: 15px;
-    outline: 0;
-    color: #9B9B9B;
-    border-radius: 3px;
-    padding-left: 12px;
-    @include theme-aware('border', 'input-border');
-    @include theme-aware('background', 'input-background');
-    box-shadow: inset 0px 0px 0px 0px red;
-    caret-color: #535353;
+  .input {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin-bottom: 5px;
+
+    .title {
+      width: 150px;
+      @include theme-aware('color', 'text-color');
+    }
+
+    .inputField {
+      width: 100%;
+      box-sizing: border-box;
+      background: #fff;
+      height: 50px;
+      font-size: 16px;
+      outline: 0;
+      color: #9B9B9B;
+      border-radius: 3px;
+      padding-left: 12px;
+      @include theme-aware('border', 'input-border');
+      @include theme-aware('background', 'input-background');
+      caret-color: #535353;
+      font-family: "Raleway", sans-serif;
+    }
+
+
+    ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+      color: white;
+      opacity: 0.15; /* Firefox */
+    }
+
+    :-ms-input-placeholder { /* Internet Explorer 10-11 */
+      color: white;
+      opacity: 0.15; /* Firefox */
+    }
+
+    input:focus::placeholder {
+      color: transparent;
+    }
+
+    ::-ms-input-placeholder { /* Microsoft Edge */
+      color: white;
+      opacity: 0.15; /* Firefox */
+    }
+
+    input:-webkit-autofill,
+    input:-webkit-autofill:hover,
+    input:-webkit-autofill:focus,
+    input:-webkit-autofill:active {
+      -webkit-box-shadow: 0 0 0 30px #25272d inset !important;
+    }
+
+    input:-webkit-autofill {
+      -webkit-text-fill-color: #bcbcbc !important;
+    }
   }
 
-
-  ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
-    color: #000000;
-    opacity: 0.3; /* Firefox */
+  .input.noError {
+    border: 1px solid #c1c1c1;
   }
 
-  :-ms-input-placeholder { /* Internet Explorer 10-11 */
-    color: #000000;
-    opacity: 0.3; /* Firefox */
+  .input.error {
+    border: 2px solid rgb(186, 47, 47);
   }
-
-  ::-ms-input-placeholder { /* Microsoft Edge */
-    color: #000000;
-    opacity: 0.3; /* Firefox */
-  }
-
-}
-
-.input.noError {
-  border: 1px solid #c1c1c1;
-}
-
-.input.error {
-  border: 2px solid rgb(202, 12, 12);
 }

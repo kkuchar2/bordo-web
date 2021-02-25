@@ -1,29 +1,30 @@
 import React, {useState} from "react";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 
-import Text from "components/Text.jsx";
-import InputWithError from "components/InputWithError.jsx";
-
+import Text from "components/Text";
+import InputWithError from "components/InputWithError";
 import {onFieldChange} from "util/util.js";
-import {asyncPOST} from "../redux/api/api.js";
-
-
-import Spinner from "components/Spinner.jsx";
-import Button from "components/Button.jsx";
+import Spinner from "components/Spinner";
+import Button from "components/Button";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faExclamationCircle} from "@fortawesome/free-solid-svg-icons";
 import {getResponseError} from "util/api_util.js";
+import {selectorRegistration, tryRegister} from "../redux/reducers/api/account";
 
 import "componentStyles/RegistrationForm.scss"
+import {Link} from "react-router-dom";
 
 export default () => {
 
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
-    const [error, setError] = useState(undefined);
 
-    const status = useSelector(state => state.registration.status);
-    const data = useSelector(state => state.registration.data);
+    const dispatch = useDispatch();
+
+    const registrationState = useSelector(selectorRegistration)
+
+    const status = registrationState.status;
+    const errors = registrationState.errors;
 
     const onEmailChange = e => onFieldChange(setEmail, e);
 
@@ -31,7 +32,15 @@ export default () => {
 
     const handleSubmit = e => {
         e.preventDefault();
-        asyncPOST("register", { 'email' : email, 'password' : password })
+        dispatch(tryRegister(email, password));
+    }
+
+    const renderUnknownError = () => {
+        if (status === "INIT" && errors !== undefined && errors !== null && errors === 'unknown_error') {
+            return <div className={"unknownError"}>
+                <Text text={"Something went wrong"}/>
+            </div>
+        }
     }
 
     const renderFormError = error => {
@@ -53,26 +62,32 @@ export default () => {
     }
 
     const renderButtonContent = () => {
-        if (status === 'INIT') {
+        if (status === 'INIT' || status === 'ERROR') {
             return "Sign up"
         }
         else if (status == 'SENT_REGISTRATION_REQUEST') {
-            return <Spinner text={"Signing up"}/>
+            return <Spinner/>
         }
     }
 
-    let formError = getResponseError(data, 'non_field_errors');
+    let formError = getResponseError(errors, 'non_field_errors');
 
-    return <div className={'registrationForm'}>
+    return <div className={'registrationFormComponent'}>
+
         <form onSubmit={handleSubmit} className={'form'} autoComplete="none">
-            <div className={"formTitle"}>
-                <Text>Sign up</Text>
-            </div>
 
-            <InputWithError data={data} id={'email'} type={"text"} onChange={onEmailChange}
+            <Text className={"formTitle"}>Sign up 🤗</Text>
+            <Text className={"formDescription"}>Create new account</Text>
+
+            {renderUnknownError()}
+
+            <InputWithError errors={errors} name="Email address" id={'email'} type={"text"}
+                            onChange={onEmailChange}
                             placeholder={"Enter your email address"}/>
-            <InputWithError data={data} id={'password'} type={'password'} onChange={onPasswordChange}
-                            placeholder={"Enter password"} autoComplete="on"/>
+
+            <InputWithError errors={errors} name="Password" id={'password'} type={'password'}
+                            onChange={onPasswordChange}
+                            placeholder={"Select your password"} autoComplete="on"/>
 
             {renderFormError(formError)}
 
@@ -81,6 +96,8 @@ export default () => {
                     {renderButtonContent()}
                 </Button>
             </div>
+
+            <Link to={'/login'} className={"loginLink"}>Already have an account?</Link>
         </form>
     </div>
 }

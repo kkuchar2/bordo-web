@@ -1,0 +1,16 @@
+@import '../common/responsive';
+@import '../common/constants';
+@import '../common/theme';
+
+.dashboard {
+  background: #006aff;
+  width: 100%;
+  margin-top: $navbar-height;
+  height: calc(100% - #{$navbar-height});
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 30pt;
+}

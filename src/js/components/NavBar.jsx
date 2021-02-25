@@ -1,79 +1,69 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useCallback} from 'react';
 
 import {routes} from "routes/routes.js";
 import {useDispatch, useSelector} from "react-redux";
-import {setClosed, setOpened, switchThemeRedux} from "redux/actions";
-
-import Button from "components/Button.jsx";
-import NavBarItem from "components/NavBarItem.jsx";
-import Switch from "components/Switch.jsx";
-
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faHome} from "@fortawesome/free-solid-svg-icons";
 
-import "componentStyles/NavBar.scss"
+import Button from "components/Button";
+import NavBarItem from "components/NavBarItem";
+import Switch from "components/Switch";
 
-const getAlignedRoutes = alignment => routes.filter(v => v.navbar).filter(v => v.alignment === alignment)
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {selectorAuth, tryLogout} from "../redux/reducers/api/account";
+import {closeNavbar, openNavbar, switchTheme} from "../redux/reducers/application";
 
-const mapRoutes = actionOnClick => {
-    return getAlignedRoutes('left').map((p, k) => {
-        return <NavBarItem onClick={actionOnClick} iconSrc={p.icon} href={p.path} key={k}>{p.title}</NavBarItem>
-    });
-};
+import "componentStyles/NavBar.scss";
 
-const mapRightNavbarRoutes = actionOnClick => {
+const getAlignedRoutes = alignment => routes.filter(v => v.navbar).filter(v => v.alignment === alignment);
+
+const mapRoutes = actionOnClick => getAlignedRoutes('left').map((p, k) => {
+    return <NavBarItem onClick={actionOnClick} iconSrc={p.icon} href={p.path} key={k}>{p.title}</NavBarItem>;
+});
+
+const mapRightNavbarRoutes = (isLoggedIn, actionOnClick) => {
     return getAlignedRoutes('right').map((p, k) => {
-        return <NavBarItem
-            onClick={actionOnClick}
-            iconSrc={p.icon}
-            customClass={p.customClass}
-            iconComponent={p.iconComponent}
-            href={p.path}
-            key={k}>{p.title}
-        </NavBarItem>
+        if (isLoggedIn && !p.anonymousUser || !isLoggedIn && p.anonymousUser) {
+            return <NavBarItem
+                onClick={actionOnClick}
+                iconSrc={p.icon}
+                customClass={p.customClass}
+                customComponent={p.customComponent}
+                iconComponent={p.iconComponent}
+                href={p.path}
+                key={k}>{p.title}
+            </NavBarItem>;
+        }
     });
 };
 
-export default () => {
+function NavBar() {
 
     const [width, setWidth] = useState(0);
     const [navbarAnimClass, setNavbarAnimClass] = useState('');
 
     const dispatch = useDispatch();
-
-    const setNavbarOpened = setOpened(dispatch);
-    const setNavbarClosed = setClosed(dispatch);
+    const authState = useSelector(selectorAuth);
 
     const navbarState = useSelector(state => state.navbar);
     const theme = useSelector(state => state.theme);
 
-    const onLinkClickAction = setNavbarClosed;
-
-    const switchTheme = switchThemeRedux(dispatch);
+    const onLinkClickAction = () => dispatch(openNavbar());
 
     const renderItems = () => <>{mapRoutes(onLinkClickAction)}</>;
 
-    const renderRightNavbarItems = () => <>{mapRightNavbarRoutes(onLinkClickAction)}</>;
+    const renderRightNavbarItems = isLoggedIn => <>{mapRightNavbarRoutes(isLoggedIn, onLinkClickAction)}</>;
 
     useEffect(() => {
         const updateSize = () => setWidth(window.innerWidth);
+        updateSize();
         window.addEventListener('resize', updateSize);
-        return () => window.removeEventListener('resize', updateSize)
+        return () => window.removeEventListener('resize', updateSize);
     }, []);
 
     useEffect(() => {
-        if (width >= 800) {
-            setNavbarAnimClass("");
-            setNavbarClosed();
-        }
-    }, [width])
-
-    useEffect(() => {
-        if (width >= 800) {
-            setNavbarAnimClass("");
-            setNavbarClosed();
-        }
-    }, [navbarState.opened])
+        setNavbarAnimClass("");
+        dispatch(closeNavbar());
+    }, [width]);
 
     useEffect(() => {
         if (window.innerWidth <= 800) {
@@ -81,36 +71,60 @@ export default () => {
         }
     }, [navbarState.opened]);
 
+    const handleLogout = useCallback(() => dispatch(tryLogout()), []);
+
     const hamburgerClick = () => {
         if (navbarState.opened) {
-            setNavbarClosed();
+            closeNavbar();
         }
         else {
             setNavbarOpened();
         }
-    }
+    };
 
-    return (
-        <div className={"navbar"}>
-            <div className="main-buttons">
-                <Button onClick={hamburgerClick} className={"hamburger"}>
-                    <img src={"images/hamburger_icon.png"} alt={""} width={20} height={20}/>
-                </Button>
+    const renderEmail = useCallback(() => {
+        if (authState.isUserLoggedIn) {
+            return <div className={"email"}>{authState.email}</div>;
+        }
+    }, [authState]);
 
-                <NavBarItem className={"homeIcon"} onClick={() => {}} href={'/'}>
-                    <FontAwesomeIcon className={"icon"} icon={faHome}/>
-                </NavBarItem>
-            </div>
+    const renderRightAlignedItems = useCallback(() => {
+        return <div className={"navbar-items"}>
+            {renderEmail()}
+            <div className={"navbarButtons"}>{renderRightNavbarItems(authState.isUserLoggedIn)}</div>
+            ;
+        </div>;
+    }, [authState]);
 
-            <div className={["navbar-group", navbarAnimClass].join(' ')}>
+    const renderNavbarItems = useCallback(() => {
+        if (width > 800 || (width < 800 && navbarState.opened)) {
+            return <div className={["navbar-group", navbarAnimClass].join(' ')}>
                 <div className={"navbar-items"}>{renderItems()}</div>
 
                 <div className={["right-aligned", navbarAnimClass].join(' ')}>
-                    <div className={"navbar-items"}>{renderRightNavbarItems()}</div>
+                    {renderRightAlignedItems()}
                 </div>
-            </div>
+            </div>;
+        }
+    }, [navbarState, navbarAnimClass, width]);
 
-            <Switch className={"theme-switch"} value={theme.theme === 'theme-dark'} onValueChange={switchTheme}/>
+    return <div className={"navbar"}>
+        <div className="main-buttons">
+            <NavBarItem className={"home"} onClick={() => {
+            }} href={'/'}>
+                <FontAwesomeIcon className={"icon"} icon={faHome}/>
+            </NavBarItem>
+
+            <Button onClick={hamburgerClick} className={"hamburger"}>
+                <img src={"images/hamburger_icon.png"} alt={""} width={20} height={20}/>
+            </Button>
         </div>
-    );
+
+        {renderNavbarItems()}
+
+        <Switch className={"theme-switch"} value={theme.theme === 'theme-dark'}
+                onValueChange={() => dispatch(switchTheme())}/>
+    </div>;
 }
+
+export default NavBar;

@@ -36,7 +36,6 @@
       margin-right: 10px;
       @include theme-aware('color', 'select-text-color');
       font-size: 18px;
-      font-family: "Rubik", sans-serif;
       height: 100%;
       display: flex;
       align-items: center;
@@ -48,7 +47,6 @@
         font-weight: 700;
         position: absolute;
         left: 20px;
-        font-family: "Rubik", sans-serif;
       }
     }
 
@@ -69,7 +67,6 @@
     top: 10px;
     max-height: 400px;
     overflow: scroll;
-    @include timed_animation(fadein, 0.2s);
     margin: 0 auto;
     border-radius: 5px;
 
