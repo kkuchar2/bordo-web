@@ -1,6 +1,5 @@
 import React, {useEffect, useRef, useState, useCallback} from "react";
 import useMouse from '@react-hook/mouse-position';
-import TWEEN from "@tweenjs/tween.js";
 import {Raycaster} from "three";
 import {useEffectOnTrue} from "util/util.js";
 import classNames from 'classnames';
@@ -13,20 +12,20 @@ import {
     createScene,
     enableTransparency,
     removeChildrenFromScene,
-    tweenScale, updateCamera
+    updateCamera
 } from "util/GLUtil.js";
 
 import "componentStyles/GridView.scss";
 
-const defaultMaterial = createMaterial("#404040", 0.2);
-const startPointMaterial = createMaterial("#59ff00", 1);
+const defaultMaterial = createMaterial("#696969", 0.2);
+const startPointMaterial = createMaterial("#52ac00", 1);
 const endPointMaterial = createMaterial("#ff0000", 1);
-const obstacleMaterial = createMaterial("#3996ff", 1);
+const obstacleMaterial = createMaterial("#222222", 1);
 const visitedMaterialStart = createMaterial("#81f879", 1);
-const visitedMaterialEnd = createMaterial("#222222", 1);
+const visitedMaterialEnd = createMaterial("#175eae", 1);
 const pathMaterialStart = createMaterial("#ffffff", 1);
-const pathMaterialEnd = createMaterial("#d4d4d4", 1);
-const lineMaterial = createMaterial("#5f5f5f", 1);
+const pathMaterialEnd = createMaterial("#d79f00", 1);
+const lineMaterial = createMaterial("#262626", 1);
 const highlightMaterial = createMaterial("#9f9f9f", 0.5);
 
 function GridView(props) {
@@ -352,7 +351,6 @@ function GridView(props) {
     const renderFrame = useCallback(() => {
         raycast();
         renderer.render(scene, camera);
-        TWEEN.update();
         frameId.current = window?.requestAnimationFrame(renderFrame);
     }, [camera]);
 
@@ -362,7 +360,6 @@ function GridView(props) {
             visitedIndices.current.push(visited);
 
             if (!cell.userData.isStart && !cell.userData.isEnd) {
-                tweenScale(cell, 200);
                 cell.material = visitedMaterialEnd.clone();
             }
         }
@@ -374,7 +371,6 @@ function GridView(props) {
                 const cell = scene.children[i];
 
                 if (pathIndices.current.length === 0 && path.includes(i) && !cell.userData.isStart && !cell.userData.isEnd) {
-                    tweenScale(cell, 200);
                     cell.material = pathMaterialEnd.clone();
                     cell.position.z = -3;
                     cell.userData.isPath = true;

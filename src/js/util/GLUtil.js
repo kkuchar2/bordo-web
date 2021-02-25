@@ -103,7 +103,7 @@ export const createCells = (scene, defaultMaterial, startMaterial, endMaterial, 
 };
 
 export const createLines = (scene, material, cellSize, cols, rows, width, height) => {
-    const thickness = 1;
+    const thickness = 2;
     const geometry = new createPlaneGeometry(thickness, height);
     const geometry2 = new createPlaneGeometry(width, thickness);
 
