@@ -11,6 +11,8 @@ import "styles/pages/PathfindingPage.scss";
 
 const pathfindingAlgorithms = ["aStar"];
 
+const cellSize = 25;
+
 function PathfindingPage() {
 
     const mount = useRef(null);
@@ -18,14 +20,12 @@ function PathfindingPage() {
     const [obstacles, setObstacles] = useState([]);
 
     const dispatch = useDispatch();
-    const [data, setData] = useState([]);
     const [rows, setRows] = useState(0);
     const [cols, setCols] = useState(0);
     const [width, setWidth] = useState(0);
     const [height, setHeight] = useState(0);
     const [gridWith, setGridWidth] = useState(0);
     const [gridHeight, setGridHeight] = useState(0);
-    const [cellSize, setCellSize] = useState(25);
     const [visited, setVisited] = useState(-1);
 
     const [path, setPath] = useState([]);
@@ -40,7 +40,6 @@ function PathfindingPage() {
     const messageHandlersMap = {
         "onPathFindUpdate": payload => onPathFindUpdate(payload),
         "onObstacleDataReceived": payload => onObstacleDataReceived(payload),
-        "onPathDataInit": payload => onPathDataInit(payload),
         "pathfindingFinished": payload => onPathFindingFinished(payload)
     };
 
@@ -85,8 +84,6 @@ function PathfindingPage() {
 
     const onPathFindUpdate = useCallback(payload => setVisited(payload.visited), []);
 
-    const onPathDataInit = useCallback(payload => setData(payload.data), []);
-
     const onObstacleDataReceived = useCallback(payload => setObstacles(payload.obstacles), []);
 
     const onFindPathButtonPressed = useCallback(() => {
@@ -103,14 +100,15 @@ function PathfindingPage() {
             sendMessage(worker, "selectCells", {indices: obstacles});
             sendMessage(worker, "findPath", {algorithm: pathfindingAlgorithms[selectedAlgorithm]});
         }
-    }, [worker, foundPath, obstacles]);
+    }, [worker, foundPath, obstacles, findingPath]);
 
     const onPathFindingFinished = useCallback((payload) => {
         setPath(payload.path);
         setFindingPath(false);
         setFoundPath(payload.foundPath);
-        setData(payload.data);
         setVisited(payload.visited);
+        setPath([]);
+        setVisited(-1);
     }, []);
 
     const onStopButtonPressed = useCallback(() => sendMessage(worker, "stop"), [worker]);
@@ -119,6 +117,8 @@ function PathfindingPage() {
         setObstacles([]);
         sendMessage(worker, "clearBoard");
     }, [worker]);
+
+    const onEraserToggled = useCallback(v => {}, [worker]);
 
     const getPlayPauseIcon = useCallback(() => {
         if (!findingPath || paused) {
@@ -139,7 +139,7 @@ function PathfindingPage() {
         dispatch(onMousePress());
     }, []);
 
-    const onCellsSelected = useCallback(indices => setObstacles(obstacles => [...obstacles, ...indices]), [obstacles]);
+    const onObstaclesSelected = useCallback(indices => setObstacles(obstacles => [...obstacles, ...indices]), [obstacles]);
 
     const onStartChange = useCallback(setStartIndex, [worker]);
 
@@ -148,8 +148,6 @@ function PathfindingPage() {
     useEffectWithNonNull(() => sendMessage(worker, "setStart", {id: startIndex}), [startIndex, worker]);
 
     useEffectWithNonNull(() => sendMessage(worker, "setEnd", {id: endIndex}), [endIndex, worker]);
-
-    const onEraserToggled = useCallback(v => {}, [worker]);
 
     return <div ref={mount} className={"PathfindingPage"} onMouseUp={onMouseUp} onMouseDown={onMouseDown}>
         <div className={"buttonsSection"}>
@@ -183,18 +181,17 @@ function PathfindingPage() {
         <GridView
             width={gridWith}
             height={gridHeight}
-            onCellsSelected={onCellsSelected}
             cellSize={cellSize}
             cols={cols}
             rows={rows}
-            data={data}
             visited={visited}
             path={path}
             obstacles={obstacles}
-            onStartChange={onStartChange}
-            onEndChange={onEndChange}
             startIdx={startIndex}
-            endIdx={endIndex} />
+            endIdx={endIndex}
+            onObstaclesSelected={onObstaclesSelected}
+            onStartChange={onStartChange}
+            onEndChange={onEndChange}/>
     </div>;
 }
 

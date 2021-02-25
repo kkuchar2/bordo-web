@@ -43,6 +43,8 @@ export const AStarPathfinder = async () => {
     let start = data[pathFindingState.startIdx];
     let goal = data[pathFindingState.endIdx];
 
+    pathFindingState.path = [];
+    pathFindingState.all_visited = [];
     pathFindingState.to_visit = [start.id];
 
     let cameFrom = {};

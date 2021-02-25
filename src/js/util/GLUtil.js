@@ -57,8 +57,8 @@ export const createPlaneGeometry = (width, height) => new PlaneGeometry(width, h
 
 export const createScene = () => new Scene();
 
-export const createCells = (scene, defaultMaterial, startMaterial, endMaterial, cellSize, cols, rows, matrix, startIdx, endIdx) => {
-    const size = matrix.length;
+export const createCells = (scene, defaultMaterial, startMaterial, endMaterial, cellSize, cols, rows, startIdx, endIdx) => {
+    const size = cols * rows;
 
     if (size === 0) {
         return null;
@@ -66,7 +66,7 @@ export const createCells = (scene, defaultMaterial, startMaterial, endMaterial, 
 
     let geometry = new createPlaneGeometry(cellSize, cellSize);
 
-    for (let i = 0; i < matrix.length; i++) {
+    for (let i = 0; i < size; i++) {
 
         let material = defaultMaterial.clone();
 
@@ -101,20 +101,6 @@ export const createCells = (scene, defaultMaterial, startMaterial, endMaterial, 
 
     return geometry;
 };
-
-class DeactivateableRaycastMesh extends Mesh {
-
-    constructor(...args) {
-        super(...args);
-        this.raycastEnabled = true;
-    }
-
-    raycast(...args) {
-        if (!this.raycastEnabled) return;
-        super.raycast(...args);
-    }
-
-}
 
 export const createLines = (scene, material, cellSize, cols, rows, width, height) => {
     const thickness = 1;
@@ -160,8 +146,6 @@ export const createLines = (scene, material, cellSize, cols, rows, width, height
 };
 
 export const createCircle = (scene, material, radius, position) => {
-    console.log("AMaterial:");
-    console.log(material);
     let geometry = new CircleGeometry(radius, 32);
     const circle = new Mesh(geometry, material);
     circle.position.x = position[0];

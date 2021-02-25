@@ -68,30 +68,23 @@ export const notifyPathFindUpdate = () => {
     }, false, 1);
 };
 
-export const notifyDataInitForPath = () => {
-    notify("onPathDataInit", {
-        "data": pathFindingState.data,
-        "cols": pathFindingState.cols,
-        "rows": pathFindingState.rows,
-        "obstacles": pathFindingState.obstacles
-    }, false, 1);
-};
-
 export const notifyObstacles = (data = pathFindingState.obstacles) => {
     notify("onObstacleDataReceived", { "obstacles": data }, false, 1);
 };
 
 export const onSortMethodExit = () => postMessage({type: "sortFinished", payload: {"sorted": !sortState.abort}});
 
-export const onPathfindingFinished = () => postMessage({
-    type: "pathfindingFinished",
-    payload: {
-        "foundPath": pathFindingState.found_path && !pathFindingState.abort,
-        "data": pathFindingState.data,
-        "visited": pathFindingState.new_visited,
-        "path": pathFindingState.path
-    }
-});
+export const onPathfindingFinished = () => {
+    postMessage({
+        type: "pathfindingFinished",
+        payload: {
+            "foundPath": pathFindingState.found_path && !pathFindingState.abort,
+            "data": pathFindingState.data,
+            "visited": pathFindingState.new_visited,
+            "path": pathFindingState.path
+        }
+    });
+};
 
 export const getSortMethod = (algorithm) => sortAlgorithmMap[algorithm];
 

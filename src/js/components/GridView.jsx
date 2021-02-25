@@ -22,9 +22,9 @@ const defaultMaterial = createMaterial("#404040", 0.2);
 const startPointMaterial = createMaterial("#59ff00", 1);
 const endPointMaterial = createMaterial("#ff0000", 1);
 const obstacleMaterial = createMaterial("#3996ff", 1);
-const visitedMaterialStart = createMaterial("#fff100", 1);
+const visitedMaterialStart = createMaterial("#81f879", 1);
 const visitedMaterialEnd = createMaterial("#222222", 1);
-const pathMaterialStart = createMaterial("#ff00f2", 1);
+const pathMaterialStart = createMaterial("#ffffff", 1);
 const pathMaterialEnd = createMaterial("#d4d4d4", 1);
 const lineMaterial = createMaterial("#5f5f5f", 1);
 
@@ -52,7 +52,7 @@ function GridView(props) {
     const [cellsCreated, setCellsCreated] = useState(false);
     const [lineCount, setLineCount] = useState(0);
 
-    const { width, height, onCellsSelected, cellSize, cols, rows, data, visited, path, obstacles, onStartChange, onEndChange, startIdx, endIdx } = props;
+    const { width, height, cellSize, cols, rows, visited, path, obstacles, startIdx, endIdx, onObstaclesSelected, onStartChange, onEndChange } = props;
 
     useEffect(() => {
         setCamera(createOrthoCamera(width, height, 1, 1000, 0));
@@ -94,11 +94,6 @@ function GridView(props) {
     }, [mouseFetcher]);
 
     useEffectOnTrue(initialized, () => {
-
-        if (data.length === 0) {
-            return;
-        }
-
         if (cellsCreated) {
             const cellsCount = scene.children.length - lineCount;
             const expectedCellsCount = cols * rows;
@@ -116,12 +111,11 @@ function GridView(props) {
 
         updateCamera(camera, 0, width, height, 0);
         renderer.setSize(width, height);
-    }, [obstacles, cols, rows, data, visited, path, width, height, cellsCreated, lineCount]);
+    }, [obstacles, cols, rows, visited, path, width, height, cellsCreated, lineCount]);
 
     const createInitialScene = () => {
-        console.log("Creating initial scene");
         removeChildrenFromScene(scene);
-        createCells(scene, defaultMaterial, startPointMaterial, endPointMaterial, cellSize, cols, rows, data, startIdx, endIdx);
+        createCells(scene, defaultMaterial, startPointMaterial, endPointMaterial, cellSize, cols, rows, startIdx, endIdx);
         setLineCount(createLines(scene, lineMaterial, cellSize, cols, rows, width, height));
         setCellsCreated(true);
     };
@@ -153,7 +147,7 @@ function GridView(props) {
         // const indicesToSelect = [id, ...calculateCellsInCircle(circleX, circleY, 1, scene.children)];
         const indicesToSelect = [id];
 
-        onCellsSelected(indicesToSelect);
+        onObstaclesSelected(indicesToSelect);
 
         for (let j = 0; j < indicesToSelect.length; j++) {
             const obj = scene.children[indicesToSelect[j]];

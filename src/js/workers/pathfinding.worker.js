@@ -1,14 +1,11 @@
 import {
-    getPathfindingMethod, notifyObstacles, notifyDataInitForPath,
-    onPathfindingFinished,
+    getPathfindingMethod, notifyObstacles, onPathfindingFinished,
     pathFindingState,
 } from "workers/worker.utils.js";
 
 /* -------------- Main message handler ------------------ */
 
-self.onmessage = message => {
-    requestMap[message.data.type](message.data.payload);
-};
+self.onmessage = message => requestMap[message.data.type](message.data.payload);
 
 /* ------------------------------------------------------ */
 
@@ -73,10 +70,6 @@ const initDataRequest = m => {
     pathFindingState.startIdx = m.startIndex;
     pathFindingState.endIdx = m.endIndex;
     pathFindingState.data = grid;
-
-    console.log(pathFindingState);
-
-    notifyDataInitForPath();
 };
 
 const clearBoardRequest = m => {
