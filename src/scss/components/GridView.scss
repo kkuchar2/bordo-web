@@ -17,12 +17,10 @@
 
   .flag {
 
-    background: #2d2d2d66;
-
+    background: rgba(0, 0, 0, 0.3);
     position: absolute;
-    color: white;
+    color: #b5b5b5;
     display: flex;
-
     justify-content: center;
     padding: 10px;
     visibility: hidden;

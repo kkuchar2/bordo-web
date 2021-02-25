@@ -443,7 +443,7 @@ function GridView(props) {
             return {};
         }
 
-        return {top: rect.top - 100 + mouseFetcher.y, left: rect.left + mouseFetcher.x - 25 + 30};
+        return {top: rect.top - 130 + mouseFetcher.y, left: rect.left + mouseFetcher.x - 25 + 40};
     };
 
     return <div ref={mount} style={{width: width, height: height}} onMouseLeave={onMouseLeave} onMouseDown={onMouseDown}
