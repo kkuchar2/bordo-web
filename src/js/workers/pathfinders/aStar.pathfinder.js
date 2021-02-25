@@ -1,4 +1,4 @@
-import {notifyPathFindUpdate, pathFindingState} from "workers/worker.utils.js";
+import {CheckPathfindingPause, notifyPathFindUpdate, pathFindingState} from "workers/worker.utils.js";
 
 const removeFromArray = (arr, v) => {
     for (let i = arr.length - 1; i >= 0; i--) {
@@ -66,6 +66,8 @@ export const AStarPathfinder = async () => {
     let cnt = 0;
 
     while (pathFindingState.to_visit.length > 0) {
+
+        await CheckPathfindingPause();
 
         while (new Date().getTime() - previousTime < 16) {}
 

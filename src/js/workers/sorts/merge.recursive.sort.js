@@ -1,4 +1,4 @@
-import {CheckPause, notifySortUpdate, sortState} from "workers/worker.utils.js";
+import {CheckSortPause, notifySortUpdate, sortState} from "workers/worker.utils.js";
 
 const merge = async (start, mid, end) => {
     if (sortState.abort) {
@@ -35,7 +35,7 @@ const merge = async (start, mid, end) => {
         notifySortUpdate();
     }
 
-    await CheckPause();
+    await CheckSortPause();
 };
 
 const mergeSort = async (start, end) => {

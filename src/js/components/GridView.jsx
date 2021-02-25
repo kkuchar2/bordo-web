@@ -13,7 +13,7 @@ import {
     createScene,
     enableTransparency,
     removeChildrenFromScene,
-    tweenMaterial, tweenScale, updateCamera
+    tweenScale, updateCamera
 } from "util/GLUtil.js";
 
 import "componentStyles/GridView.scss";
@@ -27,6 +27,7 @@ const visitedMaterialEnd = createMaterial("#222222", 1);
 const pathMaterialStart = createMaterial("#ffffff", 1);
 const pathMaterialEnd = createMaterial("#d4d4d4", 1);
 const lineMaterial = createMaterial("#5f5f5f", 1);
+const highlightMaterial = createMaterial("#9f9f9f", 0.5);
 
 function GridView(props) {
 
@@ -35,13 +36,15 @@ function GridView(props) {
     const mouseFetcher = useMouse(mount, {enterDelay: 100, leaveDelay: 100, fps: 60});
     const mouseData = useRef({x: -1, y: -1, pressed: false});
 
-    const userActions = useRef({
+    const pageState = useRef({
         movingStart: false,
         movingEnd: false,
         overStart: false,
         overEnd: false,
         startIndex: -1,
         endIndex: -1,
+        lastHoveredIndex: -1,
+        findingPath: false
     });
 
     const [renderer, setRenderer] = useState(null);
@@ -51,8 +54,26 @@ function GridView(props) {
     const [raycaster, setRaycaster] = useState(null);
     const [cellsCreated, setCellsCreated] = useState(false);
     const [lineCount, setLineCount] = useState(0);
+    const [rect, setRect] = useState(null);
+    const pathIndices = useRef([]);
+    const visitedIndices = useRef([]);
 
-    const { width, height, cellSize, cols, rows, visited, path, obstacles, startIdx, endIdx, onObstaclesSelected, onStartChange, onEndChange } = props;
+    const {
+        width,
+        height,
+        cellSize,
+        cols,
+        rows,
+        visited,
+        path,
+        obstacles,
+        startIdx,
+        endIdx,
+        findingPath,
+        onObstaclesSelected,
+        onStartChange,
+        onEndChange
+    } = props;
 
     useEffect(() => {
         setCamera(createOrthoCamera(width, height, 1, 1000, 0));
@@ -70,12 +91,18 @@ function GridView(props) {
         };
     }, []);
 
+    useEffect(() => pageState.current.findingPath = findingPath, [findingPath]);
+
     useEffect(() => {
         if (!initialized) {
             return;
         }
         enableTransparency(renderer);
         mount.current?.appendChild(renderer.domElement);
+
+        const r = mount.current.getBoundingClientRect();
+        setRect(r);
+
         requestAnimationFrame(renderFrame);
         return () => dispose();
     }, [initialized]);
@@ -85,13 +112,19 @@ function GridView(props) {
             return;
         }
 
-        if (mouseFetcher.x < 1 || mouseFetcher.y  < 1) {
+        if (mouseFetcher.x < 1 || mouseFetcher.y < 1) {
+            resetLastHoveredCell();
             return;
         }
 
         mouseData.current.x = (mouseFetcher.x / width) * 2 - 1;
         mouseData.current.y = -(mouseFetcher.y / height) * 2 + 1;
     }, [mouseFetcher]);
+
+    useEffect(() => {
+        const r = mount.current.getBoundingClientRect();
+        setRect(r);
+    }, [width, height]);
 
     useEffectOnTrue(initialized, () => {
         if (cellsCreated) {
@@ -156,7 +189,7 @@ function GridView(props) {
                 continue;
             }
             obj.userData.isObstacle = true;
-            obj.material = obstacleMaterial.clone();
+            setCellMaterial(obj, obstacleMaterial.clone());
         }
     }, [scene]);
 
@@ -166,7 +199,7 @@ function GridView(props) {
         }
 
         const cell = intersectedChildren[0].object;
-        const actions = userActions.current;
+        const actions = pageState.current;
         const userData = cell.userData;
         const isStart = userData.isStart;
         const isEnd = userData.isEnd;
@@ -185,7 +218,7 @@ function GridView(props) {
 
     const moveStartCell = useCallback((cell) => {
 
-        const actions = userActions.current;
+        const actions = pageState.current;
         const isStart = cell.userData.isStart;
         const isEnd = cell.userData.isEnd;
         const isObstacle = cell.userData.isObstacle;
@@ -194,14 +227,14 @@ function GridView(props) {
             const nextIndex = cell.userData.id;
 
             // Disable old cell
-            const oldStartCell = scene.children[userActions.current.startIndex];
-            oldStartCell.material = defaultMaterial.clone();
+            const oldStartCell = scene.children[pageState.current.startIndex];
+            setCellMaterial(oldStartCell, defaultMaterial.clone());
             oldStartCell.userData.isStart = false;
             oldStartCell.position.z = -3;
 
             // Enable new cell
             const newStartCell = scene.children[nextIndex];
-            newStartCell.material = startPointMaterial.clone();
+            setCellMaterial(newStartCell, startPointMaterial.clone());
             newStartCell.userData.isStart = true;
             newStartCell.position.z = -3;
 
@@ -211,7 +244,7 @@ function GridView(props) {
     });
 
     const moveEndCell = useCallback((cell) => {
-        const actions = userActions.current;
+        const actions = pageState.current;
         const isStart = cell.userData.isStart;
         const isEnd = cell.userData.isEnd;
         const isObstacle = cell.userData.isObstacle;
@@ -220,14 +253,14 @@ function GridView(props) {
             const nextIndex = cell.userData.id;
 
             // Disable old cell
-            const oldEndCell = scene.children[userActions.current.endIndex];
-            oldEndCell.material = defaultMaterial.clone();
+            const oldEndCell = scene.children[pageState.current.endIndex];
+            setCellMaterial(oldEndCell, defaultMaterial.clone());
             oldEndCell.userData.isEnd = false;
             oldEndCell.position.z = -3;
 
             // Enable new cell
             const newEndCell = scene.children[nextIndex];
-            newEndCell.material = endPointMaterial.clone();
+            setCellMaterial(newEndCell, endPointMaterial.clone());
             newEndCell.userData.isEnd = true;
             newEndCell.position.z = -3;
 
@@ -237,12 +270,37 @@ function GridView(props) {
     });
 
     const raycast = useCallback(() => {
-        const actions = userActions.current;
+        if (pageState.current.findingPath) {
+            return;
+        }
+
+        const actions = pageState.current;
         const mouseInfo = mouseData.current;
 
         const movingStart = actions.movingStart;
         const movingEnd = actions.movingEnd;
         const isMouseDown = mouseInfo.pressed;
+
+        if (isMouseDown) {
+            for (let i = 0; i < scene.children.length; i++) {
+                if (pathIndices.current.includes(i)) {
+                    const cell = scene.children[i];
+                    cell.userData.isPath = false;
+                    setCellMaterial(cell, defaultMaterial.clone());
+                }
+
+                if (visitedIndices.current.length > 0) {
+                    if (visitedIndices.current.includes(i)) {
+                        const cell = scene.children[i];
+                        if (!cell.userData.isStart) {
+                            setCellMaterial(cell, defaultMaterial.clone());
+                        }
+                    }
+                }
+            }
+            visitedIndices.current = [];
+            pathIndices.current = [];
+        }
 
         raycaster.setFromCamera(mouseInfo, camera);
 
@@ -260,14 +318,36 @@ function GridView(props) {
         }
         else {
             if (isMouseDown) {
+                actions.lastHoveredIndex = -1;
                 selectObstacles(intersectedChildren);
             }
             else {
+
+                const cell = intersectedChildren[0].object;
+                const cellInfo = cell.userData;
+
+                if (cellInfo.isStart || cellInfo.isEnd) {
+                    resetLastHoveredCell();
+                }
+
+                if (!cellInfo.isStart && !cellInfo.isEnd && !cellInfo.isObstacle && !cellInfo.isPath) {
+                    resetLastHoveredCell();
+                    cell.material = highlightMaterial.clone();
+                    actions.lastHoveredIndex = cellInfo.id;
+                }
                 detectOverStart(intersectedChildren);
             }
         }
 
-    }, [camera]);
+    }, [camera, findingPath]);
+
+    const resetLastHoveredCell = useCallback(() => {
+        const lastHoveredIndex = pageState.current.lastHoveredIndex;
+        if (lastHoveredIndex === -1) {
+            return;
+        }
+        scene.children[lastHoveredIndex].material = defaultMaterial.clone();
+    }, [scene]);
 
     const renderFrame = useCallback(() => {
         raycast();
@@ -277,42 +357,44 @@ function GridView(props) {
     }, [camera]);
 
     const updateCells = useCallback(() => {
+        if (visited !== -1) {
+            const cell = scene.children[visited];
+            visitedIndices.current.push(visited);
 
-        if (visited === -1) {
-            return;
-        }
-
-        if (path === undefined) {
-            return;
-        }
-
-        const cell = scene.children[visited];
-
-        if (!cell.userData.isStart && !cell.userData.isEnd) {
-            tweenScale(cell, 200);
-            tweenMaterial(cell, visitedMaterialStart, 200, () => tweenMaterial(cell, visitedMaterialEnd, 200));
-        }
-
-        for (let i = 0; i < scene.children.length; i++) {
-            const cell = scene.children[i];
-
-            if (path.includes(i) && !cell.userData.isStart && !cell.userData.isEnd) {
-                tweenScale(cell, 600);
-                tweenMaterial(cell, pathMaterialStart, 600, () => tweenMaterial(cell, pathMaterialEnd, 600));
-                cell.position.z = -3;
+            if (!cell.userData.isStart && !cell.userData.isEnd) {
+                tweenScale(cell, 200);
+                cell.material = visitedMaterialEnd.clone();
             }
         }
 
-    }, [scene, visited, path]);
+        if (path.length > 0) {
+            const nextPathIndices = [];
+
+            for (let i = 0; i < scene.children.length; i++) {
+                const cell = scene.children[i];
+
+                if (pathIndices.current.length === 0 && path.includes(i) && !cell.userData.isStart && !cell.userData.isEnd) {
+                    tweenScale(cell, 200);
+                    cell.material = pathMaterialEnd.clone();
+                    cell.position.z = -3;
+                    cell.userData.isPath = true;
+                    nextPathIndices.push(i);
+                }
+            }
+            pathIndices.current = nextPathIndices;
+        }
+    }, [scene, visited, path, pathIndices]);
+
+    const setCellMaterial = (cell, material) => cell.material = material;
 
     const onMouseDown = useCallback(() => {
         mouseData.current.pressed = true;
 
-        if (userActions.current.overStart && !userActions.current.movingStart) {
-            userActions.current.movingStart = true;
+        if (pageState.current.overStart && !pageState.current.movingStart) {
+            pageState.current.movingStart = true;
         }
-        else if (userActions.current.overEnd && !userActions.current.movingEnd) {
-            userActions.current.movingEnd = true;
+        else if (pageState.current.overEnd && !pageState.current.movingEnd) {
+            pageState.current.movingEnd = true;
         }
     }, []);
 
@@ -324,23 +406,58 @@ function GridView(props) {
     const onMouseUp = useCallback(() => {
         mouseData.current.pressed = false;
 
-        if (userActions.current.movingStart) {
-            userActions.current.movingStart = false;
+        if (pageState.current.movingStart) {
+            pageState.current.movingStart = false;
         }
-        else if (userActions.current.movingEnd) {
-            userActions.current.movingEnd = false;
+        else if (pageState.current.movingEnd) {
+            pageState.current.movingEnd = false;
         }
     }, []);
 
     const getClassName = useCallback(() => {
         return classNames({
             "gridView": true,
-            "isOverStart": userActions.current.overStart,
-            "isOverEnd": userActions.current.overEnd
+            "isOverStart": pageState.current.overStart,
+            "isOverEnd": pageState.current.overEnd
         });
     }, []);
 
-    return <div ref={mount} style={{width: width, height: height}} onMouseLeave={onMouseLeave} onMouseDown={onMouseDown} className={getClassName()}/>;
+    const getText = () => {
+        const overStart = pageState.current.overStart;
+        const overEnd = pageState.current.overEnd;
+        if (overStart) {
+            return "Start point";
+        }
+        else if (overEnd) {
+            return "Goal";
+        }
+
+        return "";
+    };
+
+    const getFlagClassName = () => {
+        return classNames({
+            "flag": true,
+            "visible": pageState.current.overStart || pageState.current.overEnd
+        });
+    };
+
+    const getFlagStyle = () => {
+        if (rect === null) {
+            return {};
+        }
+
+        return {top: rect.top - 100 + mouseFetcher.y, left: rect.left + mouseFetcher.x - 25 + 30};
+    };
+
+    return <div ref={mount} style={{width: width, height: height}} onMouseLeave={onMouseLeave} onMouseDown={onMouseDown}
+                className={getClassName()}>
+        <div className={getFlagClassName()}
+             style={getFlagStyle()}>
+            <div>{getText()}</div>
+            <div className={"description"}>Drag and drop to move</div>
+        </div>
+    </div>;
 }
 
 export default GridView;

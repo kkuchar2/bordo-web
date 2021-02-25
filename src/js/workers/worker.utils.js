@@ -102,9 +102,16 @@ export const PromiseTimeout = delay => {
     return new Promise((resolve, reject) => setTimeout(resolve, delay));
 };
 
-export const CheckPause = async (delay = 0) => {
+export const CheckSortPause = async (delay = 0) => {
     await PromiseTimeout(delay);
     while (sortState.pause) {
+        await PromiseTimeout(delay);
+    }
+};
+
+export const CheckPathfindingPause = async (delay = 0) => {
+    await PromiseTimeout(delay);
+    while (pathFindingState.pause) {
         await PromiseTimeout(delay);
     }
 };

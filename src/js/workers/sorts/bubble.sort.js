@@ -1,4 +1,4 @@
-import {CheckPause, notifySortUpdate, sortState} from "workers/worker.utils.js";
+import {CheckSortPause, notifySortUpdate, sortState} from "workers/worker.utils.js";
 
 export const bubbleSort = async () => {
     let len = sortState.data.length;
@@ -6,7 +6,7 @@ export const bubbleSort = async () => {
     for (let i = 0; i < len; i++) {
 
         for (let j = 0; j < len; j++) {
-            await CheckPause(sortState.pause);
+            await CheckSortPause(sortState.pause);
 
             if (sortState.abort) {
                 return;

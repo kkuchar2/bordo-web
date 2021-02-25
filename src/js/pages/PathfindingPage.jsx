@@ -92,9 +92,11 @@ function PathfindingPage() {
         }
 
         if (findingPath) {
+            setPaused(true);
             sendMessage(worker, "pause", {});
         }
         else {
+            setPaused(false);
             setFindingPath(true);
 
             sendMessage(worker, "selectCells", {indices: obstacles});
@@ -107,7 +109,6 @@ function PathfindingPage() {
         setFindingPath(false);
         setFoundPath(payload.foundPath);
         setVisited(payload.visited);
-        setPath([]);
         setVisited(-1);
     }, []);
 
@@ -139,11 +140,20 @@ function PathfindingPage() {
         dispatch(onMousePress());
     }, []);
 
-    const onObstaclesSelected = useCallback(indices => setObstacles(obstacles => [...obstacles, ...indices]), [obstacles]);
+    const onObstaclesSelected = useCallback(indices => {
+        setObstacles(obstacles => [...obstacles, ...indices]);
+        setPath([]);
+    }, [obstacles]);
 
-    const onStartChange = useCallback(setStartIndex, [worker]);
+    const onStartChange = useCallback(idx => {
+        setStartIndex(idx);
+        setPath([]);
+    }, [worker]);
 
-    const onEndChange = useCallback(setEndIndex, [worker]);
+    const onEndChange = useCallback(idx => {
+        setEndIndex(idx);
+        setPath([]);
+    }, [worker]);
 
     useEffectWithNonNull(() => sendMessage(worker, "setStart", {id: startIndex}), [startIndex, worker]);
 
@@ -189,6 +199,7 @@ function PathfindingPage() {
             obstacles={obstacles}
             startIdx={startIndex}
             endIdx={endIndex}
+            findingPath={findingPath}
             onObstaclesSelected={onObstaclesSelected}
             onStartChange={onStartChange}
             onEndChange={onEndChange}/>

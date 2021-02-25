@@ -15,7 +15,8 @@ const requestMap = {
     "findPath": e => onFindPathRequest(e),
     "selectCells": e => onCellsSelected(e),
     "setStart": e => setStart(e),
-    "setEnd": e => setEnd(e)
+    "setEnd": e => setEnd(e),
+    "pause": e => onPauseRequest(e)
 };
 
 const onCellsSelected = (m) => {
