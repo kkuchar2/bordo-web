@@ -98,6 +98,7 @@ function PathfindingPage() {
         else {
             setPaused(false);
             setFindingPath(true);
+            setPath([]);
 
             sendMessage(worker, "selectCells", {indices: obstacles});
             sendMessage(worker, "findPath", {algorithm: pathfindingAlgorithms[selectedAlgorithm]});
