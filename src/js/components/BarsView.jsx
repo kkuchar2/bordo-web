@@ -3,8 +3,7 @@ import React, {useEffect, useRef, useState, useCallback} from "react";
 import {getParentHeight, getParentWidth, useEffectOnTrue} from "util/util.js";
 
 import {
-    createBars, createCircle,
-    createMaterial,
+    createBars, createMaterial,
     createOrthoCamera,
     createPlaneGeometry,
     createRenderer,
@@ -127,11 +126,11 @@ function BarsView(props) {
         const updateBars = () => {
             const barWidth = width / props.samples;
             const barHeight = height;
-            const geometry = createPlaneGeometry(barWidth, barHeight);
+            const geom = createPlaneGeometry(barWidth, barHeight);
 
             for (let i = 0; i < props.samples; i++) {
                 const bar = scene.children[i];
-                bar.geometry = geometry;
+                bar.geometry = geom;
                 bar.scale.y = (props.data[i] / props.maxValue) * 0.8;
                 bar.position.x = barWidth / 2 + barWidth * i;
                 bar.position.y = barHeight / 2;
