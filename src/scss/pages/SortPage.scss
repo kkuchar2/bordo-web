@@ -3,170 +3,182 @@
 @import '../common/theme';
 @import '../common/fonts';
 
-
 .sortPage {
   height: 100%;
   display: flex;
-  flex-direction: column;
-  background: #312e2b;
+  align-items: center;
+  justify-content: center;
 
   @media (max-height: 400px) {
     flex-direction: row;
   }
 
-  .left {
-    margin-top: $navbar-height;
-    min-height: 100px;
+  .window {
+    margin-left: 50px;
+    margin-right: 50px;
     display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    box-sizing: border-box;
+    width: 100%;
+    height: 80%;
+    background: #2a2828;
+    border-radius: 6px;
+    box-shadow: 20px 20px 20px 0 rgba(0,0,0,.4);
 
-    @media (max-height: 400px) {
-      justify-content: unset;
-    }
-
-    .actions {
-      padding: 10px;
-      flex-wrap: wrap;
+    .left {
+      border-top-left-radius: 6px;
+      border-bottom-left-radius: 6px;
+      min-height: 100px;
       display: flex;
-      align-items: center;
-      justify-content: center;
+      flex-direction: row;
       box-sizing: border-box;
+      background: #1f1f1f;
 
-
-      > * {
-        margin: 5px;
+      @media (max-height: 400px) {
+        justify-content: unset;
       }
 
-      .sampleCountSection {
-        box-sizing: border-box;
+      .actions {
         display: flex;
-        align-items: center;
-        justify-content: left;
-        height: 50px;
+        flex-direction: column;
+        align-items: flex-start;
+        box-sizing: border-box;
 
-        @media (max-width: 400px) {
+        .parameters {
+          flex-wrap: wrap;
+          flex-direction: column;
+          display: flex;
+          box-sizing: border-box;
           width: 100%;
+
+
+          .algorithmSelectSection {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            padding: 10px;
+            height: 100px;
+
+            .title {
+              margin-right: 10px;
+            }
+          }
+
+          .sampleCountSection {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+
+            .title {
+              margin-right: 10px;
+            }
+
+            .sampleInput {
+
+              .inputField {
+                background: #303030;
+                color: white;
+              }
+
+              @media (max-width: 400px) {
+                flex: 1;
+
+                input {
+                  width: 100%;
+                }
+              }
+            }
+          }
         }
 
-        .samplesTitle {
+        .buttonsSection {
+          box-sizing: border-box;
           display: flex;
-          align-items: center;
-          justify-content: left;
-          height: 100%;
-          width: 60px;
+          align-items: flex-end;
+          flex: 1 0 auto;
+          padding: 20px;
 
-          .title {
-            text-decoration: none;
-            @include theme-aware('color', 'text-color');
-            font-size: 17px;
-            font-weight: 400;
+          @media (max-height: 400px) {
+            flex-direction: row;
+            flex-wrap: nowrap;
+          }
+
+          .chartButton {
+            width: 130px;
+            height: 50px;
+            background: rgb(45, 45, 45);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            padding: 0;
+            font-size: 16px;
+            line-height: 35px;
+            color: #9B9B9B;
+            border-radius: 3px;
+
+            img {
+              margin-left: 10px;
+            }
+
+            &:active {
+              outline: none;
+            }
 
             &:hover {
-              cursor: auto;
+              background: rgb(54, 54, 54);
+            }
+
+            &:focus {
+              outline: none;
             }
           }
-        }
 
-        .sampleInput {
-          margin-left: 20px;
-
-          .inputField {
-            background: #303030;
-            color: white;
+          .playButton {
+            margin-left: 10px;
           }
 
-          @media (max-width: 400px) {
-            flex: 1;
+          .chartButton.enabled {
 
-            input {
-              width: 100%;
+            .Text {
+              color: white;
             }
+
+            &:hover {
+              cursor: pointer;
+            }
+          }
+
+          .chartButton.disabled {
+            background: #262626;
+
+            .Text {
+              color: rgba(56, 56, 56, 0.12);
+            }
+
+            img {
+              opacity: 0.3;
+            }
+          }
+
+          .stopButton {
+            margin-left: 10px;
           }
         }
       }
+    }
 
-      .buttonsSection {
-        box-sizing: border-box;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-wrap: wrap;
-
-        @media (max-height: 400px) {
-          flex-direction: row;
-          flex-wrap: nowrap;
-        }
-
-        .chartButton {
-          @include theme-aware('background', 'sort-page-buttons-background');
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          position: relative;
-          padding: 0;
-          width: 50px;
-          height: 50px;
-          font-size: 16px;
-          line-height: 35px;
-          color: #9B9B9B;
-          border-radius: 3px;
-
-          &:active {
-            outline: none;
-          }
-
-          &:focus {
-            outline: none;
-          }
-        }
-
-        .playButton {
-          margin-left: 10px;
-        }
-
-        .chartButton.enabled {
-
-          .Text {
-            color: white;
-          }
-
-          &:hover {
-            cursor: pointer;
-          }
-        }
-
-        .chartButton.disabled {
-          @include theme-aware('background', 'sort-page-buttons-disabled-background');
-
-          .Text {
-            color: rgba(255, 255, 255, 0.34);
-          }
-
-          img {
-            opacity: 0.3;
-          }
-        }
-
-        .stopButton {
-          margin-left: 10px;
-        }
+    .chart {
+      padding: 15px;
+      min-height: 0;
+      @media (min-width: 1200px) {
+        min-width: 800px;
       }
-    }
-  }
 
-  .chart {
-    margin-top: $navbar-height;
-    transform: scale(0.75);
-    min-height: 0;
-    @media (min-width: 1200px) {
-      min-width: 800px;
+      flex: 1;
+      box-sizing: border-box;
     }
 
-    flex: 1;
-    box-sizing: border-box;
   }
 }
 

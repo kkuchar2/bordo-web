@@ -3,8 +3,7 @@ import {
     Mesh, MeshBasicMaterial,
     OrthographicCamera,
     PlaneGeometry,
-    Scene, Vector3,
-    WebGLRenderer
+    Scene, WebGLRenderer,
 } from "three";
 import TWEEN from "@tweenjs/tween.js";
 
@@ -129,7 +128,7 @@ export const createLines = (scene, material, cellSize, cols, rows, width, height
     for (let i = 0; i < rows + 1; i++) {
         const line = new Mesh(geometry2, material);
         line.position.z = -1;
-        line.position.x = width / 2 ;
+        line.position.x = width / 2;
 
         if (i === 0) {
             line.position.y = i * cellSize + thickness / 2;
@@ -154,23 +153,26 @@ export const createCircle = (scene, material, radius, position) => {
     return circle;
 };
 
-export const createBars = (scene, material1, material2, width, height, data, maxValue) => {
+export const createBars = (scene, material, width, height, data, maxValue) => {
     removeChildrenFromScene(scene);
 
-    let barWidth = width / data.length;
+    let spacing = 1;
+    let barWidth = (width - (spacing * data.length)) / data.length;
     let barHeight = height;
+
+    if (barWidth < 1) {
+        return;
+    }
 
     let geometry = new PlaneGeometry(barWidth, barHeight, 1);
 
     for (let i = 0; i < data.length; i++) {
-        const bar = new Mesh(geometry, i % 2 === 0 ? material1 : material2);
-        bar.scale.y = (data[i] / maxValue) * 0.8;
-        bar.position.x = barWidth / 2 + barWidth * i;
-        bar.position.y = barHeight / 2;
+        const bar = new Mesh(geometry, material);
+        bar.scale.y = (data[i] / maxValue);
+        bar.position.x = barWidth / 2 + barWidth * i + spacing * i;
+        bar.position.y = barHeight / 2 - (height * (1.0 - bar.scale.y)) / 2;
         scene.add(bar);
     }
-
-    return geometry;
 };
 
 export const tweenScale = (mesh, time) => {

@@ -84,62 +84,78 @@ function SortPage() {
         return !sorting || paused ? 'images/play_icon.png' : 'images/pause_icon.png';
     }, [sorting, paused]);
 
+    const getStartButtonText = useCallback(() => {
+        return !sorting || paused ? "Sort" : "Pause";
+    }, [sorting, paused])
+
     const onSelectedAlgorithmChange = useCallback(setSelectedAlgorithm);
 
     return <div className={"sortPage"}>
-        <div className={"left"}>
-            <div className={"actions"}>
+        <div className={"window"}>
+            <div className={"left"}>
+                <div className={"actions"}>
+                    <div className={"parameters"}>
+                        <div className={"algorithmSelectSection"}>
+                            <div className={"algorithmSelectTitle"}>
+                                <p className={"title"}>Select sorting algorithm:</p>
+                            </div>
 
-                <SelectControl
-                    className={"sorting-algorithm-select"}
-                    options={sortingAlgorithms}
-                    value={selectedAlgorithm}
-                    disabled={sorting}
-                    onChange={onSelectedAlgorithmChange}>
-                </SelectControl>
+                            <SelectControl
+                                className={"sorting-algorithm-select"}
+                                options={sortingAlgorithms}
+                                value={selectedAlgorithm}
+                                disabled={sorting}
+                                onChange={onSelectedAlgorithmChange}>
+                            </SelectControl>
+                        </div>
 
-                <div className={"sampleCountSection"}>
-                    <div className={"samplesTitle"}>
-                        <p className={"title"}>Samples:</p>
+                        <div className={"sampleCountSection"}>
+                            <div className={"samplesTitle"}>
+                                <p className={"title"}>Select number of samples:</p>
+                            </div>
+
+                            <div className={"sampleInput"}>
+                                <Input
+                                    id="fname"
+                                    name="fname"
+                                    disabled={false}
+                                    value={sampleCount}
+                                    active={true}
+                                    onChange={onSampleCountInputChange}/>
+                            </div>
+                        </div>
                     </div>
 
-                    <div className={"sampleInput"}>
-                        <Input
-                            id="fname"
-                            name="fname"
-                            disabled={false}
-                            value={sampleCount}
-                            active={true}
-                            onChange={onSampleCountInputChange}/>
+                    <div className={"buttonsSection"}>
+                        <Button
+                            className={"chartButton"}
+                            text={"Shuffle"}
+                            onClick={() => onShuffleRequest(sampleCount)}
+                            disabled={sorting}>
+                            <img src={'/images/shuffle_icon.png'} width={12} height={12} alt={""}/>
+                        </Button>
+
+                        <Button
+                            className={"chartButton playButton"}
+                            onClick={onStartPauseButtonPressed}
+                            text={getStartButtonText()}
+                            disabled={sorted}>
+                            <img src={getPlayPauseIcon()} width={12} height={12} alt={""}/>
+                        </Button>
+
+                        <Button
+                            className={"chartButton stopButton"}
+                            onClick={onStopButtonPressed}
+                            text={"Stop"}
+                            disabled={!sorting || paused}>
+                            <img src={'/images/stop_icon.png'} width={12} height={12} alt={""}/>
+                        </Button>
                     </div>
-                </div>
-
-                <div className={"buttonsSection"}>
-                    <Button
-                        className={"chartButton"}
-                        onClick={() => onShuffleRequest(sampleCount)}
-                        disabled={sorting}>
-                        <img src={'/images/shuffle_icon.png'} width={12} height={12} alt={""}/>
-                    </Button>
-
-                    <Button
-                        className={"chartButton playButton"}
-                        onClick={onStartPauseButtonPressed}
-                        disabled={sorted}>
-                        <img src={getPlayPauseIcon()} width={12} height={12} alt={""}/>
-                    </Button>
-
-                    <Button
-                        className={"chartButton stopButton"}
-                        onClick={onStopButtonPressed}
-                        disabled={!sorting || paused}>
-                        <img src={'/images/stop_icon.png'} width={12} height={12} alt={""}/>
-                    </Button>
                 </div>
             </div>
-        </div>
-        <div className={"chart"}>
-            <BarsView samples={sampleCount} maxValue={maxValue} data={data}/>
+            <div className={"chart"}>
+                <BarsView samples={sampleCount} maxValue={maxValue} data={data}/>
+            </div>
         </div>
     </div>;
 }
