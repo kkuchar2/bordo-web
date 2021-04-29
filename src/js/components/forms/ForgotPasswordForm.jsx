@@ -43,8 +43,8 @@ function ForgotPasswordForm() {
     return <div className={'forgotPasswordComponent'}>
         <form onSubmit={sendResetPasswordRequest} className={'form'} autoComplete="none">
 
-            <Text className={"formTitle"}>Reset your password</Text>
-            <Text className={"formDescription"}>Enter your e-mail address and we'll send you a reset password link</Text>
+            <Text className={"formTitle"} text={"Reset your password"} />
+            <Text className={"formDescription"} text={"Enter your e-mail address and we'll send you a reset password link"} />
 
             {renderInput('email', "Email address", 'text', "Enter your email address", "on", onEmailChange, errors)}
 

@@ -3,10 +3,4 @@
 .text {
   font-size: 18px;
   @include theme-aware('color', 'text-color');
-  display: flex;
-  flex-basis: auto;
-  flex-grow: 1;
-  box-sizing: border-box;
-  width: fit-content;
-  block-size: fit-content;
 }

@@ -40,8 +40,8 @@ function ConfirmPage(props) {
                 <img className={"emailSentIcon"} src={'images/sent_mail_icon.png'} width={60} height={60} alt={""}/>
             </div>
             <div className={"confirmationMessage"}>
-                <Text className={"title"}>Your account has been confirmed and activated.</Text>
-                <Text className={"message"}>You can now sign in.</Text>
+                <Text className={"title"} text={"Your account has been confirmed and activated."} />
+                <Text className={"message"} text={"You can now sign in"} />
             </div>;
             <div className={"buttonGroup"}>
                 <Link to={'/login'} className={'button'}>Back to sign in</Link>

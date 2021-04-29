@@ -18,9 +18,8 @@ function EmailSentPopup() {
             <div className={'imageWrapper'}>
                 <img className={"emailSentIcon"} src={'images/sent_mail_icon.png'} width={60} height={60} alt={""}/>
             </div>
-            <Text className={'title'}>Registration sucessful!</Text>
-            <Text className={'description'}>We've sent you a link to confirm your email address. Please check your
-                inbox.</Text>
+            <Text className={'title'} text={"Registration successful!"} />
+            <Text className={'description'} text={"We've sent you a link to confirm your email address. Please check your inbox."} />
             <div className={"buttonGroup"}>
                 <Link onClick={onLoginClick} to={'/login'} className={'button'}>Back to sign in</Link>
             </div>

@@ -44,8 +44,8 @@ function ChangePasswordForm() {
 
     return <div className={'forgotPasswordComponent'}>
         <form onSubmit={attemptLogin} className={'form'} autoComplete="none">
-            <Text className={"formTitle"}>Choose a new password</Text>
-            <Text className={"formDescription"}>Enter new password and confirm</Text>
+            <Text className={"formTitle"} text={"Choose a new password"} />
+            <Text className={"formDescription"} text={"Enter new password and confirm"} />
 
             <InputWithError errors={errors} name="Password" id={'password1'} type={'password'}
                             onChange={onFirstPasswordChange}

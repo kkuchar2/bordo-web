@@ -48,8 +48,8 @@ function LoginForm() {
 
     return <div className={'loginFormComponent'}>
         <form onSubmit={attemptLogin} className={'form'} autoComplete="none">
-            <Text className={"formTitle"}>Welcome back!</Text>
-            <Text className={"formDescription"}>Sign in to your account to continue</Text>
+            <Text className={"formTitle"} text={"Welcome back!"} />
+            <Text className={"formDescription"} text={"Sign in to your account to continue"} />
 
             {renderInput('email', "Email address", 'text', "Enter your email address", "on", onEmailChange, errors)}
             {renderInput('password', "Password", 'password', "Enter your password", "on", onPasswordChange, errors)}

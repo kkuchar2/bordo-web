@@ -56,8 +56,8 @@ function RegistrationForm() {
 
         <form onSubmit={handleSubmit} className={'form'} autoComplete="none">
 
-            <Text className={"formTitle"}>Sign up 🤗</Text>
-            <Text className={"formDescription"}>Create new account</Text>
+            <Text className={"formTitle"} text={"Sign up 🤗"} />
+            <Text className={"formDescription"} text={"Create new account"} />
 
             {renderUnknownError()}
 
