@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import removeFbclid from "remove-fbclid";
-import App from "./js/App";
+import App from "App.jsx";
 
 removeFbclid();
 

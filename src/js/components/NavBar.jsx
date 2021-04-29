@@ -9,8 +9,8 @@ import NavBarItem from "components/NavBarItem";
 import Switch from "components/Switch";
 
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {selectorAuth, tryLogout} from "../redux/reducers/api/account";
-import {closeNavbar, openNavbar, switchTheme} from "../redux/reducers/application";
+import {selectorAuth, tryLogout} from "redux/reducers/api/account";
+import {closeNavbar, openNavbar, switchTheme} from "redux/reducers/application";
 
 import "componentStyles/NavBar.scss";
 
@@ -20,9 +20,9 @@ const mapRoutes = actionOnClick => getAlignedRoutes('left').map((p, k) => {
     return <NavBarItem onClick={actionOnClick} iconSrc={p.icon} href={p.path} key={k}>{p.title}</NavBarItem>;
 });
 
-const mapRightNavbarRoutes = (isLoggedIn, actionOnClick) => {
-    return getAlignedRoutes('right').map((p, k) => {
-        if (isLoggedIn && !p.anonymousUser || !isLoggedIn && p.anonymousUser) {
+const mapRightNavbarRoutes = (status, isLoggedIn, actionOnClick) => {
+     return getAlignedRoutes('right').map((p, k) => {
+        if (isLoggedIn && p.authRequired || !isLoggedIn && !p.authRequired) {
             return <NavBarItem
                 onClick={actionOnClick}
                 iconSrc={p.icon}
@@ -51,7 +51,7 @@ function NavBar() {
 
     const renderItems = () => <>{mapRoutes(onLinkClickAction)}</>;
 
-    const renderRightNavbarItems = isLoggedIn => <>{mapRightNavbarRoutes(isLoggedIn, onLinkClickAction)}</>;
+    const renderRightNavbarItems = (status, isLoggedIn) => <>{mapRightNavbarRoutes(status, isLoggedIn, onLinkClickAction)}</>;
 
     useEffect(() => {
         const updateSize = () => setWidth(window.innerWidth);
@@ -71,8 +71,6 @@ function NavBar() {
         }
     }, [navbarState.opened]);
 
-    const handleLogout = useCallback(() => dispatch(tryLogout()), []);
-
     const hamburgerClick = () => {
         if (navbarState.opened) {
             closeNavbar();
@@ -82,6 +80,14 @@ function NavBar() {
         }
     };
 
+    const renderLogoutButton = useCallback(() => {
+        if (authState.isUserLoggedIn) {
+            return <Button text={"Logout"} onClick={logout} className={"logoutButton"}/>;
+        }
+    }, [authState]);
+
+    const logout = useCallback(() => dispatch(tryLogout()), []);
+
     const renderEmail = useCallback(() => {
         if (authState.isUserLoggedIn) {
             return <div className={"email"}>{authState.email}</div>;
@@ -89,14 +95,21 @@ function NavBar() {
     }, [authState]);
 
     const renderRightAlignedItems = useCallback(() => {
+        if (authState.status === 'SENT_AUTOLOGIN_REQUEST') {
+            return <div className={"loadingIndicator"}/>;
+        }
+
         return <div className={"navbar-items"}>
             {renderEmail()}
-            <div className={"navbarButtons"}>{renderRightNavbarItems(authState.isUserLoggedIn)}</div>
+            <div className={"navbarButtons"}>
+                {renderRightNavbarItems(authState.status, authState.isUserLoggedIn)}
+            </div>
             ;
         </div>;
     }, [authState]);
 
     const renderNavbarItems = useCallback(() => {
+
         if (width > 800 || (width < 800 && navbarState.opened)) {
             return <div className={["navbar-group", navbarAnimClass].join(' ')}>
                 <div className={"navbar-items"}>{renderItems()}</div>
@@ -106,12 +119,11 @@ function NavBar() {
                 </div>
             </div>;
         }
-    }, [navbarState, navbarAnimClass, width]);
+    }, [navbarState, navbarAnimClass, width, authState]);
 
     return <div className={"navbar"}>
         <div className="main-buttons">
-            <NavBarItem className={"home"} onClick={() => {
-            }} href={'/'}>
+            <NavBarItem className={"home"} onClick={() => {}} href={'/'}>
                 <FontAwesomeIcon className={"icon"} icon={faHome}/>
             </NavBarItem>
 
@@ -121,9 +133,9 @@ function NavBar() {
         </div>
 
         {renderNavbarItems()}
+        {renderLogoutButton()}
 
-        <Switch className={"theme-switch"} value={theme.theme === 'theme-dark'}
-                onValueChange={() => dispatch(switchTheme())}/>
+        <Switch className={"theme-switch"} value={theme.theme === 'theme-dark'} onValueChange={() => dispatch(switchTheme())}/>
     </div>;
 }
 

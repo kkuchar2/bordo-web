@@ -2,25 +2,27 @@ import React, {useCallback} from "react";
 import {useDispatch} from "react-redux";
 
 import Button from "components/Button";
-import {showConfirmationDialog} from "../../redux/reducers/application";
-import {tryDeleteAccount} from "../../redux/reducers/api/account";
+import {showDialog} from "redux/reducers/application";
+import {tryDeleteAccount} from "redux/reducers/api/account";
 
-import "styles/pages/settings/AccountSettings.scss"
+import "styles/pages/settings/AccountSettings.scss";
 
-export default () => {
+function AccountSettings() {
 
     const dispatch = useDispatch();
 
     const openDeleteAccountConfirmationDialog = useCallback(() => {
-        dispatch(showConfirmationDialog({
+        dispatch(showDialog({
             title: "Are you sure?",
             content: "All user data will be permanently removed",
             onConfirm: () => dispatch(tryDeleteAccount())
-        }))
+        }));
     }, []);
 
     return <div className={"accountSettings"}>
         <div>Account settings</div>
         <Button onClick={openDeleteAccountConfirmationDialog} className={"deleteAccountButton"} text={"Delete account"}/>
-    </div>
+    </div>;
 }
+
+export default AccountSettings;

@@ -1,22 +1,22 @@
-import {createSlice} from "@reduxjs/toolkit"
-import axios from "axios"
-import {buildApiUrl} from "../../util.js"
+import {createSlice} from "@reduxjs/toolkit";
+import axios from "axios";
+import {buildApiUrl} from "../../util.js";
 import {getCookie} from "util/CookieManager";
 
 const initialState = {
     status: "INIT",
     data: null
-}
+};
 
 export const helloSlice = createSlice({
     name: "auth",
     initialState: initialState,
     reducers: {
         hello_received: (state, action) => {
-            state.data = action.payload
+            state.data = action.payload;
         }
     },
-})
+});
 
 export const tryGetHello = () => {
     return async dispatch => {
@@ -26,17 +26,17 @@ export const tryGetHello = () => {
                     "Authorization": 'Token ' + getCookie("token")
                 },
                 withCredentials: true
-            })
+            });
 
-            dispatch(hello_received(response))
+            dispatch(hello_received(response));
         }
         catch (e) {
             console.log(e);
-            console.log("hello -> error")
+            console.log("hello -> error");
         }
-    }
-}
+    };
+};
 
-export const selectorHello = state => state.hello
-export const {hello_received} = helloSlice.actions
-export default helloSlice.reducer
+export const selectorHello = state => state.hello;
+export const {hello_received} = helloSlice.actions;
+export default helloSlice.reducer;

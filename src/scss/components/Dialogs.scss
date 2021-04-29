@@ -7,6 +7,14 @@
   }
 }
 
+.errorDialog {
+  .MuiPaper-root {
+    background: none;
+    padding: 0;
+    width: 600px;
+  }
+}
+
 .MuiDialogTitle-root {
   padding: 30px !important;
   border-top-left-radius: 8px;
@@ -37,7 +45,7 @@
   border-radius: 5px;
 }
 
-.deleteAccountButtonConfirm {
+.buttonRed {
   background: #860000;
   color: #9B9B9B;
   width: 130px;
@@ -48,7 +56,7 @@
   }
 }
 
-.deleteAccountButtonCancel {
+.buttonBlack {
   background: #151515;
   color: #9B9B9B;
   width: 130px;
@@ -58,3 +66,15 @@
     background: darken(#151515, 5%);
   }
 }
+
+.buttonBlue {
+  background: #3f6b81;
+  color: #9B9B9B;
+  width: 130px;
+  height: 40px;
+
+  &:hover {
+    background: darken(#151515, 5%);
+  }
+}
+

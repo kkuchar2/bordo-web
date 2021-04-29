@@ -1,5 +1,4 @@
 .emailSentPopup {
-
   @media (max-width: 600px) {
     display: flex;
     flex-direction: row;
@@ -11,6 +10,13 @@
   }
 
   .popup {
+    border-radius: 6px;
+    background: #323232;
+    display: flex;
+    flex-direction: column;
+    padding: 30px 30px 30px;
+    box-shadow: 20px 20px 20px 0 rgba(0, 0, 0, .4);
+
     @media (min-width: 600px) {
       width: 380px;
       position: relative;
@@ -20,15 +26,6 @@
       width: 100%;
     }
 
-    background: rgba(55, 55, 55, 1);
-    margin-bottom: 200px;
-    display: flex;
-
-    flex-direction: column;
-    margin-top: 10vh;
-    padding-left: 20px;
-    padding-right: 20px;
-    padding-bottom: 10px;
 
     .imageWrapper {
       margin-top: 40px;
@@ -70,13 +67,13 @@
         white-space: nowrap;
         color: white;
         font-size: 16px;
-        background: #168a80;
+        background: #404040;
         width: 100%;
         border-radius: 8px;
         height: 100%;
 
         &:hover {
-          background: lighten(#168a80, 10%);
+          background: #4562d4;
         }
       }
     }

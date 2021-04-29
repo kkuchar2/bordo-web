@@ -3,8 +3,6 @@
 @import '../common/mixins';
 @import '../common/theme';
 @import '../common/fonts';
-@import "../common/animations/mixins";
-@import "../common/animations/fade_in";
 
 .settingsPage {
   width: 100%;
@@ -18,82 +16,134 @@
   font-size: 30pt;
 
   .settingsWindow {
+    border-radius: 6px;
+    box-shadow: 20px 20px 20px 0 rgba(0,0,0,.4);
     box-sizing: border-box;
     display: flex;
-    flex-direction: column;
-    @include timed_animation(fadein, 0.3s);
-    width: 100%;
-    height: 100%;
-    background: #1a1a1acc;
+    flex-direction: row;
+    width: 1000px;
+    height: 600px;
+    background: #323232;
 
-    .top {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      width: 100%;
-      flex: 0 1 60px;
-      border-bottom: 1px solid #262626;
+    .left {
+      border-top-left-radius: 6px;
+      border-bottom-left-radius: 6px;
+      width: 350px;
+      background: #212121;
 
-      .icon {
-        margin-left: 20px;
-        font-size: 15pt;
-        color: #4a4a4a;
-      }
+      .accountInfo {
+        margin: 20px;
+        align-items: center;
 
-      .title {
-        margin-left: 15px;
-        color: #6e6e6e;
-        font-size: 17pt;
-      }
-    }
+        display: flex;
+        flex-direction: row;
 
-    .bottom {
-      display: flex;
-      flex-direction: row;
-      flex: 1;
+        .profilePicture {
+          border-radius: 100%;
+        }
 
-      .rightPanel {
-        flex: 1 0 auto;
+        .profileDetails {
+          box-sizing: border-box;
+          margin-left: 10px;
 
-        .profileSettings {
-          font-size: 14pt;
-          height: 100%;
+          .profileName {
+            font-size: 16px;
+            color: #eeeeee;
+          }
+
+          .profileEmail {
+            margin-top: 10px;
+            font-size: 12px;
+            color: #777777;
+          }
+        }
+
+        .cogWrapper {
+          margin-left: 20px;
           display: flex;
           flex-direction: row;
           align-items: center;
           justify-content: center;
-          color: #5d5d5d;
-        }
-
-        .accountSettings {
-          padding: 20px;
-          font-size: 14pt;
-
-          .deleteAccountButton {
-            margin-top: 20px;
-            width: 150px;
-            height: 40px;
-            border-radius: 4px;
-            background: #6b0000;
-            color: white;
-
-            .content {
-              .text {
-                font-size: 12pt;
-              }
-            }
-
-            &:hover {
-              background: #860000;
-            }
+          background: #333433;
+          padding: 7px;
+          border-radius: 8px;
+          .cog {
+            font-size: 15px;
+            color: #9d9db6
           }
         }
       }
 
-      .leftPanel {
-        width: 200px;
-        height: calc(100% - 50px);
-        border-right: 1px solid #262626;
+      .menuSection {
+        padding-top: 50px;
+        display: flex;
+        flex-direction: column;
+
+        .menuName {
+          padding: 20px;
+          font-size: 15px;
+          color: #777777;
+        }
+
+        .menuItems {
+          display: flex;
+          flex-direction: column;
+
+          .menuItem {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+
+            width: 95%;
+            height: 60px;
+            border-bottom: 1px solid #353535;
+
+            &:hover {
+              cursor: pointer;
+              background: #ffffff11;
+
+              .menuItemText {
+                color: #d6d6d6;
+              }
+            }
+
+            .iconWrapper {
+              width: 25px;
+              height: 25px;
+              margin-left: 20px;
+              display: flex;
+              flex-direction: row;
+              align-items: center;
+              justify-content: center;
+
+              padding: 7px;
+              border-radius: 12px;
+
+              .icon {
+                font-size: 15px;
+                color: #ffffff
+              }
+            }
+
+            .menuItemText {
+              margin-left: 15px;
+              font-size: 15px;
+              color: #999999;
+            }
+          }
+        }
+      }
+    }
+
+    .right {
+      flex: 1 0 auto;
+      display: flex;
+      flex-direction: column;
+
+      .panel1 {
+        flex: 1 0 auto;
+        width: 100%;
+        border-right: 1px solid #3b3b3b;
 
         .settingsList {
           padding: 0;
@@ -112,6 +162,26 @@
               cursor: pointer;
               background: #282828;
             }
+          }
+        }
+      }
+
+      .panel2 {
+        height: 80px;
+        align-items: center;
+        justify-content: flex-end;
+        display: flex;
+
+        .saveSettingsButton {
+          background: #262626;
+          margin-right: 20px;
+          border-radius: 4px;
+          width: 170px;
+          height: 40px;
+
+          &:hover {
+            background: #131313;
+            background-size: 300% 300%;
           }
         }
       }

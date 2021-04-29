@@ -2,8 +2,8 @@ import React, {useEffect, useCallback} from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import {withNotStatus, withStatus} from "util/util";
 import EmailSentPopup from "components/EmailSentPopup";
-import RegistrationForm from "components/RegistrationForm";
-import {reset, selectorRegistration} from "../redux/reducers/api/account";
+import RegistrationForm from "components/forms/RegistrationForm.jsx";
+import {reset, selectorRegistration} from "redux/reducers/api/account";
 
 import "styles/pages/RegistrationPage.scss";
 
@@ -15,17 +15,21 @@ function RegistrationPage() {
 
     useEffect(() => dispatch(reset()), []);
 
-    const renderRegistrationFormGroup = useCallback(() => {
-        return <div className={'registrationFormGroup'}>
-            <div className={"registrationWrapper"}>
-                <RegistrationForm/>
-            </div>
+    const renderRegistrationForm = useCallback(() => {
+        return <div className={"wrapper"}>
+            <RegistrationForm/>
+        </div>;
+    }, []);
+
+    const renderEmailSentPopup = useCallback(() => {
+        return <div className={"wrapper"}>
+            <EmailSentPopup/>
         </div>;
     }, []);
 
     return <div className={"registrationPage"}>
-        {withStatus(status, "REGISTRATION_COMPLETE", () => <EmailSentPopup/>)}
-        {withNotStatus(status, "REGISTRATION_COMPLETE", renderRegistrationFormGroup)}
+        {withStatus(status, "REGISTRATION_COMPLETE", renderEmailSentPopup)}
+        {withNotStatus(status, "REGISTRATION_COMPLETE", renderRegistrationForm)}
     </div>;
 }
 

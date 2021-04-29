@@ -1,107 +1,80 @@
-import {createSlice} from "@reduxjs/toolkit"
-import {sendAnonymousPostAndParse, sendAuthPostAndParse} from "../../../util.js"
-import {getCookie, removeCookie, setCookie} from "util/CookieManager";
+import {createSlice} from "@reduxjs/toolkit";
+import {sendAnonymousPostAndParse, sendAuthPostAndParse} from "../../../util.js";
+import {removeCookie, setCookie} from "util/CookieManager";
 
 const initialState = {
     status: "LOGGED_OUT",
+    isUserLoggedIn: false,
+    hasPermission: false,
     errors: null,
-    isUserLoggedIn: getCookie("token") !== undefined,
     email: "",
-}
+};
+
+const setState = (state, status, loggedIn, errors, email) => {
+    state.status = status;
+    state.isUserLoggedIn = loggedIn;
+    state.errors = errors;
+    state.email = email;
+    state.hasPermission = false;
+};
 
 export const authSlice = createSlice({
     name: "auth",
     initialState: initialState,
     reducers: {
-        sentLoginRequest: (state) => {
-            state.status = "SENT_LOGIN_REQUEST";
-            state.isUserLoggedIn = false;
-            state.email = null;
-        },
-        sentAutologinRequest: (state) => {
-            state.status = "SENT_AUTOLOGIN_REQUEST";
-            state.isUserLoggedIn = false;
-            state.errors = null;
-            state.email = null;
-        },
+        sentLoginRequest: (state) => setState(state, "SENT_LOGIN_REQUEST", false, null, null),
+        sentAutologinRequest: (state) => setState(state, "SENT_AUTOLOGIN_REQUEST", false, null, null),
         loginSuccess: (state, action) => {
-            state.errors = null;
-            state.status = "LOGGED_IN";
-            state.email = action.payload.user;
-            state.isUserLoggedIn = true
+            setState(state, "LOGGED_IN", true, null, action.payload.user);
             setCookie("token", action.payload.key);
         },
-        autoLoginSuccess: (state, action) => {
-            state.errors = null;
-            state.status = "LOGGED_IN";
-            state.email = action.payload.user;
-            state.isUserLoggedIn = true
-        },
-        loginFailed: (state, action) => {
-            state.status = "ERROR";
-            state.isUserLoggedIn = false;
-            state.errors = action.payload;
-            state.email = null;
-        },
-        autoLoginFailed: (state) => {
-            state.status = "LOGGED_OUT";
-            state.isUserLoggedIn = false;
-            state.errors = null;
-            state.email = null;
-        },
-        sentLogoutRequest: (state) => {
-            state.status = "SENT LOGOUT REQUEST";
-            state.errors = null;
-            state.email = null;
-        },
+        autoLoginSuccess: (state, action) => setState(state, "LOGGED_IN", true, null, action.payload.user),
+        loginFailed: (state, action) => setState(state, "ERROR", false, action.payload, null),
+        autoLoginFailed: (state, action) => setState(state, "LOGGED_OUT", false, action.payload, null),
+        sentLogoutRequest: (state) => setState(state, "SENT_LOGOUT_REQUEST", state.isUserLoggedIn, null, state.email),
         logoutSuccess: (state) => {
-            state.status = "LOGGED_OUT";
-            state.email = null;
-            state.isUserLoggedIn = false;
-            state.errors = null;
-            removeCookie("token")
+            setState(state, "LOGGED_OUT", false, null, null);
+            removeCookie("token");
         },
         logoutFailed: (state, action) => {
-            state.status = "ERROR";
-            state.errors = action.payload;
-            removeCookie("token")
+            setState(state, "ERROR", false, action.payload, null);
+            removeCookie("token");
         },
-        sentDeleteAccountRequest: (state) => {
-            state.status = "SENT_DELETE_ACCOUNT_REQUEST";
-            state.errors = null;
+        sentDeleteAccountRequest: (state) => setState(state, "SENT_DELETE_ACCOUNT_REQUEST", true, null, state.email),
+        deleteAccountSuccess: (state) => setState(state, "LOGGED_OUT", false, null, null),
+        deleteAccountFailed: (state, action) => setState(state, state.status, state.isUserLoggedIn, action.payload, state.email),
+        sentAuthCheck: (state) => {
+            setState(state, "SENT_AUTH_CHECK", state.isUserLoggedIn, state.errors, state.email);
+            state.hasPermission = false;
         },
-        deleteaccountSuccess: (state) => {
-            state.status = "LOGGED_OUT";
-            state.email = null;
-            state.isUserLoggedIn = false;
-            state.errors = null;
-            removeCookie("token")
+        authCheckSuccess: (state, action) => {
+            setState(state, "AUTHENTICATED", true, null, state.email);
+            state.hasPermission = true;
         },
-        deleteAccountFailed: (state, action) => {
-            state.errors = action.payload;
+        authCheckFail: (state) => setState(state, "LOGGED_OUT", false, null, null),
+        removeErrors: (state) => setState(state, state.status, state.isUserLoggedIn, null, state.email),
+        logUserOut: (state) => {
+            removeCookie("token");
+            setState(state, "LOGGED_OUT", false, null, null);
         },
-        resetAuthState: (state) => {
-            state.status = "LOGGED_OUT";
-            state.errors = null;
-            state.isUserLoggedIn = false;
-            state.email = "";
-        }
     }
-})
+});
 
-export const tryLoginWithAuthKey = () =>
-    sendAuthPostAndParse("session", sentAutologinRequest, autoLoginSuccess, autoLoginFailed);
+export const tryValidateAuthentication = () => sendAuthPostAndParse("is_authenticated", sentAuthCheck, authCheckSuccess, authCheckFail);
 
-export const tryLogin = (email, password) =>
-    sendAnonymousPostAndParse("login", sentLoginRequest, loginSuccess, loginFailed, {email: email, password: password});
+export const tryLoginWithAuthKey = () => sendAuthPostAndParse("session", sentAutologinRequest, autoLoginSuccess, autoLoginFailed);
 
-export const tryLogout = () =>
-    sendAuthPostAndParse("logout", sentLogoutRequest, logoutSuccess, logoutFailed);
+export const tryLogin = (email, password) => sendAnonymousPostAndParse("login", sentLoginRequest, loginSuccess, loginFailed, {email: email, password: password});
 
-export const tryDeleteAccount = () =>
-    sendAuthPostAndParse("deleteAccount", sentDeleteAccountRequest, deleteaccountSuccess, deleteAccountFailed);
+export const tryLogout = () => sendAuthPostAndParse("logout", sentLogoutRequest, logoutSuccess, logoutFailed);
 
-export const selectorAuth = state => state.auth
+export const tryDeleteAccount = () => sendAuthPostAndParse("deleteAccount", sentDeleteAccountRequest, deleteAccountSuccess, deleteAccountFailed);
+
+export const clearErrors = () => async dispatch => dispatch(removeErrors());
+
+export const selectorAuth = state => state.auth;
+
+export const logOut = () => async dispatch => dispatch(logUserOut());
 
 export const {
     sentLoginRequest,
@@ -114,10 +87,12 @@ export const {
     logoutSuccess,
     logoutFailed,
     sentDeleteAccountRequest,
-    deleteaccountSuccess,
+    deleteAccountSuccess,
     deleteAccountFailed,
-    resetAuthState
-} = authSlice.actions
-export default authSlice.reducer
-
-
+    sentAuthCheck,
+    authCheckSuccess,
+    authCheckFail,
+    removeErrors,
+    logUserOut
+} = authSlice.actions;
+export default authSlice.reducer;

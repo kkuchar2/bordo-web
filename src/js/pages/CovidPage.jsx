@@ -27,7 +27,7 @@ const mapDateFields = (data, fieldNames) => data.map(entry => {
     return mapped;
 });
 
-export default () => {
+function ChartPage() {
     const [todayDate, setTodayDate] = useState(0);
     const [todayCases, setTodayCases] = useState(0);
     const [todayCases2] = useState(0);
@@ -127,4 +127,6 @@ export default () => {
         {renderChart("recoveries", recoveriesConfig, ["recoveries_daily"], statistics)}
         {renderChart("deaths", deathsConfig, ["deaths_daily"], statistics)}
     </div>;
-};
+}
+
+export default ChartPage;

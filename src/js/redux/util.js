@@ -1,4 +1,5 @@
 import {getCookie} from "util/CookieManager";
+import {showDialog} from "redux/reducers/application";
 
 import axios from "axios";
 
@@ -16,14 +17,10 @@ const sendPostWithAuthKey = async (url, body = {}) => {
         return undefined;
     }
 
-    return await axios.post(url, body, {
-        headers: {
-            "Authorization": "Token " + authToken
-        }
-    });
+    return axios.post(url, body, { headers: { "Authorization": "Token " + authToken }});
 };
 
-const sendPostNoAuthKey = async (url, body = {}) => await axios.post(url, body);
+const sendPostNoAuthKey = async (url, body = {}) => axios.post(url, body);
 
 const sendPostAndParse = (requestFunc, name, onBefore, onSuccess, onFail, body = {}) => {
     return async dispatch => {
@@ -32,7 +29,17 @@ const sendPostAndParse = (requestFunc, name, onBefore, onSuccess, onFail, body =
             parseResponse(dispatch, await requestFunc(buildApiUrl(name), body), onSuccess, onFail);
         }
         catch (e) {
-            dispatch(onFail("Unknown error"));
+            if (e.response.status === 401) {
+                dispatch(onFail("Unauthorized"));
+            }
+            else {
+                dispatch(showDialog({
+                    type: "error",
+                    title: "Server error",
+                    content: "Server error: " + e.response.status,
+                }));
+                dispatch(onFail("Unknown error"));
+            }
         }
     };
 };

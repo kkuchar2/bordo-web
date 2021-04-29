@@ -64,8 +64,8 @@ function PathfindingPage() {
         if (findingPath) {
             return;
         }
-        const columnCount = Math.floor((width - 100) / cellSize);
-        const rowCount = Math.floor((height - 150) / cellSize);
+        const columnCount = Math.floor((width / 2 - 100) / cellSize);
+        const rowCount = Math.floor((height - 100) / cellSize);
         const newGridWidth = columnCount * cellSize;
         const newGridHeight = rowCount * cellSize;
         setGridWidth(newGridWidth);
@@ -75,8 +75,8 @@ function PathfindingPage() {
         sendMessage(worker, "initData", {
             "rows": rowCount,
             "cols": columnCount,
-            "startIndex" : startIndex,
-            "endIndex" : endIndex
+            "startIndex": startIndex,
+            "endIndex": endIndex
         });
         setStartIndex(0);
         setEndIndex(1);
@@ -161,7 +161,25 @@ function PathfindingPage() {
     useEffectWithNonNull(() => sendMessage(worker, "setEnd", {id: endIndex}), [endIndex, worker]);
 
     return <div ref={mount} className={"PathfindingPage"} onMouseUp={onMouseUp} onMouseDown={onMouseDown}>
-        <div className={"buttonsSection"}>
+
+        <div className={"grid"}>
+            <GridView
+                width={gridWith}
+                height={gridHeight}
+                cellSize={cellSize}
+                cols={cols}
+                rows={rows}
+                visited={visited}
+                path={path}
+                obstacles={obstacles}
+                startIdx={startIndex}
+                endIdx={endIndex}
+                findingPath={findingPath}
+                onObstaclesSelected={onObstaclesSelected}
+                onStartChange={onStartChange}
+                onEndChange={onEndChange}/>
+        </div>
+        <div className={"controlPanel"}>
             <Button
                 className={"playButton"}
                 onClick={onFindPathButtonPressed}
@@ -189,21 +207,6 @@ function PathfindingPage() {
             {/*    <img src={'/images/clear_icon.png'} width={24} height={24} alt={""}/>*/}
             {/*</ToggleButton>*/}
         </div>
-        <GridView
-            width={gridWith}
-            height={gridHeight}
-            cellSize={cellSize}
-            cols={cols}
-            rows={rows}
-            visited={visited}
-            path={path}
-            obstacles={obstacles}
-            startIdx={startIndex}
-            endIdx={endIndex}
-            findingPath={findingPath}
-            onObstaclesSelected={onObstaclesSelected}
-            onStartChange={onStartChange}
-            onEndChange={onEndChange}/>
     </div>;
 }
 

@@ -2,9 +2,9 @@ import React, {useEffect, useState} from 'react';
 import {faMoon, faSun} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
-import "componentStyles/Switch.scss"
+import "componentStyles/Switch.scss";
 
-export default props => {
+function Switch(props) {
 
     const [value, setValue] = useState(false);
 
@@ -13,7 +13,7 @@ export default props => {
     const onToggle = () => {
         setValue(!value);
         props.onValueChange(!value);
-    }
+    };
 
     return <div className={[props.className, "switch"].join(' ')}>
         <FontAwesomeIcon className={"sun"} icon={faSun}/>
@@ -31,5 +31,7 @@ export default props => {
             <span className={`react-switch-button`}/>
         </label>
         <FontAwesomeIcon className={"moon"} icon={faMoon}/>
-    </div>
-};
+    </div>;
+}
+
+export default Switch;

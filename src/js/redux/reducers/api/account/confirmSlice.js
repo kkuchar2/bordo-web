@@ -1,62 +1,29 @@
 import {createSlice} from "@reduxjs/toolkit";
-import {buildApiUrl} from "../../../util";
-import axios from "axios";
+import {sendAnonymousPostAndParse} from "../../../util.js";
+
+const initialState = {
+    status: "INIT",
+    errors: null
+};
+
+const setState = (state, status, errors) => {
+    state.status = status;
+    state.errors = errors;
+};
 
 export const confirmSlice = createSlice({
     name: 'confirmEmail',
-    initialState: {
-        status: "INIT",
-        data: null
-    },
+    initialState: initialState,
     reducers: {
-        accountConfirmationTokenSent: state => {
-            state.status = "CONFIRMATION_TOKEN_SENT";
-            state.data = null;
-        },
-        accountConfirmationSuccess: state => {
-            state.status = "ACCOUNT_CONFIRMED";
-            state.data = null;
-        },
-        accountConfirmationError: (state, action) => {
-            state.status = "CONFIRMATION_ERROR";
-            state.data = action.payload;
-        },
-        resetConfirmState: state => {
-            state.status = "INIT";
-            state.data = null
-        }
+        accountConfirmationTokenSent: (state) => setState(state, "CONFIRMATION_TOKEN_SENT",  null),
+        accountConfirmationSuccess: (state) => setState(state, "ACCOUNT_CONFIRMED",  null),
+        accountConfirmationError: (state, action) => setState(state, "CONFIRMATION_ERROR",  action.payload),
+        resetConfirmState: (state) => setState(state, "INIT",  null),
     }
 })
 
-export const tryConfirmAccount = token => {
-
-    return async dispatch => {
-        try {
-            dispatch(accountConfirmationTokenSent())
-            const url = buildApiUrl("confirm-email");
-            const response = await axios.post(url, {"key": token});
-            if (response === undefined) {
-                dispatch(accountConfirmationError(undefined))
-                return;
-            }
-            const responseData = response.data;
-            const status = responseData.status;
-            const message = responseData.data;
-
-            if (status === 'success') {
-                dispatch(accountConfirmationSuccess())
-            }
-            else {
-                dispatch(accountConfirmationError(message))
-            }
-        }
-        catch (e) {
-            console.log(e)
-            dispatch(accountConfirmationError("Unknown error"))
-        }
-    }
-}
-
+export const tryConfirmAccount = (token) => sendAnonymousPostAndParse("confirm-email",
+    accountConfirmationTokenSent, accountConfirmationSuccess, accountConfirmationError, {key: token});
 
 export const selectorAccountConfirm = state => state.confirm
 

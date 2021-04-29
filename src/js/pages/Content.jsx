@@ -1,39 +1,26 @@
-import {Route, Switch, useHistory} from "react-router-dom";
-import React, {useEffect, useCallback} from "react";
-import NotFound from "./NotFound";
-import {routes, isOnAuthenticatedPage} from "../routes/routes.js";
-import {withSuspense} from "util/withSuspense";
+import {Route, Switch} from "react-router-dom";
+import React, {useCallback} from "react";
+import {routes} from "../routes/routes.js";
 import {AuthRoute} from "../routes/AuthRoute.js";
-import {useDispatch, useSelector} from "react-redux";
-import {selectorAuth, tryLoginWithAuthKey} from "../redux/reducers/api/account";
+import {withSuspense} from "util/withSuspense.js";
+import {lazyImport} from "util/util.js";
+import {SimpleRoute} from "routes/SimpleRoute.js";
+const NotFound = lazyImport(() => import (/* webpackChunkName: "not-found" */ "pages/NotFound"));
 
 function Content() {
-
-    const dispatch = useDispatch();
-    const authState = useSelector(selectorAuth);
-    let history = useHistory();
-
-    useEffect(() => dispatch(tryLoginWithAuthKey()), []);
-
-    useEffect(() => {
-        if (authState.isUserLoggedIn && isOnAuthenticatedPage()) {
-            history.replace({pathname: "/"});
-        }
-    }, [authState]);
-
     const mapRoutesToContent = useCallback(() => routes.filter(v => v.enabled)
         .map((p, k) => {
-            if (p.requireAuth) {
+            if (p.authRequired) {
                 return <AuthRoute key={k} exact={p.exact} path={p.path} component={p.component}/>;
             }
             else {
-                return <Route key={k} exact={p.exact} path={p.path} component={p.component}/>;
+                return <SimpleRoute key={k} exact={p.exact} path={p.path} component={p.component}/>;
             }
         }), []);
 
     return <Switch>
         {mapRoutesToContent()}
-        <Route component={withSuspense(NotFound)} key={0}/>
+        {<Route component={withSuspense(NotFound)} key={0}/>}
     </Switch>;
 }
 

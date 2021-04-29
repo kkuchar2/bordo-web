@@ -1,10 +1,9 @@
-import React, {useEffect, useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import Button from "components/Button";
 import {useDispatch, useSelector} from "react-redux";
-
+import classNames from 'classnames';
 import {Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Slide} from "@material-ui/core";
-
-import {dialogConfirmed, hideConfirmationDialog} from "../redux/reducers/application";
+import {dialogConfirmed, hideDialog} from "redux/reducers/application";
 
 import "styles/components/Dialogs.scss";
 
@@ -19,7 +18,10 @@ function Dialogs() {
     const dispatch = useDispatch();
     const dialogState = useSelector(state => state.dialog);
 
-    const handleClose = () => dispatch(hideConfirmationDialog());
+    const handleClose = () => {
+        dialogState.onCancel();
+        dispatch(hideDialog());
+    };
 
     useEffect(() => setOpen(dialogState.opened), [dialogState.opened]);
 
@@ -28,9 +30,41 @@ function Dialogs() {
         dispatch(dialogConfirmed());
     };
 
+    const getDialogClassName = useCallback(() => {
+        if (dialogState.type === 'error') {
+            return 'errorDialog';
+        }
+        else {
+            return 'confirmDialog';
+        }
+    }, [dialogState]);
+
+    const renderDialogActions = useCallback(() => {
+        if (dialogState.type === 'error') {
+            return <DialogActions className={"dialogActions"}>
+                <Button className={"buttonBlack dialogButton"} onClick={handleClose}>Close</Button>
+            </DialogActions>;
+        }
+        else {
+            return <DialogActions className={"dialogActions"}>
+                <Button
+                    className={classNames(dialogState.cancelButtonClass, 'dialogButton')}
+                    onClick={handleClose}>
+                    {dialogState.cancelButtonName}
+                </Button>
+                <Button
+                    className={classNames(dialogState.confirmButtonClass, 'dialogButton')}
+                    onClick={onConfirm}
+                    autoFocus>
+                    {dialogState.confirmButtonName}
+                </Button>
+            </DialogActions>;
+        }
+    }, [dialogState]);
+
     return <div className={"dialogs"}>
         <Dialog
-            className={"confirmDialog"}
+            className={getDialogClassName()}
             open={open}
             disableBackdropClick
             disableEscapeKeyDown
@@ -46,15 +80,7 @@ function Dialogs() {
                     {dialogState.content}
                 </DialogContentText>
             </DialogContent>
-            <DialogActions className={"dialogActions"}>
-                <Button className="dialogButton deleteAccountButtonCancel" onClick={handleClose}>
-                    Cancel
-                </Button>
-                <Button className="dialogButton deleteAccountButtonConfirm" onClick={onConfirm}
-                        autoFocus>
-                    Delete account
-                </Button>
-            </DialogActions>
+            {renderDialogActions()}
         </Dialog>
     </div>;
 }

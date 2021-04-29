@@ -90,7 +90,7 @@ module.exports = {
                 use: [{loader: 'babel-loader'}]
             },
             { // Files
-                test: /\.(png|jpg|gif|ico|svg|ttf|otf)$/,
+                test: /\.(png|jpg|gif|ico|svg|ttf|woff|otf)$/,
                 use: [
                     {
                         loader: 'file-loader',

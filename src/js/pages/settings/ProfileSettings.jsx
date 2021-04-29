@@ -1,10 +1,12 @@
 import React from "react";
 
-import "styles/pages/settings/AccountSettings.scss"
+import "styles/pages/settings/AccountSettings.scss";
 
-export default () => {
+function ProfileSettings() {
 
     return <div className={"profileSettings"}>
         <div>No data</div>
-    </div>
+    </div>;
 }
+
+export default ProfileSettings;

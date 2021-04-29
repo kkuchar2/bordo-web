@@ -1,11 +1,13 @@
 import React from "react";
 
-import "componentStyles/ConnectionError.scss"
+import "componentStyles/ConnectionError.scss";
 
-export default props => {
+function ConnectionError(props) {
     return <div className={"connectionError"}>
         <div className={"errorMessage"}>
             {props.message}
         </div>
-    </div>
+    </div>;
 }
+
+export default ConnectionError;

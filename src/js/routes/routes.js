@@ -7,22 +7,22 @@ import {faCog} from "@fortawesome/free-solid-svg-icons";
 
 const MainPage = lazyImport(() => import (/* webpackChunkName: "main-page" */ "pages/MainPage"));
 const SortPage = lazyImport(() => import (/* webpackChunkName: "sort-page" */ "pages/SortPage"));
-const RegistrationPage = lazyImport(() => import (/* webpackChunkName: "registration-page" */ "pages/RegistrationPage"));
-const ConfirmPage = lazyImport(() => import (/* webpackChunkName: "confirm-page" */ "pages/ConfirmPage"));
-const LoginPage = lazyImport(() => import (/* webpackChunkName: "login-page" */ "pages/LoginPage"));
-const LogoutPage = lazyImport(() => import (/* webpackChunkName: "logout-page" */ "pages/LogoutPage"));
+const RegistrationPage = lazyImport(() => import (/* webpackChunkName: "auth-chunk" */ "pages/RegistrationPage"));
+const ConfirmPage = lazyImport(() => import (/* webpackChunkName: "auth-chunk" */ "pages/ConfirmPage"));
+const LoginPage = lazyImport(() => import (/* webpackChunkName: "auth-chunk" */ "pages/LoginPage"));
+const ForgotPasswordPage = lazyImport(() => import (/* webpackChunkName: "auth-chunk" */ "pages/ForgotPasswordPage"));
+const ChangePasswordPage = lazyImport(() => import (/* webpackChunkName: "auth-chunk" */ "pages/ChangePasswordPage"));
 const Dashboard = lazyImport(() => import (/* webpackChunkName: "dashboard" */ "pages/Dashboard"));
 const SettingsPage = lazyImport(() => import (/* webpackChunkName: "dashboard" */ "pages/SettingsPage"));
 const PathfindingPage = lazyImport(() => import (/* webpackChunkName: "grid-page" */ "pages/PathfindingPage"));
 const NotFound = lazyImport(() => import (/* webpackChunkName: "not-found" */ "pages/NotFound"));
 
-// const ChartPage = lazyImport(() => import (/* webpackChunkName: "chart-page" */ "pages/ChartPage"));
-
 export const routes = [
     {
         component: withSuspense(NotFound),
         exact: false,
-        anonymousUser: true
+        authRequired: false,
+        hiddenForAuthenticated: false
     },
     {
         path: "/",
@@ -33,7 +33,8 @@ export const routes = [
         navbar: false,
         alignment: 'left',
         exact: true,
-        anonymousUser: true
+        authRequired: false,
+        hiddenForAuthenticated: false
     },
     {
         path: "/sort",
@@ -43,18 +44,9 @@ export const routes = [
         navbar: true,
         alignment: 'left',
         exact: true,
-        anonymousUser: true
+        authRequired: false,
+        hiddenForAuthenticated: false
     },
-    // {
-    //     path: "/chart",
-    //     component: withSuspense(ChartPage),
-    //     title: "COVID-19 IN POLAND",
-    //     enabled: true,
-    //     navbar: true,
-    //     alignment: 'left',
-    //     exact: true,
-    //     anonymousUser: true
-    // },
     {
         path: "/login",
         component: withSuspense(LoginPage),
@@ -64,32 +56,36 @@ export const routes = [
         navbar: true,
         alignment: 'right',
         exact: true,
-        anonymousUser: true
+        authRequired: false,
+        hiddenForAuthenticated: true
     },
     {
         path: "/register",
         component: withSuspense(RegistrationPage),
         customClass: 'registerButton',
-        title: "Sign up",
+        title: "Create account",
         enabled: true,
         navbar: true,
         alignment: 'right',
         exact: true,
-        anonymousUser: true
+        authRequired: false,
+        hiddenForAuthenticated: true
     },
     {
         path: "/verify-email/:token",
         component: withSuspense(ConfirmPage),
         exact: false,
         enabled: true,
-        anonymousUser: true
+        authRequired: false,
+        hiddenForAuthenticated: true
     },
     {
         path: "/dashboard",
         component: withSuspense(Dashboard),
         exact: false,
         enabled: true,
-        anonymousUser: false
+        authRequired: true,
+        hiddenForAuthenticated: false
     },
     {
         path: "/settings",
@@ -99,31 +95,48 @@ export const routes = [
         navbar: true,
         alignment: 'right',
         exact: true,
-        anonymousUser: false
+        authRequired: true,
+        hiddenForAuthenticated: false
     },
     {
-        path: "/pathfindig",
+        path: "/pathfinding",
         component: withSuspense(PathfindingPage),
         title: "PATHFINDING VISUALIZER",
         enabled: true,
         navbar: true,
         alignment: 'left',
         exact: true,
-        anonymousUser: true
+        authRequired: false,
+        hiddenForAuthenticated: false
     },
     {
-        path: "/logout",
-        component: withSuspense(LogoutPage),
-        customClass: 'logoutButton',
-        title: "Logout",
+        path: "/forgotPassword",
+        component: withSuspense(ForgotPasswordPage),
+        title: "Forgot password",
         enabled: true,
-        navbar: true,
-        alignment: 'right',
+        navbar: false,
         exact: true,
-        anonymousUser: false
+        authRequired: false,
+        hiddenForAuthenticated: true
+    },
+    {
+        path: "/changePassword",
+        component: withSuspense(ChangePasswordPage),
+        title: "Change password",
+        enabled: true,
+        navbar: false,
+        exact: true,
+        authRequired: false,
+        hiddenForAuthenticated: false
     }
 ];
 
-export const isOnAuthenticatedPage = () => {
-    return find(routes.filter(v => v.path === window.location.pathname, v => !v.anonymousUser));
-};
+const getCurrentRoute = () => routes.filter(v => v.path === window.location.pathname)[0];
+
+export const isOnAuthenticatedPage = () => getCurrentRoute().authRequired;
+
+export const isOnAuthShadowedPage = () => getCurrentRoute().hiddenForAuthenticated;
+
+export const isOnMainPage = () => getCurrentRoute().path === '/';
+
+export const isOnLoginPage = () => getCurrentRoute().path === '/login';

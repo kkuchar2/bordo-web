@@ -3,7 +3,7 @@ import {useDispatch} from "react-redux";
 
 import Text from "components/Text";
 import {Link} from "react-router-dom";
-import {reset} from "../redux/reducers/api/account";
+import {reset} from "redux/reducers/api/account";
 
 import "componentStyles/EmailSentPopup.scss";
 

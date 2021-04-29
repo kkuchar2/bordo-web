@@ -2,13 +2,13 @@ export const splitLineStyle = {
     lineStyle: {
         color: 'rgba(112,112,112,0.0)'
     }
-}
+};
 export const axisLabelX = {
     show: true,
     padding: [23, 0, 0, 0],
     textStyle: {
         color: 'white',
-        fontFamily: 'Raleway',
+        fontFamily: 'Whitney Medium',
         fontSize: 14
     },
     position: "top"
@@ -17,7 +17,7 @@ export const axisLabelY = {
     show: true,
     textStyle: {
         color: 'white',
-        fontFamily: 'Raleway',
+        fontFamily: 'Whitney Medium',
         fontSize: 15,
     }
 };
@@ -46,9 +46,9 @@ export const zoomComponent = (data, visible) => data.length === 0 || !useZoom ? 
     show: visible,
     textStyle: {
         color: '#ffffff00',
-        fontFamily: 'Raleway',
+        fontFamily: 'Whitney Medium',
         fontSize: 15,
     }
-}]
+}];
 
 export const mapDates = data => data.map(d => [d.x.getFullYear(), d.x.getMonth() + 1, d.x.getDate()].join('/'));
