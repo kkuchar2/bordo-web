@@ -158,7 +158,6 @@ export const createBars = (scene, material, width, height, data, maxValue, maxSp
 
     let spacing = maxSpacing;
     let barWidth = (width - (spacing * data.length)) / data.length;
-    let barHeight = height;
 
     while (barWidth < 1 && spacing > 0) {
         spacing -= 1;
@@ -169,14 +168,14 @@ export const createBars = (scene, material, width, height, data, maxValue, maxSp
         }
     }
 
-    let geometry = new PlaneGeometry(1, barHeight, 1);
+    let geometry = new PlaneGeometry(1, 1, 1);
 
     for (let i = 0; i < data.length; i++) {
         const bar = new Mesh(geometry, material);
         bar.scale.x = barWidth;
-        bar.scale.y = (data[i] / maxValue);
+        bar.scale.y = (data[i] / maxValue) * height;
         bar.position.x = barWidth / 2 + barWidth * i + spacing * i;
-        bar.position.y = barHeight / 2 - (height * (1.0 - bar.scale.y)) / 2;
+        bar.position.y = -(1.0 - bar.scale.y) / 2;
         scene.add(bar);
     }
 };

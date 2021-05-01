@@ -89,40 +89,6 @@ function BarsView(props) {
 
     useEffectOnTrue(initialized, () => {
 
-        const updateBars = () => {
-            let spacing = 5;
-            let barWidth = (width - (spacing * props.data.length)) / props.data.length;
-
-            while (barWidth < 1 && spacing > 0) {
-                spacing -= 1;
-                barWidth = (width - (spacing * props.data.length)) / props.data.length;
-                if (barWidth > 1) {
-                    break;
-                }
-            }
-
-            for (let i = 0; i < props.samples; i++) {
-                scene.children[i].scale.x = barWidth;
-                scene.children[i].scale.y = (props.data[i] / props.maxValue);
-                scene.children[i].position.y = height / 2 - (height * (1.0 - scene.children[i].scale.y)) / 2;
-            }
-        };
-
-        const createOrUpdateBars = () => {
-            if (scene.children.length === 0 || scene.children.length > 0 && scene.children.length !== props.data.length) {
-                createBars(scene, material, width, height, props.data, props.maxValue, props.maxSpacing);
-            }
-            else {
-                updateBars();
-            }
-        };
-
-        createOrUpdateBars();
-
-    }, [props.data, width]);
-
-    useEffectOnTrue(initialized, () => {
-
         const updateCamera = () => {
             camera.left = 0;
             camera.right = width;
@@ -131,27 +97,33 @@ function BarsView(props) {
             camera.updateProjectionMatrix();
         };
 
-        const udpateRenderer = () => {
-            renderer.setSize(width, height);
-        };
-
         const updateBars = () => {
-            const spacing = props.maxSpacing;
-            const barWidth = (width - (props.samples * spacing)) / props.samples;
-            const barHeight = height;
-            const geom = createPlaneGeometry(barWidth, barHeight);
+            let spacing = props.maxSpacing;
+            let barWidth = (width - (spacing * props.samples)) / props.samples;
+
+            while (barWidth < 1 && spacing > 0) {
+                spacing -= 1;
+                barWidth = (width - (spacing * props.samples)) / props.samples;
+
+                if (barWidth > 1) {
+                    break;
+                }
+            }
 
             for (let i = 0; i < props.samples; i++) {
-                const bar = scene.children[i];
-                bar.geometry = geom;
-                bar.scale.y = (props.data[i] / props.maxValue);
-                bar.position.x = barWidth / 2 + barWidth * i + spacing * i;
-                bar.position.y = barHeight / 2 - (height * (1.0 - bar.scale.y)) / 2;
+                scene.children[i].scale.x = barWidth;
+                scene.children[i].scale.y = props.data[i] / props.maxValue * height;
+                scene.children[i].position.x = barWidth / 2 + barWidth * i + spacing * i;
+                scene.children[i].position.y =  -(1.0 - scene.children[i].scale.y) / 2;
             }
         };
 
         const createOrUpdateBars = () => {
-            if (scene.children.length === 0) {
+            if (props.data.length === 0) {
+                return;
+            }
+
+            if (scene.children.length === 0 || scene.children.length !== props.samples) {
                 createBars(scene, material, width, height, props.data, props.maxValue, props.maxSpacing);
             }
             else {
@@ -160,10 +132,11 @@ function BarsView(props) {
         };
 
         updateCamera();
-        udpateRenderer();
-        createOrUpdateBars();
+        renderer.setSize(width, height);
         renderer.render(scene, camera);
-    }, [width, height]);
+
+        createOrUpdateBars();
+    }, [props.data, width, height, props.maxSpacing, renderer, camera, scene]);
 
     const getClassName = useCallback(() => firstFrameRendered ? "visible" : "not_visible", [firstFrameRendered]);
 
