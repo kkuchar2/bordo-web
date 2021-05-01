@@ -46,17 +46,18 @@
           flex-wrap: wrap;
           flex-direction: column;
           display: flex;
+          align-items: flex-start;
           box-sizing: border-box;
           width: 100%;
-
+          padding: 20px;
 
           .algorithmSelectSection {
             display: flex;
             align-items: center;
-            justify-content: center;
+            justify-content: flex-start;
             color: white;
-            padding: 10px;
             height: 100px;
+            width: 100%;
 
             .title {
               margin-right: 10px;
@@ -65,26 +66,43 @@
 
           .sampleCountSection {
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             justify-content: center;
+            flex-direction: column;
             color: white;
+            width: 100%;
 
             .title {
               margin-right: 10px;
             }
 
-            .sampleInput {
+            .sliderValueGroup {
+              display: flex;
+              flex-direction: row;
+              align-items: center;
+              justify-content: center;
+              width: 100%;
 
-              .inputField {
-                background: #303030;
-                color: white;
+              .slider {
+                flex: 0 1 auto;
               }
 
-              @media (max-width: 400px) {
-                flex: 1;
+              .sampleInput {
+                margin-left: 20px;
+                width: 100px;
 
-                input {
-                  width: 100%;
+                .inputField {
+                  background: #303030;
+                  color: white;
+                ;
+                }
+
+                @media (max-width: 400px) {
+                  flex: 1;
+
+                  input {
+                    width: 100%;
+                  }
                 }
               }
             }

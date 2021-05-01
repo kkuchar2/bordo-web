@@ -5,12 +5,54 @@ import SelectControl from "components/SelectControl";
 import {registerSortWorker, unregisterWorker, sendMessage} from "workers/workers.js";
 import {useEffectWithNonNull} from "util/util.js";
 import Input from "components/Input";
+import Slider, {createSliderWithTooltip} from 'rc-slider';
+import validator from 'validator';
+
+import 'rc-slider/assets/index.css';
 
 import "styles/pages/SortPage.scss";
+import Text from "components/Text.jsx";
 
 const sortingAlgorithms = ["MergeSort", "BubbleSort", "InsertionSort", "QuickSort"];
 
-const maxValue = 1000;
+const marks = {};
+
+const maxValue = 2000;
+
+const logPosition = (value, min, max) => {
+    const minPosition = 0;
+    const maxPosition = 100;
+    const minValue = Math.log(min);
+    const maxValue = Math.log(max);
+    const scale = (maxValue - minValue) / (maxPosition - minPosition);
+    return (Math.log(value) - minValue) / scale + minPosition;
+}
+
+const logSlider = (position, min, max) => {
+    const minPosition = 0;
+    const maxPosition = 100;
+    const minValue = Math.log(min);
+    const maxValue = Math.log(max);
+    const scale = (maxValue - minValue) / (maxPosition - minPosition);
+    return Math.exp(minValue + scale * (position - minPosition));
+}
+
+const calcLogPos = (v) => logPosition(v, 1, maxValue)
+const calcLogVal = (v) => logSlider(v, 1, maxValue)
+
+
+marks[calcLogPos(1)] = <p>{1}</p>;
+marks[calcLogPos(maxValue / 100)] = <p>{maxValue / 100}</p>;
+marks[calcLogPos(maxValue / 10)] = <p>{maxValue / 10}</p>;
+marks[calcLogPos(maxValue)] = {
+    style: {
+        color: '#00b0ff',
+    },
+    label: <p>{maxValue}</p>,
+};
+
+
+
 
 function SortPage() {
 
@@ -19,7 +61,8 @@ function SortPage() {
     const [sorting, setSorting] = useState(false);
     const [paused, setPaused] = useState(false);
     const [selectedAlgorithm, setSelectedAlgorithm] = useState(0);
-    const [sampleCount, setSampleCount] = useState(200);
+    const [sampleCount, setSampleCount] = useState(maxValue / 2);
+    const [maxSpacing, setMaxSpacing] = useState(5);
     const [worker, setWorker] = useState(null);
 
     const messageHandlersMap = {
@@ -71,14 +114,17 @@ function SortPage() {
     }, [worker]);
 
     const onSampleCountInputChange = useCallback(e => {
-        let v = e.target.value;
-        let targetValue = 1;
-        if ((/^([1-9][0-9]{0,3}|10000)$/).test(v)) {
-            targetValue = parseInt(v);
-            onShuffleRequest(targetValue);
+        const number = validator.toInt(e.target.value);
+
+        if (number >= 1 && number <= maxValue) {
+            setSampleCount(number)
         }
-        setSampleCount(v);
+
     }, [worker]);
+
+    useEffectWithNonNull(() => onShuffleRequest(sampleCount), [sampleCount, worker])
+
+    const onSampleCountSliderChange = useCallback(v => setSampleCount(Math.ceil(calcLogVal(v))), [worker]);
 
     const getPlayPauseIcon = useCallback(() => {
         return !sorting || paused ? 'images/play_icon.png' : 'images/pause_icon.png';
@@ -97,7 +143,7 @@ function SortPage() {
                     <div className={"parameters"}>
                         <div className={"algorithmSelectSection"}>
                             <div className={"algorithmSelectTitle"}>
-                                <p className={"title"}>Select sorting algorithm:</p>
+                                <Text className={"title"} text={"Sorting algorithm:"}/>
                             </div>
 
                             <SelectControl
@@ -111,17 +157,40 @@ function SortPage() {
 
                         <div className={"sampleCountSection"}>
                             <div className={"samplesTitle"}>
-                                <p className={"title"}>Select number of samples:</p>
+                                <Text className={"title"} text={"Number of samples:"}/>
                             </div>
+                            <div className={"sliderValueGroup"}>
 
-                            <div className={"sampleInput"}>
-                                <Input
-                                    id="fname"
-                                    name="fname"
-                                    disabled={false}
-                                    value={sampleCount}
-                                    active={true}
-                                    onChange={onSampleCountInputChange}/>
+                                <Slider
+                                    handleStyle={{
+                                        borderColor: 'transparent',
+                                        height: 20,
+                                        width: 20,
+                                        marginTop: -5,
+                                        backgroundColor: '#00aeff',
+                                    }}
+                                    dotStyle={{
+                                        borderColor: 'transparent',
+                                        backgroundColor: '#c4c4c4',
+                                        marginBottom: -3,
+                                    }}
+                                    railStyle={{ backgroundColor: '#404040', height: 10 }}
+                                    className={"slider"}
+                                    marks={marks}
+                                    included={false}
+                                    value={calcLogPos(sampleCount)}
+                                    onChange={onSampleCountSliderChange}
+                                    defaultValue={Math.log(250)}/>
+
+                                <div className={"sampleInput"}>
+                                    <Input
+                                        id="fname"
+                                        name="fname"
+                                        disabled={false}
+                                        value={sampleCount}
+                                        active={true}
+                                        onChange={onSampleCountInputChange}/>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -154,7 +223,7 @@ function SortPage() {
                 </div>
             </div>
             <div className={"chart"}>
-                <BarsView samples={sampleCount} maxValue={maxValue} data={data}/>
+                <BarsView samples={sampleCount} maxValue={maxValue} data={data} maxSpacing={maxSpacing}/>
             </div>
         </div>
     </div>;

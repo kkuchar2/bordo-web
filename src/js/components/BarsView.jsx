@@ -90,7 +90,19 @@ function BarsView(props) {
     useEffectOnTrue(initialized, () => {
 
         const updateBars = () => {
+            let spacing = 5;
+            let barWidth = (width - (spacing * props.data.length)) / props.data.length;
+
+            while (barWidth < 1 && spacing > 0) {
+                spacing -= 1;
+                barWidth = (width - (spacing * props.data.length)) / props.data.length;
+                if (barWidth > 1) {
+                    break;
+                }
+            }
+
             for (let i = 0; i < props.samples; i++) {
+                scene.children[i].scale.x = barWidth;
                 scene.children[i].scale.y = (props.data[i] / props.maxValue);
                 scene.children[i].position.y = height / 2 - (height * (1.0 - scene.children[i].scale.y)) / 2;
             }
@@ -98,7 +110,7 @@ function BarsView(props) {
 
         const createOrUpdateBars = () => {
             if (scene.children.length === 0 || scene.children.length > 0 && scene.children.length !== props.data.length) {
-                createBars(scene, material, width, height, props.data, props.maxValue);
+                createBars(scene, material, width, height, props.data, props.maxValue, props.maxSpacing);
             }
             else {
                 updateBars();
@@ -107,7 +119,7 @@ function BarsView(props) {
 
         createOrUpdateBars();
 
-    }, [props.data]);
+    }, [props.data, width]);
 
     useEffectOnTrue(initialized, () => {
 
@@ -124,7 +136,7 @@ function BarsView(props) {
         };
 
         const updateBars = () => {
-            const spacing = 2;
+            const spacing = props.maxSpacing;
             const barWidth = (width - (props.samples * spacing)) / props.samples;
             const barHeight = height;
             const geom = createPlaneGeometry(barWidth, barHeight);
@@ -140,7 +152,7 @@ function BarsView(props) {
 
         const createOrUpdateBars = () => {
             if (scene.children.length === 0) {
-                createBars(scene, material, width, height, props.data, props.maxValue);
+                createBars(scene, material, width, height, props.data, props.maxValue, props.maxSpacing);
             }
             else {
                 updateBars();

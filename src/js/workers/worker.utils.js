@@ -1,7 +1,7 @@
 import {bubbleSort, insertionSort, mergeSortRecursive, quickSort} from "workers/sorts";
 import {AStarPathfinder} from "workers/pathfinders";
 
-export const SLOWDOWN_FACTOR_MS = 10;
+export const SLOWDOWN_FACTOR_MS = 1;
 
 export const sortState = {
     pause: false,
