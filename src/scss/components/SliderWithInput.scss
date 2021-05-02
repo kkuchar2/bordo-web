@@ -1,0 +1,54 @@
+.sliderWithInput {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  flex-direction: column;
+  color: white;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px;
+  margin-bottom: 10px;
+
+  .title {
+    margin-right: 10px;
+  }
+
+  .description {
+    margin-top: 5px;
+    margin-bottom: 10px;
+    font-size: 11pt;
+    color: #8b8b8b;
+    max-width: 400px;
+  }
+
+  .sliderAndInput {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+
+    .slider {
+      flex: 0 1 auto;
+    }
+
+    .valueInput {
+      margin-left: 20px;
+      width: 100px;
+
+      .inputField {
+        background: #303030;
+        color: white;
+      ;
+      }
+
+      @media (max-width: 400px) {
+        flex: 1;
+
+        input {
+          width: 100%;
+        }
+      }
+    }
+  }
+}

@@ -142,6 +142,14 @@ function SortPage() {
             <div className={"left"}>
                 <div className={"actions"}>
                     <div className={"parameters"}>
+                        <Text className="sortTitle" text={"Sorting algorithms visualizer"}/>
+
+                        <Text className="sortDescription"
+                              text={"Tool that displays visualisation of common sorting algorithms"}/>
+
+                        <Text className="sortDescription"
+                              text={"Algorithms code is placed and running on worker thread, while notifying UI components in real time"}/>
+
                         <div className={"algorithmSelectSection"}>
                             <div className={"algorithmSelectTitle"}>
                                 <Text className={"title"} text={"Sorting algorithm:"}/>
@@ -170,7 +178,7 @@ function SortPage() {
 
                         <SliderWithInput
                             text={"Slowdown factor [ms]:"}
-                            description={"Delay of miliseconds to wait before each visual state to update"}
+                            description={"Delay of miliseconds to wait before each visual state to update (less = faster)"}
                             logharitmic={false}
                             marks={slowdownFactorMarks}
                             value={slowdownFactor}

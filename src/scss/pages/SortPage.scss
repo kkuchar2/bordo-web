@@ -43,13 +43,26 @@
         box-sizing: border-box;
 
         .parameters {
-          flex-wrap: wrap;
+          flex-wrap: nowrap;
           flex-direction: column;
           display: flex;
           align-items: flex-start;
           box-sizing: border-box;
           width: 100%;
+          max-height: 100%;
           padding: 20px;
+          overflow: auto;
+          .sortTitle {
+            font-size: 20pt;
+          }
+
+          .sortDescription {
+            margin-top: 15px;
+            margin-bottom: 10px;
+            font-size: 12pt;
+            color: #a1a1a1;
+            max-width: 450px;
+          }
 
           .algorithmSelectSection {
             display: flex;
