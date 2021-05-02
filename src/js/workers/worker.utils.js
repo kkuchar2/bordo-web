@@ -59,7 +59,9 @@ export const notify = (type, payload, skipMessagesByTime = false, skipTimeInMs =
 
 export const notifySortDataShuffled = () => notify("shuffle", sortState.data);
 
-export const notifySortUpdate = () => notify("sort", sortState.data, true, 16);
+export const notifySortUpdate = (forceSend = false) => {
+    notify("sort", sortState.data, !forceSend, 16);
+}
 
 export const setSlowdownFactor = (m) => SLOWDOWN_FACTOR_MS = m.value;
 
@@ -73,7 +75,10 @@ export const notifyObstacles = (data = pathFindingState.obstacles) => {
     notify("onObstacleDataReceived", { "obstacles": data }, false, 1);
 };
 
-export const onSortMethodExit = () => postMessage({type: "sortFinished", payload: {"sorted": !sortState.abort}});
+export const onSortMethodExit = () => {
+    notifySortUpdate(true);
+    postMessage({type: "sortFinished", payload: {"sorted": !sortState.abort}});
+}
 
 export const onPathfindingFinished = () => {
     postMessage({

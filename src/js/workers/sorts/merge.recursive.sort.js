@@ -56,4 +56,4 @@ const mergeSort = async (start, end) => {
     notifySortUpdate();
 };
 
-export const mergeSortRecursive = async () => await mergeSort(0, sortState.data.length - 1);
+export const mergeSortRecursive = async () => mergeSort(0, sortState.data.length - 1);
