@@ -1,6 +1,6 @@
 import React, {useEffect, useRef, useState, useCallback} from "react";
 
-import {getParentHeight, getParentWidth, useEffectOnTrue} from "util/util.js";
+import {getParentHeight, getParentWidth, useEffectOnTrue, useEffectWithNonNull} from "util/util.js";
 
 import {
     createBars, createMaterial,
@@ -14,7 +14,7 @@ import {
 
 import "componentStyles/BarsView.scss";
 
-let material = createMaterial("#00c4ff", 0.5);
+let material = createMaterial("#00c4ff", 1);
 let geometry;
 
 function BarsView(props) {
@@ -86,6 +86,14 @@ function BarsView(props) {
         start();
         return dispose;
     }, [initialized]);
+
+    useEffectWithNonNull(() => {
+        if (scene.children.length > 0) {
+            for (let i = 0; i < props.samples; i++) {
+                scene.children[i].material.color.setHex("0x" + props.color.substring(1));
+            }
+        }
+    }, [props.color, scene])
 
     useEffectOnTrue(initialized, () => {
 

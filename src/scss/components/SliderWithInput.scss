@@ -6,8 +6,8 @@
   color: white;
   width: 100%;
   box-sizing: border-box;
-  padding: 10px;
   margin-bottom: 10px;
+  margin-top: 10px;
 
   .title {
     margin-right: 10px;
@@ -27,6 +27,8 @@
     align-items: center;
     justify-content: center;
     width: 100%;
+    padding-left: 10px;
+    padding-right: 10px;
 
     .slider {
       flex: 0 1 auto;

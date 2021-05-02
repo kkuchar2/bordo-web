@@ -4,6 +4,7 @@ import Button from "components/Button";
 import SliderWithInput from "components/SliderWithInput";
 import SelectControl from "components/SelectControl";
 import Text from "components/Text.jsx";
+import { HexColorPicker } from "react-colorful";
 
 import {registerSortWorker, unregisterWorker, sendMessage} from "workers/workers.js";
 import {logPosition, logSlider, useEffectWithNonNull} from "util/util.js";
@@ -50,6 +51,7 @@ function SortPage() {
     const [maxSpacing, setMaxSpacing] = useState(5);
     const [slowdownFactor, setSlowdownFactor] = useState(1);
     const [worker, setWorker] = useState(null);
+    const [color, setColor] = useState("#aabbcc");
 
     const messageHandlersMap = {
         "sort": payload => setData(payload),
@@ -188,6 +190,9 @@ function SortPage() {
                             onInputChange={onSlowdownFactorChange}>
                         </SliderWithInput>
 
+                        <Text className={"title"} text={"Bars color:"}/>
+
+                        <HexColorPicker color={color} onChange={setColor} />
                     </div>
 
                     <div className={"buttonsSection"}>
@@ -218,7 +223,7 @@ function SortPage() {
                 </div>
             </div>
             <div className={"chart"}>
-                <BarsView samples={sampleCount} maxValue={maxSampleCount} data={data} maxSpacing={maxSpacing}/>
+                <BarsView samples={sampleCount} maxValue={maxSampleCount} data={data} maxSpacing={maxSpacing} color={color}/>
             </div>
         </div>
     </div>;
