@@ -2,7 +2,7 @@ import {
     getSortMethod,
     notifySortDataShuffled,
     onSortMethodExit,
-    resetState,
+    resetState, setSlowdownFactor,
     shuffle,
     sortState,
 } from "workers/worker.utils.js";
@@ -17,7 +17,8 @@ const requestMap = {
     "sort": e => onSortRequest(e),
     "shuffle": e => onShuffleRequest(e),
     "pause": e => onPauseRequest(e),
-    "stop": e => onAbortRequest(e)
+    "stop": e => onAbortRequest(e),
+    "setSlowdownFactor" : e => setSlowdownFactor(e)
 };
 
 const onSortRequest = message_data => {

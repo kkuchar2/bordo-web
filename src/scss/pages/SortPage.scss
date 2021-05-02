@@ -63,50 +63,6 @@
               margin-right: 10px;
             }
           }
-
-          .sampleCountSection {
-            display: flex;
-            align-items: flex-start;
-            justify-content: center;
-            flex-direction: column;
-            color: white;
-            width: 100%;
-
-            .title {
-              margin-right: 10px;
-            }
-
-            .sliderValueGroup {
-              display: flex;
-              flex-direction: row;
-              align-items: center;
-              justify-content: center;
-              width: 100%;
-
-              .slider {
-                flex: 0 1 auto;
-              }
-
-              .sampleInput {
-                margin-left: 20px;
-                width: 100px;
-
-                .inputField {
-                  background: #303030;
-                  color: white;
-                ;
-                }
-
-                @media (max-width: 400px) {
-                  flex: 1;
-
-                  input {
-                    width: 100%;
-                  }
-                }
-              }
-            }
-          }
         }
 
         .buttonsSection {

@@ -97,3 +97,22 @@ export const withNotStatus = (status, statusName, func) => {
         return func();
     }
 };
+
+
+export const logPosition = (value, min, max) => {
+    const minPosition = 0;
+    const maxPosition = 100;
+    const minValue = Math.log(min);
+    const maxValue = Math.log(max);
+    const scale = (maxValue - minValue) / (maxPosition - minPosition);
+    return (Math.log(value) - minValue) / scale + minPosition;
+}
+
+export const logSlider = (position, min, max) => {
+    const minPosition = 0;
+    const maxPosition = 100;
+    const minValue = Math.log(min);
+    const maxValue = Math.log(max);
+    const scale = (maxValue - minValue) / (maxPosition - minPosition);
+    return Math.exp(minValue + scale * (position - minPosition));
+}

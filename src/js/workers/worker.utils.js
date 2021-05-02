@@ -1,7 +1,7 @@
 import {bubbleSort, insertionSort, mergeSortRecursive, quickSort} from "workers/sorts";
 import {AStarPathfinder} from "workers/pathfinders";
 
-export const SLOWDOWN_FACTOR_MS = 1;
+let SLOWDOWN_FACTOR_MS = 1;
 
 export const sortState = {
     pause: false,
@@ -60,6 +60,8 @@ export const notify = (type, payload, skipMessagesByTime = false, skipTimeInMs =
 export const notifySortDataShuffled = () => notify("shuffle", sortState.data);
 
 export const notifySortUpdate = () => notify("sort", sortState.data, true, 16);
+
+export const setSlowdownFactor = (m) => SLOWDOWN_FACTOR_MS = m.value;
 
 export const notifyPathFindUpdate = () => {
     notify("onPathFindUpdate", {

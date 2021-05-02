@@ -1,58 +1,43 @@
 import React, {useEffect, useState, useCallback} from 'react';
 import BarsView from "components/BarsView";
 import Button from "components/Button";
+import SliderWithInput from "components/SliderWithInput";
 import SelectControl from "components/SelectControl";
+import Text from "components/Text.jsx";
+
 import {registerSortWorker, unregisterWorker, sendMessage} from "workers/workers.js";
-import {useEffectWithNonNull} from "util/util.js";
-import Input from "components/Input";
-import Slider, {createSliderWithTooltip} from 'rc-slider';
+import {logPosition, logSlider, useEffectWithNonNull} from "util/util.js";
 import validator from 'validator';
 
-import 'rc-slider/assets/index.css';
-
 import "styles/pages/SortPage.scss";
-import Text from "components/Text.jsx";
 
 const sortingAlgorithms = ["MergeSort", "BubbleSort", "InsertionSort", "QuickSort"];
 
 const marks = {};
+const slowdownFactorMarks = {};
 
-const maxValue = 2000;
+const minSampleCount = 1;
+const maxSampleCount = 2000;
 
-const logPosition = (value, min, max) => {
-    const minPosition = 0;
-    const maxPosition = 100;
-    const minValue = Math.log(min);
-    const maxValue = Math.log(max);
-    const scale = (maxValue - minValue) / (maxPosition - minPosition);
-    return (Math.log(value) - minValue) / scale + minPosition;
-}
-
-const logSlider = (position, min, max) => {
-    const minPosition = 0;
-    const maxPosition = 100;
-    const minValue = Math.log(min);
-    const maxValue = Math.log(max);
-    const scale = (maxValue - minValue) / (maxPosition - minPosition);
-    return Math.exp(minValue + scale * (position - minPosition));
-}
-
-const calcLogPos = (v) => logPosition(v, 1, maxValue)
-const calcLogVal = (v) => logSlider(v, 1, maxValue)
-
-
-marks[calcLogPos(1)] = <p>{1}</p>;
-marks[calcLogPos(maxValue / 100)] = <p>{maxValue / 100}</p>;
-marks[calcLogPos(maxValue / 10)] = <p>{maxValue / 10}</p>;
-marks[calcLogPos(maxValue)] = {
+marks[logPosition(1, minSampleCount, maxSampleCount)] = <p>{1}</p>;
+marks[logPosition(maxSampleCount / 100, minSampleCount, maxSampleCount)] = <p>{maxSampleCount / 100}</p>;
+marks[logPosition(maxSampleCount / 10, minSampleCount, maxSampleCount)] = <p>{maxSampleCount / 10}</p>;
+marks[logPosition(maxSampleCount, minSampleCount, maxSampleCount)] = {
     style: {
         color: '#00b0ff',
     },
-    label: <p>{maxValue}</p>,
+    label: <p>{maxSampleCount}</p>,
 };
 
-
-
+slowdownFactorMarks[1 * (100 / 50)] = <p>{1}</p>;
+slowdownFactorMarks[10 * (100 / 50)] = <p>{10}</p>;
+slowdownFactorMarks[15 * (100 / 50)] = <p>{15}</p>;
+slowdownFactorMarks[50 * (100 / 50)] = {
+    style: {
+        color: '#00b0ff',
+    },
+    label: <p>{50}</p>,
+};
 
 function SortPage() {
 
@@ -61,14 +46,15 @@ function SortPage() {
     const [sorting, setSorting] = useState(false);
     const [paused, setPaused] = useState(false);
     const [selectedAlgorithm, setSelectedAlgorithm] = useState(0);
-    const [sampleCount, setSampleCount] = useState(maxValue / 2);
+    const [sampleCount, setSampleCount] = useState(maxSampleCount / 2);
     const [maxSpacing, setMaxSpacing] = useState(5);
+    const [slowdownFactor, setSlowdownFactor] = useState(1);
     const [worker, setWorker] = useState(null);
 
     const messageHandlersMap = {
         "sort": payload => setData(payload),
         "shuffle": payload => onShuffleDataReceived(payload),
-        "sortFinished": payload => onSortFinished(payload.sorted)
+        "sortFinished": payload => onSortFinished(payload.sorted),
     };
 
     useEffect(() => {
@@ -110,21 +96,36 @@ function SortPage() {
 
     const onShuffleRequest = useCallback(samples => {
         setSorting(false);
-        sendMessage(worker, "shuffle", {sampleCount: samples, maxValue: maxValue});
+        sendMessage(worker, "shuffle", {sampleCount: samples, maxValue: maxSampleCount});
     }, [worker]);
+
+    const onSlowdownFactorChange = useCallback((e) => {
+        const value = validator.toInt(e.target.value);
+
+        if (value >= 1 && value <= 50) {
+            setSlowdownFactor(value)
+        }
+    }, []);
 
     const onSampleCountInputChange = useCallback(e => {
-        const number = validator.toInt(e.target.value);
+        const value = validator.toInt(e.target.value);
 
-        if (number >= 1 && number <= maxValue) {
-            setSampleCount(number)
+        if (value >= 1 && value <= maxSampleCount) {
+            setSampleCount(value)
         }
-
-    }, [worker]);
+    }, []);
 
     useEffectWithNonNull(() => onShuffleRequest(sampleCount), [sampleCount, worker])
 
-    const onSampleCountSliderChange = useCallback(v => setSampleCount(Math.ceil(calcLogVal(v))), [worker]);
+    useEffectWithNonNull(() => {
+        sendMessage(worker, "setSlowdownFactor", {value: slowdownFactor});
+    }, [slowdownFactor, worker])
+
+    const onSampleCountSliderChange = useCallback(v => {
+        setSampleCount(Math.ceil(logSlider(v, minSampleCount, maxSampleCount)))
+    }, [worker]);
+
+    const onSlowdownFactorSliderChange = useCallback(v => setSlowdownFactor(v * (50 / 100)), [worker]);
 
     const getPlayPauseIcon = useCallback(() => {
         return !sorting || paused ? 'images/play_icon.png' : 'images/pause_icon.png';
@@ -155,44 +156,30 @@ function SortPage() {
                             </SelectControl>
                         </div>
 
-                        <div className={"sampleCountSection"}>
-                            <div className={"samplesTitle"}>
-                                <Text className={"title"} text={"Number of samples:"}/>
-                            </div>
-                            <div className={"sliderValueGroup"}>
+                        <SliderWithInput
+                            text={"Number of samples:"}
+                            description={"Number of samples that will be sorted and visualized"}
+                            logharitmic={true}
+                            marks={marks}
+                            value={sampleCount}
+                            min={1}
+                            max={2000}
+                            onSliderChange={onSampleCountSliderChange}
+                            onInputChange={onSampleCountInputChange}>
+                        </SliderWithInput>
 
-                                <Slider
-                                    handleStyle={{
-                                        borderColor: 'transparent',
-                                        height: 20,
-                                        width: 20,
-                                        marginTop: -5,
-                                        backgroundColor: '#00aeff',
-                                    }}
-                                    dotStyle={{
-                                        borderColor: 'transparent',
-                                        backgroundColor: '#c4c4c4',
-                                        marginBottom: -3,
-                                    }}
-                                    railStyle={{ backgroundColor: '#404040', height: 10 }}
-                                    className={"slider"}
-                                    marks={marks}
-                                    included={false}
-                                    value={calcLogPos(sampleCount)}
-                                    onChange={onSampleCountSliderChange}
-                                    defaultValue={Math.log(250)}/>
+                        <SliderWithInput
+                            text={"Slowdown factor [ms]:"}
+                            description={"Delay of miliseconds to wait before each visual state to update"}
+                            logharitmic={false}
+                            marks={slowdownFactorMarks}
+                            value={slowdownFactor}
+                            min={1}
+                            max={50}
+                            onSliderChange={onSlowdownFactorSliderChange}
+                            onInputChange={onSlowdownFactorChange}>
+                        </SliderWithInput>
 
-                                <div className={"sampleInput"}>
-                                    <Input
-                                        id="fname"
-                                        name="fname"
-                                        disabled={false}
-                                        value={sampleCount}
-                                        active={true}
-                                        onChange={onSampleCountInputChange}/>
-                                </div>
-                            </div>
-                        </div>
                     </div>
 
                     <div className={"buttonsSection"}>
@@ -223,7 +210,7 @@ function SortPage() {
                 </div>
             </div>
             <div className={"chart"}>
-                <BarsView samples={sampleCount} maxValue={maxValue} data={data} maxSpacing={maxSpacing}/>
+                <BarsView samples={sampleCount} maxValue={maxSampleCount} data={data} maxSpacing={maxSpacing}/>
             </div>
         </div>
     </div>;

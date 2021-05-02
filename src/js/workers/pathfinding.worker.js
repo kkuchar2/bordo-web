@@ -1,6 +1,6 @@
 import {
     getPathfindingMethod, notifyObstacles, onPathfindingFinished,
-    pathFindingState,
+    pathFindingState, setSlowdownFactor,
 } from "workers/worker.utils.js";
 
 /* -------------- Main message handler ------------------ */
