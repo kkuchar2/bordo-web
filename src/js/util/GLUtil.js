@@ -1,26 +1,42 @@
 import {
-    CircleGeometry,
-    Mesh, MeshBasicMaterial,
+    DynamicDrawUsage,
+    FrontSide,
+    InstancedBufferGeometry,
+    InstancedMesh,
+    Mesh,
+    MeshBasicMaterial, Object3D,
     OrthographicCamera,
+    PlaneBufferGeometry,
     PlaneGeometry,
-    Scene, WebGLRenderer,
+    Scene,
+    Color,
+    WebGLRenderer,
 } from "three";
-import TWEEN from "@tweenjs/tween.js";
+
+export const dummyObj = new Object3D();
+export const dummyColor = new Color();
+
+export const colorOfHash = v => dummyColor.setHex("0x" + v.substring(1));
+
+export const updateInstancedMeshColor = (mesh, instanceCount, color) => {
+    for (let i = 0; i < instanceCount; i++) {
+        mesh.setColorAt(i, colorOfHash(color));
+    }
+    mesh.instanceColor.needsUpdate = true;
+}
 
 export const createMaterial = (color, alpha) => {
     return new MeshBasicMaterial({
         color: color,
-        opacity: alpha
+        alpha: alpha,
+        side: FrontSide
     });
 };
 
 export const createOrthoCamera = (width, height, near, far, z) => {
-    let camera = new OrthographicCamera(0, width, height, 0, near, far);
-    camera.left = 0;
-    camera.right = width;
-    camera.top = height;
-    camera.bottom = 0;
+    let camera = new OrthographicCamera(0, width, height, 0, -1000, 1000);
     camera.position.z = z;
+    camera.lookAt(0, 0, 0);
     camera.updateProjectionMatrix();
     return camera;
 };
@@ -144,70 +160,64 @@ export const createLines = (scene, material, cellSize, cols, rows, width, height
     return count;
 };
 
-export const createCircle = (scene, material, radius, position) => {
-    let geometry = new CircleGeometry(radius, 32);
-    const circle = new Mesh(geometry, material);
-    circle.position.x = position[0];
-    circle.position.y = position[1];
-    scene.add(circle);
-    return circle;
-};
+export const calculateBarsSizes = (width, barsCount) => {
+    let maxBarWidth = width / barsCount;
+    let spacing = 0;
+    let barWidth = 1;
+    let min = Math.min();
+    let targetBarWidth = -1;
+    let targetSpacing = -1;
 
-export const createBars = (scene, material, width, height, data, maxValue, maxSpacing) => {
+    while (barWidth <= maxBarWidth) {
+        while (spacing <= 5) {
+            let diff = width - barsCount * (barWidth + spacing);
+
+            if (diff < min && diff > 0) {
+                min = diff;
+                targetSpacing = spacing;
+                targetBarWidth = barWidth;
+            }
+
+            spacing++;
+        }
+        barWidth++;
+        spacing = 0;
+    }
+
+    barWidth = targetBarWidth;
+    spacing = targetSpacing;
+
+    if (barWidth === -1) {
+        barWidth = maxBarWidth;
+        spacing = 0;
+    }
+
+    const offsetX = Math.floor((width - barsCount * (barWidth + spacing)) / 2);
+
+    return {barWidth, spacing, offsetX}
+}
+
+export const updateInstancedBar = (idx, mesh, value, maxValue, height, barWidth, spacing, offsetX, color) => {
+    const scale = (value / maxValue) * height;
+    dummyObj.scale.set(barWidth, scale, 1);
+    dummyObj.position.set(barWidth / 2 + barWidth * idx + spacing * idx + offsetX, scale / 2, 0);
+    dummyObj.updateMatrix();
+    mesh.setColorAt(idx, colorOfHash(color));
+}
+
+export const createBars = (scene, width, height, data, maxValue, color) => {
     removeChildrenFromScene(scene);
 
-    let spacing = maxSpacing;
-    let barWidth = (width - (spacing * data.length)) / data.length;
+    const geom = new InstancedBufferGeometry().copy(new PlaneBufferGeometry(1, 1));
+    const mesh = new InstancedMesh(geom, new MeshBasicMaterial({ color: 0xffffff, opacity: 1, transparent: false}), maxValue);
+    const {barWidth, spacing, offsetX} = calculateBarsSizes(width, data.length);
 
-    while (barWidth < 1 && spacing > 0) {
-        spacing -= 1;
-        barWidth = (width - (spacing * data.length)) / data.length;
-
-        if (barWidth > 1) {
-            break;
-        }
+    for (let x = 0; x < data.length; x++) {
+        updateInstancedBar(x, mesh, data[x], maxValue, height, barWidth, spacing, offsetX, color);
+        mesh.setMatrixAt(x, dummyObj.matrix);
     }
 
-    let geometry = new PlaneGeometry(1, 1, 1);
-
-    for (let i = 0; i < data.length; i++) {
-        const bar = new Mesh(geometry, material);
-        bar.scale.x = barWidth;
-        bar.scale.y = (data[i] / maxValue) * height;
-        bar.position.x = barWidth / 2 + barWidth * i + spacing * i;
-        bar.position.y = -(1.0 - bar.scale.y) / 2;
-        scene.add(bar);
-    }
-};
-
-export const tweenScale = (mesh, time) => {
-    mesh.scale.x = 0;
-    mesh.scale.y = 0;
-    mesh.position.z = -2;
-    return new TWEEN.Tween(mesh.scale).to({x: 0.9, y: 0.9, z: 1.3}, time).onComplete(() => {
-        new TWEEN.Tween(mesh.scale).to({x: 1.0, y: 1.0, z: 1.0}, time).start();
-    }).start();
-};
-
-export const tweenMaterial = (mesh, targetMaterial, time, onEndFunc = () => {}) => {
-    const m = targetMaterial.clone();
-    return new TWEEN.Tween(mesh.material)
-        .to({color: m.color, opacity: m.opacity}, time)
-        .onComplete(() => onEndFunc())
-        .start();
-};
-
-export const calculateCellsInCircle = (x, y, radius, matrix) => {
-    const selectionIndexes = [];
-
-    for (let i = 0; i < matrix.length; i++) {
-        const a = matrix[i].userData.x - x;
-        const b = matrix[i].userData.y - y;
-
-        if (a * a + b * b <= radius * radius) {
-            selectionIndexes.push(i);
-        }
-    }
-
-    return selectionIndexes;
+    mesh.instanceMatrix.setUsage(DynamicDrawUsage);
+    mesh.instanceMatrix.needsUpdate = true;
+    scene.add(mesh);
 };

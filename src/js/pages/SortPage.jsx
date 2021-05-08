@@ -4,41 +4,41 @@ import Button from "components/Button";
 import SliderWithInput from "components/SliderWithInput";
 import SelectControl from "components/SelectControl";
 import Text from "components/Text.jsx";
-import { HexColorPicker } from "react-colorful";
+import {HexColorPicker} from "react-colorful";
 
 import {registerSortWorker, unregisterWorker, sendMessage} from "workers/workers.js";
 import {logPosition, logSlider, useEffectWithNonNull} from "util/util.js";
 import validator from 'validator';
 
-import "styles/pages/SortPage.scss";
-
 const sortingAlgorithms = ["MergeSort", "BubbleSort", "InsertionSort", "QuickSort"];
 
-const marks = {};
-const slowdownFactorMarks = {};
+const minSampleCount = 10;
+const maxSampleCount = 300;
 
-const minSampleCount = 1;
-const maxSampleCount = 2000;
+const minSlowdownFactor = 1;
+const maxSlowdownFactor = 60;
 
-marks[logPosition(1, minSampleCount, maxSampleCount)] = <p>{1}</p>;
-marks[logPosition(maxSampleCount / 100, minSampleCount, maxSampleCount)] = <p>{maxSampleCount / 100}</p>;
-marks[logPosition(maxSampleCount / 10, minSampleCount, maxSampleCount)] = <p>{maxSampleCount / 10}</p>;
-marks[logPosition(maxSampleCount, minSampleCount, maxSampleCount)] = {
-    style: {
-        color: '#00b0ff',
-    },
-    label: <p>{maxSampleCount}</p>,
-};
+const createSliderMarks = (min, max) => {
+    const marks = {};
+    marks[logPosition(min, min, max)] = <p>{min}</p>;
+    marks[logPosition(max / 2, min, max)] = <p>{max / 2}</p>;
+    marks[logPosition(max / 4, min, max)] = <p>{max / 4}</p>;
+    marks[logPosition(max / 6, min, max)] = <p>{max / 6}</p>;
+    marks[logPosition(max, min, max)] = {
+        style: {
+            color: '#00b0ff',
+        },
+        label: <p>{max}</p>,
+    };
+    return marks;
+}
 
-slowdownFactorMarks[1 * (100 / 50)] = <p>{1}</p>;
-slowdownFactorMarks[10 * (100 / 50)] = <p>{10}</p>;
-slowdownFactorMarks[15 * (100 / 50)] = <p>{15}</p>;
-slowdownFactorMarks[50 * (100 / 50)] = {
-    style: {
-        color: '#00b0ff',
-    },
-    label: <p>{50}</p>,
-};
+const sampleCountMarks = createSliderMarks(minSampleCount, maxSampleCount);
+const slowdownFactorMarks = createSliderMarks(minSlowdownFactor, maxSlowdownFactor);
+
+console.log(slowdownFactorMarks);
+
+import "styles/pages/SortPage.scss";
 
 function SortPage() {
 
@@ -47,14 +47,19 @@ function SortPage() {
     const [sorting, setSorting] = useState(false);
     const [paused, setPaused] = useState(false);
     const [selectedAlgorithm, setSelectedAlgorithm] = useState(0);
-    const [sampleCount, setSampleCount] = useState(maxSampleCount / 2);
-    const [maxSpacing, setMaxSpacing] = useState(5);
-    const [slowdownFactor, setSlowdownFactor] = useState(1);
+    const [sampleCount, setSampleCount] = useState(100);
+    const [maxSpacing, setMaxSpacing] = useState(1);
+    const [slowdownFactor, setSlowdownFactor] = useState(minSlowdownFactor);
     const [worker, setWorker] = useState(null);
-    const [color, setColor] = useState("#aabbcc");
+    const [color, setColor] = useState("#5e5e5e");
+    const [dirty, setDirty] = useState(false);
+    const [marks, setMarks] = useState([]);
 
     const messageHandlersMap = {
-        "sort": payload => setData(payload),
+        "sort": payload => {
+            setData(payload.data)
+            setMarks(payload.marks)
+        },
         "shuffle": payload => onShuffleDataReceived(payload),
         "sortFinished": payload => onSortFinished(payload.sorted),
     };
@@ -70,6 +75,7 @@ function SortPage() {
     const onShuffleDataReceived = useCallback(receivedData => {
         setData(receivedData);
         setSorted(false);
+        setDirty(true);
     }, []);
 
     const onSortFinished = useCallback(isSorted => {
@@ -78,6 +84,8 @@ function SortPage() {
     }, []);
 
     const onStartPauseButtonPressed = useCallback(() => {
+        setDirty(false);
+
         if (sorted) {
             return;
         }
@@ -124,10 +132,11 @@ function SortPage() {
     }, [slowdownFactor, worker])
 
     const onSampleCountSliderChange = useCallback(v => {
+        console.log("Slider changed to : " + v);
         setSampleCount(Math.ceil(logSlider(v, minSampleCount, maxSampleCount)))
     }, [worker]);
 
-    const onSlowdownFactorSliderChange = useCallback(v => setSlowdownFactor(v * (50 / 100)), [worker]);
+    const onSlowdownFactorSliderChange = useCallback(v => setSlowdownFactor(v * (maxSlowdownFactor / 100)), [worker]);
 
     const getPlayPauseIcon = useCallback(() => {
         return !sorting || paused ? 'images/play_icon.png' : 'images/pause_icon.png';
@@ -137,94 +146,102 @@ function SortPage() {
         return !sorting || paused ? "Sort" : "Pause";
     }, [sorting, paused])
 
-    const onSelectedAlgorithmChange = useCallback(setSelectedAlgorithm);
+    const onSelectedAlgorithmChange = useCallback(setSelectedAlgorithm, []);
 
     return <div className={"sortPage"}>
         <div className={"window"}>
-            <div className={"left"}>
-                <div className={"actions"}>
-                    <div className={"parameters"}>
-                        <Text className="sortTitle" text={"Sorting algorithms visualizer"}/>
+            <div className={"toolbar"}>
+                <Text className="sortTitle" text={"Sorting algorithms visualizer"}/>
 
-                        <Text className="sortDescription"
-                              text={"Tool that displays visualisation of common sorting algorithms"}/>
+                <Text className="sortDescription"
+                      text={"Tool that displays visualisation of common sorting algorithms"}/>
 
-                        <Text className="sortDescription"
-                              text={"Algorithms code is placed and running on worker thread, while notifying UI components in real time"}/>
+                <Text className="sortDescription"
+                      text={"Algorithms code is placed and running on worker thread, while notifying UI components in real time"}/>
 
-                        <div className={"algorithmSelectSection"}>
-                            <div className={"algorithmSelectTitle"}>
-                                <Text className={"title"} text={"Sorting algorithm:"}/>
-                            </div>
-
-                            <SelectControl
-                                className={"sorting-algorithm-select"}
-                                options={sortingAlgorithms}
-                                value={selectedAlgorithm}
-                                disabled={sorting}
-                                onChange={onSelectedAlgorithmChange}>
-                            </SelectControl>
-                        </div>
-
-                        <SliderWithInput
-                            text={"Number of samples:"}
-                            description={"Number of samples that will be sorted and visualized"}
-                            logharitmic={true}
-                            marks={marks}
-                            value={sampleCount}
-                            min={1}
-                            max={2000}
-                            onSliderChange={onSampleCountSliderChange}
-                            onInputChange={onSampleCountInputChange}>
-                        </SliderWithInput>
-
-                        <SliderWithInput
-                            text={"Slowdown factor [ms]:"}
-                            description={"Delay of miliseconds to wait before each visual state to update (less = faster)"}
-                            logharitmic={false}
-                            marks={slowdownFactorMarks}
-                            value={slowdownFactor}
-                            min={1}
-                            max={50}
-                            onSliderChange={onSlowdownFactorSliderChange}
-                            onInputChange={onSlowdownFactorChange}>
-                        </SliderWithInput>
-
-                        <Text className={"title"} text={"Bars color:"}/>
-
-                        <HexColorPicker color={color} onChange={setColor} />
+                <div className={"algorithmSelectSection"}>
+                    <div className={"algorithmSelectTitle"}>
+                        <Text disabled={sorting} className={"title"} text={"Sorting algorithm:"}/>
                     </div>
 
-                    <div className={"buttonsSection"}>
-                        <Button
-                            className={"chartButton"}
-                            text={"Shuffle"}
-                            onClick={() => onShuffleRequest(sampleCount)}
-                            disabled={sorting}>
-                            <img src={'/images/shuffle_icon.png'} width={12} height={12} alt={""}/>
-                        </Button>
+                    <SelectControl
+                        className={"sorting-algorithm-select"}
+                        options={sortingAlgorithms}
+                        value={selectedAlgorithm}
+                        disabled={sorting}
+                        onChange={onSelectedAlgorithmChange}>
+                    </SelectControl>
+                </div>
 
-                        <Button
-                            className={"chartButton playButton"}
-                            onClick={onStartPauseButtonPressed}
-                            text={getStartButtonText()}
-                            disabled={sorted}>
-                            <img src={getPlayPauseIcon()} width={12} height={12} alt={""}/>
-                        </Button>
+                <SliderWithInput
+                    text={"Number of samples:"}
+                    description={"Number of samples that will be sorted and visualized"}
+                    logharitmic={true}
+                    marks={sampleCountMarks}
+                    value={sampleCount}
+                    min={minSampleCount}
+                    max={maxSampleCount}
+                    disabled={sorting}
+                    onSliderChange={onSampleCountSliderChange}
+                    onInputChange={onSampleCountInputChange}>
+                </SliderWithInput>
 
-                        <Button
-                            className={"chartButton stopButton"}
-                            onClick={onStopButtonPressed}
-                            text={"Stop"}
-                            disabled={!sorting || paused}>
-                            <img src={'/images/stop_icon.png'} width={12} height={12} alt={""}/>
-                        </Button>
-                    </div>
+                <SliderWithInput
+                    text={"Slowdown factor [ms]:"}
+                    description={"Delay of miliseconds to wait before each visual state to update (less = faster)"}
+                    logharitmic={false}
+                    marks={slowdownFactorMarks}
+                    value={slowdownFactor}
+                    min={minSlowdownFactor}
+                    max={maxSlowdownFactor}
+                    onSliderChange={onSlowdownFactorSliderChange}
+                    onInputChange={onSlowdownFactorChange}>
+                </SliderWithInput>
+
+                <Text className={"title"} text={"Bars color:"}/>
+
+                <HexColorPicker color={color} onChange={setColor}/>
+
+                <div className={"buttonsSection"}>
+                    <Button
+                        className={"chartButton"}
+                        text={"Shuffle"}
+                        onClick={() => onShuffleRequest(sampleCount)}
+                        disabled={sorting}>
+                        <img src={'/images/shuffle_icon.png'} width={12} height={12} alt={""}/>
+                    </Button>
+
+                    <Button
+                        className={"chartButton playButton"}
+                        onClick={onStartPauseButtonPressed}
+                        text={getStartButtonText()}
+                        disabled={sorted}>
+                        <img src={getPlayPauseIcon()} width={12} height={12} alt={""}/>
+                    </Button>
+
+                    <Button
+                        className={"chartButton stopButton"}
+                        onClick={onStopButtonPressed}
+                        text={"Stop"}
+                        disabled={!sorting || paused}>
+                        <img src={'/images/stop_icon.png'} width={12} height={12} alt={""}/>
+                    </Button>
                 </div>
             </div>
+
+
             <div className={"chart"}>
-                <BarsView samples={sampleCount} maxValue={maxSampleCount} data={data} maxSpacing={maxSpacing} color={color}/>
+                <BarsView
+                    samples={sampleCount}
+                    maxValue={maxSampleCount}
+                    data={data}
+                    maxSpacing={maxSpacing}
+                    color={color}
+                    marks={marks}
+                    algorithm={selectedAlgorithm}
+                    dirty={dirty}/>
             </div>
+
         </div>
     </div>;
 }

@@ -127,4 +127,23 @@
     width: 0;
     height: 0;
   }
+
+  &.disabled {
+    .select-control-button {
+      background: rgb(31, 31, 31);
+      cursor: default;
+
+      &:hover {
+        filter: none;
+      }
+
+      .selected-value {
+        color: #575757;
+      }
+
+      .arrowDown {
+        color: #575757;
+      }
+    }
+  }
 }

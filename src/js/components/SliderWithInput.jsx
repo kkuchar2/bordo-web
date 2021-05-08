@@ -3,6 +3,7 @@ import React, {useCallback} from "react";
 import Text from "components/Text.jsx";
 import Input from "components/Input.jsx";
 import Slider from "rc-slider";
+import classNames from "classnames";
 
 import {logPosition} from "util/util.js";
 
@@ -12,20 +13,22 @@ import "componentStyles/SliderWithInput.scss";
 
 function SliderWithInput(props) {
 
+    const {text, description, logharitmic, marks, value, min, max, disabled, onSliderChange, onInputChange} = props;
+
     const setValue = useCallback((v) => {
-        if (props.logharitmic) {
-            return logPosition(v, props.min, props.max)
+        if (logharitmic) {
+            return logPosition(v, min, max)
         }
         else {
-            return props.value * (100 / 50);
+            return value * (100 / max);
         }
-    }, [props.value, props.logharitmic, props.min, props.max])
+    }, [value, logharitmic, min, max])
 
-    return <div className={"sliderWithInput"}>
+    return <div className={classNames("sliderWithInput", { disabled: disabled })}>
         <div className={"title"}>
-            <Text className={"title"} text={props.text}/>
+            <Text className={"title"} text={text}/>
         </div>
-        <Text className={"description"} text={props.description} />
+        <Text className={"description"} text={description}/>
 
         <div className={"sliderAndInput"}>
 
@@ -35,29 +38,40 @@ function SliderWithInput(props) {
                     height: 20,
                     width: 20,
                     marginTop: -5,
-                    backgroundColor: '#00aeff',
+                    backgroundColor: !disabled ? '#00aeff' : '#4b4b4b',
                 }}
                 dotStyle={{
                     borderColor: 'transparent',
-                    backgroundColor: '#c4c4c4',
-                    marginBottom: -3,
+                    backgroundColor: !disabled ? '#c4c4c4' : '#4b4b4b',
+                    marginBottom: -8,
+                    height: 17,
+                    borderRadius: 0,
+                    marginLeft: 0,
+                    border: "1px solid " + (!disabled ? '#c4c4c4' : '#4b4b4b'),
+                    padding: 0,
+                    width: 0,
                 }}
-                railStyle={{backgroundColor: '#404040', height: 10}}
+                railStyle={{
+                    borderRadius: 0,
+                    backgroundColor: !disabled ? '#404040' : '#313131',
+                    height: 11
+                }}
                 className={"slider"}
-                marks={props.marks}
+                marks={marks}
                 included={false}
-                value={setValue(props.value)}
-                onChange={props.onSliderChange}
-                defaultValue={1}/>
+                disabled={disabled}
+                value={setValue(value)}
+                onChange={onSliderChange}
+                defaultValue={value}/>
 
             <div className={"valueInput"}>
                 <Input
                     id="fname"
                     name="fname"
-                    disabled={false}
-                    value={Math.ceil(props.value)}
+                    disabled={disabled}
+                    value={Math.ceil(value)}
                     active={true}
-                    onChange={props.onInputChange}/>
+                    onChange={onInputChange}/>
             </div>
         </div>
     </div>;

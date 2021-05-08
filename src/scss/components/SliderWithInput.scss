@@ -3,11 +3,29 @@
   align-items: flex-start;
   justify-content: center;
   flex-direction: column;
-  color: white;
   width: 100%;
   box-sizing: border-box;
   margin-bottom: 10px;
   margin-top: 10px;
+
+  &.disabled {
+    .title {
+      color: #575757;
+    }
+
+    .description {
+      color: #575757;
+    }
+
+    .sliderAndInput {
+      .valueInput {
+        .inputField {
+          color: #575757;
+          background: #282828;
+        }
+      }
+    }
+  }
 
   .title {
     margin-right: 10px;
@@ -30,6 +48,18 @@
     padding-left: 10px;
     padding-right: 10px;
 
+    .rc-slider-disabled {
+      background: none;
+
+      .rc-slider-rail  {
+          background: #2a2a2a;
+      }
+
+      .rc-slider-handle {
+
+      }
+    }
+
     .slider {
       flex: 0 1 auto;
     }
@@ -41,7 +71,6 @@
       .inputField {
         background: #303030;
         color: white;
-      ;
       }
 
       @media (max-width: 400px) {

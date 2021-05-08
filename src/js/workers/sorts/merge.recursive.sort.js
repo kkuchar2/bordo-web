@@ -1,9 +1,14 @@
-import {CheckSortPause, notifySortUpdate, sortState} from "workers/worker.utils.js";
+import {CheckSortPause, mark, notifySortUpdate, sortState, unmark} from "workers/worker.utils.js";
 
 const merge = async (start, mid, end) => {
     if (sortState.abort) {
         return;
     }
+
+    mark(start, 2);
+    mark(mid, 0);
+    mark(end - 1, 2);
+    notifySortUpdate();
 
     let merged = [];
     let leftIdx = start;
@@ -21,7 +26,7 @@ const merge = async (start, mid, end) => {
     }
 
     while (leftIdx <= mid) {
-        merged.push(parseInt(sortState.data[leftIdx]));
+        merged.push(sortState.data[leftIdx]);
         leftIdx += 1;
     }
 
@@ -30,10 +35,18 @@ const merge = async (start, mid, end) => {
         rightIdx += 1;
     }
 
+    unmark(mid);
+    notifySortUpdate();
+
     for (let i = 0; i < merged.length; i++) {
+        mark(start + i, 3);
         sortState.data[start + i] = merged[i];
         notifySortUpdate();
     }
+
+    unmark(start);
+    unmark(end - 1);
+    notifySortUpdate();
 
     await CheckSortPause();
 };

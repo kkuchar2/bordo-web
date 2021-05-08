@@ -6,7 +6,8 @@ let SLOWDOWN_FACTOR_MS = 1;
 export const sortState = {
     pause: false,
     abort: false,
-    data: []
+    data: [],
+    marks: []
 };
 
 export const pathFindingState = {
@@ -40,7 +41,7 @@ export const pathfindingAlgorithmMap = {
 let previousTime = new Date().getTime();
 let firstTime = true;
 
-export const notify = (type, payload, skipMessagesByTime = false, skipTimeInMs = 16) => {
+export const notify = (type, payload, skipMessagesByTime = false, skipTimeInMs = 33) => {
     let currentTime = new Date().getTime();
 
     if (skipMessagesByTime) {
@@ -54,13 +55,31 @@ export const notify = (type, payload, skipMessagesByTime = false, skipTimeInMs =
         postMessage({type: type, payload: payload});
     }
 
-    while (new Date().getTime() - currentTime < SLOWDOWN_FACTOR_MS) {}
+    while (new Date().getTime() - currentTime < SLOWDOWN_FACTOR_MS) {
+    }
 };
 
-export const notifySortDataShuffled = () => notify("shuffle", sortState.data);
+export const notifySortDataShuffled = () => notify("shuffle", sortState.data, true);
 
 export const notifySortUpdate = (forceSend = false) => {
-    notify("sort", sortState.data, !forceSend, 16);
+    notify("sort", {
+        data: sortState.data,
+        marks: sortState.marks
+    }, !forceSend, 16);
+}
+
+export const clearMarks = () => sortState.marks = [];
+
+export const mark = (idx, color = 0) => {
+    sortState.marks.push({ idx: idx, color: color})
+}
+
+export const markExclusive = (idx, color = 0) => {
+    sortState.marks = [{ idx: idx, color: color}]
+}
+
+export const unmark = (idx) => {
+    sortState.marks = sortState.marks.filter(item => item.idx === idx);
 }
 
 export const setSlowdownFactor = (m) => SLOWDOWN_FACTOR_MS = m.value;
@@ -76,7 +95,14 @@ export const notifyObstacles = (data = pathFindingState.obstacles) => {
 };
 
 export const onSortMethodExit = () => {
+    clearMarks();
+
+    for (let i = 0; i < sortState.data.length; i++) {
+        mark(i, 3);
+        notifySortUpdate();
+    }
     notifySortUpdate(true);
+    clearMarks();
     postMessage({type: "sortFinished", payload: {"sorted": !sortState.abort}});
 }
 
@@ -100,7 +126,7 @@ export const shuffle = async (size, maxValue) => {
     sortState.data = new Array(size);
 
     for (let i = 0; i < size; i++) {
-        sortState.data[i] = getRandomInt(1, maxValue);
+        sortState.data[i] = getRandomInt(1, maxValue)
     }
 };
 

@@ -1,23 +1,27 @@
-import React, {useEffect, useRef, useState, useCallback} from "react";
+import React, {useCallback, useEffect, useRef, useState} from "react";
 
 import {getParentHeight, getParentWidth, useEffectOnTrue, useEffectWithNonNull} from "util/util.js";
 
 import {
-    createBars, createMaterial,
+    colorOfHash,
+    createBars,
     createOrthoCamera,
-    createPlaneGeometry,
     createRenderer,
     createScene,
     enableTransparency,
-    removeChildrenFromScene
+    removeChildrenFromScene,
+    calculateBarsSizes,
+    updateInstancedBar,
+    updateInstancedMeshColor,
+    dummyObj
 } from "util/GLUtil.js";
 
 import "componentStyles/BarsView.scss";
 
-let material = createMaterial("#00c4ff", 1);
-let geometry;
+const barMarkColors = ["#ff0033", "#ff0084", "#00a002", "#ff6600"]
 
 function BarsView(props) {
+    const { samples, maxValue, data, maxSpacing, color, marks, algorithm, dirty } = props;
 
     const mount = useRef(null);
 
@@ -25,7 +29,6 @@ function BarsView(props) {
     const [scene, setScene] = useState(null);
     const [camera, setCamera] = useState(null);
     const [initialized, setInitialized] = useState(false);
-    const [firstFrameRendered, setFristFrameRendered] = useState(false);
     const [width, setWidth] = useState(0);
     const [height, setHeight] = useState(0);
 
@@ -38,7 +41,7 @@ function BarsView(props) {
         let h = getParentHeight(mount);
         let w = getParentWidth(mount);
 
-        setCamera(createOrthoCamera(w, h, -500, 1000, -5));
+        setCamera(createOrthoCamera(w, h, 0.1, 1000, 5));
         setRenderer(createRenderer(w, h, 0x00000));
         setScene(createScene());
         setWidth(w);
@@ -50,50 +53,22 @@ function BarsView(props) {
     }, []);
 
     useEffectOnTrue(initialized, () => {
-
         enableTransparency(renderer);
-
         mount.current.appendChild(renderer.domElement);
 
-        let frameId;
-
-        const renderScene = () => {
-            renderer.render(scene, camera);
-            if (!firstFrameRendered) {
-                setFristFrameRendered(true);
-            }
-        };
-
-        const animate = () => {
-            renderScene();
-            frameId = window.requestAnimationFrame(animate);
-        };
-
-        const dispose = () => {
-            cancelAnimationFrame(frameId);
-            frameId = null;
+        return () => {
             removeChildrenFromScene(scene);
-            geometry?.dispose();
             mount.current.removeChild(renderer.domElement);
         };
-
-        const start = () => {
-            if (!frameId) {
-                requestAnimationFrame(animate);
-            }
-        };
-
-        start();
-        return dispose;
     }, [initialized]);
 
-    useEffectWithNonNull(() => {
+    useEffectWithNonNull(() => updateBarsColor(), [data, color, scene])
+
+    const updateBarsColor = useCallback(() => {
         if (scene.children.length > 0) {
-            for (let i = 0; i < props.samples; i++) {
-                scene.children[i].material.color.setHex("0x" + props.color.substring(1));
-            }
+            updateInstancedMeshColor(scene.children[0], data.length, color);
         }
-    }, [props.color, scene])
+    }, [scene, data, color])
 
     useEffectOnTrue(initialized, () => {
 
@@ -106,33 +81,39 @@ function BarsView(props) {
         };
 
         const updateBars = () => {
-            let spacing = props.maxSpacing;
-            let barWidth = (width - (spacing * props.samples)) / props.samples;
-
-            while (barWidth < 1 && spacing > 0) {
-                spacing -= 1;
-                barWidth = (width - (spacing * props.samples)) / props.samples;
-
-                if (barWidth > 1) {
-                    break;
-                }
-            }
-
-            for (let i = 0; i < props.samples; i++) {
-                scene.children[i].scale.x = barWidth;
-                scene.children[i].scale.y = props.data[i] / props.maxValue * height;
-                scene.children[i].position.x = barWidth / 2 + barWidth * i + spacing * i;
-                scene.children[i].position.y =  -(1.0 - scene.children[i].scale.y) / 2;
-            }
-        };
-
-        const createOrUpdateBars = () => {
-            if (props.data.length === 0) {
+            if (scene.children.length === 0) {
                 return;
             }
 
-            if (scene.children.length === 0 || scene.children.length !== props.samples) {
-                createBars(scene, material, width, height, props.data, props.maxValue, props.maxSpacing);
+            const mesh = scene.children[0];
+
+            const {barWidth, spacing, offsetX} = calculateBarsSizes(width, data.length);
+
+            for (let x = 0; x < samples; x++) {
+
+                updateInstancedBar(x, mesh, data[x], maxValue, height, barWidth, spacing, offsetX, color);
+
+                for (const mark of marks) {
+                    if (mark.idx === x) {
+                        mesh.setColorAt(x, colorOfHash(barMarkColors[mark.color]));
+                        break;
+                    }
+                }
+
+                mesh.setMatrixAt(x, dummyObj.matrix);
+            }
+
+            mesh.instanceMatrix.needsUpdate = true;
+            mesh.instanceColor.needsUpdate = true;
+        }
+
+        const createOrUpdateBars = () => {
+            if (data.length === 0) {
+                return;
+            }
+
+            if (dirty) {
+                createBars(scene, width, height, data, maxValue, color);
             }
             else {
                 updateBars();
@@ -140,15 +121,12 @@ function BarsView(props) {
         };
 
         updateCamera();
+        createOrUpdateBars();
         renderer.setSize(width, height);
         renderer.render(scene, camera);
+    }, [algorithm, dirty, data, width, height, maxSpacing, color, marks]);
 
-        createOrUpdateBars();
-    }, [props.data, width, height, props.maxSpacing, renderer, camera, scene]);
-
-    const getClassName = useCallback(() => firstFrameRendered ? "visible" : "not_visible", [firstFrameRendered]);
-
-    return <div ref={mount} className={getClassName()}/>;
+    return <div ref={mount} className={"visible"}/>;
 }
 
 export default BarsView;

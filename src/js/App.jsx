@@ -12,7 +12,7 @@ import "styles/App.scss";
 function App() {
     return <Provider store={store}>
         <BrowserRouter>
-            <AppManager />
+            <AppManager/>
             <NavBar/>
             <Content/>
             <Dialogs/>

@@ -1,4 +1,4 @@
-import {CheckSortPause, notifySortUpdate, sortState} from "workers/worker.utils.js";
+import {CheckSortPause, mark, notifySortUpdate, sortState, unmark} from "workers/worker.utils.js";
 
 export const insertionSort = async () => {
     let length = sortState.data.length;
@@ -10,13 +10,19 @@ export const insertionSort = async () => {
             return;
         }
 
+        mark(i, 2);
+
         let key = sortState.data[i];
         let j = i - 1;
+
         while (j >= 0 && sortState.data[j] > key) {
             sortState.data[j + 1] = sortState.data[j];
-            j = j - 1;
+            mark(j, 0);
             notifySortUpdate();
+            j = j - 1;
         }
         sortState.data[j + 1] = key;
+
+        unmark(i);
     }
 };
