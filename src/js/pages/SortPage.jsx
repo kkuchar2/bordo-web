@@ -49,7 +49,7 @@ function SortPage() {
     const [maxSpacing, setMaxSpacing] = useState(1);
     const [slowdownFactor, setSlowdownFactor] = useState(minSlowdownFactor);
     const [worker, setWorker] = useState(null);
-    const [color, setColor] = useState("#5e5e5e");
+    const [color, setColor] = useState("#714bb1");
     const [dirty, setDirty] = useState(false);
     const [marks, setMarks] = useState([]);
 

@@ -41,22 +41,24 @@
 
   .sliderAndInput {
     display: flex;
+    flex-wrap: wrap;
     flex-direction: row;
     align-items: center;
-    justify-content: center;
     width: 100%;
     padding-left: 10px;
     padding-right: 10px;
+
+    .rc-slider {
+      min-width: 200px;
+      width: calc(100% - 120px);
+      flex: auto 1 0;
+    }
 
     .rc-slider-disabled {
       background: none;
 
       .rc-slider-rail  {
           background: #2a2a2a;
-      }
-
-      .rc-slider-handle {
-
       }
     }
 
