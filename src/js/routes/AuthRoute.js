@@ -22,7 +22,6 @@ export const AuthRoute = ({component: Component, ...rest}) => {
 
     useEffect(() => {
         if (tokenExists && !authState.isUserLoggedIn) {
-            console.log("Logging in with token");
             dispatch(tryLoginWithAuthKey());
         }
         else if (tokenExists && authState.isUserLoggedIn) {
@@ -31,8 +30,6 @@ export const AuthRoute = ({component: Component, ...rest}) => {
     }, []);
 
     useEffect(() => {
-        console.log("Current auth changed: " + JSON.stringify(authState));
-
         if (authState.status === 'LOGGED_IN') {
             dispatch(tryValidateAuthentication());
             return;

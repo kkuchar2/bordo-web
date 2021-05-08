@@ -32,7 +32,6 @@ export const tryGetHello = () => {
         }
         catch (e) {
             console.log(e);
-            console.log("hello -> error");
         }
     };
 };

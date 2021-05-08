@@ -145,5 +145,4 @@ export const AStarPathfinder = async () => {
         }
         notifyPathFindUpdate();
     }
-    console.log("Finished AStarPathfinder");
 };

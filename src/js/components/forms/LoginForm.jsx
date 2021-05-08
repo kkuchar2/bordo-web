@@ -62,7 +62,7 @@ function LoginForm() {
                 <Button>
                     {renderButtonContent()}
                 </Button>
-                <GoogleButton className={"googleButton"} onClick={() => { console.log('Google button clicked'); }} />
+                <GoogleButton className={"googleButton"} onClick={() => {}} />
             </div>
 
             <div className={"needAccount"}>

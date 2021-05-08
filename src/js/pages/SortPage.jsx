@@ -36,8 +36,6 @@ const createSliderMarks = (min, max) => {
 const sampleCountMarks = createSliderMarks(minSampleCount, maxSampleCount);
 const slowdownFactorMarks = createSliderMarks(minSlowdownFactor, maxSlowdownFactor);
 
-console.log(slowdownFactorMarks);
-
 import "styles/pages/SortPage.scss";
 
 function SortPage() {
@@ -132,7 +130,6 @@ function SortPage() {
     }, [slowdownFactor, worker])
 
     const onSampleCountSliderChange = useCallback(v => {
-        console.log("Slider changed to : " + v);
         setSampleCount(Math.ceil(logSlider(v, minSampleCount, maxSampleCount)))
     }, [worker]);
 

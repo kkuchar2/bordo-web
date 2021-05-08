@@ -20,15 +20,12 @@ export const SimpleRoute = ({component: Component, ...rest}) => {
 
     useEffect(() => {
         if (tokenExists && !authState.isUserLoggedIn) {
-            console.log("Sending auth request");
             dispatch(tryLoginWithAuthKey());
             setLoading(true);
         }
     }, []);
 
     useEffect(() => {
-        console.log(JSON.stringify(authState));
-
         if (authState.errors === 'Unauthorized') {
             setLoading(false);
             setLoggedIn(false);
@@ -37,7 +34,6 @@ export const SimpleRoute = ({component: Component, ...rest}) => {
         }
 
         if (authState.isUserLoggedIn) {
-            console.log("Loading set to false");
             setLoading(false);
             setReceiveAuthResponse(true);
             setLoggedIn(authState.isUserLoggedIn);

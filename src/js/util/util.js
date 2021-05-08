@@ -98,14 +98,12 @@ export const withNotStatus = (status, statusName, func) => {
     }
 };
 
-
 export const logPosition = (value, min, max) => {
     const minPosition = 0;
     const maxPosition = 100;
     const minValue = Math.log(min);
     const maxValue = Math.log(max);
     const scale = (maxValue - minValue) / (maxPosition - minPosition);
-    console.log("Min: " + minValue + " max: " + maxValue + " scale: " + scale + " v: " + + value + "  " + Math.log(value));
     return (Math.log(value) - minValue) / scale + minPosition;
 }
 

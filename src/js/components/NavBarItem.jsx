@@ -11,7 +11,6 @@ function NavbarItem(props) {
         }
 
         if (props.iconComponent) {
-            console.log(props.iconComponent);
             return props.iconComponent;
         }
     };

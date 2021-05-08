@@ -18,7 +18,6 @@ function ConfirmPage(props) {
     useEffect(() => dispatch(tryConfirmAccount(props.match.params.token)), []);
 
     useEffect(() => {
-        console.log(status);
         if (status === 'CONFIRMATION_ERROR') {
             setError(true);
         }
