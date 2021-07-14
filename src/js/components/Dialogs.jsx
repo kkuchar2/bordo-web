@@ -1,7 +1,6 @@
+import {Button} from "kuchkr-react-component-library";
 import React, {useCallback, useEffect, useState} from "react";
-import Button from "components/Button";
 import {useDispatch, useSelector} from "react-redux";
-import classNames from 'classnames';
 import {Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Slide} from "@material-ui/core";
 import {dialogConfirmed, hideDialog} from "redux/reducers/application";
 
@@ -42,22 +41,13 @@ function Dialogs() {
     const renderDialogActions = useCallback(() => {
         if (dialogState.type === 'error') {
             return <DialogActions className={"dialogActions"}>
-                <Button className={"buttonBlack dialogButton"} onClick={handleClose}>Close</Button>
+                <Button onClick={handleClose}>Close</Button>
             </DialogActions>;
         }
         else {
             return <DialogActions className={"dialogActions"}>
-                <Button
-                    className={classNames(dialogState.cancelButtonClass, 'dialogButton')}
-                    onClick={handleClose}>
-                    {dialogState.cancelButtonName}
-                </Button>
-                <Button
-                    className={classNames(dialogState.confirmButtonClass, 'dialogButton')}
-                    onClick={onConfirm}
-                    autoFocus>
-                    {dialogState.confirmButtonName}
-                </Button>
+                <Button onClick={handleClose}>{dialogState.cancelButtonName}</Button>
+                <Button onClick={onConfirm} autoFocus>{dialogState.confirmButtonName}</Button>
             </DialogActions>;
         }
     }, [dialogState]);

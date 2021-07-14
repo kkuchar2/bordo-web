@@ -7,66 +7,6 @@ $font-color: rgba(238, 236, 235, 1);
 
 $stop-width: 800px;
 
-.logInButton {
-  background: #131313;
-  margin: 10px;
-  height: 40px;
-  width: 150px;
-  border-radius: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 14px;
-  color: white;
-
-  &:hover {
-    background: lighten(#131313, 5%);
-  }
-}
-
-.registerButton {
-  background: #131313;
-  margin: 10px;
-  height: 40px;
-  width: 150px;
-  border-radius: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 14px;
-  color: white;
-
-  &:hover {
-    background: lighten(#131313, 10%);
-  }
-}
-
-.logoutButton {
-  background: #000000;
-  margin: 10px;
-  height: 35px;
-  border-radius: 20px;
-  width: 130px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-
-  .content {
-    .text {
-      font-size: 15px;
-      font-family: inherit;
-    }
-  }
-
-  &:hover {
-    background: lighten(#000000, 10%);
-  }
-}
-
-
-
-
 .navbar {
   @include theme-aware('background', 'navbar-background');
 

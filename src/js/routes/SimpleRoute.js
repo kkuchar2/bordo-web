@@ -18,6 +18,8 @@ export const SimpleRoute = ({component: Component, ...rest}) => {
 
     const [receivedAuthResponse, setReceiveAuthResponse] = useState(false);
 
+    console.log(authState);
+
     useEffect(() => {
         if (tokenExists && !authState.isUserLoggedIn) {
             dispatch(tryLoginWithAuthKey());
@@ -39,6 +41,8 @@ export const SimpleRoute = ({component: Component, ...rest}) => {
             setLoggedIn(authState.isUserLoggedIn);
         }
     }, [authState]);
+
+    console.log('Loading: ' + loading + ' loggedIn: ' + loggedIn + ' received auth response: ' + receivedAuthResponse + ' isOnLoginPage: ' + isOnLoginPage());
 
     return <Route
         {...rest}

@@ -1,16 +1,10 @@
+import {Button, Spinner, Text} from "kuchkr-react-component-library";
 import React, {useCallback, useState} from "react";
-
-import Text from "components/Text.jsx";
 import InputWithError from "components/InputWithError.jsx";
-
 import {onFieldChange} from "util/util";
-import Button from "components/Button.jsx";
 import {useDispatch, useSelector} from "react-redux";
 import {getResponseError} from "util/api_util";
-import Spinner from "components/Spinner.jsx";
 import {Link} from "react-router-dom";
-
-import "componentStyles/forms/ForgotPasswordForm.scss";
 import {renderFormError} from "components/forms/FormErrorRenderer.js";
 
 function ChangePasswordForm() {
@@ -36,7 +30,7 @@ function ChangePasswordForm() {
             return "Change password 🔑";
         }
         else {
-            return <Spinner/>;
+            return <Spinner visible={true}/>;
         }
     }, [status]);
 
@@ -58,14 +52,12 @@ function ChangePasswordForm() {
             {renderFormError(formError)}
 
             <div className={"buttonGroup"}>
-                <Button>
-                    {renderButtonContent()}
-                </Button>
+                <Button>{renderButtonContent()}</Button>
             </div>
 
             <div className={"needAccount"}>
-                <Text className="needAccountText" text={"Wrong page?"}/>
-                <Link to={'/login'} className={"registerLink"}>Sign in</Link>
+                <Text text={"Wrong page?"}/>
+                <Link to={'/'} className={"registerLink"}>Sign in</Link>
             </div>
         </form>
     </div>;

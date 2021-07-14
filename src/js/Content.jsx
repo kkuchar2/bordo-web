@@ -1,13 +1,13 @@
 import {Route, Switch} from "react-router-dom";
 import React, {useCallback} from "react";
-import {routes} from "../routes/routes.js";
-import {AuthRoute} from "../routes/AuthRoute.js";
-import {withSuspense} from "util/withSuspense.js";
-import {lazyImport} from "util/util.js";
+import {routes} from "routes/routes.js";
+import {AuthRoute} from "routes/AuthRoute.js";
+import {withSuspense} from "util/withSuspense";
+import {lazyImport} from "util/util";
 import {SimpleRoute} from "routes/SimpleRoute.js";
-const NotFound = lazyImport(() => import (/* webpackChunkName: "not-found" */ "pages/NotFound"));
+const NotFound = lazyImport(() => import (/* webpackChunkName: "not-found" */ "pages/NotFound.jsx"));
 
-function Content() {
+const Content = () => {
     const mapRoutesToContent = useCallback(() => routes.filter(v => v.enabled)
         .map((p, k) => {
             if (p.authRequired) {
@@ -22,6 +22,6 @@ function Content() {
         {mapRoutesToContent()}
         {<Route component={withSuspense(NotFound)} key={0}/>}
     </Switch>;
-}
+};
 
 export default Content;

@@ -1,18 +1,48 @@
-import React, {useEffect, useState, useCallback} from 'react';
-
-import {routes} from "routes/routes.js";
-import {useDispatch, useSelector} from "react-redux";
 import {faHome} from "@fortawesome/free-solid-svg-icons";
 
-import Button from "components/Button";
-import NavBarItem from "components/NavBarItem";
-import Switch from "components/Switch";
-
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {selectorAuth, tryLogout} from "redux/reducers/api/account";
-import {closeNavbar, openNavbar, switchTheme} from "redux/reducers/application";
+
+import NavBarItem from "components/NavBarItem";
 
 import "componentStyles/NavBar.scss";
+import {Button} from "kuchkr-react-component-library";
+import React, {useCallback, useEffect, useState} from 'react';
+import {useDispatch, useSelector} from "react-redux";
+import {Link} from "react-router-dom";
+import {selectorAuth, tryLogout} from "redux/reducers/api/account";
+import {closeNavbar, openNavbar} from "redux/reducers/application";
+
+import {routes} from "routes/routes.js";
+
+const hamburgerButtonTheme = {
+    width: "40px",
+    height: "40px",
+    background: "transparent",
+    disabledBackground: "rgba(47,47,47,0.43)",
+    hoverBackground: "#393939",
+    border: "none",
+    borderRadius: "0px",
+
+    text: {
+        textColor: "#e5e5e5",
+        disabledTextColor: "rgba(255,255,255,0.20)"
+    }
+};
+
+const buttonTheme = {
+    width: "40px",
+    height: "40px",
+    background: "#ffffff",
+    disabledBackground: "rgba(47,47,47,0.43)",
+    hoverBackground: "#393939",
+    border: "none",
+    borderRadius: "0px",
+
+    text: {
+        textColor: "#e5e5e5",
+        disabledTextColor: "rgba(255,255,255,0.20)"
+    }
+};
 
 const getAlignedRoutes = alignment => routes.filter(v => v.navbar).filter(v => v.alignment === alignment);
 
@@ -21,7 +51,7 @@ const mapRoutes = actionOnClick => getAlignedRoutes('left').map((p, k) => {
 });
 
 const mapRightNavbarRoutes = (status, isLoggedIn, actionOnClick) => {
-     return getAlignedRoutes('right').map((p, k) => {
+    return getAlignedRoutes('right').map((p, k) => {
         if (isLoggedIn && p.authRequired || !isLoggedIn && !p.authRequired) {
             return <NavBarItem
                 onClick={actionOnClick}
@@ -73,16 +103,16 @@ function NavBar() {
 
     const hamburgerClick = () => {
         if (navbarState.opened) {
-            closeNavbar();
+            dispatch(closeNavbar());
         }
         else {
-            setNavbarOpened();
+            dispatch(openNavbar());
         }
     };
 
     const renderLogoutButton = useCallback(() => {
         if (authState.isUserLoggedIn) {
-            return <Button text={"Logout"} onClick={logout} className={"logoutButton"}/>;
+            return <Button style={{marginRight: 20, marginLeft: 10}} theme={Button.darkTheme} text={"Logout"} onClick={logout} />;
         }
     }, [authState]);
 
@@ -104,7 +134,6 @@ function NavBar() {
             <div className={"navbarButtons"}>
                 {renderRightNavbarItems(authState.status, authState.isUserLoggedIn)}
             </div>
-            ;
         </div>;
     }, [authState]);
 
@@ -121,21 +150,35 @@ function NavBar() {
         }
     }, [navbarState, navbarAnimClass, width, authState]);
 
+    const renderHamburgerButton = useCallback(() => {
+        if (width > 800) {
+            return;
+        }
+
+        return <Button style={{display: "flex", alignItems: "center", justifyContent: "center"}}
+                       theme={hamburgerButtonTheme} onClick={hamburgerClick}>
+            <img src={"images/hamburger_icon.png"} alt={""} width={18} height={18}/>
+        </Button>;
+    }, [width]);
+
+    const renderHomeButton = useCallback(() => {
+        if (width < 800) {
+            return;
+        }
+
+        return <Link to={'/'} style={{marginLeft: 10, display: "flex", alignItems: "center", justifyContent: "center"}}>
+            <FontAwesomeIcon icon={faHome} style={{color: "#ffffff", fontSize: 24}}/>
+        </Link>;
+
+    }, [width]);
+
     return <div className={"navbar"}>
         <div className="main-buttons">
-            <NavBarItem className={"home"} onClick={() => {}} href={'/'}>
-                <FontAwesomeIcon className={"icon"} icon={faHome}/>
-            </NavBarItem>
-
-            <Button onClick={hamburgerClick} className={"hamburger"}>
-                <img src={"images/hamburger_icon.png"} alt={""} width={20} height={20}/>
-            </Button>
+            {renderHomeButton()}
+            {renderHamburgerButton()}
         </div>
-
         {renderNavbarItems()}
         {renderLogoutButton()}
-
-        <Switch className={"theme-switch"} value={theme.theme === 'theme-dark'} onValueChange={() => dispatch(switchTheme())}/>
     </div>;
 }
 

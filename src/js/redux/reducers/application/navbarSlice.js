@@ -1,32 +1,26 @@
-import {createSlice} from "@reduxjs/toolkit"
+import {createSlice} from "@reduxjs/toolkit";
 
-const navbarSlice = createSlice({
-    name: "navbar",
-    initialState: {
-        opened: false,
-    },
+const initialState = {
+    opened: false
+};
+
+export const navbarSlice = createSlice({
+    name: 'navbar',
+    initialState: initialState,
     reducers: {
-        open: (state) => {
+        onNavbarOpened: (state) => {
             state.opened = true;
         },
-        close: (state) => {
+        onNavbarClosed: (state) =>  {
             state.opened = false;
-        }
-    },
-})
-
-export const openNavbar = () => {
-    return async dispatch => {
-        dispatch(open())
+        },
     }
-}
+});
 
-export const closeNavbar = () => {
-    return async dispatch => {
-        dispatch(close())
-    }
-}
+export const openNavbar = () => async dispatch => dispatch(onNavbarOpened());
+export const closeNavbar = () => async dispatch => dispatch(onNavbarClosed());
 
-export const selectorNavbar = state => state.opened
-export const {open, close} = navbarSlice.actions
-export default navbarSlice.reducer
+export const selectorNavbar = state => state.opened;
+
+export const { onNavbarOpened, onNavbarClosed } = navbarSlice.actions;
+export default navbarSlice.reducer;

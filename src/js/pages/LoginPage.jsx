@@ -1,15 +1,15 @@
-import React from 'react';
 import LoginForm from "components/forms/LoginForm.jsx";
+import React from 'react';
 
 import "styles/pages/LoginPage.scss";
 
-function LoginPage() {
+const LoginPage = () => {
 
-    return (<div className={"loginPage"}>
+    return <div className={"loginPage"}>
         <div className={"wrapper"}>
             <LoginForm/>
         </div>
-    </div>);
-}
+    </div>;
+};
 
 export default LoginPage;

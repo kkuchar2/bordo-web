@@ -1,12 +1,24 @@
+import {Input, Text} from "kuchkr-react-component-library";
 import React, {useState, useCallback, useEffect} from "react";
-
-import Input from "components/Input";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faExclamationCircle} from "@fortawesome/free-solid-svg-icons";
-import Text from "components/Text";
 import {getResponseError} from "util/api_util.js";
 
-function InputWithError(props) {
+const formFieldTheme = {
+    backgroundColor: "#2b2b2b",
+    textColor: "#cbcbcb",
+    disabledTextColor: "red",
+    placeholderTextColor: "#4c4c4c",
+    border: "none",
+    borderRadius: "4px"
+};
+
+const errorTextTheme = {
+    textColor: "#ff4949",
+    fontSize: "15px"
+};
+
+const InputWithError = (props) => {
 
     const [error, setError] = useState(undefined);
 
@@ -24,7 +36,7 @@ function InputWithError(props) {
         for (let i = 0; i < error.length; i++) {
             rows.push(<div key={i} className={"errorWrapper"}>
                 <FontAwesomeIcon className={"errorIcon"} icon={faExclamationCircle}/>
-                <Text className={"errorText"} text={error[i]['message']}/>
+                <Text style={{marginLeft: 5}} theme={errorTextTheme} text={error[i]['message']}/>
             </div>);
         }
         return <>{rows}</>;
@@ -32,23 +44,23 @@ function InputWithError(props) {
 
     const onChange = useCallback(props.onChange, []);
 
-    const getClassName = useCallback(() => error !== undefined ? 'error' : 'noError', [error]);
-
     return <>
         <Input
-            className={getClassName()}
-            title={props.title}
+            name={props.id}
+            style={{marginTop: 10, padding: 3}}
+            theme={formFieldTheme}
             id={props.id}
             type={props.type}
             onChange={onChange}
-            autoComplete={props.autoComplete}
+            autoComplete={"on"}
+            disabled={props.disabled}
             placeholder={props.placeholder}/>
         {renderError()}
     </>;
-}
+};
 
-export const renderInput = (id, title, type, placeholder, autocomplete, onChange, err) => {
-    return <InputWithError id={id} title={title} type={type} placeholder={placeholder} onChange={onChange} errors={err} />;
+export const renderInput = (id, title, type, placeholder, autocomplete, onChange, err, disabled) => {
+    return <InputWithError id={id} title={title} type={type} placeholder={placeholder} onChange={onChange} errors={err} disabled={disabled} />;
 };
 
 export default InputWithError;

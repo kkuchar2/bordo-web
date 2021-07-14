@@ -1,18 +1,122 @@
+import {Button, Spinner, Text} from "kuchkr-react-component-library";
 import React, {useCallback, useState} from "react";
 
-import Text from "components/Text.jsx";
 import {renderInput} from "components/InputWithError.jsx";
-
-import {onFieldChange} from "util/util";
-import Button from "components/Button.jsx";
 import {useDispatch, useSelector} from "react-redux";
 import {getResponseError} from "util/api_util";
 import {trySendResetPassword} from "redux/reducers/api/account";
-import Spinner from "components/Spinner.jsx";
 import {Link} from "react-router-dom";
 import {renderFormError} from "components/forms/FormErrorRenderer.js";
+import styled from "styled-components";
 
-import "componentStyles/forms/ForgotPasswordForm.scss";
+const StyledForgotPasswordForm = styled.div`
+  border-radius: 6px;
+  background: #323232;
+  box-shadow: 20px 20px 20px 0 rgba(0,0,0,.4);
+  
+  @media (max-width: 600px) {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+
+  .form {
+    border-radius: 6px;
+    background: #323232;
+    display: flex;
+    flex-direction: column;
+    padding: 30px 30px 30px;
+
+    @media (min-width: 600px) {
+      width: 350px;
+      position: relative;
+    }
+
+    @media (max-width: 600px) {
+      width: 100%;
+    }
+
+    .errorWrapper {
+      margin-top: 10px;
+      margin-bottom: 10px;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: flex-start;
+
+      .errorIcon {
+        color: rgb(186, 47, 47);
+      }
+
+      .errorText {
+        margin-left: 10px;
+        font-size: 16px;
+        color: rgb(186, 47, 47);
+      }
+    }
+
+    .buttonGroup {
+      width: 100%;
+      margin-top: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+`;
+
+const buttonTheme = {
+    width: "200px",
+    height: "40px",
+    background: "#00549a",
+    disabledBackground: "rgba(47,47,47,0.43)",
+    hoverBackground: "#004071",
+    border: "none",
+    borderRadius: "6px",
+
+    text: {
+        fontSize: "15px",
+        textColor: "#bbbbbb",
+        disabledTextColor: "rgba(255,255,255,0.20)"
+    }
+};
+
+const titleTextTheme = {
+    textColor: "#bbbbbb",
+    fontSize: "25px"
+};
+
+const descriptionTextTheme = {
+    textColor: "#bbbbbb",
+    fontSize: "15px"
+};
+
+const justRememberedTextTheme = {
+    textColor: "#bbbbbb",
+    fontSize: "15px"
+};
+
+const StyledLink = styled(Link)`
+  color: #cbcbcb;
+  position: relative;
+  margin-left: 10px;
+  margin-bottom: 2px;
+  
+  &:hover {
+    color: #00a6ff;
+  }
+`;
+
+const StyledJustRemembered = styled.div`
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+`;
 
 function ForgotPasswordForm() {
 
@@ -22,46 +126,45 @@ function ForgotPasswordForm() {
     const errors = useSelector(state => state.auth.errors);
     const dispatch = useDispatch();
 
-    const onEmailChange = useCallback(e => onFieldChange(setEmail, e), []);
+    const onEmailChange = useCallback(setEmail, []);
 
     const sendResetPasswordRequest = useCallback(e => {
         e.preventDefault();
         dispatch(trySendResetPassword(email));
     }, [email]);
 
-    const renderButtonContent = useCallback(() => {
+    const renderButton = useCallback(() => {
         if (status !== 'SENT_PASSWORD_RESET') {
-            return "Reset password 🔑";
+            return <Button text={"Reset password 🔑"} theme={buttonTheme} />;
         }
         else {
-            return <Spinner/>;
+            return <Spinner visible={true} />;
         }
     }, [status]);
 
     let formError = getResponseError(errors, 'non_field_errors');
 
-    return <div className={'forgotPasswordComponent'}>
+    return <StyledForgotPasswordForm>
         <form onSubmit={sendResetPasswordRequest} className={'form'} autoComplete="none">
 
-            <Text className={"formTitle"} text={"Reset your password"} />
-            <Text className={"formDescription"} text={"Enter your e-mail address and we'll send you a reset password link"} />
+            <Text theme={titleTextTheme} text={"Reset your password"} />
+            <Text style={{marginTop: 20, marginBottom: 10}}
+                  theme={descriptionTextTheme} text={"Enter your e-mail address and we'll send you a reset password link"} />
 
             {renderInput('email', "Email address", 'text', "Enter your email address", "on", onEmailChange, errors)}
 
             {renderFormError(formError)}
 
             <div className={"buttonGroup"}>
-                <Button>
-                    {renderButtonContent()}
-                </Button>
+                {renderButton()}
             </div>
 
-            <div className={"justRemembered"}>
-                <Text className="justRememberedText" text={"Just remembered?"}/>
-                <Link to={'/login'} className={"signInLink"}>Sign in</Link>
-            </div>
+            <StyledJustRemembered>
+                <Text theme={justRememberedTextTheme} text={"Just remembered?"}/>
+                <StyledLink to={'/'} className={"signInLink"}>Sign in</StyledLink>
+            </StyledJustRemembered>
         </form>
-    </div>;
+    </StyledForgotPasswordForm>;
 }
 
 export default ForgotPasswordForm;

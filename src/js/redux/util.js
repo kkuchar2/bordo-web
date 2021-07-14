@@ -3,7 +3,7 @@ import {showDialog} from "redux/reducers/application";
 
 import axios from "axios";
 
-const BASE_API_URL_DEVELOPMENT = "http://localhost:5000/api/";
+const BASE_API_URL_DEVELOPMENT = "http://127.0.0.1:8001/api/";
 
 const BASE_API_URL_PRODUCTION = "https://klkucharski-api.com/api/";
 
@@ -26,9 +26,21 @@ const sendPostAndParse = (requestFunc, name, onBefore, onSuccess, onFail, body =
     return async dispatch => {
         try {
             dispatch(onBefore());
+            // await new Promise(r => setTimeout(r, 2000));
             parseResponse(dispatch, await requestFunc(buildApiUrl(name), body), onSuccess, onFail);
         }
         catch (e) {
+            console.log(e);
+
+            if (e.message === 'Network Error'){
+                console.log('Dispatching network error failure')
+                dispatch(onFail("network_error"));
+                return;
+            }
+
+            if (!e.response) {
+                dispatch(onFail("unknown_error"));
+            }
             if (e.response.status === 401) {
                 dispatch(onFail("Unauthorized"));
             }
@@ -38,7 +50,7 @@ const sendPostAndParse = (requestFunc, name, onBefore, onSuccess, onFail, body =
                     title: "Server error",
                     content: "Server error: " + e.response.status,
                 }));
-                dispatch(onFail("Unknown error"));
+                dispatch(onFail("unknown_error"));
             }
         }
     };

@@ -1,10 +1,9 @@
+import {Text} from "kuchkr-react-component-library";
 import React, {useEffect, useState} from "react";
-
-import Text from "components/Text";
 
 import "componentStyles/ToggleButton.scss";
 
-function ToggleButton(props) {
+export const ToggleButton = (props) => {
 
     const [toggled, setToggled] = useState(false);
 
@@ -36,6 +35,4 @@ function ToggleButton(props) {
             </div>
         </button>
     );
-}
-
-export default ToggleButton;
+};

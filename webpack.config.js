@@ -122,7 +122,7 @@ module.exports = {
     },
     externals: {
         config: JSON.stringify({
-            apiUrl: 'http://0.0.0.0:8000'
+            apiUrl: 'http://localhost:5000'
         })
     },
     //stats: "verbose"

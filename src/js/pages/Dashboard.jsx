@@ -1,12 +1,13 @@
+import NavBar from "components/NavBar.jsx";
 import React from "react";
 
 import "styles/pages/Dashboard.scss";
 
-function Dashboard(props) {
+const Dashboard = (props) => {
     return <div className={"dashboardPage"}>
-        <div className={"dashboardWindow"}>
-        </div>
+        <NavBar/>
+        <div className={'content'}/>
     </div>;
-}
+};
 
 export default Dashboard;

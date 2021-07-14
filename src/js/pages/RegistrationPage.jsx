@@ -7,7 +7,7 @@ import {reset, selectorRegistration} from "redux/reducers/api/account";
 
 import "styles/pages/RegistrationPage.scss";
 
-function RegistrationPage() {
+const RegistrationPage = () => {
 
     const registrationState = useSelector(selectorRegistration);
     const status = registrationState.status;
@@ -31,6 +31,6 @@ function RegistrationPage() {
         {withStatus(status, "REGISTRATION_COMPLETE", renderEmailSentPopup)}
         {withNotStatus(status, "REGISTRATION_COMPLETE", renderRegistrationForm)}
     </div>;
-}
+};
 
 export default RegistrationPage;

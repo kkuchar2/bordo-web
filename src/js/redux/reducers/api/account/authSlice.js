@@ -22,7 +22,7 @@ export const authSlice = createSlice({
     name: "auth",
     initialState: initialState,
     reducers: {
-        sentLoginRequest: (state) => setState(state, "SENT_LOGIN_REQUEST", false, null, null),
+        sentLoginRequest: (state) => setState(state, "SENT_LOGIN_REQUEST", false, state.errors, null),
         sentAutologinRequest: (state) => setState(state, "SENT_AUTOLOGIN_REQUEST", false, null, null),
         loginSuccess: (state, action) => {
             setState(state, "LOGGED_IN", true, null, action.payload.user);
@@ -57,8 +57,19 @@ export const authSlice = createSlice({
             removeCookie("token");
             setState(state, "LOGGED_OUT", false, null, null);
         },
+        sentGoogleLoginRequest: (state) => {
+            console.log("Google login request sent");
+        },
+        googleLoginRequestSuccess: (state, action) => {
+            console.log(action.payload)
+            setState(state, "LOGGED_IN", true, null, action.payload.user);
+            setCookie("token", action.payload.key);
+        },
+        googleLoginRequestFailure: (state, action) => setState(state, "ERROR", false, action.payload, null)
     }
 });
+
+export const tryLoginWithGoogleCredentials = (accessToken) => sendAnonymousPostAndParse("googleLogin", sentGoogleLoginRequest, googleLoginRequestSuccess, googleLoginRequestFailure, {access_token: accessToken});
 
 export const tryValidateAuthentication = () => sendAuthPostAndParse("is_authenticated", sentAuthCheck, authCheckSuccess, authCheckFail);
 
@@ -93,6 +104,9 @@ export const {
     authCheckSuccess,
     authCheckFail,
     removeErrors,
-    logUserOut
+    logUserOut,
+    sentGoogleLoginRequest,
+    googleLoginRequestSuccess,
+    googleLoginRequestFailure
 } = authSlice.actions;
 export default authSlice.reducer;

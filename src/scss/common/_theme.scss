@@ -14,10 +14,10 @@ $common-themes: (
         ),
         dark: (
                 color-background: #291B34,
-                navbar-background: rgb(38, 38, 38),
+                navbar-background: rgba(38, 38, 38, 1),
                 navbar-item-background-hover: #2d2d2d,
                 navbar-mobile-background: #181818cc,
-                input-background: rgba(78, 78, 78, 0.2),
+                input-background: rgba(78, 78, 78, 0.56),
                 input-border: none,
                 select-background: rgb(45, 45, 45),
                 select-options-background: rgb(45, 45, 45),

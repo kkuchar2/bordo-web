@@ -1,3 +1,4 @@
+import {Button} from "kuchkr-react-component-library";
 import React from "react";
 import {lazyImport} from "util/util.js";
 import {withSuspense} from "util/withSuspense.js";
@@ -5,8 +6,6 @@ import {withSuspense} from "util/withSuspense.js";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCog} from "@fortawesome/free-solid-svg-icons";
 
-const MainPage = lazyImport(() => import (/* webpackChunkName: "main-page" */ "pages/MainPage"));
-const SortPage = lazyImport(() => import (/* webpackChunkName: "sort-page" */ "pages/SortPage"));
 const RegistrationPage = lazyImport(() => import (/* webpackChunkName: "auth-chunk" */ "pages/RegistrationPage"));
 const ConfirmPage = lazyImport(() => import (/* webpackChunkName: "auth-chunk" */ "pages/ConfirmPage"));
 const LoginPage = lazyImport(() => import (/* webpackChunkName: "auth-chunk" */ "pages/LoginPage"));
@@ -14,7 +13,6 @@ const ForgotPasswordPage = lazyImport(() => import (/* webpackChunkName: "auth-c
 const ChangePasswordPage = lazyImport(() => import (/* webpackChunkName: "auth-chunk" */ "pages/ChangePasswordPage"));
 const Dashboard = lazyImport(() => import (/* webpackChunkName: "dashboard" */ "pages/Dashboard"));
 const SettingsPage = lazyImport(() => import (/* webpackChunkName: "dashboard" */ "pages/SettingsPage"));
-const PathfindingPage = lazyImport(() => import (/* webpackChunkName: "grid-page" */ "pages/PathfindingPage"));
 const NotFound = lazyImport(() => import (/* webpackChunkName: "not-found" */ "pages/NotFound"));
 
 export const routes = [
@@ -26,7 +24,7 @@ export const routes = [
     },
     {
         path: "/",
-        component: withSuspense(MainPage),
+        component: withSuspense(LoginPage),
         icon: '',
         title: "",
         enabled: true,
@@ -37,33 +35,10 @@ export const routes = [
         hiddenForAuthenticated: false
     },
     {
-        path: "/sort",
-        component: withSuspense(SortPage),
-        title: "SORTING ALGORITHMS",
-        enabled: true,
-        navbar: true,
-        alignment: 'left',
-        exact: true,
-        authRequired: false,
-        hiddenForAuthenticated: false
-    },
-    {
-        path: "/login",
-        component: withSuspense(LoginPage),
-        customClass: 'logInButton',
-        title: "Sign in",
-        enabled: true,
-        navbar: true,
-        alignment: 'right',
-        exact: true,
-        authRequired: false,
-        hiddenForAuthenticated: true
-    },
-    {
         path: "/register",
         component: withSuspense(RegistrationPage),
+        customComponent: <Button theme={Button.darkTheme} text={"Create account"} />,
         customClass: 'registerButton',
-        title: "Create account",
         enabled: true,
         navbar: true,
         alignment: 'right',
@@ -99,17 +74,6 @@ export const routes = [
         hiddenForAuthenticated: false
     },
     {
-        path: "/pathfinding",
-        component: withSuspense(PathfindingPage),
-        title: "PATHFINDING VISUALIZER",
-        enabled: true,
-        navbar: true,
-        alignment: 'left',
-        exact: true,
-        authRequired: false,
-        hiddenForAuthenticated: false
-    },
-    {
         path: "/forgotPassword",
         component: withSuspense(ForgotPasswordPage),
         title: "Forgot password",
@@ -137,6 +101,4 @@ export const isOnAuthenticatedPage = () => getCurrentRoute().authRequired;
 
 export const isOnAuthShadowedPage = () => getCurrentRoute().hiddenForAuthenticated;
 
-export const isOnMainPage = () => getCurrentRoute().path === '/';
-
-export const isOnLoginPage = () => getCurrentRoute().path === '/login';
+export const isOnLoginPage = () => getCurrentRoute().path === '/';

@@ -1,13 +1,12 @@
+import {Text} from "kuchkr-react-component-library";
 import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import {Link, Redirect, useLocation} from "react-router-dom";
 import {selectorAccountConfirm, tryConfirmAccount} from "redux/reducers/api/account";
 
-import Text from "components/Text.jsx";
-
 import "styles/pages/ConfirmPage.scss";
 
-function ConfirmPage(props) {
+const ConfirmPage = (props) => {
 
     const dispatch = useDispatch();
     const confirmationState = useSelector(selectorAccountConfirm);
@@ -22,15 +21,15 @@ function ConfirmPage(props) {
             setError(true);
         }
         else if (status === 'CONFIRMATION_TOKEN_SENT') {
-            setError(false)
+            setError(false);
         }
         else if (status === 'ACCOUNT_CONFIRMED') {
             setError(false);
         }
-    }, [status])
+    }, [status]);
 
     if (error) {
-        return <Redirect to={{ pathname: "/login", state: { from: location } }} />;
+        return <Redirect to={{ pathname: "/", state: { from: location } }} />;
     }
 
     return <div className={"confirmPage"}>
@@ -39,14 +38,14 @@ function ConfirmPage(props) {
                 <img className={"emailSentIcon"} src={'images/sent_mail_icon.png'} width={60} height={60} alt={""}/>
             </div>
             <div className={"confirmationMessage"}>
-                <Text className={"title"} text={"Your account has been confirmed and activated."} />
-                <Text className={"message"} text={"You can now sign in"} />
+                <Text text={"Your account has been confirmed and activated."} />
+                <Text text={"You can now sign in"} />
             </div>;
             <div className={"buttonGroup"}>
                 <Link to={'/login'} className={'button'}>Back to sign in</Link>
             </div>
         </div>
     </div>;
-}
+};
 
 export default ConfirmPage;

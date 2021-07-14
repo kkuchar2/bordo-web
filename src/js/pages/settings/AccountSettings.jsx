@@ -1,13 +1,12 @@
+import {Button} from "kuchkr-react-component-library";
 import React, {useCallback} from "react";
 import {useDispatch} from "react-redux";
-
-import Button from "components/Button";
 import {showDialog} from "redux/reducers/application";
 import {tryDeleteAccount} from "redux/reducers/api/account";
 
 import "styles/pages/settings/AccountSettings.scss";
 
-function AccountSettings() {
+export const AccountSettings = () => {
 
     const dispatch = useDispatch();
 
@@ -21,8 +20,6 @@ function AccountSettings() {
 
     return <div className={"accountSettings"}>
         <div>Account settings</div>
-        <Button onClick={openDeleteAccountConfirmationDialog} className={"deleteAccountButton"} text={"Delete account"}/>
+        <Button onClick={openDeleteAccountConfirmationDialog} text={"Delete account"}/>
     </div>;
-}
-
-export default AccountSettings;
+};

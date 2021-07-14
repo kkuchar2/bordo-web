@@ -81,11 +81,6 @@ export const withCondition = (variable, func) => {
     }
 };
 
-export const onFieldChange = (consumer, event) => {
-    consumer(event.target.value);
-    event.preventDefault();
-};
-
 export const withStatus = (status, statusName, func) => {
     if (status === statusName) {
         return func();
@@ -105,7 +100,7 @@ export const logPosition = (value, min, max) => {
     const maxValue = Math.log(max);
     const scale = (maxValue - minValue) / (maxPosition - minPosition);
     return (Math.log(value) - minValue) / scale + minPosition;
-}
+};
 
 export const logSlider = (position, min, max) => {
     const minPosition = 0;
@@ -114,4 +109,4 @@ export const logSlider = (position, min, max) => {
     const maxValue = Math.log(max);
     const scale = (maxValue - minValue) / (maxPosition - minPosition);
     return Math.exp(minValue + scale * (position - minPosition));
-}
+};

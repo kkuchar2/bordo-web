@@ -1,13 +1,12 @@
+import {Button} from "kuchkr-react-component-library";
 import React, {useCallback, useState} from "react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCog, faUser, faLightbulb, faColumns} from "@fortawesome/free-solid-svg-icons";
 import {Redirect, useLocation} from "react-router-dom";
 
-import Button from "components/Button.jsx";
-
 import "styles/pages/SettingsPage.scss";
 
-function SettingsPage() {
+const SettingsPage = () => {
 
     const [redirect, setRedirect] = useState(null);
 
@@ -67,11 +66,11 @@ function SettingsPage() {
             <div className={"right"}>
                 <div className={"panel1"}/>
                 <div className={"panel2"}>
-                    <Button onClick={saveSettings} className={"saveSettingsButton"} text={"Save"}/>
+                    <Button onClick={saveSettings} text={"Save"}/>
                 </div>
             </div>
         </div>
     </div>;
-}
+};
 
 export default SettingsPage;

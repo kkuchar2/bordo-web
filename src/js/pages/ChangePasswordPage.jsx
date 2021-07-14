@@ -3,11 +3,11 @@ import ChangePasswordForm from "components/forms/ChangePasswordForm.jsx";
 
 import "styles/pages/ChangePasswordPage.scss";
 
-function ChangePasswordPage() {
+const ChangePasswordPage = () => {
 
     return (<div className={"changePasswordPage"}>
         <ChangePasswordForm/>
     </div>);
-}
+};
 
 export default ChangePasswordPage;

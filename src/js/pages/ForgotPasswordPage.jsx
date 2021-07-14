@@ -1,15 +1,15 @@
-import React from 'react';
 import ForgotPasswordForm from "components/forms/ForgotPasswordForm.jsx";
+import React from 'react';
 
 import "styles/pages/ForgotPasswordPage.scss";
 
-function ForgotPasswordPage() {
+const ForgotPasswordPage = () => {
 
-    return (<div className={"forgotPasswordPage"}>
+    return <div className={"forgotPasswordPage"}>
         <div className={"wrapper"}>
             <ForgotPasswordForm/>
         </div>
-    </div>);
-}
+    </div>;
+};
 
 export default ForgotPasswordPage;

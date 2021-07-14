@@ -1,7 +1,6 @@
+import {Text} from "kuchkr-react-component-library";
 import React from "react";
 import {useDispatch} from "react-redux";
-
-import Text from "components/Text";
 import {Link} from "react-router-dom";
 import {reset} from "redux/reducers/api/account";
 
@@ -18,10 +17,10 @@ function EmailSentPopup() {
             <div className={'imageWrapper'}>
                 <img className={"emailSentIcon"} src={'images/sent_mail_icon.png'} width={60} height={60} alt={""}/>
             </div>
-            <Text className={'title'} text={"Registration successful!"} />
-            <Text className={'description'} text={"We've sent you a link to confirm your email address. Please check your inbox."} />
+            <Text text={"Registration successful!"} />
+            <Text text={"We've sent you a link to confirm your email address. Please check your inbox."} />
             <div className={"buttonGroup"}>
-                <Link onClick={onLoginClick} to={'/login'} className={'button'}>Back to sign in</Link>
+                <Link onClick={onLoginClick} to={'/'} className={'button'}>Back to sign in</Link>
             </div>
         </div>
     </div>;

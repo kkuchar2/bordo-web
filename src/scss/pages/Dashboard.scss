@@ -3,24 +3,15 @@
 @import '../common/theme';
 
 .dashboardPage {
+  overflow: hidden;
   width: 100%;
-  margin-top: $navbar-height;
-  height: calc(100% - #{$navbar-height});
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  color: #b8b8b8;
-  font-size: 30pt;
+  height: 100%;
+  box-sizing: border-box;
 
-  .dashboardWindow {
-    border-radius: 6px;
-    box-shadow: 20px 20px 20px 0 rgba(0, 0, 0, .4);
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: row;
-    width: calc(100% - 50px);
-    height: calc(100% - 50px);
-    background: #323232;
+  .content {
+    background: rgba(38, 38, 38, 1);
+    height: calc(100% - #{$navbar-height});
+    margin-top: $navbar-height;
   }
 }
+
