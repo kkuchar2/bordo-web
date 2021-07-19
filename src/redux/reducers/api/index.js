@@ -1,0 +1,1 @@
+export {default as helloReducer} from 'appRedux/reducers/api/helloSlice.js';

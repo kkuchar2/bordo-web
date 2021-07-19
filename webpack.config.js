@@ -45,25 +45,28 @@ module.exports = {
     },
     output: {
         filename: 'chunk-[name]-[contenthash].js',
+        sourceMapFilename: "[name].js.map",
         globalObject: "(typeof self!='undefined'?self:this)",
         pathinfo: false
     },
+    devtool: "source-map",
     resolve: {
         extensions: [".js", ".jsx"],
-        modules: ['node_modules', resolvePath('src/js')],
+        modules: ['node_modules', resolvePath('src')],
         alias: {
             images: resolvePath('images/'),
             fonts: resolvePath('fonts/'),
+            pages: resolvePath('src/pages/'),
             configs: resolvePath('configs/'),
-            components: resolvePath('src/js/components/'),
-            util: resolvePath('src/js/util/'),
-            workers: resolvePath('src/js/workers'),
-            styles: resolvePath('src/scss/'),
-            componentStyles: resolvePath('src/scss/components/')
+            appRedux: resolvePath('src/redux/'),
+            components: resolvePath('src/components/'),
+            util: resolvePath('src/util/')
         }
     },
     optimization: optimization,
     devServer: {
+        host: "127.0.0.1",
+        disableHostCheck: true,
         historyApiFallback: true,
         headers: {
             // "Cross-Origin-Embedder-Policy": "require-corp",
@@ -119,11 +122,6 @@ module.exports = {
                 ]
             }
         ]
-    },
-    externals: {
-        config: JSON.stringify({
-            apiUrl: 'http://localhost:5000'
-        })
-    },
+    }
     //stats: "verbose"
 };

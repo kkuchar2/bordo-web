@@ -34,13 +34,19 @@
     "eslint-plugin-react": "^7.23.2",
     "faker": "^5.5.3",
     "file-loader": "^6.2.0",
+    "framer-motion": "^4.1.17",
+    "google-map-react": "^2.1.10",
     "html-loader": "^2.1.2",
     "html-webpack-plugin": "^5.3.1",
-    "kuchkr-react-component-library": "^2.0.21",
+    "kuchkr-react-component-library": "^2.0.22",
+    "leaflet": "^1.7.1",
+    "lodash": "^4.17.21",
     "miragejs": "^0.1.41",
     "moment-locales-webpack-plugin": "^1.2.0",
     "prop-types": "^15.7.2",
     "react-google-login": "^5.2.2",
+    "react-grid-layout": "^1.2.5",
+    "react-leaflet": "^3.2.0",
     "redux": "^4.1.0",
     "remove-fbclid": "^0.9.6",
     "sass": "^1.35.1",
@@ -88,5 +94,5 @@
     "universal-cookie": "^4.0.4",
     "validator": "^13.6.0"
   },
-  "buildDate": "30-12-2020 14:21:49"
+  "buildDate": "19-07-2021 14:58:34"
 }

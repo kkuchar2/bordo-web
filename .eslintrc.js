@@ -63,7 +63,7 @@ module.exports = {
     overrides: [
         {
             files: [
-                'src/js/**'
+                'src/**'
             ]
         }
     ]

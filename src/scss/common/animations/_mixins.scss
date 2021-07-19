@@ -1,7 +1,0 @@
-@mixin timed_animation($name, $time) {
-  -webkit-animation: #{$name} #{$time};
-  -moz-animation: #{$name} #{$time};
-  -o-animation: #{$name} #{$time};
-  animation: #{$name} #{$time};
-  animation-timing-function: ease-out;
-}
