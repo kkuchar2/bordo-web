@@ -16,11 +16,7 @@ function AppManager() {
 
         dispatch(showDialog({
             title: "Cookie consent",
-            content: "This website uses cookies to enhance user experience",
-            cancelButtonClass: 'buttonBlack',
-            confirmButtonClass: 'buttonBlue',
-            cancelButtonName: 'Reject',
-            confirmButtonName: 'Accept',
+            description: "This website uses cookies to enhance user experience",
             onConfirm: () => setCookie("cookieAccepted", true),
             onCancel: () => setCookie("cookieAccepted", false)
         }));

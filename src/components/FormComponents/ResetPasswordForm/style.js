@@ -1,9 +1,8 @@
 import {motion} from "framer-motion";
-import GoogleLogin from "react-google-login";
 import {Link} from "react-router-dom";
 import styled from "styled-components";
 
-export const changePasswordTextTheme = {
+export const resetPasswordTextTheme = {
     textColor: "#bbbbbb",
     fontSize: "25px"
 };
@@ -34,7 +33,7 @@ export const buttonTheme = {
     }
 };
 
-export const StyledChangePasswordFormComponent = styled(motion.div)`
+export const StyledResetPasswordFormComponent = styled(motion.div)`
   border-radius: 6px;
   background: #323232;
   box-shadow: 20px 20px 20px 0 rgba(0,0,0,.4);
@@ -124,13 +123,17 @@ export const StyledUnknownError = styled.div`
   margin-top: 20px;
 `;
 
-export const StyledGoogleButton = styled(GoogleLogin)`
-  div {
-    display: flex;
-  }
-`;
-
 export const errorTextTheme = {
     textColor: "#ff4949",
     fontSize: "15px"
+};
+
+export const spinnerTheme = {
+    color: "#9333ff",
+    disabledColor: "rgba(255,119,0,0.29)",
+
+    text: {
+        textColor: "#e5e5e5",
+        disabledTextColor: "rgba(255,255,255,0.20)"
+    }
 };

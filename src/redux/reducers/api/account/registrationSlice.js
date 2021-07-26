@@ -35,11 +35,12 @@ export const registrationSlice = createSlice({
 
 export const tryRegister = (email, password) => {
     return sendPost({
-        target: 'register',
+        endpointName: 'register',
         onBefore: registrationRequested,
         onSuccess: registrationSucceeded,
         onFail: registrationFailed,
-        body: {email: email, password: password}
+        body: {email: email, password: password},
+        withCredentials: false
     });
 };
 

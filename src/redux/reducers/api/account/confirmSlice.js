@@ -24,7 +24,7 @@ export const confirmSlice = createSlice({
 
 export const tryConfirmAccount = (token) => {
     return sendPost({
-        target: 'confirm-email',
+        endpointName: 'confirm-email',
         onBefore: accountConfirmationTokenSent,
         onSuccess: accountConfirmationSuccess,
         onFail: accountConfirmationError,

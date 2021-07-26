@@ -74,7 +74,7 @@ const EnsureAuthorized = (WrappedComponent) => {
             {
                 if (!requestPending && receivedResponse)
                 {
-                    return redirect("/dashboard");
+                    return redirect("/home");
                 }
                 else {
                     return <></>;

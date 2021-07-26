@@ -10,5 +10,5 @@ export * from 'appRedux/reducers/api/account/confirmSlice.js';
 export {default as forgotPasswordReducer} from 'appRedux/reducers/api/account/forgotPasswordSlice.js';
 export * from 'appRedux/reducers/api/account/forgotPasswordSlice.js';
 
-export {default as changePasswordReducer} from 'appRedux/reducers/api/account/changePasswordSlice.js';
-export * from 'appRedux/reducers/api/account/changePasswordSlice.js';
+export {default as resetPasswordReducer} from 'appRedux/reducers/api/account/resetPasswordSlice.js';
+export * from 'appRedux/reducers/api/account/resetPasswordSlice.js';

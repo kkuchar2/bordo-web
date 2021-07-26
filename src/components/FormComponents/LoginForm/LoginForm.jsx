@@ -1,23 +1,21 @@
+import React, {useCallback, useEffect, useState} from "react";
+import {useDispatch, useSelector} from "react-redux";
+import {clearAuthErrors, selectorAuth, tryLogin, tryLoginWithGoogleCredentials} from "appRedux/reducers/api/account";
 import {animatedWindowProps} from "components/FormComponents/animation.js";
 import {renderFormError} from "components/FormComponents/FormErrorRenderer.js";
 import InputWithError from "components/InputWithError.jsx";
 import {Button, Spinner, Text} from "kuchkr-react-component-library";
-import React, {useCallback, useEffect, useState} from "react";
-import {useDispatch, useSelector} from "react-redux";
-import {clearAuthErrors, selectorAuth, tryLogin, tryLoginWithGoogleCredentials} from "appRedux/reducers/api/account";
-import {getResponseError} from "util/api_util.js";
 
 import {
     buttonTheme,
-    errorTextTheme,
     needAccountTextTheme,
-    signInTextTheme, spinnerTheme,
+    signInTextTheme,
+    spinnerTheme,
     StyledButtonGroup,
     StyledGoogleButton,
     StyledLink,
     StyledLoginFormComponent,
     StyledNeedAccount,
-    StyledUnknownError,
     welcomeBackTextTheme
 } from "components/FormComponents/LoginForm/style.js";
 
@@ -31,10 +29,6 @@ const LoginForm = () => {
     const authState = useSelector(selectorAuth);
 
     const errors = authState.errors;
-
-    const onEmailChange = useCallback(setEmail, []);
-
-    const onPasswordChange = useCallback(setPassword, []);
 
     const attemptLogin = useCallback(e => {
         e.preventDefault();
@@ -66,27 +60,9 @@ const LoginForm = () => {
         }
     }, [errors]);
 
-    const renderUnknownError = useCallback(() => {
-        if (Object.keys(errors).length === 0) {
-            return <StyledUnknownError>
-                <Text theme={errorTextTheme} text={"Something went wrong"}/>
-            </StyledUnknownError>;
-        }
-    }, [errors]);
-
-    const renderNetworkError = () => {
-        if (errors === 'network_error') {
-            return <StyledUnknownError>
-                <Text theme={errorTextTheme} text={"Could not connect to server"}/>
-            </StyledUnknownError>;
-        }
-    };
-
     const onGoogleAuthFailure = useCallback((response) => {
         console.log(response);
     }, []);
-
-    let formError = getResponseError(errors, 'non_field_errors');
 
     return <StyledLoginFormComponent {...animatedWindowProps}>
         <form onSubmit={attemptLogin} className={'form'} autoComplete="none">
@@ -95,13 +71,11 @@ const LoginForm = () => {
                   text={"Sign in to your account to continue"}/>
 
             <InputWithError id={'email'} title={"Email address"} type={'text'} placeholder={"Enter your email address"}
-                            onChange={onEmailChange} errors={errors} disabled={disabled}/>
+                            onChange={setEmail} errors={errors} disabled={disabled} autoComplete={"on"}/>
             <InputWithError id={'password'} title={"Password"} type={'password'} placeholder={"Select your password"}
-                            onChange={onPasswordChange} errors={errors} disabled={disabled}/>
+                            onChange={setPassword} errors={errors} disabled={disabled} autoComplete={"current-password"}/>
 
-            {renderNetworkError()}
-            {renderUnknownError()}
-            {renderFormError(formError)}
+            {renderFormError(errors)}
 
             <StyledLink style={{marginTop: 20}} to={'/forgotPassword'}>Forgot your password?</StyledLink>
 

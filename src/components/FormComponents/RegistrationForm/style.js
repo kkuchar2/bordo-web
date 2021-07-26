@@ -29,7 +29,7 @@ export const buttonTheme = {
     disabledBackground: "rgba(47,47,47,0.43)",
     hoverBackground: "#435ec6",
     border: "none",
-    borderRadius: "50px",
+    borderRadius: "5px",
 
     text: {
         fontSize: "14px",
@@ -80,8 +80,7 @@ export const StyledUnknownError = styled.div`
 
 export const StyledRegistrationFormComponent = styled(motion.div)`
   border-radius: 6px;
-  background: #323232;
-  box-shadow: 20px 20px 20px 0 rgba(0, 0, 0, .4);
+  background: #2b2b2b;
 
   @media (max-width: 600px) {
     display: flex;

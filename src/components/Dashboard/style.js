@@ -2,6 +2,13 @@ import {motion} from "framer-motion";
 import {Responsive, WidthProvider} from "react-grid-layout";
 import styled from "styled-components";
 
+export const StyledDashboard = styled.div`
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+`;
+
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
 
 export const StyledTile = styled(motion.div)`
@@ -27,25 +34,6 @@ export const StyledTile = styled(motion.div)`
   }
 `;
 
-export const StyledDashboardPage = styled.div`
-  overflow: hidden;
-  width: 100%;
-  height: 100%;
-  box-sizing: border-box;
-`;
-
-export const StyledDashboardContent = styled.div`
-  box-sizing: border-box;
-  //border: 1px solid red;
-  background: #2a2a2a;
-  padding: 20px;
-  min-width: 600px;
-  display: flex;
-  flex-direction: row;
-  height: 100%;
-`;
-
-
 export const StyledResponsiveReactGridLayout = styled(ResponsiveReactGridLayout)`
   width: 100%;
   background: #1a1a1a;
@@ -53,6 +41,3 @@ export const StyledResponsiveReactGridLayout = styled(ResponsiveReactGridLayout)
   border-radius: 10px;
   padding: 20px;
 `;
-
-export class StyledLeftMenu {
-}

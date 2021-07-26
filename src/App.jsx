@@ -1,3 +1,4 @@
+import Dialogs from "components/Dialogs/Dialogs";
 import Content from "./Content";
 import React from "react";
 import {BrowserRouter} from "react-router-dom";
@@ -12,7 +13,7 @@ function App() {
         <BrowserRouter>
             <AppManager/>
             <Content/>
-            {/*<Dialogs/>*/}
+            <Dialogs/>
         </BrowserRouter>
     </Provider>;
 }

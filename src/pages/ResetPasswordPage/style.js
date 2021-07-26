@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const StyledChangePasswordPage = styled.div`
+export const StyledResetPasswordPage = styled.div`
   overflow: hidden;
   box-sizing: border-box;
   width: 100%;

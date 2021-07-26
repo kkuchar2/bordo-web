@@ -1,40 +1,32 @@
 import {createSlice} from "@reduxjs/toolkit";
-import {
-    accountConfirmationError,
-    accountConfirmationSuccess,
-    accountConfirmationTokenSent
-} from "appRedux/reducers/api/account/confirmSlice.js";
 import {sendPost} from "appRedux/util.js";
+
+const initialState = {
+    requestPending: false,
+    receivedResponse: false,
+    errors: []
+};
+
+const setState = (state, errors, requestPending, receivedResponse) => {
+    state.errors = errors;
+    state.requestPending = requestPending;
+    state.receivedResponse = receivedResponse;
+};
 
 export const forgotPasswordSlice = createSlice({
     name: 'forgotPassword',
-    initialState: {
-        status: "INIT",
-        data: null
-    },
+    initialState: initialState,
     reducers: {
-        sentForgotPasswordRequest: state => {
-            state.status = "FORGOT_PASSWORD_REQUEST_SENT";
-            state.data = null;
-        },
-        forgotPasswordSuccess: state => {
-            state.status = "FORGOT_PASSWORD_EMAIL_SENT";
-            state.data = null;
-        },
-        forgotPasswordFailed: (state, action) => {
-            state.status = "FORGOT_PASSWORD_ERROR";
-            state.data = action.payload;
-        },
-        forgotPasswordResetState: state => {
-            state.status = "INIT";
-            state.data = null;
-        }
+        sentForgotPasswordRequest: state => setState(state, [], true, false),
+        forgotPasswordSuccess: state => setState(state, [], false, true),
+        forgotPasswordFailed: (state, action) => setState(state, action.payload, false, true),
+        forgotPasswordResetState: state => setState(state, [], false, false)
     }
 });
 
-export const trySendResetPassword = (email) => {
+export const trySendForgotPassword = (email) => {
     return sendPost({
-        target: 'forgotPassword',
+        endpointName: 'forgotPassword',
         onBefore: sentForgotPasswordRequest,
         onSuccess: forgotPasswordSuccess,
         onFail: forgotPasswordFailed,

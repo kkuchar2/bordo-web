@@ -1,15 +1,16 @@
-import {Input, Text} from "kuchkr-react-component-library";
-import React, {useState, useCallback, useEffect} from "react";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faExclamationCircle} from "@fortawesome/free-solid-svg-icons";
-import {getResponseError} from "util/api_util.js";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {Input, Text} from "kuchkr-react-component-library";
+import React, {useCallback, useEffect, useState} from "react";
+import {getFormFieldError} from "util/api_util.js";
 
 const formFieldTheme = {
-    backgroundColor: "#2b2b2b",
+    backgroundColor: "#242424",
     textColor: "#cbcbcb",
     disabledTextColor: "red",
     placeholderTextColor: "#4c4c4c",
     border: "none",
+    height: "40px",
     borderRadius: "4px"
 };
 
@@ -20,12 +21,15 @@ const errorTextTheme = {
 
 const InputWithError = (props) => {
 
-    const [error, setError] = useState(undefined);
+    const {id, title, type, value, placeholder, onChange, errors, disabled, theme, style, autoComplete = "off"} = props;
 
-    useEffect(() => setError(getResponseError(props.errors, props.id)), [props.id, props.errors]);
+    const [error, setError] = useState(undefined);
+    const [formValue, setFormValue] = useState(value);
+
+    useEffect(() => setError(getFormFieldError(errors, id)), [id, errors]);
 
     const renderError = useCallback(() => {
-        if (error === undefined || error === null) {
+        if (!error) {
             return;
         }
         if (error.length === 0) {
@@ -42,19 +46,23 @@ const InputWithError = (props) => {
         return <>{rows}</>;
     }, [error]);
 
-    const onChange = useCallback(props.onChange, []);
+    const onFormChange = useCallback(v => {
+        setFormValue(v);
+        onChange?.(v);
+    }, [onChange]);
 
     return <>
         <Input
-            name={props.id}
-            style={{marginTop: 10, padding: 3}}
-            theme={formFieldTheme}
-            id={props.id}
-            type={props.type}
-            onChange={onChange}
-            autoComplete={"on"}
-            disabled={props.disabled}
-            placeholder={props.placeholder}/>
+            name={id}
+            style={style ? style : {marginTop: 10, padding: 3}}
+            theme={theme ? theme : formFieldTheme}
+            id={id}
+            value={formValue}
+            type={type}
+            onChange={onFormChange}
+            autoComplete={autoComplete}
+            disabled={disabled}
+            placeholder={placeholder}/>
         {renderError()}
     </>;
 };

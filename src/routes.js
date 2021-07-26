@@ -7,8 +7,8 @@ const RegistrationPage = lazyImport(() => import (/* webpackChunkName: "auth-chu
 const ConfirmPage = lazyImport(() => import (/* webpackChunkName: "auth-chunk" */ "pages/ConfirmPage/ConfirmPage.jsx"));
 const LoginPage = lazyImport(() => import (/* webpackChunkName: "auth-chunk" */ "pages/LoginPage/LoginPage.jsx"));
 const ForgotPasswordPage = lazyImport(() => import (/* webpackChunkName: "auth-chunk" */ "pages/ForgotPasswordPage/ForgotPasswordPage.jsx"));
-const ChangePasswordPage = lazyImport(() => import (/* webpackChunkName: "auth-chunk" */ "pages/ChangePasswordPage/ChangePasswordPage.jsx"));
-const Dashboard = lazyImport(() => import (/* webpackChunkName: "dashboard" */ "pages/DashboardPage/DashboardPage.jsx"));
+const ResetPasswordPage = lazyImport(() => import (/* webpackChunkName: "auth-chunk" */ "pages/ResetPasswordPage/ResetPasswordPage.jsx"));
+const LoggedInHomePage = lazyImport(() => import (/* webpackChunkName: "home" */ "pages/LoggedInHomePage/LoggedInHomePage.jsx"));
 
 export const routes = [
     {
@@ -44,8 +44,8 @@ export const routes = [
         hiddenForAuthenticated: true
     },
     {
-        path: "/dashboard",
-        component: withSuspense(Dashboard),
+        path: "/home",
+        component: withSuspense(LoggedInHomePage),
         exact: false,
         enabled: true,
         authRequired: true,
@@ -62,8 +62,8 @@ export const routes = [
         hiddenForAuthenticated: true
     },
     {
-        path: "/changePassword/:token",
-        component: withSuspense(ChangePasswordPage),
+        path: "/resetPassword/:token",
+        component: withSuspense(ResetPasswordPage),
         title: "Change password",
         enabled: true,
         navbar: false,

@@ -1,7 +1,8 @@
-import {getCookie} from "util/CookieManager.js";
 import {showDialog} from "appRedux/reducers/application";
 
 import axios from "axios";
+import Cookies from "universal-cookie/es6";
+import {createNetworkError} from "util/api_util.js";
 
 const BASE_API_URL_DEVELOPMENT = "http://127.0.0.1:8001/api/";
 
@@ -10,36 +11,39 @@ const BASE_API_URL_PRODUCTION = "https://klkucharski-api.com/api/";
 export const buildApiUrl = name => BASE_API_URL_DEVELOPMENT + name;
 
 const sendPostWithCookies = async (url, body = {}) => {
-    return axios.post(url, body, {withCredentials: true});
+    console.debug(`%c[POST]: ${url}, body: ${JSON.stringify(body)}`, "color: #ccff44");
+
+    return axios.post(url, body, {
+        withCredentials: true,
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+            'X-CSRFTOKEN': new Cookies().get('csrftoken')
+        }
+    });
 };
 
-const sendPostAndParse = (requestFunc, name, onBefore, onSuccess, onFail, body = {}) => {
+const sendPostAndParse = (requestFunc, endpointName, onBefore, onSuccess, onFail, body = {}) => {
     return async dispatch => {
         try {
             dispatch(onBefore());
             //await new Promise(r => setTimeout(r, 1000));
-            parseResponse(dispatch, await requestFunc(buildApiUrl(name), body), onSuccess, onFail);
+            parseResponse(dispatch, await requestFunc(buildApiUrl(endpointName), body), onSuccess, onFail);
         }
         catch (e) {
-            if (e.message === 'Network Error'){
-                dispatch(onFail("network_error"));
+            if (e.message === 'Network Error') {
+                dispatch(onFail(createNetworkError(endpointName)));
                 return;
             }
 
             if (!e.response) {
-                dispatch(onFail("unknown_error"));
+                dispatch(onFail({ "any": ["unknown_error"] }));
             }
 
             if (e.response.status === 401) {
-                dispatch(onFail("Unauthorized"));
+                dispatch(onFail({ "any": ["unauthorized"] }));
             }
             else {
-                dispatch(showDialog({
-                    type: "error",
-                    title: "Server error",
-                    content: "Server error: " + e.response.status,
-                }));
-                dispatch(onFail("unknown_error"));
+                dispatch(onFail({ "any": ["unknown_error"] }));
             }
         }
     };
@@ -80,7 +84,6 @@ const parseResponse = (dispatch, response, onSuccess, onFail) => {
 };
 
 export const sendPost = (params) => {
-    const {target, onBefore, onSuccess, onFail, body = {}} = params;
-    console.debug(`%c[POST]: /${target}, body: ${JSON.stringify(body)}`, "color: #ccff44");
-    return sendPostAndParse(sendPostWithCookies, target, onBefore, onSuccess, onFail, body);
+    const {endpointName, onBefore, onSuccess, onFail, body = {}} = params;
+    return sendPostAndParse(sendPostWithCookies, endpointName, onBefore, onSuccess, onFail, body);
 };

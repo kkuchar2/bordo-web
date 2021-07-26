@@ -38,7 +38,7 @@
     "google-map-react": "^2.1.10",
     "html-loader": "^2.1.2",
     "html-webpack-plugin": "^5.3.1",
-    "kuchkr-react-component-library": "^2.0.22",
+    "kuchkr-react-component-library": "^2.0.25",
     "leaflet": "^1.7.1",
     "lodash": "^4.17.21",
     "miragejs": "^0.1.41",

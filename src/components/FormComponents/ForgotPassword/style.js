@@ -4,9 +4,8 @@ import styled from "styled-components";
 
 export const StyledForgotPasswordForm = styled(motion.div)`
   border-radius: 6px;
-  background: #323232;
-  box-shadow: 20px 20px 20px 0 rgba(0,0,0,.4);
-  
+
+
   @media (max-width: 600px) {
     display: flex;
     flex-direction: row;
@@ -19,7 +18,7 @@ export const StyledForgotPasswordForm = styled(motion.div)`
 
   .form {
     border-radius: 6px;
-    background: #323232;
+    background: #2b2b2b;
     display: flex;
     flex-direction: column;
     padding: 30px 30px 30px;
@@ -70,11 +69,28 @@ export const buttonTheme = {
     disabledBackground: "rgba(47,47,47,0.43)",
     hoverBackground: "#ee1960",
     border: "none",
-    borderRadius: "50px",
+    borderRadius: "5px",
 
     text: {
         fontSize: "14px",
         textColor: "#ffffff",
+        disabledTextColor: "rgba(255,255,255,0.20)"
+    }
+};
+
+export const StyledUnknownError = styled.div`
+  justify-content: center;
+  display: flex;
+  align-items: center;
+  margin-top: 20px;
+`;
+
+export const spinnerTheme = {
+    color: "#9333ff",
+    disabledColor: "rgba(255,119,0,0.29)",
+
+    text: {
+        textColor: "#e5e5e5",
         disabledTextColor: "rgba(255,255,255,0.20)"
     }
 };
@@ -104,6 +120,11 @@ export const StyledLink = styled(Link)`
     color: #00a6ff;
   }
 `;
+
+export const errorTextTheme = {
+    textColor: "#ff4949",
+    fontSize: "15px"
+};
 
 export const StyledJustRemembered = styled.div`
     display: flex;

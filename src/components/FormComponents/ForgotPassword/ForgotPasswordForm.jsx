@@ -4,16 +4,16 @@ import InputWithError from "components/InputWithError.jsx";
 import {Button, Spinner, Text} from "kuchkr-react-component-library";
 import React, {useCallback, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {trySendResetPassword} from "appRedux/reducers/api/account";
+import {selectorForgotPassword, trySendForgotPassword} from "appRedux/reducers/api/account";
 import {getResponseError} from "util/api_util.js";
 
 import {
     buttonTheme,
-    descriptionTextTheme,
-    justRememberedTextTheme,
+    descriptionTextTheme, errorTextTheme,
+    justRememberedTextTheme, spinnerTheme,
     StyledForgotPasswordForm,
     StyledJustRemembered,
-    StyledLink,
+    StyledLink, StyledUnknownError,
     titleTextTheme
 } from "components/FormComponents/ForgotPassword/style.js";
 
@@ -21,25 +21,34 @@ const ForgotPasswordForm = () => {
 
     const [email, setEmail] = useState('');
 
-    const status = useSelector(state => state.auth.status);
-    const errors = useSelector(state => state.auth.errors);
+    const forgotPasswordState = useSelector(selectorForgotPassword);
+    const errors = forgotPasswordState.errors;
+
     const dispatch = useDispatch();
 
     const onEmailChange = useCallback(v => setEmail(v), []);
 
     const sendResetPasswordRequest = useCallback(e => {
         e.preventDefault();
-        dispatch(trySendResetPassword(email));
+        dispatch(trySendForgotPassword(email));
     }, [email]);
 
     const renderButton = useCallback(() => {
-        if (status !== 'SENT_PASSWORD_RESET') {
+        if (!forgotPasswordState.requestPending) {
             return <Button text={"Send password reset link 🔑"} theme={buttonTheme} onClick={sendResetPasswordRequest}/>;
         }
         else {
-            return <Spinner visible={true}/>;
+            return <Spinner theme={spinnerTheme} text={''}/>;
         }
-    }, [status, email]);
+    }, [email, forgotPasswordState]);
+
+    const renderNetworkError = () => {
+        if (errors === 'network_error') {
+            return <StyledUnknownError>
+                <Text theme={errorTextTheme} text={"Could not connect to server"}/>
+            </StyledUnknownError>;
+        }
+    };
 
     let formError = getResponseError(errors, 'non_field_errors');
 
@@ -56,6 +65,7 @@ const ForgotPasswordForm = () => {
 
             <InputWithError id={'password'} title={"Password"} type={'text'} placeholder={"Enter your email address"} onChange={onEmailChange} errors={errors} disabled={false} />
 
+            {renderNetworkError()}
             {renderFormError(formError)}
 
             <div className={"buttonGroup"}>

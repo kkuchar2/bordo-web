@@ -65,6 +65,7 @@ module.exports = {
     },
     optimization: optimization,
     devServer: {
+        port: 3000,
         host: "127.0.0.1",
         disableHostCheck: true,
         historyApiFallback: true,

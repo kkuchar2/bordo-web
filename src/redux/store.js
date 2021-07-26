@@ -8,13 +8,13 @@ import {
     confirmReducer,
     registrationReducer,
     forgotPasswordReducer,
-    changePasswordReducer
+    resetPasswordReducer
 } from "appRedux/reducers/api/account";
 
 export const store = configureStore({
     reducer: {
         forgotPassword: forgotPasswordReducer,
-        changePassword: changePasswordReducer,
+        resetPassword: resetPasswordReducer,
         registration: registrationReducer,
         auth: authReducer,
         hello: helloReducer,

@@ -54,7 +54,7 @@ export const authSlice = createSlice({
 
 export const tryLoginWithGoogleCredentials = (accessToken) => {
     return sendPost({
-        target: 'googleLogin',
+        endpointName: 'googleLogin',
         onBefore: sentGoogleLoginRequest,
         onSuccess: googleLoginRequestSuccess,
         onFail: googleLoginRequestFailure,
@@ -64,7 +64,7 @@ export const tryLoginWithGoogleCredentials = (accessToken) => {
 
 export const tryAutoLogin = () => {
     return sendPost({
-        target: 'autoLogin',
+        endpointName: 'autoLogin',
         onBefore: sentAutologinRequest,
         onSuccess: autoLoginSuccess,
         onFail: autoLoginFailed,
@@ -74,16 +74,18 @@ export const tryAutoLogin = () => {
 
 export const tryLogin = (user, password) => {
     return sendPost({
-        target: 'login',
+        endpointName: 'login',
         onBefore: sentLoginRequest,
         onSuccess: loginSuccess,
         onFail: loginFailed,
-        body: {email: user, password: password}
+        body: {email: user, password: password},
+        withCredentials: false
     });
 };
 
 export const tryLogout = () => {
-    return sendPost({target: 'logout',
+    return sendPost({
+        endpointName: 'logout',
         onBefore: sentLogoutRequest,
         onSuccess: logoutSuccess,
         onFail: logoutFailed,
@@ -93,7 +95,7 @@ export const tryLogout = () => {
 
 export const tryDeleteAccount = () => {
     return sendPost({
-        target: 'deleteAccount',
+        endpointName: 'deleteAccount',
         onBefore: sentDeleteAccountRequest,
         onSuccess: deleteAccountSuccess,
         onFail: deleteAccountFailed,
