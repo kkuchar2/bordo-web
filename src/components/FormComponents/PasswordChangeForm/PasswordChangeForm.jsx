@@ -6,7 +6,7 @@ import {
     StyledSaveSection,
     StyledTitleSection, titleTheme
 } from "components/FormComponents/PasswordChangeForm/style.js";
-import InputWithError from "components/InputWithError.jsx";
+import withErrors from "components/withErrors.jsx"
 import {Button, Text} from "kuchkr-react-component-library";
 import React, {useCallback, useState} from "react";
 

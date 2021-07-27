@@ -1,8 +1,9 @@
 import {animatedWindowProps} from "components/FormComponents/animation.js";
 import {renderFormError} from "components/FormComponents/FormErrorRenderer.js";
-import InputWithError from "components/InputWithError.jsx";
-import {Button, Spinner, Text} from "kuchkr-react-component-library";
+import withErrors from "components/withErrors.jsx"
+import {Button, Input, Spinner, Text} from "kuchkr-react-component-library";
 import React, {useCallback, useState} from "react";
+import {useTranslation} from "react-i18next";
 import {useDispatch, useSelector} from "react-redux";
 import {selectorForgotPassword, trySendForgotPassword} from "appRedux/reducers/api/account";
 import {getResponseError} from "util/api_util.js";
@@ -17,7 +18,10 @@ import {
     titleTextTheme
 } from "components/FormComponents/ForgotPassword/style.js";
 
+const InputWithError = withErrors(Input);
+
 const ForgotPasswordForm = () => {
+    const { t } = useTranslation();
 
     const [email, setEmail] = useState('');
 
@@ -35,7 +39,7 @@ const ForgotPasswordForm = () => {
 
     const renderButton = useCallback(() => {
         if (!forgotPasswordState.requestPending) {
-            return <Button text={"Send password reset link 🔑"} theme={buttonTheme} onClick={sendResetPasswordRequest}/>;
+            return <Button text={t('FORGOT_PASSWORD_BUTTON')} theme={buttonTheme} onClick={sendResetPasswordRequest}/>;
         }
         else {
             return <Spinner theme={spinnerTheme} text={''}/>;
@@ -55,15 +59,12 @@ const ForgotPasswordForm = () => {
     return <StyledForgotPasswordForm {...animatedWindowProps}>
         <form onSubmit={sendResetPasswordRequest} className={'form'} autoComplete="none">
 
-            <Text style={{textAlign: "center"}} theme={titleTextTheme} text={"Forgot your password?"}/>
-            <div style={{marginTop: 10, width: "100%", display: "flex", alignItems: "center", justifyContent: "center"}}>
-                <img src={"images/cyanide.png"} alt={""} width={150} height={150}/>
-            </div>
+            <Text style={{textAlign: "center"}} theme={titleTextTheme} text={t('FORGOT_PASSWORD_FORM_TITLE')}/>
             <Text style={{marginTop: 20, marginBottom: 30}}
                   theme={descriptionTextTheme}
-                  text={"Enter your e-mail address and we'll send you a reset password link"}/>
+                  text={t('FORGOT_PASSWORD_INSTRUCTION')}/>
 
-            <InputWithError id={'password'} title={"Password"} type={'text'} placeholder={"Enter your email address"} onChange={onEmailChange} errors={errors} disabled={false} />
+            <InputWithError id={'email'} type={'text'} placeholder={t('ENTER_EMAIL_INPUT_PLACEHOLDER')} onChange={onEmailChange} errors={errors} disabled={false} />
 
             {renderNetworkError()}
             {renderFormError(formError)}
@@ -73,9 +74,8 @@ const ForgotPasswordForm = () => {
             </div>
 
             <StyledJustRemembered>
-                <Text theme={justRememberedTextTheme} text={"Just remembered?"}/>
-                <StyledLink style={{marginLeft: 10, marginBottom: 0}} to={'/'} className={"signInLink"}>Sign
-                    in</StyledLink>
+                <Text theme={justRememberedTextTheme} text={t('PASSWORD_JUST_REMEMBERED')}/>
+                <StyledLink style={{marginLeft: 10, marginBottom: 0}} to={'/'} className={"signInLink"}>{t('SIGN_IN')}</StyledLink>
             </StyledJustRemembered>
         </form>
     </StyledForgotPasswordForm>;

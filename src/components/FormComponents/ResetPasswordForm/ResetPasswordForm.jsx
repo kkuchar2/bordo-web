@@ -2,11 +2,13 @@ import {selectorResetPassword, trySendResetPassword} from "appRedux/reducers/api
 import {animatedWindowProps} from "components/FormComponents/animation.js";
 
 import {renderFormError} from "components/FormComponents/FormErrorRenderer.js";
-import InputWithError from "components/InputWithError.jsx";
-import {Button, Spinner, Text} from "kuchkr-react-component-library";
+import withErrors from "components/withErrors.jsx";
+import {Button, Input, Spinner, Text} from "kuchkr-react-component-library";
 import React, {useCallback, useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {getResponseError} from "util/api_util.js";
+
+const InputWithError = withErrors(Input);
 
 import {
     buttonTheme,

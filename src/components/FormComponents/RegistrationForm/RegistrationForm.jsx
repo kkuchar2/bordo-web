@@ -15,14 +15,18 @@ import {
     StyledUnknownError
 } from "components/FormComponents/RegistrationForm/style.js";
 
-import InputWithError from "components/InputWithError.jsx";
-import {Button, Spinner, Text} from "kuchkr-react-component-library";
+import withErrors from "components/withErrors.jsx";
+import {Button, Input, Spinner, Text} from "kuchkr-react-component-library";
 import React, {useCallback, useEffect, useState} from "react";
+import {useTranslation} from "react-i18next";
 import {useDispatch, useSelector} from "react-redux";
 import {clearAuthErrors, tryRegister} from "appRedux/reducers/api/account";
 import {getResponseError} from "util/api_util.js";
 
+const InputWithError = withErrors(Input);
+
 const RegistrationForm = (props) => {
+    const { t } = useTranslation();
 
     const {formSelector} = props;
 
@@ -74,7 +78,7 @@ const RegistrationForm = (props) => {
 
     const renderSignUpButton = useCallback(() => {
         if (status === 'INIT' || status === 'ERROR') {
-            return <Button text={"Sign up"} theme={buttonTheme}/>;
+            return <Button text={t('SIGN_UP')}theme={buttonTheme}/>;
         }
         else if (status === 'SENT_REGISTRATION_REQUEST') {
             return <Spinner text={'Signing up'} theme={spinnerTheme}/>;
@@ -85,11 +89,11 @@ const RegistrationForm = (props) => {
 
     return <StyledRegistrationFormComponent {...animatedWindowProps}>
         <form onSubmit={handleSubmit} className={'form'} autoComplete="none">
-            <Text theme={signUpTextTheme} text={"Sign up 🤗"}/>
-            <Text style={{marginTop: 20, marginBottom: 20}} theme={createNewAccountTextTheme} text={"Create new account"}/>
+            <Text theme={signUpTextTheme} text={t('REGISTRATION')}/>
+            <Text style={{marginTop: 20, marginBottom: 20}} theme={createNewAccountTextTheme} text={t('CREATE_ACCOUNT')}/>
 
-            <InputWithError id={'email'} title={"Password"} type={'text'} placeholder={"Enter your email address"} onChange={onEmailChange} errors={errors} disabled={disabled} />
-            <InputWithError id={'password'} title={"Password"} type={'password'} placeholder={"Select your password"} onChange={onPasswordChange} errors={errors} disabled={disabled} />
+            <InputWithError id={'email'} type={'text'} placeholder={t('ENTER_EMAIL_INPUT_PLACEHOLDER')} onChange={onEmailChange} errors={errors} disabled={disabled} />
+            <InputWithError id={'password'} type={'password'} placeholder={t('ENTER_PASSWORD_INPUT_PLACEHOLDER')} onChange={onPasswordChange} errors={errors} disabled={disabled} />
 
             {renderUnknownError()}
             {renderFormError(formError)}
@@ -97,8 +101,8 @@ const RegistrationForm = (props) => {
             <StyledButtonGroup>{renderSignUpButton()}</StyledButtonGroup>
 
             <StyledJustRemembered>
-                <Text theme={signInTextTheme} text={"Already have an account?"}/>
-                <StyledLink style={{marginLeft: 10}} to={'/'}>Sign in</StyledLink>
+                <Text theme={signInTextTheme} text={t('ALREADY_HAVE_ACCOUNT')}/>
+                <StyledLink style={{marginLeft: 10}} to={'/'}>{t('SIGN_IN')}</StyledLink>
             </StyledJustRemembered>
         </form>
     </StyledRegistrationFormComponent>;

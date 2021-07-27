@@ -55,7 +55,6 @@ module.exports = {
         modules: ['node_modules', resolvePath('src')],
         alias: {
             images: resolvePath('images/'),
-            fonts: resolvePath('fonts/'),
             pages: resolvePath('src/pages/'),
             configs: resolvePath('configs/'),
             appRedux: resolvePath('src/redux/'),
@@ -81,7 +80,7 @@ module.exports = {
         new CopyPlugin({
             patterns: [
                 {from: resolvePath('images'), to: resolvePath('dist/images')},
-                {from: resolvePath('fonts'), to: resolvePath('dist/fonts')},
+                {from: resolvePath('translation'), to: resolvePath('dist/translation')},
             ],
         }),
     ],
