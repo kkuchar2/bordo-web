@@ -1,16 +1,15 @@
-import {animatedWindowProps, animatedWindowProps2} from "components/FormComponents/animation.js";
+import {editButtonTheme} from "components/EditableTextProperty/style.js";
 import PasswordChangeForm from "components/FormComponents/PasswordChangeForm/PasswordChangeForm.jsx";
 import {Button, Text} from "kuchkr-react-component-library";
 import React, {useCallback, useState} from "react";
 import {
-    editButtonTheme,
     PropertyEditSection,
     propertyNameTheme,
     PropertyValueSection,
     propertyValueTheme,
     StyledEditablePasswordProperty,
-    StyledPropertyValues,
-    StyledEditedProperty
+    StyledEditedProperty,
+    StyledPropertyValues
 } from "./style.js";
 
 const EditablePasswordProperty = props => {

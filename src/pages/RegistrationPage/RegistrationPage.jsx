@@ -1,10 +1,10 @@
+import {selectorRegistration, tryResetRegistrationState} from "appRedux/reducers/api/account";
 import EmailSentPopup from "components/EmailSentPopup/EmailSentPopup.jsx";
 import RegistrationForm from "components/FormComponents/RegistrationForm/RegistrationForm.jsx";
 import EnsureAuthorized from "hoc/EnsureAuthorized.jsx";
 import {StyledRegistrationPage} from "pages/RegistrationPage/style.js";
 import React, {useCallback, useEffect} from 'react';
 import {useDispatch, useSelector} from "react-redux";
-import {selectorRegistration, tryResetRegistrationState} from "appRedux/reducers/api/account";
 import {withNotStatus, withStatus} from "util/util.js";
 
 const RegistrationPage = () => {
@@ -19,7 +19,7 @@ const RegistrationPage = () => {
 
     const renderRegistrationForm = useCallback(() => {
         return <div className={"wrapperSignIn"}>
-            <RegistrationForm formSelector={selectorRegistration}/>
+            <RegistrationForm/>
         </div>;
     }, []);
 

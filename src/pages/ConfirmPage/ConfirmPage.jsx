@@ -1,11 +1,11 @@
+import {selectorAccountConfirm, tryConfirmAccount} from "appRedux/reducers/api/account";
 import {animatedWindowProps} from "components/FormComponents/animation.js";
 import WaitingComponent from "components/WaitingComponent/WaitingComponent.jsx";
+import {Text} from "kuchkr-react-component-library";
+import {StyledConfirmPage, StyledConfirmPopup} from "pages/ConfirmPage/style.js";
 import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import {Link, Redirect, useLocation} from "react-router-dom";
-import {selectorAccountConfirm, tryConfirmAccount} from "appRedux/reducers/api/account";
-import {Text} from "kuchkr-react-component-library";
-import {StyledConfirmPage, StyledConfirmPopup} from "pages/ConfirmPage/style.js";
 
 const ConfirmPage = (props) => {
 
@@ -41,7 +41,8 @@ const ConfirmPage = (props) => {
     return <StyledConfirmPage>
         <StyledConfirmPopup {...animatedWindowProps}>
             <div className={'imageWrapper'}>
-                <img className={"emailSentIcon"} src={'images/sent_mail_icon.png'} width={60} height={60} alt={""}/>
+                <img className={"emailSentIcon"} src={'assets/images/sent_mail_icon.png'} width={60} height={60}
+                     alt={""}/>
             </div>
             <div className={"confirmationMessage"}>
                 <Text theme={Text.darkTheme} text={"Your account has been confirmed and activated."} />

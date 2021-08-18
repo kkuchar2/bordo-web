@@ -1,32 +1,27 @@
 import i18n from 'i18next';
-import { initReactI18next } from 'react-i18next';
+import LanguageDetector from 'i18next-browser-languagedetector';
 
 import Backend from 'i18next-http-backend';
-import LanguageDetector from 'i18next-browser-languagedetector';
+import {initReactI18next} from 'react-i18next';
 
 i18n
     .use(Backend)
     .use(LanguageDetector)
     .use(initReactI18next)
     .init({
-        lng: 'pl',
+        lng: 'en',
         backend: {
-            /* translation file path */
             loadPath: '{{ns}}/{{lng}}.json'
         },
         fallbackLng: 'en',
-        debug: true,
-        /* can have multiple namespace, in case you want to divide a huge translation into smaller pieces and load them on demand */
-        ns: ['translation'],
-        defaultNS: 'translation',
+        debug: false,
+        ns: ['assets/translation'],
+        defaultNS: 'assets/translation',
         keySeparator: false,
         interpolation: {
             escapeValue: false,
             formatSeparator: ','
-        },
-        react: {
-            wait: true
         }
-    });
+    }).then(r => {});
 
 export default i18n;

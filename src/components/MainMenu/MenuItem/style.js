@@ -1,45 +1,38 @@
 import {motion} from "framer-motion";
 import styled from "styled-components";
 
-export const StyledMenuItem = styled(motion.div)`
+export const textTheme = {
+    fontSize: "1em",
+    textColor: "#929292",
+    disabledTextColor: "rgba(255,255,255,0.20)",
+    fontWeight: 500,
+};
+
+export const StyledIconWrapper = styled.div`
   display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 100%;
+`;
+
+export const StyledMenuItem = styled(motion.div)`
+  display: flex;  @media (max-width: 600px) {
+  flex-direction: row;
+}
   flex-direction: row;
   align-items: center;
-
+  justify-content: flex-start;
+  box-sizing: border-box;
   width: 100%;
   height: 60px;
-  border-bottom: 1px solid #353535;
 
   &:hover {
     cursor: pointer;
-    background: #ffffff11;
-
-    .menuItemText {
-      color: #d6d6d6;
-    }
   }
 
-  .iconWrapper {
-    width: 25px;
-    height: 25px;
-    margin-left: 20px;
-    display: flex;
+  @media (max-width: 600px) {
     flex-direction: row;
-    align-items: center;
     justify-content: center;
-
-    padding: 7px;
-    border-radius: 12px;
-
-    .icon {
-      font-size: 15px;
-      color: #ffffff
-    }
-  }
-
-  .menuItemText {
-    margin-left: 15px;
-    font-size: 15px;
-    color: #999999;
   }
 `;

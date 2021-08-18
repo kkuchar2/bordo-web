@@ -1,15 +1,22 @@
-import thunkMiddleware from 'redux-thunk';
 import {configureStore} from '@reduxjs/toolkit';
-
-import {mouseReducer, dialogReducer, navbarReducer, themeReducer} from "appRedux/reducers/application";
-import {helloReducer} from "appRedux/reducers/api";
 import {
     authReducer,
     confirmReducer,
-    registrationReducer,
     forgotPasswordReducer,
+    registrationReducer,
     resetPasswordReducer
 } from "appRedux/reducers/api/account";
+
+import {getModelDataReducer, listModelsReducer, updateModelDataReducer} from "appRedux/reducers/api/crud";
+
+import {
+    dialogReducer,
+    modelViewReducer,
+    mouseReducer,
+    navbarReducer,
+    themeReducer
+} from "appRedux/reducers/application";
+import thunkMiddleware from 'redux-thunk';
 
 export const store = configureStore({
     reducer: {
@@ -17,7 +24,10 @@ export const store = configureStore({
         resetPassword: resetPasswordReducer,
         registration: registrationReducer,
         auth: authReducer,
-        hello: helloReducer,
+        listModels: listModelsReducer,
+        getModelData: getModelDataReducer,
+        updateModelData: updateModelDataReducer,
+        modelView: modelViewReducer,
         dialog: dialogReducer,
         mouse: mouseReducer,
         confirm: confirmReducer,

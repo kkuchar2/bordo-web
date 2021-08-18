@@ -2,13 +2,13 @@ import {selectorAuth} from "appRedux/reducers/api/account";
 import axios from "axios";
 import {StyledDashboard, StyledResponsiveReactGridLayout, StyledTile} from "components/Dashboard/style.js";
 import {animatedWindowProps} from "components/FormComponents/animation.js";
+import "leaflet/dist/leaflet.css";
 
 import React, {useCallback, useEffect, useRef, useState} from "react";
-import {MapContainer, Marker, Popup, TileLayer, useMap} from "react-leaflet";
-import {useDispatch, useSelector} from "react-redux";
 
 import 'react-grid-layout/css/styles.css';
-import "leaflet/dist/leaflet.css";
+import {MapContainer, Marker, Popup, TileLayer, useMap} from "react-leaflet";
+import {useDispatch, useSelector} from "react-redux";
 import 'react-resizable/css/styles.css';
 
 const ResizeMap = () => {
@@ -106,7 +106,8 @@ const Dashboard = (props) => {
     }
 
     return <StyledDashboard {...animatedWindowProps}>
-        <StyledResponsiveReactGridLayout style={{height: height}} ref={ref}
+        <StyledResponsiveReactGridLayout style={{height: "100%"}} ref={ref}
+
                                          className="layout" layouts={layouts}
                                          measureBeforeMount={false}
                                          breakpoints={breakpoints}

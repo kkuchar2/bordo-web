@@ -30,52 +30,46 @@ export const PropertyEditSection = styled.div`
 
 export const propertyNameTheme = {
     textColor: "#666666",
-    fontSize: "15px"
+    fontSize: "0.9em"
 };
 
 export const propertyValueTheme = {
-    textColor: "#bbbbbb",
-    fontSize: "15px"
+    textColor: "#6b6b6b",
+    fontSize: "0.9em"
 };
 
 export const editButtonTheme = {
-    width: "90px",
-    height: "30px",
-    background: "#2b2b34",
+    width: "100px",
+    height: "35px",
+    background: "rgba(0,180,105,1)",
     disabledBackground: "rgba(47,47,47,0.43)",
-    hoverBackground: "#393945",
+    hoverBackground: "rgb(0,140,81)",
     border: "none",
     borderRadius: "6px",
 
     text: {
+        textAlign: "center",
         fontSize: "14px",
         textColor: "#ffffff",
-        disabledTextColor: "rgba(255,255,255,0.20)"
-    }
-};
-
-export const saveButtonTheme = {
-    width: "90px",
-    height: "30px",
-    background: "#760000",
-    disabledBackground: "rgba(47,47,47,0.43)",
-    hoverBackground: "#890e0e",
-    border: "none",
-    borderRadius: "6px",
-
-    text: {
-        fontSize: "14px",
-        textColor: "#ffffff",
+        fontWeight: "700",
         disabledTextColor: "rgba(255,255,255,0.20)"
     }
 };
 
 export const editInputTheme = {
-    backgroundColor: "#2b2b2b",
-    textColor: "#cbcbcb",
-    disabledTextColor: "red",
-    placeholderTextColor: "#4c4c4c",
-    border: "none",
+    backgroundColor: "rgba(255,255,255,0)",
+    textColor: "#474747",
+    placeholderTextColor: "#dbdbdb",
+    border: "1px solid " + "#afafaf",
+    borderFocus: "1px solid " + "#0088ff",
+    borderRadius: "0",
     height: "40px",
-    borderRadius: "4px"
+    width: "280px",
+    margin: "0px 0px 0px 0px",
+
+    textTheme: {
+        fontWeight: "300",
+        textColor: '#868686',
+        fontSize: '1em'
+    }
 };

@@ -1,5 +1,13 @@
+import {useMediaQuery} from "@material-ui/core";
 import {selectorAuth} from "appRedux/reducers/api/account";
-import {emailTextTheme, StyledAccountEmailAndPicture, StyledAccountInfo} from "components/AccountDisplay/style.js";
+import {
+    emailTextTheme,
+    logoutButtonTheme,
+    StyledAccountEmailAndPicture,
+    StyledAccountInfo
+} from "components/AccountDisplay/style.js";
+import EditableProfilePictureProperty
+    from "components/EditableProfilePictureProperty/EditableProfilePictureProperty.jsx";
 import LogoutButton from "components/LogoutButton/LogoutButton.jsx";
 import {Text} from "kuchkr-react-component-library";
 import React, {useCallback} from "react";
@@ -7,24 +15,32 @@ import {useSelector} from "react-redux";
 
 const AcccountDisplay = props => {
 
-    const {profileImageSize = 50, showLogoutButton = false} = props;
+    const {profileImageSize = 0, showLogoutButton = false} = props;
 
     const authState = useSelector(selectorAuth);
 
+    const isMobile = useMediaQuery('(max-width: 600px)');
+
     const renderLogoutButton = useCallback(() => {
-        if (!showLogoutButton) {
+        if (!showLogoutButton || isMobile) {
             return;
         }
 
-        return <LogoutButton/>;
-    }, [showLogoutButton]);
+        return <LogoutButton theme={logoutButtonTheme}/>;
+    }, [showLogoutButton, isMobile]);
+
+    const renderUserEmail = useCallback(() => {
+        if (isMobile) {
+            return;
+        }
+
+        return <Text theme={emailTextTheme(isMobile)} text={authState.user.email}/>;
+    }, [isMobile]);
 
     return <StyledAccountInfo>
         <StyledAccountEmailAndPicture>
-            <img className={"profilePicture"} src={"images/profile.png"} alt={""} width={profileImageSize} height={profileImageSize}/>
-            <div className={"profileDetails"}>
-                <Text theme={emailTextTheme} text={authState.user.email}/>
-            </div>
+            <EditableProfilePictureProperty/>
+            {renderUserEmail()}
         </StyledAccountEmailAndPicture>
         {renderLogoutButton()}
     </StyledAccountInfo>;

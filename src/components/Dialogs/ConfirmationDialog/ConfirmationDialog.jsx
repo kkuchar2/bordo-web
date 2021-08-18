@@ -1,6 +1,9 @@
 import {
+    cancelButtonTheme,
+    confirmButtonTheme,
     descriptionTextTheme,
-    StyledConfirmationDialog, StyledDialogButtonsSection,
+    StyledConfirmationDialog,
+    StyledDialogButtonsSection,
     StyledDialogDescriptionSection,
     StyledDialogTitleSection,
     titleTextTheme
@@ -13,7 +16,9 @@ const ConfirmationDialog = (props) => {
 
     const {title, description, onConfirm, onCancel} = props;
 
-    return <StyledConfirmationDialog {...animatedWindowProps}>
+    console.log('Rendering confirmation dialog');
+
+    return <StyledConfirmationDialog>
         <StyledDialogTitleSection>
             <Text theme={titleTextTheme} text={title}/>
         </StyledDialogTitleSection>
@@ -23,8 +28,8 @@ const ConfirmationDialog = (props) => {
         </StyledDialogDescriptionSection>
 
         <StyledDialogButtonsSection>
-            <Button theme={Button.darkTheme} text={"Cancel"} onClick={onCancel}/>
-            <Button style={{marginLeft: 10}} theme={Button.darkTheme} text={"Confirm"} onClick={onConfirm}/>
+            <Button theme={cancelButtonTheme} text={"Cancel"} onClick={onCancel}/>
+            <Button theme={confirmButtonTheme} text={"Confirm"} onClick={onConfirm}/>
         </StyledDialogButtonsSection>
     </StyledConfirmationDialog>;
 };

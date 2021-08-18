@@ -1,0 +1,22 @@
+{
+  "ENTER_EMAIL_INPUT_PLACEHOLDER": "Enter your email address",
+  "ENTER_PASSWORD_INPUT_PLACEHOLDER": "Enter your password",
+  "SIGN_IN": "Sign in",
+  "WELCOME_BACK": "Welcome back!",
+  "LOGIN_TO_CONTINUE": "Sign in to your account to continue",
+  "SIGNIN_WTH_GOOGLE": "Continue with Google",
+  "NEED_ACCOUNT": "New user?",
+  "SIGN_UP": "Sign up",
+  "FORGOT_PASSWORD": "Reset your password",
+  "FORGOT_PASSWORD_FORM_TITLE": "Forgot your password?",
+  "CREATE_ACCOUNT": "Create an account",
+  "ALREADY_HAVE_ACCOUNT": "Already have an account?",
+  "REGISTRATION": "Sign up",
+  "FORGOT_PASSWORD_INSTRUCTION": "Enter your e-mail address and we'll send you a reset password link",
+  "FORGOT_PASSWORD_BUTTON": "Send password reset link",
+  "PASSWORD_JUST_REMEMBERED": "Just remembered?",
+  "NETWORK_ERROR" : "Could not connect to server",
+  "INPUT_PASSWORD_TITLE" : "Password:",
+  "SIGNING_IN_PROGRESS" : "Signing in",
+  "SIGNING_UP_PROGRESS" : "Signing up"
+}

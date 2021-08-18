@@ -1,24 +1,23 @@
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {animatedWindowProps} from "components/FormComponents/animation.js";
-import {StyledMenuItem} from "components/MainMenu/MenuItem/style.js";
+import {StyledIconWrapper, StyledMenuItem, textTheme} from "components/MainMenu/MenuItem/style.js";
+import {Text} from "kuchkr-react-component-library";
 
 import React, {useCallback} from "react";
 
 const MenuItem = (props) => {
 
-    const {name, color, icon, onClick} = props;
+    const {name, icon, onClick, active} = props;
 
-    const onMenuItemClick = useCallback(() => {
-        if (onClick) {
-            onClick(name);
-        }
-    }, [onClick]);
+    const onMenuItemClick = useCallback(() => onClick?.(), [onClick]);
+
+    const IconComponent = icon;
 
     return <StyledMenuItem {...animatedWindowProps} onClick={onMenuItemClick}>
-            <div className={"iconWrapper"} style={{background: color}}>
-                <FontAwesomeIcon className={"icon"} icon={icon}/>
-            </div>
-            <div className={"menuItemText"}>{name}</div>
+        {/*<StyledActiveIndicator active={active}/>*/}
+        <StyledIconWrapper>
+            <IconComponent style={{color: active ? "rgba(0,180,105,1)" : "#929292"}}/>
+        </StyledIconWrapper>
+        <Text style={{color: active ? "rgba(0,180,105,1)" : "#929292"}} theme={textTheme} text={name}/>
     </StyledMenuItem>;
 };
 

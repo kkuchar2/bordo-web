@@ -1,35 +1,30 @@
 import {createSlice} from "@reduxjs/toolkit";
-import {
-    forgotPasswordFailed,
-    forgotPasswordSuccess,
-    sentForgotPasswordRequest
-} from "appRedux/reducers/api/account/forgotPasswordSlice.js";
 import {sendPost} from "appRedux/util.js";
 
 const initialState = {
-    status: "INIT",
-    errors: null
+    path: null,
+    requestSent: false,
+    responseReceived: false,
+    errors: []
+};
+
+const setState = (state, action, requestSent, responseReceived) => {
+    const {errors = [], path = 'default'} = action.payload ? action.payload : {};
+
+    state.errors = errors;
+    state.path = path;
+    state.requestSent = requestSent;
+    state.responseReceived = responseReceived;
 };
 
 export const registrationSlice = createSlice({
     name: 'registration',
     initialState: initialState,
     reducers: {
-        registrationRequested: (state) => {
-            state.status = "SENT_REGISTRATION_REQUEST";
-        },
-        registrationSucceeded: (state) => {
-            state.status = "REGISTRATION_COMPLETE";
-            state.errors = null;
-        },
-        registrationFailed: (state, action) => {
-            state.status = "ERROR";
-            state.errors = action.payload;
-        },
-        resetRegistrationState: state => {
-            state.status = "INIT";
-            state.errors = null;
-        }
+        registrationRequested: (state, action) => setState(state, action, true, false),
+        registrationSucceeded: (state, action) => setState(state, action, false, true),
+        registrationFailed: (state, action) => setState(state, action, false, true),
+        resetRegistrationState: (state, action) => setState(state, action, false, false)
     }
 });
 

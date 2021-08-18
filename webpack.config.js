@@ -54,7 +54,8 @@ module.exports = {
         extensions: [".js", ".jsx"],
         modules: ['node_modules', resolvePath('src')],
         alias: {
-            images: resolvePath('images/'),
+            images: resolvePath('assets/images/'),
+            fonts: resolvePath('assets/fonts/'),
             pages: resolvePath('src/pages/'),
             configs: resolvePath('configs/'),
             appRedux: resolvePath('src/redux/'),
@@ -65,7 +66,7 @@ module.exports = {
     optimization: optimization,
     devServer: {
         port: 3000,
-        host: "127.0.0.1",
+        host: "0.0.0.0",
         disableHostCheck: true,
         historyApiFallback: true,
         headers: {
@@ -79,15 +80,16 @@ module.exports = {
         new CompressionPlugin({algorithm: 'gzip', test: /\.js$/}),
         new CopyPlugin({
             patterns: [
-                {from: resolvePath('images'), to: resolvePath('dist/images')},
-                {from: resolvePath('translation'), to: resolvePath('dist/translation')},
+                {from: resolvePath('assets/fonts'), to: resolvePath('dist/assets/images')},
+                {from: resolvePath('assets/images'), to: resolvePath('dist/assets/images')},
+                {from: resolvePath('assets/translation'), to: resolvePath('dist/assets/translation')},
             ],
         }),
     ],
     module: {
         rules: [
-            { // JS + JSX
-                test: /\.(js|jsx)$/,
+            { // JS + JSX + TS + TSX
+                test: /\.(js|jsx|ts|tsx)$/,
                 include: resolvePath('src'),
                 exclude: /node_modules/,
                 use: [{loader: 'babel-loader'}]

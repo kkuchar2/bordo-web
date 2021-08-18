@@ -1,29 +1,33 @@
-import {faExclamationCircle} from "@fortawesome/free-solid-svg-icons";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {Input, Text} from "kuchkr-react-component-library";
+import {FieldError} from "components/FormComponents/FormErrors/FieldError.jsx";
 import React, {useCallback, useEffect, useState} from "react";
+import {useTranslation} from "react-i18next";
 import {getFormFieldError} from "util/api_util.js";
 
 const formFieldTheme = {
-    backgroundColor: "#242424",
-    textColor: "#cbcbcb",
-    disabledTextColor: "red",
-    placeholderTextColor: "#4c4c4c",
-    border: "none",
+    backgroundColor: "rgba(255,255,255,0)",
+    textColor: "#1f1f1f",
+    placeholderTextColor: "#dbdbdb",
+    border: "1px solid " + "#afafaf",
+    borderFocus: "1px solid " + "#0088ff",
+    borderRadius: "0",
     height: "40px",
-    borderRadius: "4px"
-};
+    width: "280px",
+    margin: "30px 0px 0px 0px",
 
-const errorTextTheme = {
-    textColor: "#ff4949",
-    fontSize: "15px"
+    textTheme: {
+        fontWeight: "500",
+        textColor: '#3b3b3b',
+        fontSize: '1em'
+    }
 };
 
 const withErrors = (WrappedInput) => {
 
     function wrapped(props) {
 
-        const {errors, id, theme, style, ...rest} = props;
+        const {t} = useTranslation();
+
+        const {errors, id, theme, style, translation, ...rest} = props;
 
         const [error, setError] = useState(undefined);
 
@@ -39,10 +43,8 @@ const withErrors = (WrappedInput) => {
 
             let rows = [];
             for (let i = 0; i < error.length; i++) {
-                rows.push(<div key={i} className={"errorWrapper"}>
-                    <FontAwesomeIcon className={"errorIcon"} icon={faExclamationCircle}/>
-                    <Text style={{marginLeft: 5}} theme={errorTextTheme} text={error[i]['message']}/>
-                </div>);
+                console.log(error[i]['message']);
+                rows.push(<FieldError key={i} error={t(error[i]['message'])}/>);
             }
             return <>{rows}</>;
         }, [error]);
@@ -51,7 +53,6 @@ const withErrors = (WrappedInput) => {
             <WrappedInput
                 id={id}
                 theme={theme ? theme : formFieldTheme}
-                style={style ? style : {marginTop: 10, padding: 3}}
                 {...rest} />
             {renderError()}
         </>;

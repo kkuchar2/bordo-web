@@ -1,24 +1,15 @@
 import {selectorResetPassword, trySendResetPassword} from "appRedux/reducers/api/account";
+import {descriptionTextTheme, titleTextTheme} from "components/Dialogs/ConfirmationDialog/style.js";
 import {animatedWindowProps} from "components/FormComponents/animation.js";
-
-import {renderFormError} from "components/FormComponents/FormErrorRenderer.js";
+import {buttonTheme, spinnerTheme, StyledButtonGroup} from "components/FormComponents/commonStyles.js";
+import {FormErrors} from "components/FormComponents/FormErrors/FormErrors.jsx";
+import {StyledResetPasswordFormComponent} from "components/FormComponents/ResetPasswordForm/style.js";
 import withErrors from "components/withErrors.jsx";
 import {Button, Input, Spinner, Text} from "kuchkr-react-component-library";
 import React, {useCallback, useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {getResponseError} from "util/api_util.js";
 
 const InputWithError = withErrors(Input);
-
-import {
-    buttonTheme,
-    resetPasswordTextTheme,
-    errorTextTheme,
-    signInTextTheme, spinnerTheme,
-    StyledButtonGroup,
-    StyledResetPasswordFormComponent,
-    StyledUnknownError
-} from "components/FormComponents/ResetPasswordForm/style.js";
 
 const ResetPasswordForm = (props) => {
 
@@ -61,32 +52,19 @@ const ResetPasswordForm = (props) => {
         }
     }, [resetPasswordState]);
 
-    const renderNetworkError = () => {
-        if (errors === 'network_error') {
-            return <StyledUnknownError>
-                <Text theme={errorTextTheme} text={"Could not connect to server"}/>
-            </StyledUnknownError>;
-        }
-    };
-
-    let formError = getResponseError(errors, 'non_field_errors');
-
-    console.log(errors);
-
     return <StyledResetPasswordFormComponent {...animatedWindowProps}>
         <form onSubmit={attemptResetPassword} className={'form'} autoComplete="none">
-            <Text style={{textAlign: "center"}} theme={resetPasswordTextTheme} text={"Password reset"}/>
-            <Text style={{textAlign: "center", marginTop: 30, marginBottom: 10}} theme={signInTextTheme}
-                  text={"Choose your new password"}/>
+            <Text theme={titleTextTheme} text={"Password reset"}/>
+            <Text theme={descriptionTextTheme} text={"Choose your new password"}/>
 
             <InputWithError id={'new_password1'} title={"Password"} type={'password'} placeholder={"New password"}
                             onChange={onNewPassword1Change} errors={errors} disabled={disabled}/>
 
-            <InputWithError id={'new_password2'} title={"Confirm password"} type={'password'} placeholder={"Confirm new password"}
+            <InputWithError id={'new_password2'} title={"Confirm password"} type={'password'}
+                            placeholder={"Confirm new password"}
                             onChange={onNewPassword2Change} errors={errors} disabled={disabled}/>
 
-            {renderNetworkError()}
-            {renderFormError(formError)}
+            <FormErrors errors={errors}/>
 
             <StyledButtonGroup>{renderButton()}</StyledButtonGroup>
         </form>

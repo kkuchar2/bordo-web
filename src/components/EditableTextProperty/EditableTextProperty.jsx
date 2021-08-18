@@ -1,16 +1,19 @@
-import withErrors from "components/withErrors.jsx"
-import {Button, Text} from "kuchkr-react-component-library";
+import {saveButtonTheme} from "components/FormComponents/PasswordChangeForm/style.js";
+import withErrors from "components/withErrors.jsx";
+import {Button, Input, Text} from "kuchkr-react-component-library";
 import React, {useCallback, useState} from "react";
 import {
     editButtonTheme,
+    editInputTheme,
     PropertyEditSection,
     propertyNameTheme,
     PropertyValueSection,
     propertyValueTheme,
     StyledEditableTextProperty,
-    StyledPropertyValues,
-    editInputTheme, saveButtonTheme
+    StyledPropertyValues
 } from "./style.js";
+
+const InputWithError = withErrors(Input);
 
 const EditableTextProperty = props => {
 
@@ -24,8 +27,12 @@ const EditableTextProperty = props => {
 
     const renderProperty = useCallback(() => {
         if (edit) {
-            return <InputWithError theme={editInputTheme} style={{width: '100%', marginTop: 0}} id={name} title={name} type={'text'}
-                                   value={value}
+            return <InputWithError theme={editInputTheme}
+                                   style={{width: '100%', marginTop: 0}}
+                                   id={name}
+                                   title={null}
+                                   type={'text'}
+                                   initialValue={value}
                                    placeholder={"New: " + name}
                                    onChange={onPropertyChange}/>;
         }
@@ -60,7 +67,7 @@ const EditableTextProperty = props => {
             <PropertyValueSection>
                 {renderProperty()}
                 <PropertyEditSection>
-                    <Button style={{marginLeft: 20}} theme={edit ? saveButtonTheme : editButtonTheme} text={getEditText()}
+                    <Button theme={edit ? saveButtonTheme : editButtonTheme} text={getEditText()}
                             onClick={onEditButtonClick}/>
                 </PropertyEditSection>
             </PropertyValueSection>

@@ -3,12 +3,13 @@ import {
     inputTheme,
     saveButtonTheme,
     StyledPasswordChangeForm,
-    StyledSaveSection,
-    StyledTitleSection, titleTheme
+    StyledSaveSection
 } from "components/FormComponents/PasswordChangeForm/style.js";
-import withErrors from "components/withErrors.jsx"
-import {Button, Text} from "kuchkr-react-component-library";
+import withErrors from "components/withErrors.jsx";
+import {Button, Input} from "kuchkr-react-component-library";
 import React, {useCallback, useState} from "react";
+
+const InputWithError = withErrors(Input);
 
 const PasswordChangeForm = props => {
 
@@ -37,33 +38,28 @@ const PasswordChangeForm = props => {
     }, []);
 
     return <StyledPasswordChangeForm>
-
-        <StyledTitleSection>
-            <Text theme={titleTheme} text={"Change password:"}/>
-        </StyledTitleSection>
-
         <InputWithError
             theme={inputTheme}
             id={"current_password"}
-            title={"current_password"}
             type={'text'}
+            title={'Current password:'}
             value={currentPassword}
-            placeholder={"Current password"}
+            placeholder={"Enter current password"}
             onChange={onCurrentPasswordChange}/>
 
         <InputWithError
             theme={inputTheme}
             id={"new_password1"}
-            title={"new_password2"}
+            title={'New password:'}
             type={'text'}
             value={newPassword1}
-            placeholder={"New password"}
+            placeholder={"Choose new password"}
             onChange={onNewPassword1Change}/>
 
         <InputWithError
             theme={inputTheme}
+            title={'Confirm new password:'}
             id={"new_password2"}
-            title={"new_password2"}
             type={'text'}
             value={newPassword2}
             placeholder={"Confirm new password"}
@@ -71,9 +67,9 @@ const PasswordChangeForm = props => {
 
         <StyledSaveSection>
             <Button theme={cancelButtonTheme} text={'Cancel'} onClick={onCancelClick}/>
-            <Button style={{marginLeft: 10}} theme={saveButtonTheme} text={'Save'}
-                    onClick={onSaveButtonClick}/>
+            <Button theme={saveButtonTheme} text={'Save'} onClick={onSaveButtonClick}/>
         </StyledSaveSection>
+
     </StyledPasswordChangeForm>;
 };
 

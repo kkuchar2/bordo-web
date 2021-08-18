@@ -9,3 +9,7 @@ export * from 'appRedux/reducers/application/dialogSlice.js';
 
 export {default as mouseReducer} from 'appRedux/reducers/application/mouseSlice.js';
 export * from 'appRedux/reducers/application/mouseSlice.js';
+
+export {default as modelViewReducer} from 'appRedux/reducers/application/modelViewSlice.js';
+export * from 'appRedux/reducers/application/modelViewSlice.js';
+

@@ -1,26 +1,28 @@
-import ConfirmationDialog from "components/Dialogs/ConfirmationDialog/ConfirmationDialog.jsx";
-import {StyledDialogs} from "components/Dialogs/style.js";
-import React, {useCallback} from "react";
-import {useSelector} from "react-redux";
+import {useMediaQuery} from "@material-ui/core";
 import {selectorDialogs} from "appRedux/reducers/application";
+import {StyledDialog, StyledDialogs} from "components/Dialogs/style.js";
+import {animatedWindowProps4} from "components/FormComponents/animation.js";
+import React from "react";
+import {useSelector} from "react-redux";
 
 const Dialogs = (props) => {
 
-    const {opened, title, description, onConfirm, onCancel} = useSelector(selectorDialogs);
+    const data = useSelector(selectorDialogs);
 
-    const renderDialog = useCallback(() => {
-        if (opened)
-        {
-            return <ConfirmationDialog title={title} description={description} onConfirm={onConfirm} onCancel={onCancel}/>;
-        }
-    }, [opened]);
+    const Component = data.component;
+    const componentProps = data.componentProps;
+    const isMobile = useMediaQuery('(max-width: 1200px)');
 
-    if (!opened) {
-        return <></>;
+    if (!Component) {
+        return null;
     }
 
+    const animationProps = isMobile ? null : animatedWindowProps4
+
     return <StyledDialogs>
-        {renderDialog()}
+        <StyledDialog {...animationProps}>
+            <Component {...componentProps} />
+        </StyledDialog>
     </StyledDialogs>;
 };
 

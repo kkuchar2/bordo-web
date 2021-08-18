@@ -1,17 +1,17 @@
 import {faHome} from "@fortawesome/free-solid-svg-icons";
 
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {routes} from "routes.js";
+import {selectorAuth, tryLogout} from "appRedux/reducers/api/account";
+import {closeNavbar, openNavbar} from "appRedux/reducers/application";
+
+import "components/NavBar/NavBar.scss";
 
 import NavBarItem from "components/NavBar/NavBarItem.jsx";
 import {Button} from "kuchkr-react-component-library";
 import React, {useCallback, useEffect, useState} from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import {Link} from "react-router-dom";
-import {selectorAuth, tryLogout} from "appRedux/reducers/api/account";
-import {closeNavbar, openNavbar} from "appRedux/reducers/application";
-
-import "components/NavBar/NavBar.scss";
+import {routes} from "routes.js";
 
 const hamburgerButtonTheme = {
     width: "40px",
@@ -168,7 +168,7 @@ function NavBar() {
 
         return <Button style={{display: "flex", alignItems: "center", justifyContent: "center"}}
                        theme={hamburgerButtonTheme} onClick={hamburgerClick}>
-            <img src={"images/hamburger_icon.png"} alt={""} width={18} height={18}/>
+            <img src={"assets/images/hamburger_icon.png"} alt={""} width={18} height={18}/>
         </Button>;
     }, [width]);
 

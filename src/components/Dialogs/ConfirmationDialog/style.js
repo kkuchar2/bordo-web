@@ -1,22 +1,23 @@
-import styled from "styled-components";
 import {motion} from "framer-motion";
+import styled from "styled-components";
 
 export const titleTextTheme = {
-    textColor: "#bbbbbb",
-    fontSize: "25px"
+    textColor: "#252525",
+    fontSize: "1.2em",
+    textAlign: "center"
 };
 
 export const descriptionTextTheme = {
-    textColor: "#bbbbbb",
-    fontSize: "15px"
+    textColor: "#333333",
+    fontSize: "15px",
 };
 
-export const StyledConfirmationDialog = styled(motion.div)`
+export const StyledConfirmationDialog = styled.div`
   max-width: 500px;
   max-height: 200px;
   width: 450px;
   height: 200px;
-  background: #1a1a1a;
+  background: #ffffff;
   box-sizing: border-box;
   border-radius: 8px;
   overflow: hidden;
@@ -44,3 +45,40 @@ export const StyledDialogButtonsSection = styled.div`
   display: flex;
   padding: 20px;
 `;
+
+export const cancelButtonTheme = {
+    width: "120px",
+    height: "40px",
+    background: "rgba(255,255,255,0.68)",
+    disabledBackground: "rgba(47,47,47,0.43)",
+    hoverBackground: "rgba(238,238,238,0.68)",
+    border: "none",
+    borderRadius: "6px",
+
+    text: {
+        textAlign: "center",
+        fontSize: "14px",
+        textColor: "#565656",
+        fontWeight: "700",
+        disabledTextColor: "rgba(255,255,255,0.20)",
+    }
+};
+
+export const confirmButtonTheme = {
+    width: "120px",
+    height: "40px",
+    background: "rgba(255,255,255,0.68)",
+    disabledBackground: "rgba(47,47,47,0.43)",
+    hoverBackground: "rgba(238,238,238,0.68)",
+    border: "none",
+    borderRadius: "6px",
+    margin: "0px 0px 0px 10px",
+
+    text: {
+        textAlign: "center",
+        fontSize: "14px",
+        textColor: "#565656",
+        fontWeight: "700",
+        disabledTextColor: "rgba(255,255,255,0.20)",
+    }
+};

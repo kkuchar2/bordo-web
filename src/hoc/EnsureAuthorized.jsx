@@ -14,8 +14,8 @@ const EnsureAuthorized = (WrappedComponent) => {
         const authState = useSelector(selectorAuth);
         const dispatch = useDispatch();
         const isOnAuthPage = isOnAuthenticatedPage();
-        const receivedResponse = authState.receivedResponse;
-        const requestPending = authState.requestPending;
+        const receivedResponse = authState.responseReceived;
+        const requestSent = authState.requestSent;
         const loggedIn = authState.loggedIn;
 
         /**
@@ -51,8 +51,7 @@ const EnsureAuthorized = (WrappedComponent) => {
         if (isOnAuthPage) {
             if (loggedIn)
             {
-                if ((!requestPending && receivedResponse) || (requestPending && !receivedResponse))
-                {
+                if ((!requestSent && receivedResponse) || (requestSent && !receivedResponse)) {
                     return <WrappedComponent {...props} />;
                 }
                 else {
@@ -60,11 +59,10 @@ const EnsureAuthorized = (WrappedComponent) => {
                 }
             }
             else {
-                if (!requestPending && receivedResponse) {
+                if (!requestSent && receivedResponse) {
                     return redirect("/");
                 }
-                else if ((!requestPending && !receivedResponse) || (requestPending && !receivedResponse))
-                {
+                else if ((!requestSent && !receivedResponse) || (requestSent && !receivedResponse)) {
                     return <></>;
                 }
             }
@@ -72,8 +70,7 @@ const EnsureAuthorized = (WrappedComponent) => {
         else {
             if (loggedIn)
             {
-                if (!requestPending && receivedResponse)
-                {
+                if (!requestSent && receivedResponse) {
                     return redirect("/home");
                 }
                 else {
@@ -81,12 +78,10 @@ const EnsureAuthorized = (WrappedComponent) => {
                 }
             }
             else {
-                if (!requestPending && !receivedResponse)
-                {
+                if (!requestSent && !receivedResponse) {
                     return <></>;
                 }
-                else if ((requestPending && !receivedResponse) || (!requestPending && receivedResponse))
-                {
+                else if ((requestSent && !receivedResponse) || (!requestSent && receivedResponse)) {
                     return <WrappedComponent {...props} />;
                 }
             }

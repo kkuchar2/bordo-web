@@ -1,5 +1,5 @@
-import styled from "styled-components";
 import {motion} from "framer-motion";
+import styled from "styled-components";
 
 export const StyledEditablePasswordProperty = styled.div`
   display: flex;
@@ -16,8 +16,7 @@ export const StyledPropertyValues = styled.div`
 export const StyledEditedProperty = styled(motion.div)`
   width: 100%;
   display: flex;
-  align-items: center;
-  justify-content: center;
+
 `;
 
 export const PropertyValueSection = styled.div`
@@ -25,7 +24,7 @@ export const PropertyValueSection = styled.div`
   width: 100%;
   display: flex;
   justify-content: flex-end;
-  align-items: flex-end;
+  align-items: center;
 `;
 
 export const PropertyEditSection = styled.div`
@@ -38,42 +37,10 @@ export const PropertyEditSection = styled.div`
 
 export const propertyNameTheme = {
     textColor: "#666666",
-    fontSize: "15px"
+    fontSize: "0.9em"
 };
 
 export const propertyValueTheme = {
-    textColor: "#bbbbbb",
-    fontSize: "15px"
-};
-
-export const editButtonTheme = {
-    width: "90px",
-    height: "30px",
-    background: "#2b2b34",
-    disabledBackground: "rgba(47,47,47,0.43)",
-    hoverBackground: "#393945",
-    border: "none",
-    borderRadius: "6px",
-
-    text: {
-        fontSize: "14px",
-        textColor: "#ffffff",
-        disabledTextColor: "rgba(255,255,255,0.20)"
-    }
-};
-
-export const saveButtonTheme = {
-    width: "90px",
-    height: "30px",
-    background: "#760000",
-    disabledBackground: "rgba(47,47,47,0.43)",
-    hoverBackground: "#890e0e",
-    border: "none",
-    borderRadius: "6px",
-
-    text: {
-        fontSize: "14px",
-        textColor: "#ffffff",
-        disabledTextColor: "rgba(255,255,255,0.20)"
-    }
+    textColor: "#6b6b6b",
+    fontSize: "0.5em"
 };

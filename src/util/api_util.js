@@ -12,7 +12,6 @@ export const getResponseError = (errors, context, key) => {
 
     if (context === 'form' && key)
     {
-        console.log()
         const formContextErrors = errors['form'];
 
         if (formContextErrors) {
@@ -37,6 +36,6 @@ export const createError = (errorType, errorMessage, errorSource) => {
 
 export const createNetworkError = (source) => {
     return {
-        "generic": [ createError("network_error", "Could not connect to server", source) ]
+        "generic": [createError("network_error", "NETWORK_ERROR", source)]
     };
 };

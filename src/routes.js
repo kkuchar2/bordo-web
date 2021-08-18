@@ -8,7 +8,7 @@ const ConfirmPage = lazyImport(() => import (/* webpackChunkName: "auth-chunk" *
 const LoginPage = lazyImport(() => import (/* webpackChunkName: "auth-chunk" */ "pages/LoginPage/LoginPage.jsx"));
 const ForgotPasswordPage = lazyImport(() => import (/* webpackChunkName: "auth-chunk" */ "pages/ForgotPasswordPage/ForgotPasswordPage.jsx"));
 const ResetPasswordPage = lazyImport(() => import (/* webpackChunkName: "auth-chunk" */ "pages/ResetPasswordPage/ResetPasswordPage.jsx"));
-const LoggedInHomePage = lazyImport(() => import (/* webpackChunkName: "home" */ "pages/LoggedInHomePage/LoggedInHomePage.jsx"));
+const HomePage = lazyImport(() => import (/* webpackChunkName: "home" */ "pages/HomePage/HomePage.jsx"));
 
 export const routes = [
     {
@@ -45,7 +45,7 @@ export const routes = [
     },
     {
         path: "/home",
-        component: withSuspense(LoggedInHomePage),
+        component: withSuspense(HomePage),
         exact: false,
         enabled: true,
         authRequired: true,
@@ -83,9 +83,5 @@ export const isOnAuthenticatedPage = () => {
     }
     return false;
 };
-
-export const isOnAuthShadowedPage = () => getCurrentRoute().hiddenForAuthenticated;
-
-export const isOnLoginPage = () => window.location.pathname === '/';
 
 export const isOnAccountConfirmPage = () => (/^\/verify-email\/(.*)$/).test(window.location.pathname);

@@ -1,54 +1,65 @@
 import {createSlice} from "@reduxjs/toolkit";
-import Cookies from "universal-cookie/es6";
-import {sendPost} from "appRedux/util.js";
+import {sendFilePost, sendPost} from "appRedux/util.js";
 
 const initialState = {
-    requestPending: false,
-    receivedResponse: false,
+    path: null,
+    requestSent: false,
+    responseReceived: false,
     loggedIn: false,
     errors: [],
     user: null,
 };
 
-const setState = (state, loggedIn, errors, user, requestPending, receivedResponse) => {
+const setState = (state, action, loggedIn, user, requestSent, responseReceived) => {
+
+    const {errors = state.errors, path = 'default'} = action.payload ? action.payload : {};
+
     state.loggedIn = loggedIn;
     state.errors = errors;
     state.user = user;
-    state.requestPending = requestPending;
-    state.receivedResponse = receivedResponse;
+    state.path = path;
+    state.requestSent = requestSent;
+    state.responseReceived = responseReceived;
 };
 
 export const authSlice = createSlice({
     name: "auth",
     initialState: initialState,
     reducers: {
-        // password login
-        sentLoginRequest: (state) => setState(state, false, state.errors, null, true, false),
-        loginSuccess: (state, action) => setState(state, true, [], action.payload.user, false, true),
-        loginFailed: (state, action) => setState(state, false, action.payload, null, false, true),
+        // Request: password login
+        sentLoginRequest: (state, action) => setState(state, action, false, null, true, false),
+        loginSuccess: (state, action) => {
 
-        // autologin
-        sentAutologinRequest: (state) => setState(state, false, [], null, true, false),
-        autoLoginSuccess: (state, action) => setState(state, true, [], action.payload.user, false, true),
-        autoLoginFailed: (state, action) => setState(state, false, action.payload, null, false, true),
+            setState(state, action, true, action.payload.user, false, true);
+        },
+        loginFailed: (state, action) => setState(state, action, false, null, false, true),
 
-        // google login
-        sentGoogleLoginRequest: (state) => setState(state, false, [], null, true, false),
-        googleLoginRequestSuccess: (state, action) => setState(state, true, [], action.payload.user, false, true),
-        googleLoginRequestFailure: (state, action) => setState(state, false, action.payload, null, false, true),
+        // Request: autologin
+        sentAutologinRequest: (state, action) => setState(state, action, false, null, true, false),
+        autoLoginSuccess: (state, action) => setState(state, action, true, action.payload.user, false, true),
+        autoLoginFailed: (state, action) => setState(state, action, false, null, false, true),
 
-        // logout
-        sentLogoutRequest: (state) => setState(state, state.loggedIn, [], state.user, true, false),
-        logoutSuccess: (state) => setState(state, false, [], null, false, true),
-        logoutFailed: (state, action) => setState(state, false, action.payload, null, false, true),
+        // Request: google login
+        sentGoogleLoginRequest: (state, action) => setState(state, action, false, null, true, false),
+        googleLoginRequestSuccess: (state, action) => setState(state, action, true, action.payload.user, false, true),
+        googleLoginRequestFailure: (state, action) => setState(state, action, false, null, false, true),
 
-        // delete account
-        sentDeleteAccountRequest: (state) => setState(state, true, [], state.user, true, false),
-        deleteAccountSuccess: (state) => setState(state, false, [], null, false, true),
-        deleteAccountFailed: (state, action) => setState(state, state.loggedIn, action.payload, state.user, false, true),
+        // Request: logout
+        sentLogoutRequest: (state, action) => setState(state, action, state.loggedIn, state.user, true, false),
+        logoutSuccess: (state, action) => setState(state, action, false, null, false, true),
+        logoutFailed: (state, action) => setState(state, action, false, null, false, true),
 
-        removeErrors: (state) => setState(state, state.loggedIn, [], state.user, state.requestPending, state.receivedResponse),
-        logUserOut: (state) => setState(state, false, [], null, false, false)
+        // Request: delete account
+        sentDeleteAccountRequest: (state, action) => setState(state, action, true, state.user, true, false),
+        deleteAccountSuccess: (state, action) => setState(state, action, false, null, false, true),
+        deleteAccountFailed: (state, action) => setState(state, action, state.loggedIn, state.user, false, true),
+
+        removeErrors: (state, action) => setState(state, action, state.loggedIn, state.user, state.requestSent, state.responseReceived),
+        logUserOut: (state, action) => setState(state, action, false, null, false, false),
+
+        sentChangeProfileImage: (state, action) => setState(state, action, state.loggedIn, state.user, true, false),
+        changeProfileImageSuccess: (state, action) => setState(state, action, state.loggedIn, action.payload.user, false, true),
+        changeProfileImageFailed: (state, action) => setState(state, action, state.loggedIn, state.user, true)
     }
 });
 
@@ -103,6 +114,16 @@ export const tryDeleteAccount = () => {
     });
 };
 
+export const tryChangeProfileImage = (file) => {
+    return sendFilePost({
+        endpointName: 'changeProfileImage',
+        onBefore: sentChangeProfileImage,
+        onSuccess: changeProfileImageSuccess,
+        onFail: changeProfileImageFailed,
+        file: file
+    });
+};
+
 export const clearAuthErrors = () => async dispatch => dispatch(removeErrors());
 
 export const selectorAuth = state => state.auth;
@@ -126,6 +147,9 @@ export const {
     logUserOut,
     sentGoogleLoginRequest,
     googleLoginRequestSuccess,
-    googleLoginRequestFailure
+    googleLoginRequestFailure,
+    sentChangeProfileImage,
+    changeProfileImageSuccess,
+    changeProfileImageFailed,
 } = authSlice.actions;
 export default authSlice.reducer;

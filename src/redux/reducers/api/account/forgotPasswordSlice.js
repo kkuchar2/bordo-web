@@ -2,25 +2,29 @@ import {createSlice} from "@reduxjs/toolkit";
 import {sendPost} from "appRedux/util.js";
 
 const initialState = {
-    requestPending: false,
-    receivedResponse: false,
+    path: null,
+    requestSent: false,
+    responseReceived: false,
     errors: []
 };
 
-const setState = (state, errors, requestPending, receivedResponse) => {
+const setState = (state, action, requestSent, responseReceived) => {
+    const {errors = [], path = 'default'} = action.payload ? action.payload : {};
+
     state.errors = errors;
-    state.requestPending = requestPending;
-    state.receivedResponse = receivedResponse;
+    state.path = path;
+    state.requestSent = requestSent;
+    state.responseReceived = responseReceived;
 };
 
 export const forgotPasswordSlice = createSlice({
     name: 'forgotPassword',
     initialState: initialState,
     reducers: {
-        sentForgotPasswordRequest: state => setState(state, [], true, false),
-        forgotPasswordSuccess: state => setState(state, [], false, true),
-        forgotPasswordFailed: (state, action) => setState(state, action.payload, false, true),
-        forgotPasswordResetState: state => setState(state, [], false, false)
+        sentForgotPasswordRequest: (state, action) => setState(state, action, true, false),
+        forgotPasswordSuccess: (state, action) => setState(state, action, false, true),
+        forgotPasswordFailed: (state, action) => setState(state, action, false, true),
+        forgotPasswordResetState: (state, action) => setState(state, action, false, false)
     }
 });
 

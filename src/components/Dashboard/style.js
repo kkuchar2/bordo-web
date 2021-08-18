@@ -36,8 +36,4 @@ export const StyledTile = styled(motion.div)`
 
 export const StyledResponsiveReactGridLayout = styled(ResponsiveReactGridLayout)`
   width: 100%;
-  background: #1a1a1a;
-  margin-left: 10px;
-  border-radius: 10px;
-  padding: 20px;
 `;

@@ -1,5 +1,4 @@
 import {motion} from "framer-motion";
-import {Link} from "react-router-dom";
 import styled from "styled-components";
 
 export const StyledEmailSent = styled(motion.div)`
@@ -75,23 +74,6 @@ export const StyledEmailSent = styled(motion.div)`
   }
 `;
 
-export const StyledLink = styled(Link)`
-  color: #cbcbcb;
-  position: relative;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 10px;
-  border-radius: 50px;
-  background-color: #3b53bb;
-  text-decoration: none;
-  
-  &:hover {
-    background: #435ec6;
-  }
-`;
-
 export const textThemeTitle = {
     textColor: "#bbbbbb",
     fontSize: "25px"
@@ -99,5 +81,6 @@ export const textThemeTitle = {
 
 export const textThemeDescription = {
     textColor: "#bbbbbb",
-    fontSize: "18px"
+    fontSize: "18px",
+    margin: "20px 0px 20px 0px"
 };

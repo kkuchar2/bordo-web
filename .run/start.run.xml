@@ -5,8 +5,8 @@
     <scripts>
       <script value="start" />
     </scripts>
-    <node-interpreter value="$USER_HOME$/.nvm/versions/node/v16.2.0/bin/node" />
-    <package-manager value="npm" />
+    <node-interpreter value="node" />
+    <package-manager value="$PROJECT_DIR$/node_modules/npm" />
     <envs />
     <method v="2" />
   </configuration>

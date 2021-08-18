@@ -1,4 +1,4 @@
-import {StyledEmailSent, StyledLink, textThemeDescription, textThemeTitle} from "components/EmailSentPopup/style.js";
+import {StyledEmailSent, textThemeDescription, textThemeTitle} from "components/EmailSentPopup/style.js";
 import {animatedWindowProps} from "components/FormComponents/animation.js";
 import {Text} from "kuchkr-react-component-library";
 import React from "react";
@@ -15,10 +15,11 @@ const EmailSentPopup = (props) => {
     return <StyledEmailSent {...animatedWindowProps}>
         <div className={'popup'}>
             <div className={'imageWrapper'}>
-                <img className={"emailSentIcon"} src={'images/sent_mail_icon.png'} width={60} height={60} alt={""}/>
+                <img className={"emailSentIcon"} src={'assets/images/sent_mail_icon.png'} width={60} height={60}
+                     alt={""}/>
             </div>
             <Text style={{marginTop: 20, textAlign: 'center'}} theme={textThemeTitle} text={title}/>
-            <Text style={{marginTop: 20, marginBottom: 20, textAlign: 'center'}} theme={textThemeDescription} text={message}/>
+            <Text style={{textAlign: 'center'}} theme={textThemeDescription} text={message}/>
             <div className={"buttonGroup"}>
                 <StyledLink onClick={onLoginClick} to={'/'}>Back to sign in</StyledLink>
             </div>
