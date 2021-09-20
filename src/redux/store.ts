@@ -1,6 +1,7 @@
 import {configureStore} from '@reduxjs/toolkit';
 import {dialogReducer, modelViewReducer} from "appRedux/reducers/application";
 import {TypedUseSelectorHook, useDispatch, useSelector} from "react-redux";
+import thunkMiddleware from 'redux-thunk';
 
 import {
     authReducer,
@@ -28,17 +29,7 @@ export const store = configureStore({
         dialog: dialogReducer,
         confirm: confirmReducer
     },
-    middleware: (getDefaultMiddleware) =>
-        getDefaultMiddleware({
-            serializableCheck: {
-                // Ignore these action types
-                ignoredActions: ['your/action/type'],
-                // Ignore these field paths in all actions
-                ignoredActionPaths: ['meta.arg', 'payload.timestamp'],
-                // Ignore these paths in the state
-                ignoredPaths: ['items.dates'],
-            },
-        }),
+    middleware: [thunkMiddleware]
 });
 
 export type RootState = ReturnType<typeof store.getState>
