@@ -19,7 +19,6 @@ export interface SignInWithGoogleButtonProps {
     disabledStyle?: object;
     fetchBasicProfile?: boolean;
     prompt?: string;
-    tag?: string;
     autoLoad?: boolean;
     disabled?: boolean;
     discoveryDocs?: Array<unknown>,
@@ -30,5 +29,4 @@ export interface SignInWithGoogleButtonProps {
     accessType?: string;
     render?: Function,
     theme?: string;
-    icon?: boolean
 }

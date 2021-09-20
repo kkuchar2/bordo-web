@@ -1,5 +1,6 @@
 const fs = require("fs");
-const moment = require('moment')
+
+const moment = require('moment');
 const filePath = "./package.json";
 const packageJson = JSON.parse(fs.readFileSync(filePath).toString());
 
@@ -21,7 +22,7 @@ if (!fs.existsSync(dir)) {
 
 fs.writeFile("dist/meta.json", jsonContent, "utf8", error => {
     if (error) {
-        console.log("An error occured while saving build date and time to meta.json");
+        console.log("An error occurred while saving build date and time to meta.json");
         return console.log(error);
     }
 

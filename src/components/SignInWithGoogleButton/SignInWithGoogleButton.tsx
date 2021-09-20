@@ -1,16 +1,26 @@
-import {useGoogleLogin} from "react-google-login";
-import Icon from './Icon';
 import * as React from "react";
 import {useState} from "react";
+
+import {useGoogleLogin} from "react-google-login";
+
 import {SignInWithGoogleButtonProps} from "./SignInWithGoogleButton.types";
 
-const ButtonContent = ({children, icon}) => {
+type ButtonContentProps = {
+    children?:
+        | React.ReactChild
+        | React.ReactChild[];
+};
+
+const ButtonContent = (props: ButtonContentProps) => {
+
+    const {children} = props;
+
     return <span style={{
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         fontWeight: 700,
-        marginLeft: icon ? 10 : 0,
+        marginLeft: 0,
     }}>{children}</span>;
 };
 
@@ -25,7 +35,6 @@ const _SignInWithGoogleButton = (props: SignInWithGoogleButtonProps) => {
         onRequest,
         onFailure,
         onScriptLoadFailure,
-        tag,
         type,
         className,
         disabledStyle,
@@ -33,7 +42,6 @@ const _SignInWithGoogleButton = (props: SignInWithGoogleButtonProps) => {
         children,
         render,
         theme,
-        icon,
         disabled: disabledProp,
         clientId,
         cookiePolicy,
@@ -127,8 +135,7 @@ const _SignInWithGoogleButton = (props: SignInWithGoogleButtonProps) => {
         return initialStyle;
     })();
 
-    return React.createElement(
-        tag,
+    return React.createElement('button',
         {
             onMouseEnter: () => setHovered(true),
             onMouseLeave: () => {
@@ -143,11 +150,9 @@ const _SignInWithGoogleButton = (props: SignInWithGoogleButtonProps) => {
             disabled,
             className
         },
-        [
-            icon && <Icon key={1} active={active}/>,
-            <ButtonContent icon={icon} key={2}>
-                {children || buttonText}
-            </ButtonContent>
+        [<ButtonContent key={2}>
+            {children || buttonText}
+        </ButtonContent>
         ]
     );
 };

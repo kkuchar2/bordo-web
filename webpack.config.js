@@ -1,9 +1,10 @@
-const HtmlWebPackPlugin = require("html-webpack-plugin");
-const MomentLocalesPlugin = require('moment-locales-webpack-plugin');
+const path = require('path');
+
 const CompressionPlugin = require('compression-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
-
-const path = require('path');
+const HtmlWebPackPlugin = require("html-webpack-plugin");
+const MomentLocalesPlugin = require('moment-locales-webpack-plugin');
+const webpack = require('webpack');
 
 const resolvePath = pathSegments => path.resolve(__dirname, pathSegments);
 
@@ -26,10 +27,6 @@ const optimization = {
                 test: /[\\/]node_modules[\\/](react-bootstrap)[\\/]/,
                 name: "bootstrap-vendor"
             },
-            threeVendor: {
-                test: /[\\/]node_modules[\\/](three)[\\/]/,
-                name: "three-vendor"
-            },
             vendor: {
                 test: /[\\/]node_modules[\\/](!react-bootstrap)(!lodash)(!moment)(!moment-timezone)[\\/]/,
                 name: "vendor"
@@ -45,29 +42,27 @@ module.exports = {
     },
     output: {
         filename: 'chunk-[name]-[contenthash].js',
-        sourceMapFilename: "[name].js.map",
+        sourceMapFilename: "chunk-[name]-[contenthash].js.map",
         globalObject: "(typeof self!='undefined'?self:this)",
         pathinfo: false
     },
     devtool: "source-map",
     resolve: {
-        extensions: [".js", ".jsx"],
+        extensions: [".js", ".jsx", ".ts", ".tsx"],
         modules: ['node_modules', resolvePath('src')],
         alias: {
             images: resolvePath('assets/images/'),
-            fonts: resolvePath('assets/fonts/'),
             pages: resolvePath('src/pages/'),
             configs: resolvePath('configs/'),
             appRedux: resolvePath('src/redux/'),
             components: resolvePath('src/components/'),
-            util: resolvePath('src/util/')
+            util: resolvePath('src/api/')
         }
     },
     optimization: optimization,
     devServer: {
         port: 3000,
         host: "0.0.0.0",
-        disableHostCheck: true,
         historyApiFallback: true,
         headers: {
             // "Cross-Origin-Embedder-Policy": "require-corp",
@@ -78,9 +73,9 @@ module.exports = {
         new HtmlWebPackPlugin({template: resolvePath("src/index.html")}),
         new MomentLocalesPlugin({localesToKeep: ['es-us', 'pl']}),
         new CompressionPlugin({algorithm: 'gzip', test: /\.js$/}),
+        new webpack.ProvidePlugin({ process: 'process/browser'}),
         new CopyPlugin({
             patterns: [
-                {from: resolvePath('assets/fonts'), to: resolvePath('dist/assets/images')},
                 {from: resolvePath('assets/images'), to: resolvePath('dist/assets/images')},
                 {from: resolvePath('assets/translation'), to: resolvePath('dist/assets/translation')},
             ],
