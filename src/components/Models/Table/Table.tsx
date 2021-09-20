@@ -1,6 +1,6 @@
 import React, {useCallback, useEffect, useState} from "react";
 
-import {tryUpdateModelData} from "appRedux/reducers/api/crud";
+import {tryDeleteModelRow, tryUpdateModelData} from "appRedux/reducers/api/crud";
 import TableHeader from "components/Models/TableHeader/TableHeader";
 import TableRow from "components/Models/TableRow/TableRow";
 import {useDispatch} from "react-redux";
@@ -31,6 +31,11 @@ const Table = (props: TableProps) => {
         dispatch(tryUpdateModelData(modelPackage, model, data));
     }, [modelPackage, model]);
 
+    const onRowDelete = useCallback((rowId) => {
+        setEditedId(-1);
+        dispatch(tryDeleteModelRow(modelPackage, model, rowId));
+    }, [modelPackage, model]);
+
     const editModeRequest = useCallback((rowId) => {
         setEditedId(rowId);
     }, [editedId]);
@@ -44,6 +49,7 @@ const Table = (props: TableProps) => {
         return Object.entries(rows).map((row, idx) => {
             const [, value] = row;
             return <TableRow key={idx + model} model={model} row={value} fields={fields} saveHandler={onRowSave}
+                             deleteHandler={onRowDelete}
                              onEditModeRequest={editModeRequest} editedId={editedId}/>;
         });
     }, [rows, fields, model, fields, onRowSave, editedId]);

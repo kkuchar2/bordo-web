@@ -76,6 +76,17 @@ export const saveButtonTheme = {
     borderRadius: "50px"
 };
 
+export const deleteButtonTheme = {
+    width: "40px",
+    height: "40px",
+    background: "#e74545",
+    disabledBackground: "rgba(213,213,213,0.43)",
+    hoverBackground: "#c03333",
+    border: "none",
+    borderRadius: "8px",
+    margin: "0px 0px 0px 10px"
+};
+
 export const saveButtonTextTheme = {
     textColor: "#ffffff",
     fontSize: "1.1em",

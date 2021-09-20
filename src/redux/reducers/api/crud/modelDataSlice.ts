@@ -1,4 +1,4 @@
-import {createSlice, PayloadAction} from "@reduxjs/toolkit";
+import {createSlice} from "@reduxjs/toolkit";
 import {API_URL, AppDispatch, RootState} from "appRedux/store";
 import {customResponseParser, sendPost, RequestState, RequestStatus} from "axios-client-wrapper";
 
@@ -9,17 +9,21 @@ export interface ColumnHeader {
     isEditable: boolean
 }
 
+export interface Rows {
+    [rowId: number]: object
+}
+
 export interface ModelData {
     model: string,
     package: string,
-    headers: Array<ColumnHeader>,
-    rows: Array<object>
+    headers: ColumnHeader[],
+    rows: Rows
 }
 
 // How response action payload should look like:
 export interface ModelDataResponse {
     path: string,
-    errors: Array<String>
+    errors: string[]
     data: ModelData
 }
 
@@ -36,10 +40,11 @@ export interface ModelInfo {
 export interface IGetModelsDataSliceState {
     path: string,
     requestState: RequestState
-    modelsList: Array<ModelInfo>,
+    modelsList: ModelInfo[],
     modelsData: IAllModelsData,
     updateInfo: any,
-    errors: Array<string>
+    deleteInfo: any,
+    errors: string[]
 }
 
 export const getModelDataSlice = createSlice({
@@ -50,6 +55,7 @@ export const getModelDataSlice = createSlice({
         modelsData: {},
         modelsList: [],
         updateInfo: null,
+        deleteInfo: null,
         errors: [],
     } as IGetModelsDataSliceState,
     reducers: {
@@ -80,7 +86,9 @@ export const getModelDataSlice = createSlice({
                 newRows[pk] = row;
             }
 
-            state.modelsData[data.package + '.' + data.model] = {
+            state.modelsData[key] = {
+                model: data.model,
+                package: data.package,
                 headers: data['headers'],
                 rows: newRows
             };
@@ -118,7 +126,27 @@ export const getModelDataSlice = createSlice({
             state.errors = errors;
             state.requestState = {pending: false, status: RequestStatus.Failure};
         },
-        getModelDataResetState: (state, action: PayloadAction) => {
+        sentDeleteModelRowRequest: (state, action) => {
+            const {errors = [], path = ''} = action.payload ? action.payload : {};
+            state.path = path;
+            state.errors = errors;
+            state.requestState = {pending: true, status: RequestStatus.Unknown};
+        },
+        modelRowDeleteSuccess: (state, action) => {
+            const {errors = [], path = '', data = {}} = action.payload ? action.payload : {};
+            data.removedIds.forEach((id : number) => delete state.modelsData[data.package + '.' + data.model].rows[id]);
+            state.deleteInfo = data;
+            state.path = path;
+            state.errors = errors;
+            state.requestState = {pending: false, status: RequestStatus.Success};
+        },
+        modelRowDeleteFailed: (state, action) => {
+            const {errors = [], path = ''} = action.payload ? action.payload : {};
+            state.path = path;
+            state.errors = errors;
+            state.requestState = {pending: false, status: RequestStatus.Failure};
+        },
+        getModelDataResetState: (state) => {
             state.errors = [];
             state.path = '';
             state.requestState = {pending: false, status: RequestStatus.Unknown};
@@ -197,6 +225,23 @@ export const tryUpdateModelData = (modelPackage: string, model: string, data: ob
     });
 };
 
+export const tryDeleteModelRow = (modelPackage: string, model: string, rowId: number) => {
+    return sendPost({
+        apiUrl: API_URL,
+        path: 'removeModelData',
+        onBefore: sentDeleteModelRowRequest,
+        onSuccess: modelRowDeleteSuccess,
+        onFail: modelRowDeleteFailed,
+        responseParser: customResponseParser,
+        withAuthentication: true,
+        body: {
+            package: modelPackage,
+            model: model,
+            rows: [rowId]
+        }
+    });
+};
+
 export const tryResetModelDataState = () => (dispatch: AppDispatch) => dispatch(getModelDataResetState());
 
 export const selectorModelData = (state: RootState) => state.modelData;
@@ -211,5 +256,8 @@ export const {
     updateModelDataSuccess,
     updateModelDataFailed,
     getModelDataResetState,
+    sentDeleteModelRowRequest,
+    modelRowDeleteSuccess,
+    modelRowDeleteFailed
 } = getModelDataSlice.actions;
 export default getModelDataSlice.reducer;

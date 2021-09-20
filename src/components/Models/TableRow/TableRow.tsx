@@ -1,6 +1,7 @@
 import React, { useCallback, useRef} from "react";
 
 import CheckIcon from '@material-ui/icons/Check';
+import DeleteIcon from '@material-ui/icons/Delete';
 import {Dictionary} from "@reduxjs/toolkit";
 import {selectorModelData} from "appRedux/reducers/api/crud";
 import {Cell} from "components/Models/Cell/Cell";
@@ -8,20 +9,21 @@ import {getColumnProperties} from "components/Models/columnProperties";
 import {Button, Text} from "kuchkr-react-component-library";
 import {useDispatch, useSelector} from "react-redux";
 
-import {saveButtonTextTheme, saveButtonTheme, StyledCell, StyledTableRow} from "./style";
+import {saveButtonTextTheme, saveButtonTheme, StyledCell, StyledTableRow, deleteButtonTheme} from "./style";
 
 export interface TableRowProps {
     row: any, // TODO
     model: string,
     fields: any, // TODO
     saveHandler: any // TODO
+    deleteHandler: any,
     onEditModeRequest: (rowId: number) => void
     editedId: number
 }
 
 const TableRow = (props: TableRowProps) => {
 
-    const {row, model, fields, saveHandler, onEditModeRequest, editedId} = props;
+    const {row, model, fields, saveHandler, deleteHandler, onEditModeRequest, editedId} = props;
 
     const cellElements: Array<any> = [];
 
@@ -47,11 +49,21 @@ const TableRow = (props: TableRowProps) => {
         saveHandler?.(editedRowData.current, dispatch);
     }, [cellElements, row]);
 
+    const onDeleteClick = useCallback(() => {
+        deleteHandler?.(row.id, dispatch);
+    }, [cellElements, row]);
+
     const onEditButtonClick = useCallback(() => {
         if (editMode) {
             onSaveClick();
         } else {
             onEditModeRequest(row.id);
+        }
+    }, [editMode]);
+
+    const onDeleteButtonClick = useCallback(() => {
+        if (editMode) {
+            onDeleteClick();
         }
     }, [editMode]);
 
@@ -71,6 +83,11 @@ const TableRow = (props: TableRowProps) => {
                 <div style={{display: 'flex'}}>
                     <Text theme={saveButtonTextTheme} text={"Save"} />
                     <CheckIcon fontSize={'small'} style={{ marginLeft: 5, color: '#ffffff'}}/>
+                </div>
+            </Button>
+            <Button theme={deleteButtonTheme} onClick={onDeleteButtonClick}>
+                <div style={{display: 'flex'}}>
+                    <DeleteIcon fontSize={'small'} style={{ color: '#ffffff'}}/>
                 </div>
             </Button>
         </StyledCell>;
