@@ -47,8 +47,5 @@ export type AppDispatch = typeof store.dispatch
 export const useAppDispatch = () => useDispatch<AppDispatch>();
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 
-const isProduction = process.argv[process.argv.indexOf('--mode') + 1] === 'production';
-
-//////////////////////////////////////////////////////////////////////////////////////
-export const API_URL = isProduction ? "https://api.kkucharski.com/api/" : 'http://0.0.0.0:8001/api/';
-//////////////////////////////////////////////////////////////////////////////////////
+// For development: switch to http://0.0.0.0:8001
+export const API_URL = "https://api.kkucharski.com/api/";
