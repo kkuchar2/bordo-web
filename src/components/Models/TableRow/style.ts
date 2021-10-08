@@ -45,25 +45,48 @@ export const StyledTableRow = styled.div<StyledTableRowProps>`
 `;
 
 export const booleanSelectTheme = {
+    // Size
     width: "200px",
     height: 50,
-    boxShadow: "0px 9px 15px 0 rgba(0, 0, 0, 0.12)",
-    border: '1px solid #D1D1D1',
-    backgroundColor: '#ffffff',
-    placeholderTextColor: '#6E6893',
-    selectedSingleValueTextColor: '#2b2b2b',
-    arrowColor: '#858585',
-    arrowColorHover: '#5d5959',
-    indicatorSeparatorColor: '#afafaf',
-    borderRadius: 4,
-    listBorderRadius: 4,
+
+    // List
+    listBorderRadius: 14,
     listBackgroundColor: '#ffffff',
-    listItemTextColor: "#6E6893",
-    listItemSelectedTextColor: "#ffffff",
-    itemHoverBackgroundColor: 'rgb(73, 119, 200)',
-    itemSelectedBackgroundColor: 'rgb(109,144,211)',
-    itemHoverTextColor: '#ffffff',
-    listItemHeight: 50
+
+    // List item
+    itemHeight: 50,
+    itemTextColor: "#343434",
+    itemSelectedTextColor: "#000000",
+    itemHoverBackgroundColor: '#d0d0d0',
+    itemSelectedBackgroundColor: '#e3e3e3',
+    itemHoverTextColor:  '#000000',
+    itemFontSize: '0.9em',
+    itemFontWeight: 600,
+
+    // Selected value
+    selectedValueTextColor: '#2b2b2b',
+    selectedValueFontWeight: 600,
+    selectedValueFontSize: '1em',
+
+    // Arrow
+    arrowColor: '#5d5959',
+    arrowColorHover: '#5d5959',
+
+    // Separator line
+    indicatorSeparatorColor: '#afafaf',
+    indicatorSeparatorDisplay: 'none',
+
+    // Placeholder
+    placeholderTextColor: '#3a3a3a',
+    placeholderFontSize: '1.1em',
+    placeholderFontWeight: 600,
+
+    // Other
+    border: '1px solid ' + '#eaeaea',
+    backgroundColor: '#ffffff',
+    borderRadius: 8,
+    boxShadow: "0 9px 15px 0 rgba(0, 0, 0, 0.12)",
+    cursorOnHover: 'pointer'
 };
 
 export const saveButtonTheme = {

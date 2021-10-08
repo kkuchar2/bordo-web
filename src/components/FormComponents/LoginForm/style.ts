@@ -13,12 +13,12 @@ export const StyledLoginFormComponent = styled(motion.div)`
     align-items: center;
     justify-content: center;
     width: 100%;
-    height: 100%;
     border-radius: 10px;
     margin: 0;
   }
 
   .form {
+    position: relative;
     border-radius: 6px;
     display: flex;
     flex-direction: column;

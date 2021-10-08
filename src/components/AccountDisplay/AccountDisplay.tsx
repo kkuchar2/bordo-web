@@ -1,11 +1,11 @@
-import React, {useCallback, useRef, useState} from "react";
+import React, {useCallback, useState} from "react";
 
 import {useMediaQuery} from "@material-ui/core";
 import ExitToApp from '@material-ui/icons/ExitToApp';
 import {selectorAuth, tryLogout} from "appRedux/reducers/api/account";
 import EditableProfilePictureProperty from "components/EditableProfilePictureProperty/EditableProfilePictureProperty";
 import {Text} from "kuchkr-react-component-library";
-import IdleTimer, {useIdleTimer} from 'react-idle-timer';
+import {useIdleTimer} from 'react-idle-timer';
 import {useDispatch, useSelector} from "react-redux";
 
 import {
@@ -30,17 +30,9 @@ const AccountDisplay = () => {
 
     const logout = useCallback(() => dispatch(tryLogout()), []);
 
-    const handleOnActive = useCallback((e) => {
-        console.log('user is active', e);
-        console.log('time remaining', getRemainingTime());
-        setActive(true);
-    }, []);
+    const handleOnActive = useCallback((e) => setActive(true), []);
 
-    const handleOnIdle = useCallback((e) => {
-        console.log('user is idle', e);
-        console.log('last active', getLastActiveTime());
-        setActive(false);
-    }, []);
+    const handleOnIdle = useCallback((e) => setActive(false), []);
 
     const { getRemainingTime, getLastActiveTime } = useIdleTimer({
         timeout: 1000 * 2,

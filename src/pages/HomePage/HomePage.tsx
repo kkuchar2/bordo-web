@@ -1,5 +1,6 @@
 import React, {useCallback, useState} from "react";
 
+import Chat from "components/Chat/Chat";
 import {defaultShowUpAnimation} from "components/FormComponents/animation";
 import MainMenu from "components/MainMenu/MainMenu";
 import {IViewDescription, mainMenuItems} from "components/MainMenu/mainMenuItems";
@@ -43,6 +44,7 @@ const HomePage = () => {
     }, []);
 
     return <StyledHomePage>
+        <Chat />
         <StyledHomePageContent>
             <MainMenu onItemClick={onMenuItemClick} openedView={currentView}/>
             {renderContent()}

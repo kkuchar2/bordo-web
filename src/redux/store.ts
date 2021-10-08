@@ -38,5 +38,8 @@ export type AppDispatch = typeof store.dispatch
 export const useAppDispatch = () => useDispatch<AppDispatch>();
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 
-// For development: switch to http://0.0.0.0:8001
-export const API_URL = "https://api.kkucharski.com/api/";
+// API URL - For development: switch to http://0.0.0.0:8000/api/
+export const API_URL = "http://0.0.0.0:8000/api/";
+
+// WEBSOCKET URL
+export const WEBSOCKET_URL = 'ws://0.0.0.0:8000/ws/chat/lobby/';
