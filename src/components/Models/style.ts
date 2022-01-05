@@ -36,26 +36,13 @@ export const StyledToolbar = styled(motion.div)`
     flex-direction: column;
   }
 `;
-export const importCSVButtonTheme = {
-    width: "200px",
-    height: "50px",
-    background: "#6256a6",
-    disabledBackground: "rgba(213,213,213,0.43)",
-    hoverBackground: "#5e549b",
-    border: "none",
-    borderRadius: "5px",
-    margin: "0px 0px 0px 10px",
-    display: "flex",
-    justifyContent: "flex-start",
-    alignItems: "center"
-};
 
 export const addItemButtonTheme = {
-    width: "200px",
-    height: "50px",
-    background: "#4977C8",
+    width: "180px",
+    height: "40px",
+    background: "#5865F2",
     disabledBackground: "rgba(213,213,213,0.43)",
-    hoverBackground: "rgb(73, 119, 200)",
+    hoverBackground: "#4752C4",
     border: "none",
     borderRadius: "5px",
     margin: "0px 0px 0px 10px",
@@ -68,45 +55,50 @@ export const modelSelectorTheme = (isMobile: boolean) => {
     return {
 
         // Size
-        width: isMobile ? "100%" : "330px",
+        width: isMobile ? "100%" : "450px",
         height: 50,
 
         // List
         listBorderRadius: 14,
-        listBackgroundColor: '#ffffff',
+        listBackgroundColor: '#1a1a1a',
 
         // List item
         itemHeight: 50,
-        itemTextColor: "#343434",
-        itemSelectedTextColor: "#000000",
-        itemHoverBackgroundColor: '#d0d0d0',
-        itemSelectedBackgroundColor: '#e3e3e3',
-        itemHoverTextColor:  '#000000',
+        itemTextColor: "#dcdcdc",
+        itemSelectedTextColor: "#dcdcdc",
+        itemHoverBackgroundColor: '#414141',
+        itemSelectedBackgroundColor: '#5865F2',
+        itemHoverTextColor: '#dcdcdc',
         itemFontSize: '0.9em',
-        itemFontWeight: 600,
+        itemFontWeight: 400,
 
         // Selected value
-        selectedValueTextColor: '#2b2b2b',
+        selectedValueTextColor: '#c0c0c0',
         selectedValueFontWeight: 600,
-        selectedValueFontSize: '1em',
+        selectedValueFontSize: '0.8em',
 
         // Arrow
-        arrowColor: '#5d5959',
-        arrowColorHover: '#5d5959',
+        arrowColor: '#c0c0c0',
+        arrowColorHover: '#c0c0c0',
+        arrowColorDisabled: 'rgba(192,192,192,0.33)',
 
         // Separator line
         indicatorSeparatorColor: '#afafaf',
         indicatorSeparatorDisplay: 'none',
 
         // Placeholder
-        placeholderTextColor: '#3a3a3a',
-        placeholderFontSize: '1.1em',
+        placeholderTextColor: '#c0c0c0',
+        placeholderTextColorDisabled: 'rgba(192,192,192,0.25)',
+        placeholderFontSize: '1em',
         placeholderFontWeight: 600,
 
         // Other
-        border: '1px solid ' + '#eaeaea',
-        backgroundColor: '#ffffff',
-        borderRadius: 8,
+        border: 'none',
+        backgroundColor: '#2a2a2a',
+        backgroundColorDisabled: 'rgba(47,47,47,0.42)',
+        borderRadius: 7,
+        menuBorderRadius: 7,
+        optionBorderRadius: 4,
         boxShadow: "0 9px 15px 0 rgba(0, 0, 0, 0.12)",
         cursorOnHover: 'pointer'
     };
@@ -116,6 +108,6 @@ export const addRowTextTheme = {
     fontSize: "1em",
     textColor: "#ffffff",
     disabledTextColor: "rgba(255,255,255,0.20)",
-    fontWeight: 500,
-    margin: "0px 0px 0px 10px"
+    fontWeight: 600,
+    margin: "2px 0px 0px 10px"
 };

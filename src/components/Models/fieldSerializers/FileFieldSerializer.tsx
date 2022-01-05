@@ -1,7 +1,7 @@
 import React from "react";
 
 import {API_URL} from "appRedux/store";
-import {StyledProfilePicture} from "components/EditableProfilePictureProperty/style";
+import {StyledProfilePicture} from "components/EditableProperties/EditableProfilePictureProperty/style";
 
 import {FieldSerializerProps} from "./fieldSerializer.types";
 

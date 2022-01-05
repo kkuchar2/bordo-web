@@ -5,7 +5,7 @@ import {Input, Text} from "kuchkr-react-component-library";
 
 const textTheme = (inEditMode: boolean) => {
     return {
-        textColor: inEditMode ? "#323232" : "#7c7c7c",
+        textColor: inEditMode ? "#323232" : "#cccccc",
         fontSize: "1.0em",
         fontWeight: 500,
         textAlign: "left"
@@ -13,36 +13,36 @@ const textTheme = (inEditMode: boolean) => {
 };
 
 const inputTheme = {
-    backgroundColor: "rgba(255,255,255,0)",
+    backgroundColor: "#1a1a1a",
     textColor: "#474747",
-    border: "2px solid " + "#e3e3e3",
-    borderFocus: "2px solid " + "#aea7da",
-    borderRadius: "0",
-    height: "30px",
+    border: "none",
+    borderRadius: "4px",
+    height: "40px",
     width: "100%",
-    padding: "0px",
+    padding: "10px",
     caretColor: "#646464",
 
     titleTextTheme: {
-        textColor: '#2f2f2f',
-        fontSize: '1.1em',
-        fontWeight: '500',
+        textColor: '#F1F1F1',
+        fontSize: '0.9em',
+        fontWeight: 600,
         textAlign: 'left',
-        margin: "0px 0px 10px 0px"
+        margin: "20px 0px 10px 0px"
     },
 
     inputTextTheme: {
-        textColor: '#2f2f2f',
-        fontSize: '1.0em',
-        fontWeight: 'bold',
+        textColor: '#e0e0e0',
+        fontSize: '0.9em',
+        fontWeight: 600,
         textAlign: 'left',
         margin: "0px 0px 0px 0px"
     },
 
     placeholderTextTheme: {
-        textColor: '#ababab',
+        textColor: '#727272',
         fontSize: '1.1em',
-        textAlign: 'left'
+        textAlign: 'left',
+        fontWeight: 600
     }
 };
 
@@ -56,7 +56,7 @@ export const IntegerFieldSerializer = (props: IntegerFieldSerializerProps) => {
 
     if (inEditMode && isEditable) {
         return <Input theme={inputCustomTheme ? inputCustomTheme : inputTheme}
-                      initialValue={value ? value.toString() : ""} placeholder={'Enter value'} title={''}
+                      value={value ? value.toString() : ""} placeholder={'Enter value'} title={''}
                       onChange={onChange}/>;
     }
     return <Text theme={textTheme(inEditMode)} style={{width: '100%', overflow: 'auto'}} text={value}/>;

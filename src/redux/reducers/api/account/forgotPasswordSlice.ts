@@ -9,14 +9,12 @@ interface ForgotPasswordArgs {
 
 export const trySendForgotPassword = (args: ForgotPasswordArgs) => {
     const {email} = args;
-    return sendPostRequest(API_URL, 'forgotPassword', {'email': email}, false, forgotPasswordSlice);
+    return sendPostRequest(API_URL, 'account/forgotPassword', {'email': email}, false, forgotPasswordSlice);
 };
 
-export const tryResetState = () => (dispatch: AppDispatch) => dispatch(onReset());
+export const tryResetForgotPasswordState = () => (dispatch: AppDispatch) => dispatch(onReset());
 
 export const selectorForgotPassword = (state: RootState) => state.forgotPassword;
-
-export * from 'appRedux/reducers/application/modelViewSlice';
 
 export const {
     onReset

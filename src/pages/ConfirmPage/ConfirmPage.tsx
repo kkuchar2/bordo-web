@@ -1,66 +1,58 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect} from 'react';
 
-import {selectorAccountConfirm, tryConfirmAccount} from "appRedux/reducers/api/account";
-import {useAppDispatch} from "appRedux/store";
-import WaitingComponent from "components/WaitingComponent/WaitingComponent";
+import {selectorConfirmAccount, tryConfirmAccount} from "appRedux/reducers/api/account";
+import {RequestStatus} from "appRedux/reducers/generic_reducer";
+import { StyledLink } from 'components/Forms/commonStyles';
 import {Text} from "kuchkr-react-component-library";
-import {useSelector} from "react-redux";
-import {RouteComponentProps} from "react-router";
-import {Link, Redirect, useLocation} from "react-router-dom";
+import {useTranslation} from "react-i18next";
+import {useDispatch, useSelector} from "react-redux";
+import {useParams} from "react-router-dom";
 
-import {StyledConfirmPage, StyledConfirmPopup} from "./style";
+import {StyledConfirmPage, StyledConfirmPageTop, textTheme} from "./style";
 
-interface MatchParams {
-    token: string;
-}
+const ConfirmPage = () => {
 
-const ConfirmPage = (props: RouteComponentProps<MatchParams>) => {
+    const params = useParams();
 
-    const {match} = props;
+    const dispatch = useDispatch();
 
-    const dispatch = useAppDispatch();
-    const confirmationState = useSelector(selectorAccountConfirm);
-    const status = confirmationState.status;
-    const location = useLocation();
-    const [error, setError] = useState(false);
+    const {t} = useTranslation();
+
+    const confirmationState = useSelector(selectorConfirmAccount);
 
     useEffect(() => {
-        dispatch(tryConfirmAccount(match.params.token));
+        dispatch(tryConfirmAccount({token: params.token}));
     }, []);
 
-    useEffect(() => {
-        if (status === 'CONFIRMATION_ERROR') {
-            setError(true);
-        } else if (status === 'CONFIRMATION_TOKEN_SENT') {
-            setError(false);
-        } else if (status === 'ACCOUNT_CONFIRMED') {
-            setError(false);
+    const renderContent = useCallback(() => {
+        const isSuccess = confirmationState.requestState.status === RequestStatus.Success;
+        const isPending = confirmationState.requestState.pending;
+
+        if (isPending) {
+            return  <Text theme={textTheme} text={t('ACTIVATING')}/>;
         }
-    }, [status]);
+        else if (isSuccess) {
 
-    if (error) {
-        return <Redirect to={{ pathname: "/", state: { from: location } }} />;
-    }
+            const response = confirmationState.responseData.data;
 
-    if (status === 'CONFIRMATION_TOKEN_SENT')
-    {
-        return <WaitingComponent />;
-    }
+            return <>
+                <Text theme={textTheme} text={t(response)}/>
+                <StyledLink to={'/'}>{t('SIGN_IN')}</StyledLink>
+            </>;
+        }
+        else {
+            return <>
+                <Text theme={textTheme} text={'Error confirming account'}/>
+                <StyledLink to={'/'}>{t('SIGN_IN')}</StyledLink>
+            </>;
+        }
+    }, [confirmationState]);
 
     return <StyledConfirmPage>
-        <StyledConfirmPopup>
-            <div className={'imageWrapper'}>
-                <img className={"emailSentIcon"} src={'assets/images/sent_mail_icon.png'} width={60} height={60}
-                     alt={""}/>
-            </div>
-            <div className={"confirmationMessage"}>
-                <Text theme={Text.darkTheme} text={"Your account has been confirmed and activated."} />
-                <Text theme={Text.darkTheme} text={"You can now sign in"} />
-            </div>
-            <div className={"buttonGroup"}>
-                <Link to={'/'} className={'button'}>Back to sign in</Link>
-            </div>
-        </StyledConfirmPopup>
+        <StyledConfirmPageTop>
+            {renderContent()}
+        </StyledConfirmPageTop>
+
     </StyledConfirmPage>;
 };
 

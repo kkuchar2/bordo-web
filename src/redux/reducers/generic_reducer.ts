@@ -6,7 +6,7 @@ import {
     SliceCaseReducers,
     ValidateSliceCaseReducers,
 } from "@reduxjs/toolkit";
-import {sendFilePost, sendGet, sendPost} from "axios-client-wrapper";
+import {customResponseParser, sendFilePost, sendGet, sendPost} from "axios-client-wrapper";
 
 export interface IResponsePayload {
     path: string;
@@ -73,10 +73,12 @@ export const createBaseRequestSlice = <Reducers extends SliceCaseReducers<BaseRe
                 state.errors = errors;
             },
             onReset: (state: BaseRequestSliceState) => {
+                console.log('RESET generic start');
                 state.path = "";
                 state.requestState = { pending: false, status: RequestStatus.Unknown };
                 state.responseData = {};
                 state.errors = [];
+                console.log('RESET generic end');
             },
             ...reducers,
         },
@@ -96,6 +98,7 @@ export const sendPostRequest = (
         onBefore: slice.actions.onRequestSent,
         onSuccess: slice.actions.onRequestSuccess,
         onFail: slice.actions.onRequestFailed,
+        responseParser: customResponseParser,
         body: body,
         withAuthentication: withAuthentication,
     });
@@ -105,6 +108,7 @@ export const sendGetRequest = (
     apiUrl: string,
     path: string,
     withAuthentication: boolean,
+    params: any,
     slice: Slice<BaseRequestSliceState>,
 ) => {
     return sendGet({
@@ -113,9 +117,7 @@ export const sendGetRequest = (
         onBefore: slice.actions.onRequestSent,
         onSuccess: slice.actions.onRequestSuccess,
         onFail: slice.actions.onRequestFailed,
-        params: {
-            q: "j%20k%20rowling",
-        },
+        params: params,
         withAuthentication: withAuthentication,
     });
 };

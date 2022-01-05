@@ -9,9 +9,10 @@ import "react-datepicker/dist/react-datepicker.css";
 import "./ReactDatePicker.scss";
 
 const textTheme = {
-    textColor: "#323232",
+    textColor: "#cccccc",
     fontSize: "1em",
-    textAlign: "left"
+    textAlign: "left",
+    fontWeight: 600
 };
 
 export const DateFieldSerializer = (props: FieldSerializerProps) => {
@@ -26,7 +27,8 @@ export const DateFieldSerializer = (props: FieldSerializerProps) => {
     }, []);
 
     if (inEditMode && isEditable) {
-        return <DatePicker wrapperClassName="datePicker" selected={selectedDay} onChange={onDateChange} portalId="root-portal"/>;
+        return <DatePicker wrapperClassName="datePicker" selected={selectedDay} onChange={onDateChange}
+                           portalId="root-portal"/>;
     }
     return <Text theme={textTheme} text={value}/>;
 };

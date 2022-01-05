@@ -11,7 +11,7 @@
       "componentStyles": ["scss/components/"]
     },
     "rootDir": "src",
-    "strict": true,
+    "strict": false,
     "declaration": true,
     "declarationDir": "dist",
     "module": "esnext",

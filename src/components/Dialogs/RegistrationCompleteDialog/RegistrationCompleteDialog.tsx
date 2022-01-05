@@ -1,40 +1,23 @@
 import React from "react";
 
+import {confirmButtonTheme} from "components/Dialogs/commonStyles";
 import {BaseDialogProps} from "components/Dialogs/types";
-import {Button, Text} from "kuchkr-react-component-library";
+import {Button} from "kuchkr-react-component-library";
+import {useTranslation} from "react-i18next";
 
-import {
-    goHomeButtonTheme,
-    descriptionTextTheme,
-    StyledRegistrationCompleteDialog,
-    StyledDialogButtonsSection,
-    StyledDialogDescriptionSection,
-    StyledDialogTitleSection,
-    titleTextTheme
-} from "./style";
+import {StyledDialogButtonsSection} from "./style";
 
 export interface RegistrationCompleteDialogProps extends BaseDialogProps {
-    title: string,
-    description: string,
     onGoHome: (e: Event) => void
 }
 
 export const RegistrationCompleteDialog = (props: RegistrationCompleteDialogProps) => {
 
-    const {title, description, onGoHome} = props;
+    const {onGoHome} = props;
 
-    return <StyledRegistrationCompleteDialog>
-        <StyledDialogTitleSection>
-            <Text theme={titleTextTheme} text={title}/>
-        </StyledDialogTitleSection>
+    const {t} = useTranslation();
 
-        <StyledDialogDescriptionSection>
-            <img style={{marginBottom: 50}} src={"https://c.tenor.com/lBPGdhDqxJcAAAAC/keanu-reeves-whoa.gif"} width={400} />
-            <Text theme={descriptionTextTheme} text={description}/>
-        </StyledDialogDescriptionSection>
-
-        <StyledDialogButtonsSection>
-            <Button theme={goHomeButtonTheme} text={"Sign in"} onClick={onGoHome}/>
-        </StyledDialogButtonsSection>
-    </StyledRegistrationCompleteDialog>;
+    return <StyledDialogButtonsSection>
+        <Button theme={confirmButtonTheme} text={t('SIGN_IN')} onClick={onGoHome}/>
+    </StyledDialogButtonsSection>;
 };

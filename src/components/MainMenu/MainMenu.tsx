@@ -6,8 +6,9 @@ import AccountDisplay from "components/AccountDisplay/AccountDisplay";
 import {IViewDescription, mainMenuItems} from "components/MainMenu/mainMenuItems";
 import MenuItem from "components/MainMenu/MenuItem/MenuItem";
 import {Text} from "kuchkr-react-component-library";
+import {useTranslation} from "react-i18next";
 
-import {StyledMainMenu, StyledMenuButton, StyledMenuItems, StyledMenuSection, menuTitleTheme} from "./style";
+import {menuTitleTheme, StyledMainMenu, StyledMenuButton, StyledMenuItems, StyledMenuSection} from "./style";
 
 export interface MainMenuProps {
     onItemClick: Function,
@@ -20,12 +21,14 @@ const MainMenu = (props: MainMenuProps) => {
 
     const isMobile = useMediaQuery('(max-width: 600px)');
 
+    const {t} = useTranslation();
+
     const onMenuItemClick = useCallback(key => {
         onItemClick?.(key);
     }, [onItemClick]);
 
     const renderMenuItems = useCallback(() => {
-        return Object.entries(mainMenuItems).map((item, idx) => {
+        return Object.entries(mainMenuItems(t)).map((item, idx) => {
             const [key, value] = item;
             return <MenuItem
                 key={value.id}
@@ -34,7 +37,7 @@ const MainMenu = (props: MainMenuProps) => {
                 onClick={() => onMenuItemClick(key)}
                 active={openedView.id === value.id}/>;
         });
-    }, [openedView]);
+    }, [openedView, t]);
 
     const renderMenu = useCallback(() => {
         if (isMobile) {
@@ -43,14 +46,14 @@ const MainMenu = (props: MainMenuProps) => {
             </StyledMenuButton>;
         }
         return <StyledMenuItems>
-            <Text theme={menuTitleTheme} text={'MENU'} />
+            <Text theme={menuTitleTheme} text={'MENU'}/>
             {renderMenuItems()}
         </StyledMenuItems>;
     }, [isMobile, openedView]);
 
     return <StyledMainMenu>
         <StyledMenuSection>
-            <AccountDisplay />
+            <AccountDisplay/>
             {renderMenu()}
         </StyledMenuSection>
     </StyledMainMenu>;

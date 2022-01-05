@@ -1,41 +1,47 @@
-import {createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {API_URL, AppDispatch, RootState} from "appRedux/store";
-import {customResponseParser, sendPost} from "axios-client-wrapper";
+import {createSlice} from "@reduxjs/toolkit";
+import {API_URL, RootState} from "appRedux/store";
+import {customResponseParser, RequestState, RequestStatus, sendPost} from "axios-client-wrapper";
 
-const initialState = {
-    path: null,
-    requestSent: false,
-    responseReceived: false,
-    errors: []
-};
+export interface RegistrationSliceState {
+    path: string,
+    requestState: RequestState,
+    errors: Array<string>
+}
 
-const setState = (state: any, action: PayloadAction<any>, requestSent: boolean, responseReceived: boolean) => {
-    const {errors = [], path = 'default'} = action.payload ? action.payload : {};
+const defaultRequestState = {pending: false, status: RequestStatus.Unknown} as RequestState;
 
-    state.errors = errors;
-    state.path = path;
-    state.requestSent = requestSent;
-    state.responseReceived = responseReceived;
-};
-
-export const registrationSlice = createSlice({
+const registrationSlice = createSlice({
     name: 'registration',
-    initialState: initialState,
+    initialState: {
+        path: '',
+        requestState: defaultRequestState,
+        errors: [],
+    } as RegistrationSliceState,
     reducers: {
-        registrationRequested: (state, action) => setState(state, action, true, false),
-        registrationSucceeded: (state, action) => setState(state, action, false, true),
-        registrationFailed: (state, action) => setState(state, action, false, true),
-        resetRegistrationState: (state, action: PayloadAction) => setState(state, action, false, false)
+        sentRegistrationRequest: (state, action) => {
+            state.path = action.payload.path;
+            state.requestState = {pending: true, status: RequestStatus.Waiting };
+        },
+        registrationRequestSuccess: (state, action) => {
+            state.path = action.payload.path;
+            state.requestState = {pending: false, status: RequestStatus.Success };
+            state.errors = [];
+        },
+        registrationRequestFailed: (state, action) => {
+            state.path = action.payload.path;
+            state.requestState = {pending: false, status: RequestStatus.Failure };
+            state.errors = action.payload.errors;
+        },
     }
 });
 
 export const tryRegister = (email: string, password: string) => {
     return sendPost({
         apiUrl: API_URL,
-        path: 'register',
-        onBefore: registrationRequested,
-        onSuccess: registrationSucceeded,
-        onFail: registrationFailed,
+        path: 'account/register',
+        onBefore: sentRegistrationRequest,
+        onSuccess: registrationRequestSuccess,
+        onFail: registrationRequestFailed,
         responseParser: customResponseParser,
         withAuthentication: false,
         body: {
@@ -45,15 +51,12 @@ export const tryRegister = (email: string, password: string) => {
     });
 };
 
-export const tryResetRegistrationState = () => async (dispatch: AppDispatch) => dispatch(resetRegistrationState());
-
 export const selectorRegistration = (state: RootState) => state.registration;
 
 export const {
-    registrationRequested,
-    registrationSucceeded,
-    registrationFailed,
-    resetRegistrationState
+    sentRegistrationRequest,
+    registrationRequestSuccess,
+    registrationRequestFailed,
 } = registrationSlice.actions;
 
 export default registrationSlice.reducer;

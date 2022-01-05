@@ -1,31 +1,79 @@
-import React, {useCallback, useEffect} from "react";
+import React, {ReactNode, useCallback, useEffect} from "react";
 
 import {useMediaQuery} from "@material-ui/core";
 import {
-    getAllModelData, getMultiRowModelData,
+    getAllModelData,
+    getMultiRowModelData,
     selectorAddItemToTable,
     selectorModelData,
     selectorModelList,
     tryGetListOfModels
 } from "appRedux/reducers/api/crud";
-import {changeCurrentViewedModel, openDialog, selectorCurrentViewedModel} from "appRedux/reducers/application";
+import {
+    changeCurrentViewedModel,
+    selectorCurrentViewedModel
+} from "appRedux/reducers/application";
 import {useAppDispatch} from "appRedux/store";
-import {defaultShowUpAnimation} from "components/FormComponents/animation";
-import {spinnerTheme} from "components/FormComponents/commonStyles";
+import {showCreateModelItemDialog} from "components/Dialogs/readyDialogs";
+import {spinnerTheme} from "components/Forms/commonStyles";
 import Table from "components/Models/Table/Table";
 import {Button, Select, Spinner, Text} from "kuchkr-react-component-library";
+import {useTranslation} from "react-i18next";
 import {useSelector} from "react-redux";
-import {OptionsType} from "react-select";
+import OptionsType from "react-select";
+import StateManagedSelect from "react-select";
+import styled from "styled-components";
 
 import {withRequestComplete} from "../../api/util";
 
 import {
     addItemButtonTheme,
+    addRowTextTheme,
     modelSelectorTheme,
     StyledModelsView,
-    StyledToolbar,
-    StyledPlusIcon, addRowTextTheme, StyledImportIcon, importCSVButtonTheme
+    StyledPlusIcon,
+    StyledToolbar
 } from "./style";
+
+const StyledOption = styled.div`
+  display: flex;
+  flex-direction: row;
+`;
+
+const StyledOptionValue = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-left: 10px;
+`;
+
+const StyledOptionIcon = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 20px;
+`;
+
+const StyledLabel = styled.div`
+  font-size: 1.1em;
+`;
+
+const StyledValue = styled.div`
+  font-size: 0.9em;
+`;
+
+const customOptionRenderer = (option: StateManagedSelect): ReactNode => {
+
+    return <StyledOption>
+        <StyledOptionIcon>
+            📚
+        </StyledOptionIcon>
+        <StyledOptionValue>
+            <StyledLabel>{option.model}</StyledLabel>
+            <StyledValue>{option.package}</StyledValue>
+        </StyledOptionValue>
+    </StyledOption>;
+};
 
 const ModelsView = () => {
 
@@ -34,11 +82,13 @@ const ModelsView = () => {
     const currentModelPackage = currentModel.package;
     const currentModelFullName = currentModel.fullModelName;
 
-    const dispatch = useAppDispatch();
-
     const modelListSelector = useSelector(selectorModelList);
     const modelDataSelector = useSelector(selectorModelData);
     const addItemToTableSelector = useSelector(selectorAddItemToTable);
+
+    const dispatch = useAppDispatch();
+
+    const {t} = useTranslation();
 
     const modelData = modelDataSelector.modelsData;
 
@@ -86,14 +136,7 @@ const ModelsView = () => {
     }, [fields, currentModelName, currentModelPackage, rows]);
 
     const onAddNewItemClick = useCallback(() => {
-        dispatch(openDialog({
-            component: "CreateNewModelItemDialog",
-            props: {
-                fields: fields,
-                modelPackage: currentModelPackage,
-                modelName: currentModelName
-            }
-        }));
+        showCreateModelItemDialog(dispatch, t, fields, currentModelPackage, currentModelName);
     }, [fields, currentModelName]);
 
     // TODO: please refactor this my god
@@ -101,8 +144,8 @@ const ModelsView = () => {
     let modelList = modelListResponse ? modelListResponse.data : [];
     modelList = modelList ? modelList : [];
 
-    const modelListForSelect: OptionsType<any> = Object.keys(modelList).length === 0 ? [] : modelList.map((x: any) => {
-        return {value: x, label: x.model};
+    const modelListForSelect: OptionsType = Object.keys(modelList).length === 0 ? [] : modelList.map((x: any) => {
+        return {value: x, label: x};
     });
 
     const renderToolbar = useCallback(() => {
@@ -120,28 +163,26 @@ const ModelsView = () => {
             <Select
                 theme={modelSelectorTheme(isMobile)}
                 options={modelListForSelect}
-                defaultValue={modelListForSelect[0]}
                 placeholder={'Select table'}
                 disabled={false}
+                menuPortalTarget={document.body}
+                customOptionRenderer={customOptionRenderer}
+                maxMenuHeight={230}
                 isSearchable={false}
                 onChange={onSelected}
                 triggerOnDefault={true}
             />
             <Button theme={addItemButtonTheme} onClick={onAddNewItemClick}>
-                <StyledPlusIcon />
-                <Text theme={addRowTextTheme} text={'Add new object'} />
-            </Button>
-            <Button theme={importCSVButtonTheme} onClick={onAddNewItemClick}>
-                <StyledImportIcon />
-                <Text theme={addRowTextTheme} text={'Import from CSV file'} />
+                <StyledPlusIcon/>
+                <Text theme={addRowTextTheme} text={t('ADD_NEW_ROW')}/>
             </Button>
         </StyledToolbar>;
     }, [modelListSelector, currentModelName, modelData, isMobile]);
 
-    return <StyledModelsView {...defaultShowUpAnimation}>
-            {renderToolbar()}
-            {renderTable()}
-        </StyledModelsView>;
+    return <StyledModelsView>
+        {renderToolbar()}
+        {renderTable()}
+    </StyledModelsView>;
 };
 
 export default ModelsView;

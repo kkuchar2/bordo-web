@@ -38,8 +38,8 @@ export const StyledTopSection = styled(motion.div)`
   align-items: flex-start;
   flex-direction: column;
   padding: 30px;
-  min-height: 100px;
-  background: white;
+  min-height: 60px;
+  background: #333333;
 `;
 
 export const StyledAnimatedHeader = styled(motion.div)`
@@ -49,19 +49,19 @@ export const StyledBottomSection = styled.div`
   overflow-y: auto;
   overflow-x: auto;
   flex: 1 0;
-  background: white;
+  background: #333333;
 `;
 
 export const viewTitleTextTheme = {
-    textColor: "#4D4D4D",
-    fontSize: "1.9375em",
+    textColor: "#A9A9A9",
+    fontSize: "1.1em",
     textAlign: "left",
-    fontWeight: 400
+    fontWeight: 600
 };
 
 export const viewDescriptionTextTheme = {
-    textColor: "#7c7c7c",
-    fontSize: "1.2em",
+    textColor: "#A9A9A9",
+    fontSize: "1.0em",
     textAlign: "left",
     fontWeight: 400
 };

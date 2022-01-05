@@ -4,7 +4,7 @@ import {selectorAuth, tryAutoLogin} from "appRedux/reducers/api/account";
 import {useAppDispatch} from "appRedux/store";
 import {RequestStatus} from "axios-client-wrapper";
 import {useSelector} from "react-redux";
-import {Redirect, useLocation} from "react-router-dom";
+import {Navigate, useLocation} from "react-router-dom";
 import {isOnAuthenticatedPage} from "routes";
 
 export const EnsureAuthorized = (WrappedComponent: ComponentType) => {
@@ -44,7 +44,7 @@ export const EnsureAuthorized = (WrappedComponent: ComponentType) => {
             }
         }, [sentAutologinRequest]);
 
-        const redirect = useCallback((path) => <Redirect to={{pathname: path, state: {from: location}}}/>, [location]);
+        const redirect = useCallback((path) => <Navigate to={{pathname: path, state: {from: location}}}/>, [location]);
 
         const renderWhenLoggedInAndOnPublicPage = useCallback(() => {
             if (!requestPending && receivedResponse) {

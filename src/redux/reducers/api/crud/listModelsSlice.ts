@@ -1,4 +1,4 @@
-import {createBaseRequestSlice, sendPostRequest} from "appRedux/reducers/generic_reducer";
+import {createBaseRequestSlice, sendGetRequest} from "appRedux/reducers/generic_reducer";
 import {API_URL, AppDispatch, RootState} from "appRedux/store";
 
 export interface IFieldInfo {
@@ -8,7 +8,7 @@ export interface IFieldInfo {
 
 export const listModelsSlice = createBaseRequestSlice({name: 'listModels'});
 
-export const tryGetListOfModels = () => sendPostRequest(API_URL, 'listModels', {}, true, listModelsSlice);
+export const tryGetListOfModels = () => sendGetRequest(API_URL, 'crud/listModels', true, {}, listModelsSlice);
 
 export const tryResetModelListState = () => async (dispatch: AppDispatch) => dispatch(onReset());
 

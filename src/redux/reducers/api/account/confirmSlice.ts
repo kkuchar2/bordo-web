@@ -1,45 +1,24 @@
-import {createSlice} from "@reduxjs/toolkit";
+import {createBaseRequestSlice} from "appRedux/reducers/generic_reducer";
 import {API_URL, RootState} from "appRedux/store";
-import {customResponseParser, sendPost} from "axios-client-wrapper";
+import {sendPostRequest} from "axios-client-wrapper";
 
-const initialState = {
-    status: "INIT",
-    errors: null
-};
+export const confirmSlice = createBaseRequestSlice({name: 'confirmAccount'});
 
-const setState = (state: any, status: string, errors: any) => {
-    state.status = status;
-    state.errors = errors;
-};
+interface ConfirmSliceArgs {
+    token: string | undefined,
+}
 
-export const confirmSlice = createSlice({
-    name: 'confirmEmail',
-    initialState: initialState,
-    reducers: {
-        accountConfirmationTokenSent: (state) => setState(state, "CONFIRMATION_TOKEN_SENT", null),
-        accountConfirmationSuccess: (state) => setState(state, "ACCOUNT_CONFIRMED", null),
-        accountConfirmationError: (state, action) => setState(state, "CONFIRMATION_ERROR", action.payload),
-        resetConfirmState: (state) => setState(state, "INIT", null),
+export const tryConfirmAccount = (args: ConfirmSliceArgs) => {
+    const {token} = args;
+
+    if (!token) {
+        console.error('Confirmation token not found');
+        return;
     }
-});
 
-export const tryConfirmAccount = (token: string) => {
-    return sendPost({
-        apiUrl: API_URL,
-        path: 'confirm-email',
-        onBefore: accountConfirmationTokenSent,
-        onSuccess: accountConfirmationSuccess,
-        onFail: accountConfirmationError,
-        responseParser: customResponseParser,
-        body: {key: token}
-    });
+    return sendPostRequest(API_URL, 'account/confirm', {'token': token}, confirmSlice);
 };
 
-export const selectorAccountConfirm = (state: RootState) => state.confirm;
+export const selectorConfirmAccount = (state: RootState) => state.confirmAccount;
 
-export const {
-    accountConfirmationTokenSent,
-    accountConfirmationSuccess,
-    accountConfirmationError
-} = confirmSlice.actions;
 export default confirmSlice.reducer;

@@ -22,8 +22,17 @@ const TableHeader = (props: TableHeaderProps) => {
         }
         return fields.map((field: IFieldInfo, idx: number) => {
             const colProps = getColumnProperties(field.type);
-            return <Text theme={headerTextTheme} style={{minWidth: 0, width: colProps.width}} key={idx}
-                         text={humanize(field.name.toUpperCase())}/>;
+            return <div style={{
+                height: "100%",
+                width: colProps.width,
+                maxWidth: colProps.width,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'flex-start',
+                marginLeft: 20
+            }} key={idx}>
+                <Text theme={headerTextTheme} text={humanize(field.name.toUpperCase())}/>
+            </div>;
         });
     }, [fields]);
 

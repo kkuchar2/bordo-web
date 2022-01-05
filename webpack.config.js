@@ -63,11 +63,7 @@ module.exports = {
     devServer: {
         port: 3000,
         host: "0.0.0.0",
-        historyApiFallback: true,
-        headers: {
-            // "Cross-Origin-Embedder-Policy": "require-corp",
-            // "Cross-Origin-Opener-Policy": "same-origin"
-        }
+        historyApiFallback: true
     },
     plugins: [
         new HtmlWebPackPlugin({template: resolvePath("src/index.html")}),

@@ -3,8 +3,10 @@ import React, {useCallback, useState} from "react";
 import {useMediaQuery} from "@material-ui/core";
 import ExitToApp from '@material-ui/icons/ExitToApp';
 import {selectorAuth, tryLogout} from "appRedux/reducers/api/account";
-import EditableProfilePictureProperty from "components/EditableProfilePictureProperty/EditableProfilePictureProperty";
+import EditableProfilePictureProperty
+    from "components/EditableProperties/EditableProfilePictureProperty/EditableProfilePictureProperty";
 import {Text} from "kuchkr-react-component-library";
+import {useTranslation} from "react-i18next";
 import {useIdleTimer} from 'react-idle-timer';
 import {useDispatch, useSelector} from "react-redux";
 
@@ -13,9 +15,9 @@ import {
     nameTextTheme,
     StyledAccountEmailAndPicture,
     StyledAccountInfo,
-    StyledNameAndEmail,
     StyledExitLink,
-    StyledLogout
+    StyledLogout,
+    StyledNameAndEmail
 } from "./style";
 
 const AccountDisplay = () => {
@@ -23,6 +25,8 @@ const AccountDisplay = () => {
     const [isActive, setActive] = useState(true);
 
     const dispatch = useDispatch();
+
+    const {t} = useTranslation();
 
     const authState = useSelector(selectorAuth);
 
@@ -34,7 +38,7 @@ const AccountDisplay = () => {
 
     const handleOnIdle = useCallback((e) => setActive(false), []);
 
-    const { getRemainingTime, getLastActiveTime } = useIdleTimer({
+    const {getRemainingTime, getLastActiveTime} = useIdleTimer({
         timeout: 1000 * 2,
         onIdle: handleOnIdle,
         onActive: handleOnActive,
@@ -52,7 +56,7 @@ const AccountDisplay = () => {
                 <Text theme={emailTextTheme(isMobile)} text={authState.user.email}/>
                 <StyledLogout>
                     <ExitToApp fontSize={'small'} style={{marginTop: -1, marginLeft: -2}}/>
-                    <StyledExitLink to={''} onClick={logout}>Logout</StyledExitLink>
+                    <StyledExitLink to={''} onClick={logout}>{t('LOGOUT')}</StyledExitLink>
                 </StyledLogout>
             </StyledNameAndEmail>
         </StyledAccountEmailAndPicture>

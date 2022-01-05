@@ -1,31 +1,17 @@
-import {motion} from "framer-motion";
 import styled from "styled-components";
 
 export const StyledConfirmPage = styled.div`
   height: 100%;
   width: 100%;
+  background: #343434;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
   overflow: hidden;
-`;
-
-export const StyledConfirmPopup = styled(motion.div)`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 500px;
-  background: #323232;
-  padding: 20px 10px 20px 10px;
-  box-shadow: 20px 20px 20px 0 rgba(0, 0, 0, .4);
-  border-radius: 6px;
 
   &.full {
     height: 100%;
     width: 100%;
-    color: white;
+    color: #eaeaea;
   }
 
   @media (max-width: 600px) {
@@ -41,7 +27,7 @@ export const StyledConfirmPopup = styled(motion.div)`
 
   .confirmationMessage {
     margin-top: 20px;
-    color: white;
+    color: #eaeaea;
 
     .title {
       text-align: center;
@@ -62,16 +48,44 @@ export const StyledConfirmPopup = styled(motion.div)`
     box-sizing: border-box;
     text-decoration: none;
     white-space: nowrap;
-    color: white;
+    color: #eaeaea;
     font-size: 16px;
-    background: #404040;
     width: 200px;
     border-radius: 100px;
     height: 40px;
     margin-top: 20px;
+    font-weight: 700;
 
     &:hover {
-      background: #4562d4;
+      font-weight: 700;
     }
   }
 `;
+
+export const StyledConfirmPageTop = styled.div`
+  height: 300px;
+  width: 100%;
+  background: #2c2c2c;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  padding-left: 30px;
+  box-sizing: border-box;
+`;
+
+export const textTheme = {
+    textColor: "#d7d7d7",
+    fontSize: "1em",
+    textAlign: "center",
+    fontWeight: 600,
+    margin: "0px 0px 0px 0px"
+};
+
+export const errorTextTheme = {
+    textColor: "#ff3c3c",
+    fontSize: "1em",
+    textAlign: "center",
+    fontWeight: 600,
+    margin: "0px 0px 0px 0px"
+};

@@ -24,10 +24,10 @@ const MenuItem = (props: MenuItemProps) => {
 
     const getTextColor = useCallback(() => {
         if (hovered && !active) {
-            return "#3b3b3b";
+            return "#c2c2c2";
         }
 
-        return active ? "#4977C8" : "#929292";
+        return active ? "#6776ff" : "#929292";
     }, [active, hovered]);
 
     const onMouseEnter = useCallback((e) => {
@@ -38,12 +38,12 @@ const MenuItem = (props: MenuItemProps) => {
         setHovered(false);
     }, []);
 
-    return <StyledMenuItem active={active} onClick={onMenuItemClick} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
-        {/*<StyledActiveIndicator active={active}/>*/}
+    return <StyledMenuItem active={active} onClick={onMenuItemClick} onMouseEnter={onMouseEnter}
+                           onMouseLeave={onMouseLeave}>
         <StyledIconWrapper>
-            <IconComponent style={{transition: "0.3s all ease-out", color: getTextColor()}}/>
+            <IconComponent style={{color: getTextColor()}}/>
         </StyledIconWrapper>
-        <Text style={{transition: "0.3s all ease-out", color: getTextColor()}} theme={textTheme} text={name}/>
+        <Text theme={textTheme(getTextColor())} text={name}/>
     </StyledMenuItem>;
 };
 

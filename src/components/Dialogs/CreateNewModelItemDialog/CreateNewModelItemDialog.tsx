@@ -3,18 +3,22 @@ import React, {useCallback, useState} from "react";
 import {tryAddItemToTable} from "appRedux/reducers/api/crud";
 import {closeDialog} from "appRedux/reducers/application";
 import {useAppDispatch} from "appRedux/store";
+import {ConfirmationCancelSection} from "components/Dialogs/ConfirmationCancelSection";
 import {FieldRow} from "components/Dialogs/ConfirmationDialog/FieldRow/FieldRow";
 import {BaseDialogProps} from "components/Dialogs/types";
 import {getColumnProperties} from "components/Models/columnProperties";
-import {Button, Text} from "kuchkr-react-component-library";
+import {Text} from "kuchkr-react-component-library";
+import {useTranslation} from "react-i18next";
 
 import {humanize} from "../../../util";
 
 import {
-    cancelButtonTheme, confirmButtonTheme,
-    StyledCreateNewModelItemDialog, StyledDialogButtonsSection, StyledDialogContentSection,
-    StyledDialogTitleSection,
-    titleTextTheme
+    CreateNewModelCustomDescription,
+    StyledCreateNewModelItemDialog,
+    StyledDialogContentSection,
+    StyledModelDescription,
+    titleModelTextTheme,
+    titleModelValueTextTheme
 } from "./style";
 
 export interface CreateNewModelItemDialogProps extends BaseDialogProps {
@@ -23,7 +27,9 @@ export interface CreateNewModelItemDialogProps extends BaseDialogProps {
     fields: any // TODO
 }
 
-const CreateNewModelItemDialog = (props: CreateNewModelItemDialogProps) : JSX.Element =>{
+const CreateNewModelItemDialog = (props: CreateNewModelItemDialogProps): JSX.Element => {
+
+    const {t} = useTranslation();
 
     const {modelPackage, modelName, fields} = props;
 
@@ -78,17 +84,18 @@ const CreateNewModelItemDialog = (props: CreateNewModelItemDialogProps) : JSX.El
     }, [formData, modelName, modelPackage]);
 
     return <StyledCreateNewModelItemDialog>
-        <StyledDialogTitleSection>
-            <Text theme={titleTextTheme} text={'Create new object'}/>
-        </StyledDialogTitleSection>
+        <CreateNewModelCustomDescription>
+            <StyledModelDescription>
+                <Text theme={titleModelTextTheme} text={'Model:'}/>
+                <Text theme={titleModelValueTextTheme} text={modelName}/>
+            </StyledModelDescription>
+        </CreateNewModelCustomDescription>
+
         <StyledDialogContentSection>
             {renderFields()}
         </StyledDialogContentSection>
 
-        <StyledDialogButtonsSection>
-            <Button theme={cancelButtonTheme} text={"Cancel"} onClick={onCancel}/>
-            <Button theme={confirmButtonTheme} text={"Create"} onClick={onConfirm}/>
-        </StyledDialogButtonsSection>
+        <ConfirmationCancelSection onCancel={onCancel} onConfirm={onConfirm} translation={t} confirmDisabled={false}/>
     </StyledCreateNewModelItemDialog>;
 };
 

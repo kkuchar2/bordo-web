@@ -1,26 +1,22 @@
-import React, {lazy, useCallback} from "react";
+import React, {useCallback, Suspense} from "react";
 
 import {AnimatePresence} from "framer-motion";
-import {Route, Switch, useLocation} from "react-router-dom";
+import {Route, Routes, useLocation} from "react-router-dom";
 
-import {withSuspense} from "./api/withSuspense";
 import {routes} from "./routes";
-
-const NotFound = lazy(() => import (/* webpackChunkName: "not-found" */ "pages/NotFoundPage/NotFoundPage"));
 
 const Content = () => {
     const location = useLocation();
 
     const mapRoutesToContent = useCallback(() => routes.filter((v: any) => v.enabled)
         .map((p, k) => {
-            return <Route key={k} exact={p.exact} path={p.path} component={p.component}/>;
+            return <Route key={k} path={p.path} element={p.element} />;
         }), []);
 
     return <AnimatePresence exitBeforeEnter>
-        <Switch location={location} key={location.pathname}>
-            {mapRoutesToContent()}
-            {<Route component={withSuspense(NotFound)} key={0}/>}
-        </Switch>
+        <Suspense fallback={null}>
+            <Routes location={location} key={location.pathname}>{mapRoutesToContent()}</Routes>
+        </Suspense>
     </AnimatePresence>;
 };
 

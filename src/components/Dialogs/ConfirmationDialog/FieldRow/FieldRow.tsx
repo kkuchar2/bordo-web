@@ -2,7 +2,7 @@ import React, {useCallback} from "react";
 
 import {Text} from "kuchkr-react-component-library";
 
-import {inputTheme, StyledFieldRow, titleTextTheme} from "./style";
+import {StyledFieldRow, titleTextTheme} from "./style";
 
 export interface FieldRowProps {
     name: string,
@@ -24,16 +24,16 @@ export const FieldRow = (props: FieldRowProps) => {
 
     const renderTitle = useCallback(() => {
         if (title) {
-            return <Text theme={titleTextTheme} style={{minWidth: 250, width: 250, maxWidth: 300 }}
+            return <Text theme={titleTextTheme} style={{minWidth: 250, width: 250, maxWidth: 300}}
                          text={title}/>;
         }
     }, [title]);
 
     const Component = colProps.fieldToComponentSerializer;
 
-    return <StyledFieldRow style={{marginTop: 20, display: 'flex', minWidth: 0, width: "100%", padding: 10}}>
+    return <StyledFieldRow style={{marginTop: 0, display: 'flex', minWidth: 0, width: "100%", padding: 10}}>
         {renderTitle()}
         <Component name={name} value={value} inEditMode={inEditMode} onChange={onCellValueChange}
-                   isEditable={isEditable} inputCustomTheme={inputTheme}/>
+                   isEditable={isEditable}/>
     </StyledFieldRow>;
 };

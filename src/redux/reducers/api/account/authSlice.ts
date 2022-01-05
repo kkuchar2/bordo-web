@@ -1,14 +1,15 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {API_URL, AppDispatch, RootState} from "appRedux/store";
-import {customResponseParser, RequestState, RequestStatus, sendFilePost, sendPost} from "axios-client-wrapper";
+import {customResponseParser, RequestState, RequestStatus, sendFilePost, sendPost, sendGet} from "axios-client-wrapper";
 
 export interface User {
     loggedIn: boolean,
     email: string,
-    avatar: string
+    avatar: string,
+    isVerified: boolean
 }
 
-interface AuthSliceState {
+export interface AuthSliceState {
     path: string,
     requestState: RequestState,
     errors: Array<string>,
@@ -16,7 +17,7 @@ interface AuthSliceState {
 }
 
 const defaultRequestState = {pending: false, status: RequestStatus.Unknown} as RequestState;
-const emptyUser = {email: '', avatar: '', loggedIn: false} as User;
+const emptyUser = {email: '', avatar: '', loggedIn: false, isVerified: false} as User;
 
 const setState = (state: any, action: PayloadAction<any>, user: User, requestState: RequestState) => {
     state.path = action.payload.path;
@@ -28,23 +29,23 @@ const setState = (state: any, action: PayloadAction<any>, user: User, requestSta
     }
 };
 
-export const authSlice = createSlice({
+const authSlice = createSlice({
     name: "auth",
-    initialState : {
+    initialState: {
         path: '',
         requestState: defaultRequestState,
         errors: [],
         user: {
             loggedIn: false,
             email: '',
-            avatar: ''
+            avatar: '',
+            isVerified: false
         }
-    },
+    } as AuthSliceState,
     reducers: {
         sentLoginRequest: (state, action) => {
             state.path = action.payload.path;
-            state.requestState = {pending: true, status: RequestStatus.Unknown };
-            state.errors = action.payload.errors;
+            state.requestState = {pending: true, status: RequestStatus.Waiting };
         },
         loginSuccess: (state, action) => {
             state.path = action.payload.path;
@@ -64,7 +65,7 @@ export const authSlice = createSlice({
         },
         sentAutologinRequest: (state, action) => {
             state.path = action.payload.path;
-            state.requestState = {pending: true, status: RequestStatus.Unknown };
+            state.requestState = {pending: true, status: RequestStatus.Waiting };
             state.errors = action.payload.errors;
         },
         autoLoginSuccess: (state, action) => {
@@ -84,7 +85,7 @@ export const authSlice = createSlice({
         },
         sentGoogleLoginRequest: (state, action) => {
             state.path = action.payload.path;
-            state.requestState = {pending: true, status: RequestStatus.Unknown };
+            state.requestState = {pending: true, status: RequestStatus.Waiting };
             state.errors = action.payload.errors;
         },
         googleLoginRequestSuccess: (state, action) => {
@@ -100,7 +101,7 @@ export const authSlice = createSlice({
         },
         sentLogoutRequest: (state, action) => {
             state.path = action.payload.path;
-            state.requestState = {pending: true, status: RequestStatus.Unknown };
+            state.requestState = {pending: true, status: RequestStatus.Waiting };
             state.errors = action.payload.errors;
         },
         logoutSuccess: (state, action) => {
@@ -116,7 +117,7 @@ export const authSlice = createSlice({
         },
         sentDeleteAccountRequest: (state, action) => {
             state.path = action.payload.path;
-            state.requestState = {pending: true, status: RequestStatus.Unknown };
+            state.requestState = {pending: true, status: RequestStatus.Waiting };
             state.errors = action.payload.errors;
         },
         deleteAccountSuccess: (state, action) => {
@@ -133,7 +134,7 @@ export const authSlice = createSlice({
 
         sentChangeProfileImage: (state, action) => {
             state.path = action.payload.path;
-            state.requestState = {pending: true, status: RequestStatus.Unknown };
+            state.requestState = {pending: true, status: RequestStatus.Waiting };
             state.errors = action.payload.errors;
         },
         changeProfileImageSuccess: (state, action) => {
@@ -148,16 +149,22 @@ export const authSlice = createSlice({
             state.errors = action.payload.errors;
             state.user = action.payload.user;
         },
+
+        updateUser: (state, action: any) => {
+            console.log('Updating user:');
+            console.log(action);
+        },
+
         removeErrors: (state, action: PayloadAction) => {
             setState(state, action, state.user, state.requestState);
         },
-    }
+    },
 });
 
 export const tryLoginWithGoogleCredentials = (accessToken: string) => {
     return sendPost({
         apiUrl: API_URL,
-        path: 'googleLogin',
+        path: 'account/googleLogin',
         onBefore: sentGoogleLoginRequest,
         onSuccess: googleLoginRequestSuccess,
         onFail: googleLoginRequestFailure,
@@ -167,22 +174,22 @@ export const tryLoginWithGoogleCredentials = (accessToken: string) => {
 };
 
 export const tryAutoLogin = () => {
-    return sendPost({
+    return sendGet({
         apiUrl: API_URL,
-        path: 'autoLogin',
+        path: 'account/autoLogin',
         onBefore: sentAutologinRequest,
         onSuccess: autoLoginSuccess,
         onFail: autoLoginFailed,
         responseParser: customResponseParser,
         withAuthentication: true,
-        body: {}
+        params: {}
     });
 };
 
 export const tryLogin = (user: string, password: string) => {
     return sendPost({
         apiUrl: API_URL,
-        path: 'login',
+        path: 'account/login',
         onBefore: sentLoginRequest,
         onSuccess: loginSuccess,
         onFail: loginFailed,
@@ -195,7 +202,7 @@ export const tryLogin = (user: string, password: string) => {
 export const tryLogout = () => {
     return sendPost({
         apiUrl: API_URL,
-        path: 'logout',
+        path: 'account/logout',
         onBefore: sentLogoutRequest,
         onSuccess: logoutSuccess,
         onFail: logoutFailed,
@@ -208,7 +215,7 @@ export const tryLogout = () => {
 export const tryDeleteAccount = () => {
     return sendPost({
         apiUrl: API_URL,
-        path: 'deleteAccount',
+        path: 'account/delete',
         onBefore: sentDeleteAccountRequest,
         onSuccess: deleteAccountSuccess,
         onFail: deleteAccountFailed,
@@ -219,9 +226,10 @@ export const tryDeleteAccount = () => {
 };
 
 export const tryChangeProfileImage = (file: File) => {
+
     return sendFilePost({
         apiUrl: API_URL,
-        path: 'changeProfileImage',
+        path: 'account/changeProfileImage',
         onBefore: sentChangeProfileImage,
         onSuccess: changeProfileImageSuccess,
         onFail: changeProfileImageFailed,
@@ -232,7 +240,7 @@ export const tryChangeProfileImage = (file: File) => {
     });
 };
 
-export const clearAuthErrors = () => async (dispatch: AppDispatch) => dispatch(removeErrors());
+export const updateUserState = (user: User) => async (dispatch: AppDispatch) => dispatch(updateUser(user));
 
 export const selectorAuth = (state: RootState) => state.auth;
 
@@ -256,5 +264,6 @@ export const {
     sentChangeProfileImage,
     changeProfileImageSuccess,
     changeProfileImageFailed,
+    updateUser
 } = authSlice.actions;
 export default authSlice.reducer;

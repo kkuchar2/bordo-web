@@ -28,7 +28,6 @@ export const StyledDeleteAccountSection = styled.div`
 export const StyledSettingsSection = styled(motion.div)`
   margin-left: 10px;
   border-radius: 10px;
-  background: #fafafa;
   padding: 20px 20px 0;
   display: flex;
   flex-direction: column;

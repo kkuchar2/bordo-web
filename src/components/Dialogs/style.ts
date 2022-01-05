@@ -1,28 +1,25 @@
-import {motion} from "framer-motion";
 import styled from "styled-components";
 
 export const StyledDialogs = styled.div`
   width: 100%;
   height: 100%;
-  background: rgba(218, 218, 218, 0.64);
+  background: rgba(49, 49, 49, 0.75);
   position: absolute;
   box-sizing: border-box;
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 1;
 `;
 
-export const StyledDialog = styled(motion.div)`
-  background: white;
-  max-width: 500px;
-  width: 550px;
-  max-height: 600px;
+export const StyledDialog = styled.div`
+  background: #282828;
   box-sizing: border-box;
-  border-radius: 8px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  box-shadow: 20px 20px 20px 0 rgba(0, 0, 0, 0.11);
+  border-radius: 10px;
+  padding: 20px;
 
   @media (max-width: 600px) {
     width: 100%;
@@ -32,4 +29,10 @@ export const StyledDialog = styled(motion.div)`
     border-radius: 0;
     box-shadow: none;
   }
+`;
+
+export const StyledDialogButtonsSection = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 30px;
 `;

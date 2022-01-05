@@ -1,13 +1,12 @@
-import {motion} from "framer-motion";
 import styled from "styled-components";
 
-export const StyledMainMenu = styled(motion.div)`
+export const StyledMainMenu = styled.div`
   color: #c4c4c4;
-  width: 360px;
+  width: 320px;
   min-width: 300px;
   height: 100%;
-  background: #F6F6F6;
-  padding: 40px;
+  background: #1F1F1F;
+  padding: 20px;
   box-sizing: border-box;
 
   @media (max-width: 600px) {
@@ -28,9 +27,9 @@ export const StyledMenuItems = styled.div`
 `;
 
 export const menuTitleTheme = {
-    fontWeight: "450",
+    fontWeight: "600",
     textColor: "#8E8E8E",
-    fontSize: "1.1em",
+    fontSize: "0.8em",
     textAlign: "left",
     margin: "0px 0px 20px 0px"
 };

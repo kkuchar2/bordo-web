@@ -4,7 +4,7 @@ import {FieldSerializerProps} from "components/Models/fieldSerializers/fieldSeri
 import {Text} from "kuchkr-react-component-library";
 
 const textTheme = {
-    textColor: "#323232",
+    textColor: "#d0d0d0",
     fontSize: "1.0em",
     textAlign: "left"
 };

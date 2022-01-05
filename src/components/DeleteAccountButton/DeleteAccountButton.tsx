@@ -3,6 +3,7 @@ import React, {useCallback} from "react";
 import {tryDeleteAccount} from "appRedux/reducers/api/account";
 import {closeDialog, openDialog} from "appRedux/reducers/application";
 import {Button} from "kuchkr-react-component-library";
+import {useTranslation} from "react-i18next";
 import {useDispatch} from "react-redux";
 
 import {deleteAccountButtonTheme} from "./style";
@@ -10,6 +11,7 @@ import {deleteAccountButtonTheme} from "./style";
 const DeleteAccountButton = () => {
 
     const dispatch = useDispatch();
+    const {t} = useTranslation();
 
     const onDeleteAccountConfirmed = useCallback(() => {
         dispatch(closeDialog());
@@ -22,17 +24,17 @@ const DeleteAccountButton = () => {
 
     const deleteAccount = useCallback(() => {
         dispatch(openDialog({
-            component: "ConfirmationDialog",
+            component: "DeleteAccountDialog",
             props: {
-                title: 'Delete account',
-                description: 'All data associated with this account will be deleted',
+                title: t('DELETE_ACCOUNT'),
+                description: t('DELETE_ACCOUNT_WARNING'),
                 onConfirm: onDeleteAccountConfirmed,
                 onCancel: onDeleteAccountCanceled,
             },
         }));
     }, []);
 
-    return <Button theme={deleteAccountButtonTheme} text={"Delete Account"} onClick={deleteAccount}/>;
+    return <Button theme={deleteAccountButtonTheme} text={t('DELETE_ACCOUNT')} onClick={deleteAccount}/>;
 };
 
 export default DeleteAccountButton;

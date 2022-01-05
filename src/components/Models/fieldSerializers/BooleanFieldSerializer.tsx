@@ -6,11 +6,11 @@ import {Select, Text} from "kuchkr-react-component-library";
 import {FieldSerializerProps} from "./fieldSerializer.types";
 
 const textTheme = {
-    textColor: "#6E6893",
+    textColor: "#d0d0d0",
     fontSize: "1.0em",
-    fontWeight: 700,
+    fontWeight: 600,
     textAlign: "left",
-    margin: "0px 0px 0px 0px"
+    margin: "0px 0px 0px 0px",
 };
 
 export const BooleanFieldSerializer = (props: FieldSerializerProps) => {
@@ -28,7 +28,8 @@ export const BooleanFieldSerializer = (props: FieldSerializerProps) => {
     if (inEditMode && isEditable) {
         return <Select
             theme={booleanSelectTheme}
-            maxMenuHeight={100}
+            maxMenuHeight={105}
+            menuPortalTarget={document.body}
             defaultValue={{value: value, label: toUpperFirst(value.toString())}}
             options={[
                 {value: true, label: "True"},

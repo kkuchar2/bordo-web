@@ -14,7 +14,6 @@ const GlobalStyle = createGlobalStyle`
   body {
     height: 100%;
     margin: 0;
-    background: linear-gradient(180deg, #538DFF 0%, rgba(158, 115, 229, 0.82) 50%);
     background-size: cover;
 
     .root {

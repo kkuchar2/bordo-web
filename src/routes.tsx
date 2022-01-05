@@ -2,19 +2,23 @@ import React, {lazy} from "react";
 
 import {Button} from "kuchkr-react-component-library";
 
-import {withSuspense} from "./api/withSuspense";
-
 const RegistrationPage = React.lazy(() => import(/* webpackChunkName: "auth-chunk" */ "pages/RegistrationPage/RegistrationPage"));
 const ConfirmPage = lazy(() => import (/* webpackChunkName: "auth-chunk" */ "pages/ConfirmPage/ConfirmPage"));
 const LoginPage = lazy(() => import (/* webpackChunkName: "auth-chunk" */ "pages/LoginPage/LoginPage"));
 const ForgotPasswordPage = lazy(() => import (/* webpackChunkName: "auth-chunk" */ "pages/ForgotPasswordPage/ForgotPasswordPage"));
 const ResetPasswordPage = lazy(() => import (/* webpackChunkName: "auth-chunk" */ "pages/ResetPasswordPage/ResetPasswordPage"));
 const HomePage = lazy(() => import (/* webpackChunkName: "home" */ "pages/HomePage/HomePage"));
+const NotFound = lazy(() => import (/* webpackChunkName: "not-found" */ "pages/NotFoundPage/NotFoundPage"));
 
 export const routes = [
     {
+        path: "*",
+        element: <NotFound />,
+        enabled: true
+    },
+    {
         path: "/",
-        component: withSuspense(LoginPage),
+        element: <LoginPage />,
         icon: '',
         title: "",
         enabled: true,
@@ -24,7 +28,7 @@ export const routes = [
     },
     {
         path: "/register",
-        component: withSuspense(RegistrationPage),
+        element: <RegistrationPage />,
         customComponent: <Button theme={Button.darkTheme} text={"Create account"}/>,
         customClass: 'registerButton',
         enabled: true,
@@ -34,7 +38,7 @@ export const routes = [
     },
     {
         path: "/verify-email/:token",
-        component: withSuspense(ConfirmPage),
+        element: <ConfirmPage />,
         exact: false,
         enabled: true,
         authRequired: false,
@@ -42,7 +46,7 @@ export const routes = [
     },
     {
         path: "/home",
-        component: withSuspense(HomePage),
+        element: <HomePage />,
         exact: false,
         enabled: true,
         authRequired: true,
@@ -50,7 +54,7 @@ export const routes = [
     },
     {
         path: "/forgotPassword",
-        component: withSuspense(ForgotPasswordPage),
+        element: <ForgotPasswordPage />,
         title: "Forgot password",
         enabled: true,
         exact: true,
@@ -59,7 +63,7 @@ export const routes = [
     },
     {
         path: "/resetPassword/:token",
-        component: withSuspense(ResetPasswordPage),
+        element: <ResetPasswordPage />,
         title: "Change password",
         enabled: true,
         exact: true,

@@ -19,101 +19,100 @@ interface StyledTableRowProps {
 
 export const StyledTableRow = styled.div<StyledTableRowProps>`
   display: flex;
-  margin-top: 10px;
   padding-right: 10px;
   width: 100%;
-  height: 60px;
+  height: 50px;
   box-sizing: border-box;
   position: relative;
-  background: #ffffff;
-  outline: ${props => props.inEditMode ? '3px dashed ' + '#9a91d0' : 'transparent'};
-  border-bottom: ${props => {
-      if (!props.inEditMode) {
-          return "2px solid " + "#ebe9ff";
-      }
-      return "none";
-  }};
+  background: rgba(33, 33, 33, 0.35);
+  outline: ${props => props.inEditMode ? '2px dashed ' + '#5d5d5d' : 'transparent'};
+  border-bottom: none;
+  z-index: ${props => props.inEditMode ? 3000 : 1};
   
   @media (max-width: 1200px) {
     flex-direction: column;
   }
-  
+
   &:hover {
     cursor: pointer;
-    background: ${props => props.inEditMode ? '#ffffff' : '#F2F0F9'};
+    background: ${props => props.inEditMode ? 'rgba(33, 33, 33, 0.35)' : 'rgba(19,19,19,0.35)'};
   }
 `;
 
 export const booleanSelectTheme = {
-    // Size
-    width: "200px",
-    height: 50,
+    width: "150px",
+    height: 35,
 
     // List
     listBorderRadius: 14,
-    listBackgroundColor: '#ffffff',
+    listBackgroundColor: '#1a1a1a',
 
     // List item
     itemHeight: 50,
-    itemTextColor: "#343434",
-    itemSelectedTextColor: "#000000",
-    itemHoverBackgroundColor: '#d0d0d0',
-    itemSelectedBackgroundColor: '#e3e3e3',
-    itemHoverTextColor:  '#000000',
+    itemTextColor: "#d3d3d3",
+    itemSelectedTextColor: "#dcdcdc",
+    itemHoverBackgroundColor: '#414141',
+    itemSelectedBackgroundColor: '#5865F2',
+    itemHoverTextColor: '#dcdcdc',
     itemFontSize: '0.9em',
     itemFontWeight: 600,
 
     // Selected value
-    selectedValueTextColor: '#2b2b2b',
+    selectedValueTextColor: '#d3d3d3',
     selectedValueFontWeight: 600,
-    selectedValueFontSize: '1em',
+    selectedValueFontSize: '0.9em',
 
     // Arrow
-    arrowColor: '#5d5959',
-    arrowColorHover: '#5d5959',
+    arrowColor: '#c0c0c0',
+    arrowColorHover: '#c0c0c0',
+    arrowColorDisabled: 'rgba(192,192,192,0.33)',
 
     // Separator line
     indicatorSeparatorColor: '#afafaf',
     indicatorSeparatorDisplay: 'none',
 
     // Placeholder
-    placeholderTextColor: '#3a3a3a',
-    placeholderFontSize: '1.1em',
-    placeholderFontWeight: 600,
+    placeholderTextColor: '#c0c0c0',
+    placeholderTextColorDisabled: 'rgba(192,192,192,0.25)',
+    placeholderFontSize: '1em',
+    placeholderFontWeight: 500,
 
     // Other
-    border: '1px solid ' + '#eaeaea',
-    backgroundColor: '#ffffff',
-    borderRadius: 8,
+    border: 'none',
+    backgroundColor: '#1a1a1a',
+    backgroundColorDisabled: 'rgba(47,47,47,0.42)',
+    borderRadius: 7,
+    menuBorderRadius: 7,
+    optionBorderRadius: 4,
     boxShadow: "0 9px 15px 0 rgba(0, 0, 0, 0.12)",
     cursorOnHover: 'pointer'
 };
 
 export const saveButtonTheme = {
-    width: "120px",
-    height: "40px",
-    background: "#6358a4",
+    width: "110px",
+    height: "35px",
+    background: "#4A4AFF",
     disabledBackground: "rgba(213,213,213,0.43)",
     hoverBackground: "#544993",
     border: "none",
-    borderRadius: "50px"
+    borderRadius: "4px"
 };
 
 export const deleteButtonTheme = {
-    width: "40px",
-    height: "40px",
-    background: "#e74545",
+    width: "32px",
+    height: "32px",
+    background: "#c03838",
     disabledBackground: "rgba(213,213,213,0.43)",
     hoverBackground: "#c03333",
     border: "none",
-    borderRadius: "8px",
+    borderRadius: "4px",
     margin: "0px 0px 0px 10px"
 };
 
 export const saveButtonTextTheme = {
     textColor: "#ffffff",
-    fontSize: "1.1em",
-    fontWeight: 400
+    fontSize: "1em",
+    fontWeight: 600
 };
 
 export const spinnerTheme = {

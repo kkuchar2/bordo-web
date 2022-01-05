@@ -159,7 +159,7 @@ export const getModelDataSlice = createSlice({
 export const getRangeModelData = (modelPackage: string, model: string, startIdx: number, endIdx: number) => {
     return sendPost({
         apiUrl: API_URL,
-        path: 'getModel',
+        path: 'crud/getModel',
         onBefore: sentGetModelDataRequest,
         onSuccess: getModelDataSuccess,
         onFail: getModelDataFailed,
@@ -172,7 +172,7 @@ export const getRangeModelData = (modelPackage: string, model: string, startIdx:
 export const getSingleRowModelData = (modelPackage: string, model: string, idx: number) => {
     return sendPost({
         apiUrl: API_URL,
-        path: 'getModel',
+        path: 'crud/getModel',
         onBefore: sentGetModelDataRequest,
         onSuccess: getModelDataSuccess,
         onFail: getModelDataFailed,
@@ -185,7 +185,7 @@ export const getSingleRowModelData = (modelPackage: string, model: string, idx: 
 export const getMultiRowModelData = (modelPackage: string, model: string, indices: Array<number>) => {
     return sendPost({
         apiUrl: API_URL,
-        path: 'getModel',
+        path: 'crud/getModel',
         onBefore: sentGetModelDataRequest,
         onSuccess: getModelDataSuccess,
         onFail: getModelDataFailed,
@@ -198,7 +198,7 @@ export const getMultiRowModelData = (modelPackage: string, model: string, indice
 export const getAllModelData = (modelPackage: string, model: string) => {
     return sendPost({
         apiUrl: API_URL,
-        path: 'getModel',
+        path: 'crud/getModel',
         onBefore: sentGetModelDataRequest,
         onSuccess: getModelDataSuccess,
         onFail: getModelDataFailed,
@@ -211,7 +211,7 @@ export const getAllModelData = (modelPackage: string, model: string) => {
 export const tryUpdateModelData = (modelPackage: string, model: string, data: object) => {
     return sendPost({
         apiUrl: API_URL,
-        path: 'updateModel',
+        path: 'crud/updateModel',
         onBefore: sentUpdateModelDataRequest,
         onSuccess: updateModelDataSuccess,
         onFail: updateModelDataFailed,
@@ -228,7 +228,7 @@ export const tryUpdateModelData = (modelPackage: string, model: string, data: ob
 export const tryDeleteModelRow = (modelPackage: string, model: string, rowId: number) => {
     return sendPost({
         apiUrl: API_URL,
-        path: 'removeModelData',
+        path: 'crud/removeModelData',
         onBefore: sentDeleteModelRowRequest,
         onSuccess: modelRowDeleteSuccess,
         onFail: modelRowDeleteFailed,

@@ -10,6 +10,7 @@ export const StyledLoginPage = styled(motion.div)`
   flex-direction: column;
   transition: all 1s;
   overflow: auto;
+  overflow-x: hidden;
   
   @media (max-width: 900px) {
     flex-direction: column;
@@ -50,8 +51,8 @@ export const StyledTitles = styled.div`
 `;
 
 export const titleTheme = {
-    fontSize: "clamp(32px, 1.5rem, 100px)",
-    textColor: "#ffffff",
+    fontSize: "clamp(16px, 1.5rem, 100px)",
+    textColor: "#D0D0D0",
     disabledTextColor: "rgba(255,255,255,0.20)",
     fontWeight: 800,
     textAlign: "center"

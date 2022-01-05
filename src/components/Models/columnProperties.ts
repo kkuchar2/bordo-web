@@ -14,12 +14,12 @@ import OneToOneFieldSerializer from "components/Models/fieldSerializers/OneToOne
  */
 export const columnProperties: { [index: string]: any } = {
     'IntegerField': {
-        width: 150,
+        width: 200,
         padding: 0,
         fieldToComponentSerializer: IntegerFieldSerializer
     },
     'DecimalField': {
-        width: 250,
+        width: 200,
         padding: 0,
         fieldToComponentSerializer: DecimalFieldSerializer
     },
@@ -28,12 +28,12 @@ export const columnProperties: { [index: string]: any } = {
         padding: 0,
         fieldToComponentSerializer: CharFieldSerializer
     },
-    'BooleanField' : {
+    'BooleanField': {
         width: 220,
         padding: 0,
         fieldToComponentSerializer: BooleanFieldSerializer
     },
-    'FileField' : {
+    'FileField': {
         width: 120,
         padding: 20,
         fieldToComponentSerializer: FileFieldSerializer
@@ -58,7 +58,7 @@ export const columnProperties: { [index: string]: any } = {
         padding: 0,
         fieldToComponentSerializer: OneToOneFieldSerializer
     },
-    'Default' : {
+    'Default': {
         width: 300,
         padding: 20,
         fieldToComponentSerializer: DefaultFieldSerializer

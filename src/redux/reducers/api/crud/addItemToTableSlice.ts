@@ -18,7 +18,7 @@ export const tryAddItemToTable = (args: AddItemToTableArgs) => {
         'data': itemData
     };
 
-    return sendPostRequest(API_URL, 'addItem', body, true, addItemToTableSlice);
+    return sendPostRequest(API_URL, 'crud/addItem', body, true, addItemToTableSlice);
 };
 
 export const selectorAddItemToTable = (state: RootState) => state.addItemToTable;

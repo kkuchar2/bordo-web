@@ -1,60 +1,60 @@
 import React from "react";
 
 import {Input, Text} from "kuchkr-react-component-library";
+import {useTranslation} from "react-i18next";
 
 import {FieldSerializerProps} from "./fieldSerializer.types";
 
 const textTheme = {
-    textColor: "#323232",
+    textColor: "#b6b6b6",
     fontSize: "1em",
-    textAlign: "left"
+    textAlign: "left",
+    fontWeight: 600
 };
 
 const inputTheme = {
-    backgroundColor: "rgba(255,255,255,0)",
+    backgroundColor: "#1a1a1a",
     textColor: "#474747",
-    border: "2px solid " + "#e3e3e3",
-    borderFocus: "2px solid " + "#aea7da",
-    borderRadius: "0",
-    height: "30px",
-    width: "280px",
-    padding: "0px",
+    border: "none",
+    borderRadius: "4px",
+    height: "40px",
+    width: "100%",
+    padding: "10px",
     caretColor: "#646464",
 
     titleTextTheme: {
-        textColor: '#2f2f2f',
-        fontSize: '1.1em',
-        fontWeight: '500',
+        textColor: '#F1F1F1',
+        fontSize: '0.9em',
+        fontWeight: 600,
         textAlign: 'left',
-        margin: "0px 0px 10px 0px"
+        margin: "20px 0px 10px 0px"
     },
 
     inputTextTheme: {
-        textColor: '#2f2f2f',
-        fontSize: '1.0em',
-        fontWeight: 'bold',
+        textColor: '#e0e0e0',
+        fontSize: '0.9em',
+        fontWeight: 600,
         textAlign: 'left',
         margin: "0px 0px 0px 0px"
     },
 
     placeholderTextTheme: {
-        textColor: '#ababab',
+        textColor: '#727272',
         fontSize: '1.1em',
-        textAlign: 'left'
+        textAlign: 'left',
+        fontWeight: 600
     }
 };
 
-export interface CharFieldSerializerProps extends FieldSerializerProps {
-    inputCustomTheme: object
-}
+export const CharFieldSerializer = (props: FieldSerializerProps) => {
 
-export const CharFieldSerializer = (props: CharFieldSerializerProps) => {
+    const {name, value, inEditMode, onChange, isEditable} = props;
 
-    const {name, value, inEditMode, onChange, isEditable, inputCustomTheme} = props;
+    const {t} = useTranslation();
 
     if (inEditMode && isEditable) {
-        return <Input theme={inputCustomTheme ? inputCustomTheme : inputTheme}  initialValue={value}
-                      placeholder={'Enter new ' + name} title={''} onChange={onChange}/>;
+        return <Input theme={inputTheme} value={value}
+                      placeholder={`${t("TYPE_IN")} ${name}`} title={''} onChange={onChange}/>;
     }
     return <Text theme={textTheme} style={{width: '100%', overflow: 'auto'}} text={value}/>;
 };

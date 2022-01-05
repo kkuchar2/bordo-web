@@ -12,3 +12,9 @@ export * from 'appRedux/reducers/api/account/forgotPasswordSlice';
 
 export {default as resetPasswordReducer} from 'appRedux/reducers/api/account/resetPasswordSlice';
 export * from 'appRedux/reducers/api/account/resetPasswordSlice';
+
+export {default as changeEmailReducer} from 'appRedux/reducers/api/account/changeEmailSlice';
+export * from 'appRedux/reducers/api/account/changeEmailSlice';
+
+export {default as changePasswordReducer} from 'appRedux/reducers/api/account/changePasswordSlice';
+export * from 'appRedux/reducers/api/account/changePasswordSlice';

@@ -16,7 +16,7 @@ const ChatMessageItem = (props: ChatMessageItemProps) => {
     return <StyledChatMessageItem>
         <UserProfileImage/>
         <StyledMessageTextWrapper>
-            <Text theme={messageTextTheme} text={value} useOverflow={true} />
+            <Text theme={messageTextTheme} text={value} useOverflow={true}/>
         </StyledMessageTextWrapper>
     </StyledChatMessageItem>;
 };

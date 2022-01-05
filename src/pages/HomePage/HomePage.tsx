@@ -1,11 +1,11 @@
 import React, {useCallback, useState} from "react";
 
-import Chat from "components/Chat/Chat";
-import {defaultShowUpAnimation} from "components/FormComponents/animation";
+import {defaultShowUpAnimation} from "components/Forms/animation";
 import MainMenu from "components/MainMenu/MainMenu";
 import {IViewDescription, mainMenuItems} from "components/MainMenu/mainMenuItems";
 import {EnsureAuthorized} from "hoc/EnsureAuthorized";
 import {Text} from "kuchkr-react-component-library";
+import {useTranslation} from "react-i18next";
 
 import {
     StyledBottomSection,
@@ -14,13 +14,14 @@ import {
     StyledHomePageContent,
     StyledTopSection,
     StyledAnimatedHeader,
-    viewDescriptionTextTheme,
     viewTitleTextTheme
 } from "./style";
 
 const HomePage = () => {
 
-    const [currentView, setCurrentView] = useState<IViewDescription>(mainMenuItems['TableAdministration']);
+    const {t} = useTranslation();
+
+    const [currentView, setCurrentView] = useState<IViewDescription>(mainMenuItems(t)['TableAdministration']);
 
     const renderContent = useCallback(() => {
 
@@ -29,8 +30,7 @@ const HomePage = () => {
         return <StyledContentSection>
             <StyledTopSection>
                 <StyledAnimatedHeader {...defaultShowUpAnimation}>
-                    <Text theme={viewTitleTextTheme} text={currentView.displayName}/>
-                    <Text theme={viewDescriptionTextTheme} text={currentView.description}/>
+                    <Text theme={viewTitleTextTheme} text={currentView.displayName.toUpperCase()}/>
                 </StyledAnimatedHeader>
             </StyledTopSection>
             <StyledBottomSection>
@@ -40,11 +40,11 @@ const HomePage = () => {
     }, [currentView]);
 
     const onMenuItemClick = useCallback((key) => {
-        setCurrentView(mainMenuItems[key]);
-    }, []);
+        setCurrentView(mainMenuItems(t)[key]);
+    }, [t]);
 
     return <StyledHomePage>
-        <Chat />
+        {/*<Chat />*/}
         <StyledHomePageContent>
             <MainMenu onItemClick={onMenuItemClick} openedView={currentView}/>
             {renderContent()}

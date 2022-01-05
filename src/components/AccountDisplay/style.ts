@@ -1,5 +1,5 @@
-import styled from "styled-components";
 import {Link} from "react-router-dom";
+import styled from "styled-components";
 
 export const StyledAccountInfo = styled.div`
   align-items: center;
@@ -26,23 +26,23 @@ export const StyledLogout = styled.div`
   flex-direction: row;
   align-items: flex-start;
   justify-content: center;
-  color: #777777;
+  color: #d7d7d7;
   margin-top: 5px;
 
   &:hover {
-    color: #343434;
+    color: #EAEAEA;
   }
 `;
 
 export const StyledExitLink = styled(Link)`
   font-size: 0.8em;
   margin-left: 3px;
-  color: #777777;
+  color: #d7d7d7;
   font-weight: 500;
   text-decoration: none;
-  
+
   &:hover {
-    color: #343434;
+    color: #EAEAEA;
   }
 `;
 
@@ -66,7 +66,7 @@ export const StyledAccountEmailAndPicture = styled.div`
 
 export const emailTextTheme = (isMobile: boolean) => {
     return {
-        textColor: "#9d9d9d",
+        textColor: "#dadada",
         fontSize: isMobile ? "1em" : "0.8em",
         fontWeight: 400,
     };
@@ -74,7 +74,7 @@ export const emailTextTheme = (isMobile: boolean) => {
 
 export const nameTextTheme = (isMobile: boolean) => {
     return {
-        textColor: "#484848",
+        textColor: "#EAEAEA",
         fontSize: isMobile ? "1em" : "1em",
         fontWeight: 500,
     };

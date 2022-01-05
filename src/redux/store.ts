@@ -1,14 +1,17 @@
 import {configureStore} from '@reduxjs/toolkit';
 import {dialogReducer, modelViewReducer} from "appRedux/reducers/application";
 import {TypedUseSelectorHook, useDispatch, useSelector} from "react-redux";
-import thunkMiddleware from 'redux-thunk';
+import {ThunkMiddleware} from 'redux-thunk';
+import thunk from "redux-thunk";
 
 import {
     authReducer,
     confirmReducer,
     forgotPasswordReducer,
     registrationReducer,
-    resetPasswordReducer
+    resetPasswordReducer,
+    changePasswordReducer,
+    changeEmailReducer
 } from "./reducers/api/account";
 import {
     addItemToTableReducer,
@@ -20,6 +23,8 @@ export const store = configureStore({
     reducer: {
         forgotPassword: forgotPasswordReducer,
         resetPassword: resetPasswordReducer,
+        changePassword: changePasswordReducer,
+        changeEmail: changeEmailReducer,
         registration: registrationReducer,
         auth: authReducer,
         listModels: listModelsReducer,
@@ -27,9 +32,9 @@ export const store = configureStore({
         addItemToTable: addItemToTableReducer,
         modelView: modelViewReducer,
         dialog: dialogReducer,
-        confirm: confirmReducer
+        confirmAccount: confirmReducer
     },
-    middleware: [thunkMiddleware]
+    middleware: [thunk as ThunkMiddleware]
 });
 
 export type RootState = ReturnType<typeof store.getState>
@@ -39,7 +44,7 @@ export const useAppDispatch = () => useDispatch<AppDispatch>();
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 
 // API URL - For development: switch to http://0.0.0.0:8000/api/
-export const API_URL = "http://0.0.0.0:8000/api/";
+export const API_URL = "http://0.0.0.0:8001/api/";
 
 // WEBSOCKET URL
-export const WEBSOCKET_URL = 'ws://0.0.0.0:8000/ws/chat/lobby/';
+export const WEBSOCKET_URL = 'ws://0.0.0.0:8001/ws/chat/lobby/';

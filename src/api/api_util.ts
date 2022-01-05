@@ -3,13 +3,23 @@ export const getResponseError = (errors: any, context: string, key?: string) => 
         return [];
     }
 
-    if (context === 'generic') {
-        const anyErrors = errors['generic'];
-        return anyErrors ? anyErrors : [];
+    if (context === 'request' && errors.length === 1) {
+        const requestErrors = errors[0].request;
+        return requestErrors ? requestErrors : [];
+    }
+
+    if (context === 'generic' && errors.length === 1) {
+        const anyErrors = errors[0].generic;
+        return anyErrors ? [anyErrors] : [];
     }
 
     if (context === 'form' && key) {
-        const formContextErrors = errors['form'];
+
+        if (errors.length > 1 || errors.length === 0) {
+            return [];
+        }
+
+        const formContextErrors = errors[0]['form'];
 
         if (formContextErrors) {
             const formErrors = formContextErrors[key];
@@ -23,12 +33,4 @@ export const getResponseError = (errors: any, context: string, key?: string) => 
 
 export const getFormFieldError = (errors: any, fieldId: string | undefined) => {
     return getResponseError(errors, 'form', fieldId);
-};
-
-export const createError = (errorType: string, errorMessage: string, errorSource: string) => {
-    return {
-        'type': errorType,
-        'message': errorMessage,
-        'source': errorSource
-    };
 };

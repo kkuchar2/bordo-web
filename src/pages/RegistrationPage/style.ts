@@ -9,6 +9,7 @@ export const StyledRegistrationPage = styled.div`
   flex-direction: column;
   transition: all 1s;
   overflow: auto;
+  overflow-x: hidden;
 
   @media (max-width: 900px) {
     flex-direction: column;
