@@ -1,92 +1,109 @@
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 
-import {selectorAuth, tryLogin} from "appRedux/reducers/api/account";
-import { ErroredInput } from 'components/ErroredInput/ErroredInput';
-import {defaultShowUpAnimation} from "components/Forms/animation";
+import {CircularProgress} from '@mui/material';
+import {getLoginState, resetUserSliceRequestState} from 'appRedux/reducers/api/user/userSlice';
+import {login} from "appRedux/services/userService";
+import {useAppDispatch} from 'appRedux/store';
+import {showConfirmEmailDialog} from "components/Dialogs/readyDialogs";
+import {FormErrors} from "components/Errors/FormErrors/FormErrors";
 import {
     buttonTheme,
-    formFieldTheme,
-    formTitleTheme, questionTextTheme,
-    spinnerTheme, StyledButtonGroup, StyledForm, StyledLink, StyledQuestionWithLinkTheme
+    formTitleTheme,
+    questionTextTheme,
+    StyledButtonGroup,
+    StyledCenteredSection,
+    StyledForm,
+    StyledLink,
+    StyledQuestionWithLinkTheme
 } from "components/Forms/commonStyles";
-import {FormErrors} from "components/Forms/FormErrors/FormErrors";
+import {InputWithError} from 'components/InputWithError/InputWithError';
 import {EnsureAuthorized} from "hoc/EnsureAuthorized";
-import {Button, Spinner, Text} from "kuchkr-react-component-library";
+import {Button, Text} from "kuchkr-react-component-library";
 import {useTranslation} from "react-i18next";
-import {useDispatch, useSelector} from "react-redux";
+import {useSelector} from "react-redux";
+import {isEmailNotVerifiedError} from "tools/errors/errors";
 
-import {StyledTitles, AnimatedText, StyledLoginPage, titleTheme} from "./style";
+import {isWaiting} from "../../api/api_util";
+import {FORM_CONFIG, getConfig} from "../../api/formConfig";
+
+import {StyledLoginPage} from "./style";
 
 const LoginPage = () => {
 
-    const {t} = useTranslation();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
-    const dispatch = useDispatch();
-    const authState = useSelector(selectorAuth);
-    const isRequestPending = authState.requestState.pending;
-    const isLoginContext = authState.path === 'account/login';
+    const loginState = useSelector(getLoginState);
 
-    const errors = authState.errors;
+    const dispatch = useAppDispatch();
+
+    const { t } = useTranslation();
+
+    const cfg = useMemo(() => getConfig(FORM_CONFIG, 'login', t), [t]);
+
+    const isRequestPending = useMemo(() => isWaiting(loginState), [loginState]);
+
+    const errors = loginState.info.errors;
+
+    useEffect(() => {
+
+        const isEmailNotVerified = isEmailNotVerifiedError(errors);
+
+        if (isEmailNotVerified) {
+            showConfirmEmailDialog({ dispatch, translation: t, data: { email: email, }});
+        }
+    }, [errors]);
+
+    useEffect(() => {
+        return () => {
+            dispatch(resetUserSliceRequestState('login'));
+        };
+    }, []);
 
     const attemptLogin = useCallback(e => {
         e.preventDefault();
-        dispatch(tryLogin(email, password));
+        dispatch(login(email, password));
     }, [email, password]);
 
+    // We can create one component that is either a spinner or a button
     const renderSignInButton = useCallback(() => {
-        if (isLoginContext && isRequestPending) {
-            return <Spinner theme={spinnerTheme} text={t('SIGNING_IN_PROGRESS')}/>;
+        if (isRequestPending) {
+            return <CircularProgress/>;
         }
         return <Button text={t('SIGN_IN')} type={"submit"} theme={buttonTheme} disabled={isRequestPending}/>;
-    }, [authState]);
-
-    const disabled = isLoginContext && isRequestPending;
+    }, [loginState]);
 
     return <StyledLoginPage>
-        <StyledTitles>
-            <AnimatedText {...defaultShowUpAnimation}>
-                <Text theme={titleTheme} text={t("PAGE_TITLE")}/>
-            </AnimatedText>
-        </StyledTitles>
+        <StyledCenteredSection>
+            <StyledForm onSubmit={attemptLogin}>
+                <Text theme={formTitleTheme} text={t('SIGN_IN')}/>
 
-        <StyledForm onSubmit={attemptLogin}>
-            <Text theme={formTitleTheme} text={t('SIGN_IN')}/>
+                <InputWithError
+                    value={email}
+                    onChange={e => setEmail(e.target.value)}
+                    errors={errors}
+                    disabled={isRequestPending}
+                    {...cfg['email']}/>
 
-            <ErroredInput
-                theme={formFieldTheme(disabled)}
-                id={'email'}
-                type={'text'}
-                title={'E-mail:'}
-                placeholder={t('ENTER_EMAIL_INPUT_PLACEHOLDER')}
-                onChange={setEmail}
-                errors={errors}
-                disabled={isLoginContext && isRequestPending}
-                autoComplete={"on"}/>
+                <InputWithError
+                    value={password}
+                    onChange={e => setPassword(e.target.value)}
+                    errors={errors}
+                    disabled={isRequestPending}
+                    {...cfg['password']}/>
 
-            <ErroredInput
-                theme={formFieldTheme(disabled)}
-                id={'password'}
-                type={'password'}
-                title={t('INPUT_PASSWORD_TITLE')}
-                placeholder={t('ENTER_PASSWORD_INPUT_PLACEHOLDER')}
-                onChange={setPassword}
-                errors={errors}
-                disabled={isLoginContext && isRequestPending}
-            />
+                <FormErrors errors={errors} translation={t}/>
 
-            <FormErrors errors={errors} translation={t}/>
+                <StyledLink style={{ marginTop: 40 }} to={'/forgotPassword'}>{t('FORGOT_PASSWORD')}</StyledLink>
 
-            <StyledLink style={{marginTop: 40}} to={'/forgotPassword'}>{t('FORGOT_PASSWORD')}</StyledLink>
+                <StyledButtonGroup>{renderSignInButton()}</StyledButtonGroup>
 
-            <StyledButtonGroup>{renderSignInButton()}</StyledButtonGroup>
-
-            <StyledQuestionWithLinkTheme>
-                <Text theme={questionTextTheme} text={t('NEED_ACCOUNT')}/>
-                <StyledLink to={'/register'}>{t('CREATE_ACCOUNT')}</StyledLink>
-            </StyledQuestionWithLinkTheme>
-        </StyledForm>
+                <StyledQuestionWithLinkTheme>
+                    <Text theme={questionTextTheme} text={t('NEED_ACCOUNT')}/>
+                    <StyledLink to={'/register'}>{t('CREATE_ACCOUNT')}</StyledLink>
+                </StyledQuestionWithLinkTheme>
+            </StyledForm>
+        </StyledCenteredSection>
     </StyledLoginPage>;
 };
 

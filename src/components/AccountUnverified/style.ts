@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const StyledUnverifiedAccount = styled.div`
-  background: #E09516;
+  background: #933d00;
   margin-bottom: 20px;
   border-radius: 4px;
   display: flex;

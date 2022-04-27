@@ -41,20 +41,20 @@ export const propertyValueTheme = {
 };
 
 export const editButtonTheme = {
-    width: "120px",
-    height: "40px",
-    background: "#6363ff",
+    width: "100px",
+    height: "34px",
+    background: "#4f545c",
     disabledBackground: "rgba(47,47,47,0.43)",
-    hoverBackground: "#4e4eff",
+    hoverBackground: "#686D73",
     border: "none",
-    borderRadius: "6px",
+    borderRadius: "3px",
     margin: "0px 0px 0px 10px",
 
     text: {
         textAlign: "center",
         fontSize: "14px",
         textColor: "#e1e1e1",
-        fontWeight: "700",
+        fontWeight: "500",
         disabledTextColor: "rgba(255,255,255,0.20)",
     }
 };

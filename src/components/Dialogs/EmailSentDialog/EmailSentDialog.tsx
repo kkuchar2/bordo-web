@@ -1,10 +1,10 @@
 import React from "react";
 
+import {useAppDispatch} from "appRedux/store";
 import {StyledEmailSent, textThemeDescription, textThemeTitle} from "components/Dialogs/EmailSentDialog/style";
 import {defaultShowUpAnimation} from "components/Forms/animation";
 import {StyledLink} from "components/Forms/commonStyles";
 import {Text} from "kuchkr-react-component-library";
-import {useDispatch} from "react-redux";
 
 export interface EmailSentDialogProps {
     title: string,
@@ -16,7 +16,7 @@ const EmailSentDialog = (props: EmailSentDialogProps) => {
 
     const {title, message, resetFunc} = props;
 
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
 
     const onLoginClick = () => dispatch(resetFunc());
 

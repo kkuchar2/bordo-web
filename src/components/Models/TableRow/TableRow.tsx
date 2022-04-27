@@ -1,13 +1,12 @@
 import React, {useCallback, useRef} from "react";
 
-import DeleteIcon from '@material-ui/icons/Delete';
+import DeleteIcon from '@mui/icons-material/Delete';
 import {Dictionary} from "@reduxjs/toolkit";
-import {selectorModelData} from "appRedux/reducers/api/crud";
+import {useAppDispatch} from "appRedux/store";
 import {Cell} from "components/Models/Cell/Cell";
 import {getColumnProperties} from "components/Models/columnProperties";
 import {Button, Text} from "kuchkr-react-component-library";
 import {useTranslation} from "react-i18next";
-import {useDispatch, useSelector} from "react-redux";
 
 import {deleteButtonTheme, saveButtonTextTheme, saveButtonTheme, StyledCell, StyledTableRow} from "./style";
 
@@ -29,9 +28,7 @@ const TableRow = (props: TableRowProps) => {
 
     const editedRowData = useRef<Dictionary<any>>({});
 
-    const modelDataSelector = useSelector(selectorModelData);
-
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
 
     const {t} = useTranslation();
 

@@ -1,6 +1,6 @@
 import React, {useCallback} from "react";
 
-import {IFieldInfo} from "appRedux/reducers/api/crud";
+import {ColumnHeader} from "appRedux/reducers/api/crud/modelSlice.types";
 import {getColumnProperties} from "components/Models/columnProperties";
 import {Text} from "kuchkr-react-component-library";
 
@@ -9,7 +9,7 @@ import {humanize} from "../../../util";
 import {headerTextTheme, StyledTableHeader} from "./style";
 
 export interface TableHeaderProps {
-    fields: Array<IFieldInfo>
+    fields: Array<ColumnHeader>
 }
 
 const TableHeader = (props: TableHeaderProps) => {
@@ -20,7 +20,7 @@ const TableHeader = (props: TableHeaderProps) => {
         if (!fields) {
             return;
         }
-        return fields.map((field: IFieldInfo, idx: number) => {
+        return fields.map((field: ColumnHeader, idx: number) => {
             const colProps = getColumnProperties(field.type);
             return <div style={{
                 height: "100%",

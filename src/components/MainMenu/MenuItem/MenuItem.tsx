@@ -1,6 +1,6 @@
 import React, {useCallback, useState} from "react";
 
-import SvgIcon from "@material-ui/core/SvgIcon/SvgIcon";
+import { SvgIcon } from '@mui/material';
 import {Text} from "kuchkr-react-component-library";
 
 import {StyledIconWrapper, StyledMenuItem, textTheme} from "./style";

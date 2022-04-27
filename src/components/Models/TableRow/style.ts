@@ -21,7 +21,7 @@ export const StyledTableRow = styled.div<StyledTableRowProps>`
   display: flex;
   padding-right: 10px;
   width: 100%;
-  height: 50px;
+  min-height: 50px;
   box-sizing: border-box;
   position: relative;
   background: rgba(33, 33, 33, 0.35);

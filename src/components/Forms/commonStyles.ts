@@ -2,9 +2,9 @@ import {Link, LinkProps} from "react-router-dom";
 import styled from "styled-components";
 
 export const formTitleTheme = {
-    textColor: "#FFC046",
+    textColor: "#dcdcdc",
     fontSize: "1.2em",
-    textAlign: "left",
+    textAlign: "center",
     fontWeight: 600,
     margin: "0px 0px 10px 0px"
 };
@@ -15,48 +15,6 @@ export const questionTextTheme = {
     fontWeight: 500,
     fontSize: "1.0em",
     margin: "0px 20px 0px 0px"
-};
-
-export const errorTextTheme = {
-    textColor: "#ff4949",
-    fontSize: "15px"
-};
-
-export const formFieldTheme = (disabled: boolean) => {
-    return {
-        backgroundColor: disabled ? "rgba(57,57,57,0.5)" : "#393939",
-        autoFillBackgroundColor: disabled ? "rgba(57,57,57,0.5)" : "#393939",
-        textColor: "#474747",
-        border: "none",
-        borderRadius: "4px",
-        height: "40px",
-        width: "100%",
-        padding: "10px",
-        caretColor: "#646464",
-
-        titleTextTheme: {
-            textColor: disabled ? 'rgba(241,241,241,0.4)' : '#F1F1F1',
-            fontSize: '0.9em',
-            fontWeight: 600,
-            textAlign: 'left',
-            margin: "20px 0px 10px 0px"
-        },
-
-        inputTextTheme: {
-            textColor: disabled ? 'rgba(241,241,241,0.4)' : '#F1F1F1',
-            fontSize: '0.9em',
-            fontWeight: 600,
-            textAlign: 'left',
-            margin: "0px 0px 0px 0px"
-        },
-
-        placeholderTextTheme: {
-            textColor: '#727272',
-            fontSize: '1.1em',
-            textAlign: 'left',
-            fontWeight: 600
-        }
-    };
 };
 
 export const buttonTheme = {
@@ -111,7 +69,7 @@ export interface StyledFormProps {
 
 export const StyledLink = styled(Link)<LinkProps & StyledLinkProps>`
   text-decoration: none;
-  color: ${props => props.disabled ? "rgba(0,137,88,0.4)" : "#008958"};
+  color: ${props => props.disabled ? "rgba(0,137,88,0.4)" : "#51e320"};
   font-size: 1.0em;
   font-weight: 600;
   margin-top: ${props => `${props.marginTop}px`};
@@ -129,23 +87,16 @@ export const StyledLink = styled(Link)<LinkProps & StyledLinkProps>`
   }
 `;
 
-export const StyledRawForm = styled.form<StyledFormProps>`
-  display: flex;
-  flex-direction: column;
-
-  @media (min-width: 600px) {
-    width: 320px;
-    position: relative;
+export const StyledCenteredSection = styled.div`
+  @media (max-width: 600px) {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: flex-end;
   }
 
-  @media (max-width: 600px) {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    height: 100%;
-    border-radius: 0;
+  @media (min-width: 600px) {
+    height: 600px;
   }
 `;
 
@@ -155,20 +106,20 @@ export const StyledForm = styled.form<StyledFormProps>`
   display: flex;
   flex-direction: column;
   padding: 30px 30px 30px;
-  
+  box-sizing: border-box;
+
   @media (min-width: 600px) {
-    width: 320px;
+    width: 480px;
     position: relative;
   }
 
   @media (max-width: 600px) {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
     width: 100%;
-    height: 100%;
+    height: auto;
     border-radius: 0;
+    transform: scale(0.9);
   }
 `;
 

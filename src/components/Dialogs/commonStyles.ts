@@ -1,17 +1,17 @@
 import styled from "styled-components";
 
 export const titleTextTheme = {
-    textColor: "#FFC046",
+    textColor: "#ffffff",
     fontSize: "1.2em",
-    textAlign: "left",
+    textAlign: "center",
     fontWeight: 600
 };
 
 export const descriptionTextTheme = {
     textColor: "#bdbdbd",
     fontSize: "15px",
-    textAlign: "left",
-    fontWeight: 600
+    textAlign: "center",
+    fontWeight: 400
 };
 
 export const cancelButtonTheme = {
@@ -21,7 +21,7 @@ export const cancelButtonTheme = {
     disabledBackground: "rgba(47,47,47,0.43)",
     hoverBackground: "none",
     border: "none",
-    borderRadius: "6px",
+    borderRadius: "3px",
 
     text: {
         textAlign: "center",
@@ -33,13 +33,13 @@ export const cancelButtonTheme = {
 };
 
 export const confirmButtonTheme = {
-    width: "120px",
+    width: "150px",
     height: "40px",
     background: "#4A4AFF",
-    disabledBackground: "rgba(47,47,47,0.43)",
+    disabledBackground: "rgba(74,74,255,0.46)",
     hoverBackground: "#4e4eff",
     border: "none",
-    borderRadius: "6px",
+    borderRadius: "3px",
     margin: "0px 0px 0px 10px",
 
     text: {
@@ -51,10 +51,52 @@ export const confirmButtonTheme = {
     }
 };
 
+export const StyledDialogCloseButton = styled.div`
+  position: absolute;
+  right: 32px;
+  top: 22px;
+  width: 25px;
+  height: 25px;
+  opacity: 0.7;
+
+  &:hover {
+    cursor: pointer;
+    opacity: 1;
+  }
+
+  &:before, &:after {
+    position: absolute;
+    left: 15px;
+    content: ' ';
+    height: 25px;
+    width: 3px;
+    background-color: #717171;
+  }
+
+  &:before {
+    transform: rotate(45deg);
+  }
+
+  &:after {
+    transform: rotate(-45deg);
+  }
+`;
+
+export const StyledDialogTopSection = styled.div`
+  padding: 20px 20px 0;
+  box-sizing: border-box;
+`;
+
+export const StyledDialogBottomSection = styled.div`
+
+`;
+
 export const StyledDialogTitleSection = styled.div`
-  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 export const StyledDialogDescriptionSection = styled.div`
-  margin-bottom: 20px;
+  margin-top: 10px;
 `;

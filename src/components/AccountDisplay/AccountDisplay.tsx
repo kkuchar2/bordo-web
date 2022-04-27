@@ -1,14 +1,15 @@
 import React, {useCallback, useState} from "react";
 
-import {useMediaQuery} from "@material-ui/core";
-import ExitToApp from '@material-ui/icons/ExitToApp';
-import {selectorAuth, tryLogout} from "appRedux/reducers/api/account";
+import {ExitToApp} from "@mui/icons-material";
+import {useMediaQuery} from "@mui/material";
+import {getUserState} from "appRedux/reducers/api/user/userSlice";
+import {logout} from "appRedux/services/userService";
+import { useAppDispatch } from "appRedux/store";
 import EditableProfilePictureProperty
     from "components/EditableProperties/EditableProfilePictureProperty/EditableProfilePictureProperty";
 import {Text} from "kuchkr-react-component-library";
-import {useTranslation} from "react-i18next";
 import {useIdleTimer} from 'react-idle-timer';
-import {useDispatch, useSelector} from "react-redux";
+import { useSelector} from "react-redux";
 
 import {
     emailTextTheme,
@@ -24,15 +25,13 @@ const AccountDisplay = () => {
 
     const [isActive, setActive] = useState(true);
 
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
 
-    const {t} = useTranslation();
-
-    const authState = useSelector(selectorAuth);
+    const user = useSelector(getUserState);
 
     const isMobile = useMediaQuery('(max-width: 600px)');
 
-    const logout = useCallback(() => dispatch(tryLogout()), []);
+    const logoutCurrentUser = useCallback(() => dispatch(logout()), []);
 
     const handleOnActive = useCallback((e) => setActive(true), []);
 
@@ -53,10 +52,10 @@ const AccountDisplay = () => {
             <EditableProfilePictureProperty active={isActive}/>
             <StyledNameAndEmail>
                 <Text theme={nameTextTheme(isMobile)} text={"Krzysztof Kucharski"}/>
-                <Text theme={emailTextTheme(isMobile)} text={authState.user.email}/>
+                <Text theme={emailTextTheme(isMobile)} text={user.email.email}/>
                 <StyledLogout>
                     <ExitToApp fontSize={'small'} style={{marginTop: -1, marginLeft: -2}}/>
-                    <StyledExitLink to={''} onClick={logout}>{t('LOGOUT')}</StyledExitLink>
+                    <StyledExitLink to={''} onClick={logoutCurrentUser}>Logout</StyledExitLink>
                 </StyledLogout>
             </StyledNameAndEmail>
         </StyledAccountEmailAndPicture>

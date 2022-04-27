@@ -1,6 +1,12 @@
-import React, { StrictMode } from 'react';
+import React from "react";
 
-import {App} from "App";
-import ReactDOM from 'react-dom';
+import ReactDOM from 'react-dom/client';
 
-ReactDOM.render(<StrictMode><App/></StrictMode>, document.getElementById('root'));
+import {App} from "./App";
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+
+// NOTE: Strict mode will cause double rendering
+// root.render(<StrictMode><App/></StrictMode>);
+
+root.render(<App/>);

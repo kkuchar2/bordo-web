@@ -1,4 +1,4 @@
-import KeyboardArrowDownOutlinedIcon from "@material-ui/icons/KeyboardArrowDownOutlined";
+import KeyboardArrowDownOutlinedIcon from "@mui/icons-material/KeyboardArrowDownOutlined";
 import styled from "styled-components";
 
 export const StyledChat = styled.div`

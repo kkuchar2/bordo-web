@@ -1,8 +1,9 @@
 import React, {ComponentType, useCallback, useEffect, useState} from "react";
 
-import {selectorAuth, tryAutoLogin} from "appRedux/reducers/api/account";
+import {isFailure, isWaiting, isSuccess} from "api/api_util";
+import {getAutoLoginState, getUserState} from "appRedux/reducers/api/user/userSlice";
+import {autoLogin} from "appRedux/services/userService";
 import {useAppDispatch} from "appRedux/store";
-import {RequestStatus} from "axios-client-wrapper";
 import {useSelector} from "react-redux";
 import {Navigate, useLocation} from "react-router-dom";
 import {isOnAuthenticatedPage} from "routes";
@@ -13,16 +14,18 @@ export const EnsureAuthorized = (WrappedComponent: ComponentType) => {
         const [sentAutologinRequest, setSentAutologinRequest] = useState(false);
 
         const location = useLocation();
-        const authState = useSelector(selectorAuth);
         const isOnAuthPage = isOnAuthenticatedPage();
 
-        const requestPath = authState.path;
-        const requestStatus = authState.requestState.status;
-        const requestPending = authState.requestState.pending;
+        const userState = useSelector(getUserState);
+        const autoLoginState = useSelector(getAutoLoginState);
 
-        const receivedResponse = !requestPending && (requestStatus === RequestStatus.Success || requestStatus === RequestStatus.Failure);
+        const requestPending = isWaiting(autoLoginState);
+        const requestSuccess = isSuccess(autoLoginState);
+        const requestFailure = isFailure(autoLoginState);
 
-        const loggedIn = authState.user ? authState.user.loggedIn : false;
+        const receivedResponse = !requestPending && (requestSuccess || requestFailure);
+
+        const loggedIn = userState.loggedIn;
 
         const dispatch = useAppDispatch();
 
@@ -40,13 +43,15 @@ export const EnsureAuthorized = (WrappedComponent: ComponentType) => {
 
         useEffect(() => {
             if (sentAutologinRequest) {
-                dispatch(tryAutoLogin());
+                dispatch(autoLogin());
             }
         }, [sentAutologinRequest]);
 
-        const redirect = useCallback((path) => <Navigate to={{pathname: path, state: {from: location}}}/>, [location]);
+        const redirect = useCallback((path) => <Navigate to={path}/>, [location]);
 
         const renderWhenLoggedInAndOnPublicPage = useCallback(() => {
+            //console.log('Rendering when logged in and on auth page');
+
             if (!requestPending && receivedResponse) {
                 return redirect("/home");
             }
@@ -54,31 +59,41 @@ export const EnsureAuthorized = (WrappedComponent: ComponentType) => {
         }, [requestPending, receivedResponse]);
 
         const renderWhenLoggedOutAndOnPublicPage = useCallback(() => {
-            if (requestPath === 'autoLogin' && requestPending) {
+            //console.log('Rendering when logged out and on public page');
+
+            if (requestPending) {
                 return <WrappedComponent {...props} />;
-            } else {
+            }
+            else {
                 if (!requestPending && !receivedResponse) {
                     return null;
-                } else if ((requestPending && !receivedResponse) || (!requestPending && receivedResponse)) {
+                }
+                else if ((requestPending && !receivedResponse) || (!requestPending && receivedResponse)) {
                     return <WrappedComponent {...props} />;
                 }
             }
 
             return <></>;
-        }, [requestPath, requestPending, receivedResponse]);
+        }, [requestPending, receivedResponse]);
 
         const renderWhenLoggedInAndOnAuthPage = useCallback(() => {
+            //console.log('Rendering when logged in and on auth page');
+
             if ((!requestPending && receivedResponse) || (requestPending && !receivedResponse)) {
                 return <WrappedComponent {...props} />;
-            } else {
+            }
+            else {
                 return <></>;
             }
         }, [requestPending, receivedResponse]);
 
         const renderWhenLoggedOutAndOnAuthPage = useCallback(() => {
+            // console.log('Rendering when logged out and on auth page');
+
             if (!requestPending && receivedResponse) {
                 return redirect("/");
-            } else if ((!requestPending && !receivedResponse) || (requestPending && !receivedResponse)) {
+            }
+            else if ((!requestPending && !receivedResponse) || (requestPending && !receivedResponse)) {
                 return <></>;
             }
         }, [requestPending, receivedResponse]);
@@ -97,7 +112,8 @@ export const EnsureAuthorized = (WrappedComponent: ComponentType) => {
                 return renderWhenLoggedInAndOnAuthPage();
             }
             return renderWhenLoggedOutAndOnAuthPage();
-        } else {
+        }
+        else {
             if (loggedIn) {
                 return renderWhenLoggedInAndOnPublicPage();
             }

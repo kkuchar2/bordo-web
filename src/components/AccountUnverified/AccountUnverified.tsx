@@ -5,9 +5,19 @@ import {useTranslation} from "react-i18next";
 
 import {messageTheme, resendButtonTheme, StyledMessageWrapper, StyledUnverifiedAccount, titleTheme} from "./style";
 
-const AccountUnverified = () => {
+interface AccountUnverifiedProps {
+    show: boolean;
+}
 
-    const {t} = useTranslation();
+const AccountUnverified = (props: AccountUnverifiedProps) => {
+
+    const { show } = props;
+
+    const { t } = useTranslation();
+
+    if (!show) {
+        return null;
+    }
 
     return <StyledUnverifiedAccount>
         <Text theme={titleTheme} text={t("UNVERIFIED_ACCOUNT")}/>

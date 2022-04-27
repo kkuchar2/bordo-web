@@ -21,7 +21,7 @@ const HomePage = () => {
 
     const {t} = useTranslation();
 
-    const [currentView, setCurrentView] = useState<IViewDescription>(mainMenuItems(t)['TableAdministration']);
+    const [currentView, setCurrentView] = useState<IViewDescription>(mainMenuItems(t)['Account']);
 
     const renderContent = useCallback(() => {
 
@@ -30,7 +30,7 @@ const HomePage = () => {
         return <StyledContentSection>
             <StyledTopSection>
                 <StyledAnimatedHeader {...defaultShowUpAnimation}>
-                    <Text theme={viewTitleTextTheme} text={currentView.displayName.toUpperCase()}/>
+                    <Text theme={viewTitleTextTheme} text={currentView.displayName}/>
                 </StyledAnimatedHeader>
             </StyledTopSection>
             <StyledBottomSection>

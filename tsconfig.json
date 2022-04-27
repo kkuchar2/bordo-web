@@ -3,12 +3,12 @@
     "baseUrl": "src",
     "paths": {
       "images": ["images"],
-      "util/*": ["util/*"],
       "appRedux/*": ["redux/*"],
+      "tools/*": ["tools/*"],
       "configs": ["configs"],
       "components/*": ["components/*"],
       "styles": ["scss/"],
-      "componentStyles": ["scss/components/"]
+      "componentStyles": ["scss/components/"],
     },
     "rootDir": "src",
     "strict": false,

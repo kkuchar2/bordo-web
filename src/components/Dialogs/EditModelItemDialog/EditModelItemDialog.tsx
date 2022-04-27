@@ -1,11 +1,11 @@
 import React, {useCallback, useState} from "react";
 
-import {tryAddItemToTable} from "appRedux/reducers/api/crud";
 import {closeDialog} from "appRedux/reducers/application";
+import {addRow} from "appRedux/services/modelService";
 import {useAppDispatch} from "appRedux/store";
 import {ConfirmationCancelSection} from "components/Dialogs/ConfirmationCancelSection";
 import {FieldRow} from "components/Dialogs/ConfirmationDialog/FieldRow/FieldRow";
-import {BaseDialogProps} from "components/Dialogs/types";
+import {DialogProps} from "components/Dialogs/types";
 import {getColumnProperties} from "components/Models/columnProperties";
 import {Text} from "kuchkr-react-component-library";
 import {useTranslation} from "react-i18next";
@@ -21,17 +21,17 @@ import {
     titleModelValueTextTheme
 } from "./style";
 
-export interface EditModelItemDialogProps extends BaseDialogProps {
+export interface EditModelItemDialogData extends DialogProps {
     modelPackage: string,
     modelName: string,
     fields: any // TODO
 }
 
-const EditModelItemDialog = (props: EditModelItemDialogProps): JSX.Element => {
+const EditModelItemDialog = (props: DialogProps<EditModelItemDialogData>): JSX.Element => {
 
     const {t} = useTranslation();
 
-    const {modelPackage, modelName, fields} = props;
+    const {modelPackage, modelName, fields} = props.data;
 
     const [formData, setFormData] = useState({});
 
@@ -79,7 +79,7 @@ const EditModelItemDialog = (props: EditModelItemDialogProps): JSX.Element => {
 
     const onConfirm = useCallback(() => {
         // TODO: do not close immediately, only if the form is valid and item was added to DB\
-        dispatch(tryAddItemToTable({modelPackage: modelPackage, model: modelName, itemData: formData}));
+        dispatch(addRow({modelPackage: modelPackage, model: modelName, itemData: formData}));
         dispatch(closeDialog());
     }, [formData, modelName, modelPackage]);
 

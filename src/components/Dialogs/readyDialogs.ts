@@ -1,100 +1,213 @@
 import {closeDialog, openDialog} from "appRedux/reducers/application";
-import {AppDispatch} from "appRedux/store";
-import {TFunction} from "react-i18next";
-import {NavigateFunction} from "react-router";
+import {CreateNewModelItemDialogData} from "components/Dialogs/CreateNewModelItemDialog/CreateNewModelItemDialog";
 
-export const showRegistrationCompleteDialog = (dispatch: AppDispatch, navigate: NavigateFunction,
-                                               translation: TFunction<"translation">) => {
+import {ReadyDialogArgs} from "./readyDialogs.types";
+
+export const showRegistrationCompleteDialog = (args: ReadyDialogArgs) => {
+
+    const { dispatch, navigate, translation } = args;
+
     dispatch(openDialog({
         component: "RegistrationCompleteDialog",
         props: {
-            title: translation('REGISTRATION_COMPLETE_TITLE'),
-            description: translation('REGISTRATION_COMPLETE_DESCRIPTION'),
-            onGoHome: () => {
-                dispatch(closeDialog());
-                navigate('/');
+            dialog: {
+                title: translation('REGISTRATION_COMPLETE_TITLE'),
+                description: translation('REGISTRATION_COMPLETE_DESCRIPTION'),
+            },
+            data: {
+                onGoHome: () => {
+                    dispatch(closeDialog());
+                    navigate('/');
+                }
             }
         }
     }));
 };
 
-export const showSentResetPasswordMailDialog = (dispatch: AppDispatch, navigate: NavigateFunction,
-                                               translation: TFunction<"translation">) => {
+export const showVerificationEmailSentDialog = (args: ReadyDialogArgs) => {
+
+    const { dispatch, navigate, translation } = args;
+
+    dispatch(openDialog({
+        component: "VerificationEmailSentDialog",
+        props: {
+            dialog: {
+                title: translation('Verification email sent'),
+                description: translation('VERIFICATION_EMAIL_SENT_DESCRIPTION'),
+            },
+            data: {
+                onGoHome: () => {
+                    dispatch(closeDialog());
+                    navigate('/');
+                }
+            }
+        }
+    }));
+};
+
+export const showSentResetPasswordMailDialog = (args: ReadyDialogArgs) => {
+
+    const { dispatch, navigate, translation } = args;
+
     dispatch(openDialog({
         component: "SentPasswordResetMailDialog",
         props: {
-            title: translation('PASSWORD_RESET_MAIL_SENT_TITLE'),
-            description: translation('PASSWORD_RESET_MAIL_SENT_DESCRIPTION'),
-            onGoHome: () => {
-                dispatch(closeDialog());
-                navigate('/');
+            dialog: {
+                title: translation('PASSWORD_RESET_MAIL_SENT_TITLE'),
+                description: translation('PASSWORD_RESET_MAIL_SENT_DESCRIPTION'),
+            },
+            data: {
+                onGoHome: () => {
+                    dispatch(closeDialog());
+                    navigate('/');
+                }
             }
         }
     }));
 };
 
-export const showChangeAvatarDialog = (dispatch: AppDispatch, translation: TFunction<"translation">) => {
+export const showChangeAvatarDialog = (args: ReadyDialogArgs) => {
+
+    const { dispatch, translation } = args;
+
     dispatch(openDialog({
         component: "ChangeAvatarDialog",
         props: {
-            title: translation('CHANGE_AVATAR'),
-            description: '',
-            onConfirm: () => {
-                dispatch(closeDialog());
+            dialog: {
+                title: translation('SELECT_IMAGE'),
+                description: '',
             },
-            onCancel: () => {
-                dispatch(closeDialog());
-            }
+            data: {}
         }
     }));
 };
 
-export const showChangeEmailDialog = (dispatch: AppDispatch, translation: TFunction<"translation">) => {
+export const showChangeEmailDialog = (args: ReadyDialogArgs) => {
+
+    const { dispatch, translation } = args;
+
     dispatch(openDialog({
         component: "ChangeEmailDialog",
         props: {
-            title: translation('CHANGE_EMAIL'),
-            description: '',
-            onConfirm: () => {
-
+            dialog: {
+                title: translation('CHANGE_EMAIL'),
+                description: 'Enter a new email address and your existing password.'
             },
-            onCancel: () => {
-                dispatch(closeDialog());
-            }
+            data: {}
         }
     }));
 };
 
-export const showChangePasswordDialog = (dispatch: AppDispatch, translation: TFunction<"translation">) => {
+export const showConfirmEmailDialog = (args: ReadyDialogArgs) => {
+
+        const { dispatch, translation, data } = args;
+
+        dispatch(openDialog({
+            component: "SendConfirmationMailDialog",
+            props: {
+                dialog: {
+                    title: "Please verify your email address",
+                },
+                data: data
+            }
+        }));
+};
+
+export const showChangeUsernameDialog = (args: ReadyDialogArgs) => {
+
+    const { dispatch, translation } = args;
+
+    dispatch(openDialog({
+        component: "ChangeUsernameDialog",
+        props: {
+            dialog: {
+                title: translation('CHANGE_USERNAME'),
+                description: 'Enter a new username and your existing password.'
+            },
+            data: {}
+        }
+    }));
+};
+
+export const showChangeNormalPropertyDialog = (args: ReadyDialogArgs) => {
+
+    const { dispatch, translation } = args;
+
+    dispatch(openDialog({
+        component: "ChangeTextPropertyDialog",
+        props: {
+            dialog: {
+                title: translation('CHANGE_PROPERTY'),
+                description: '',
+            },
+            data: {}
+        }
+    }));
+};
+
+export const showChangePasswordDialog = (args: ReadyDialogArgs) => {
+
+    const { dispatch, translation } = args;
+
     dispatch(openDialog({
         component: "ChangePasswordDialog",
         props: {
-            title: translation('CHANGE_PASSWORD'),
-            description: '',
-            onConfirm: () => {
-                dispatch(closeDialog());
+            dialog: {
+                title: translation('CHANGE_PASSWORD'),
+                description: 'Enter your current password and a new password.'
             },
-            onCancel: () => {
-                dispatch(closeDialog());
+            data: {}
+        }
+    }));
+};
+
+export const showCreateModelItemDialog = (args: ReadyDialogArgs, fields: any, modelPackage: string, modelName: string) => {
+
+    const { dispatch, translation } = args;
+
+    dispatch(openDialog<CreateNewModelItemDialogData>({
+        component: "CreateNewModelItemDialog",
+        props: {
+            dialog: {
+                title: translation('ADD_NEW_ROW')
+            },
+            data: {
+                fields: fields,
+                modelPackage: modelPackage,
+                modelName: modelName
             }
         }
     }));
 };
 
-export const showCreateModelItemDialog = (dispatch: AppDispatch, translation: TFunction<"translation">, fields: any, modelPackage: string, modelName: string) => {
+export const showDeleteAccountDialog = (args: ReadyDialogArgs) => {
+
+    const { dispatch, translation } = args;
+
     dispatch(openDialog({
-        component: "CreateNewModelItemDialog",
+        component: "DeleteAccountDialog",
         props: {
-            title: translation('ADD_NEW_ROW'),
-            fields: fields,
-            modelPackage: modelPackage,
-            modelName: modelName,
-            onConfirm: () => {
-                dispatch(closeDialog());
+            dialog: {
+                title: translation('DELETE_ACCOUNT'),
+                description: ''
             },
-            onCancel: () => {
-                dispatch(closeDialog());
-            }
+            data: {}
         }
     }));
+};
+
+export const showDisableAccountDialog = (args: ReadyDialogArgs) => {
+
+        const { dispatch, translation } = args;
+
+        dispatch(openDialog({
+            component: "DisableAccountDialog",
+            props: {
+                dialog: {
+                    title: translation('DISABLE_ACCOUNT'),
+                    description: ''
+                },
+                data: {}
+            }
+        }));
 };

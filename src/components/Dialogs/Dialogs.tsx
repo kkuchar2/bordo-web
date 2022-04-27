@@ -1,23 +1,29 @@
 import React, {useCallback, useEffect} from "react";
 
-import {selectorDialogs} from "appRedux/reducers/application";
+import {closeDialog, selectorDialogs} from "appRedux/reducers/application";
+import {useAppDispatch} from "appRedux/store";
 import {ChangeAvatarDialog} from "components/Dialogs/ChangeAvatarDialog/ChangeAvatarDialog";
 import {ChangeEmailDialog} from "components/Dialogs/ChangeEmailDialog/ChangeEmailDialog";
 import {ChangePasswordDialog} from "components/Dialogs/ChangePasswordDialog/ChangePasswordDialog";
+import {ChangeTextPropertyDialog} from "components/Dialogs/ChangeTextPropertyDialog/ChangeTextPropertyDialog";
 import {
-    descriptionTextTheme,
+    descriptionTextTheme, StyledDialogBottomSection, StyledDialogCloseButton,
     StyledDialogDescriptionSection,
-    StyledDialogTitleSection,
+    StyledDialogTitleSection, StyledDialogTopSection,
     titleTextTheme
 } from "components/Dialogs/commonStyles";
 import {ConfirmationDialog} from "components/Dialogs/ConfirmationDialog/ConfirmationDialog";
 import CreateNewModelItemDialog from "components/Dialogs/CreateNewModelItemDialog/CreateNewModelItemDialog";
+import {DisableAccountDialog} from "components/Dialogs/DisableAccountDialog/DisableAccountDialog";
 import {RegistrationCompleteDialog} from "components/Dialogs/RegistrationCompleteDialog/RegistrationCompleteDialog";
+import {SendConfirmationMailDialog} from "components/Dialogs/SendConfirmationEmailDialog/SendConfirmationMailDialog";
+import {VerificationEmailSentDialog} from "components/Dialogs/VerificationEmailSentDialog/VerificationEmailSentDialog";
 import {Text} from "kuchkr-react-component-library";
 import {useSelector} from "react-redux";
 
+import { ChangeUsernameDialog } from "./ChangeUsernameDialog/ChangeUsernameDialog";
 import {DeleteAccountDialog} from "./DeleteAccountDialog/DeleteAccountDialog";
-import { SentPasswordResetMailDialog } from "./SentPasswordResetMailDialog/SentPasswordResetMailDialog";
+import {SentPasswordResetMailDialog} from "./SentPasswordResetMailDialog/SentPasswordResetMailDialog";
 import {StyledDialog, StyledDialogs} from "./style";
 
 interface IDialogComponentMap {
@@ -26,24 +32,42 @@ interface IDialogComponentMap {
 
 const componentMap: IDialogComponentMap = {
     'DeleteAccountDialog': DeleteAccountDialog,
+    'DisableAccountDialog': DisableAccountDialog,
     'ConfirmationDialog': ConfirmationDialog,
     'CreateNewModelItemDialog': CreateNewModelItemDialog,
     'RegistrationCompleteDialog': RegistrationCompleteDialog,
+    'VerificationEmailSentDialog': VerificationEmailSentDialog,
     'ChangeAvatarDialog': ChangeAvatarDialog,
     'ChangeEmailDialog': ChangeEmailDialog,
+    'SendConfirmationMailDialog': SendConfirmationMailDialog,
+    'ChangeUsernameDialog': ChangeUsernameDialog,
     'ChangePasswordDialog': ChangePasswordDialog,
-    'SentPasswordResetMailDialog' : SentPasswordResetMailDialog
+    'SentPasswordResetMailDialog': SentPasswordResetMailDialog,
+    'ChangeTextPropertyDialog': ChangeTextPropertyDialog
 };
 
 const Dialogs = () => {
 
-    const data = useSelector(selectorDialogs);
-    const componentKey = data.component;
-    const componentProps = data.componentProps;
+    const dialogState = useSelector(selectorDialogs);
+
+    const isOpened = dialogState.opened;
+    const componentName = dialogState.component;
+    const componentProps = dialogState.componentProps;
+
+    const dispatch = useAppDispatch();
 
     const handleKeyDown = useCallback((event) => {
-        if (event.keyCode === 27) { // escape
-            componentProps?.onCancel();
+        if (componentProps?.dialog && isOpened && event.keyCode === 27) { // escape
+            handleCancel();
+        }
+    }, [componentProps, isOpened]);
+
+    const handleCancel = useCallback(() => {
+        if (componentProps.dialog.onCancel) {
+            componentProps.dialog.onCancel();
+        }
+        else {
+            dispatch(closeDialog());
         }
     }, [componentProps]);
 
@@ -56,52 +80,45 @@ const Dialogs = () => {
     }, [componentProps]);
 
     const renderDescription = useCallback(() => {
-        const description = componentProps.description;
-
-        if (!description) {
-            return null;
+        if (isOpened && componentProps.dialog?.description) {
+            return <StyledDialogDescriptionSection>
+                <Text theme={descriptionTextTheme} text={componentProps.dialog.description}/>
+            </StyledDialogDescriptionSection>;
         }
-
-        if (description === '') {
-            return null;
-        }
-
-        return <StyledDialogDescriptionSection>
-            <Text theme={descriptionTextTheme} text={componentProps.description}/>
-        </StyledDialogDescriptionSection>;
-    }, [componentProps]);
+    }, [componentProps, isOpened]);
 
     const onClick = useCallback((e) => {
 
         const id = e.target.id;
 
-        if (id && id === 'dialogWrapper' && componentProps) {
-            const cancelFunc = componentProps.onCancel;
-
-            if (cancelFunc) {
-                cancelFunc();
-            }
+        if (id && id === 'dialogWrapper' && componentProps?.dialog && isOpened) {
+            handleCancel();
         }
-    }, [componentProps]);
+    }, [componentProps, isOpened]);
 
-    if (!componentKey) {
+    if (!componentName) {
         return null;
     }
 
-    if (!(componentKey in componentMap)) {
-        console.error(`No ${componentKey} in dialogs map!`);
+    if (!(componentName in componentMap)) {
+        console.error(`No ${componentName} in dialogs map!`);
         return null;
     }
 
-    const Component = componentMap[componentKey];
+    const Component = componentMap[componentName];
 
     return <StyledDialogs id={"dialogWrapper"} onKeyDown={handleKeyDown} onMouseDown={onClick}>
         <StyledDialog>
-            <StyledDialogTitleSection>
-                <Text theme={titleTextTheme} text={componentProps.title}/>
-            </StyledDialogTitleSection>
-            {renderDescription()}
-            <Component {...componentProps} />
+            <StyledDialogTopSection>
+                <StyledDialogCloseButton onClick={handleCancel}/>
+                <StyledDialogTitleSection>
+                    <Text theme={titleTextTheme} text={componentProps.dialog.title}/>
+                </StyledDialogTitleSection>
+                {renderDescription()}
+            </StyledDialogTopSection>
+            <StyledDialogBottomSection>
+                <Component {...componentProps} />
+            </StyledDialogBottomSection>
         </StyledDialog>
     </StyledDialogs>;
 };

@@ -35,33 +35,3 @@ export const StyledLoginPage = styled(motion.div)`
     flex-direction: column;
   }
 `;
-
-export const AnimatedText = styled(motion.div)``;
-
-export const StyledTitles = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  width: 600px;
-  max-width: 100%;
-  z-index: 1;
-  padding: 20px;
-  box-sizing: border-box;
-`;
-
-export const titleTheme = {
-    fontSize: "clamp(16px, 1.5rem, 100px)",
-    textColor: "#D0D0D0",
-    disabledTextColor: "rgba(255,255,255,0.20)",
-    fontWeight: 800,
-    textAlign: "center"
-};
-
-export const descriptionTheme = {
-    fontSize: "clamp(15px, 1.2rem, 100px)",
-    textColor: "#ffffff",
-    disabledTextColor: "rgba(255,255,255,0.20)",
-    fontWeight: 600,
-    textAlign: "center"
-};

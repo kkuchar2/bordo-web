@@ -1,124 +1,111 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 
-import {selectorRegistration, tryRegister} from "appRedux/reducers/api/account";
+import {getRegistrationState, resetUserSliceRequestState} from 'appRedux/reducers/api/user/userSlice';
+import {register} from "appRedux/services/userService";
 import {useAppDispatch} from "appRedux/store";
-import {RequestStatus} from "axios-client-wrapper";
-import EmailSentDialog from "components/Dialogs/EmailSentDialog/EmailSentDialog";
 import {showRegistrationCompleteDialog} from "components/Dialogs/readyDialogs";
-import {ErroredInput} from 'components/ErroredInput/ErroredInput';
-import {defaultShowUpAnimation} from "components/Forms/animation";
+import {FormErrors} from "components/Errors/FormErrors/FormErrors";
 import {
     buttonTheme,
-    formFieldTheme,
-    formTitleTheme, questionTextTheme,
-    spinnerTheme, StyledButtonGroup, StyledForm, StyledLink, StyledQuestionWithLinkTheme
+    formTitleTheme,
+    questionTextTheme,
+    spinnerTheme,
+    StyledButtonGroup,
+    StyledCenteredSection,
+    StyledForm,
+    StyledLink,
+    StyledQuestionWithLinkTheme
 } from "components/Forms/commonStyles";
-import {FormErrors} from "components/Forms/FormErrors/FormErrors";
+import {InputWithError} from 'components/InputWithError/InputWithError';
 import {EnsureAuthorized} from "hoc/EnsureAuthorized";
 import {Button, Spinner, Text} from "kuchkr-react-component-library";
 import {useTranslation} from "react-i18next";
 import {useSelector} from "react-redux";
 import {useNavigate} from "react-router-dom";
 
-import {AnimatedText, StyledTitles, titleTheme} from "../LoginPage/style";
+import {isSuccess, isWaiting} from "../../api/api_util";
+import {FORM_CONFIG, getConfig} from "../../api/formConfig";
 
 import {StyledRegistrationPage} from "./style";
 
 const RegistrationPage = () => {
 
-    const {t} = useTranslation();
+    const { t } = useTranslation();
 
-    let navigate = useNavigate();
-
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-
+    const navigate = useNavigate();
     const dispatch = useAppDispatch();
 
-    const registrationState = useSelector(selectorRegistration);
-    const isRegistrationContext = registrationState.path === 'account/register';
-    const isRequestPending = registrationState.requestState.pending;
-    const errors = registrationState.errors;
+    const [email, setEmail] = useState('');
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
 
-    const onEmailChange = useCallback(setEmail, []);
+    const registrationState = useSelector(getRegistrationState);
+    const isRequestPending = useMemo(() => isWaiting(registrationState), [registrationState]);
+    const errors = registrationState.info.errors;
 
-    const onPasswordChange = useCallback(setPassword, []);
-
-    const renderEmailSentPopup = useCallback(() => {
-        return <EmailSentDialog
-            resetFunc={() => {
-            }}
-            title={"Registration successful!"}
-            message={"We've sent you a link to confirm your email address. Please check your inbox."}/>;
-    }, []);
-
-    const registerNewUser = (e: any) => {
-        e.preventDefault();
-        dispatch(tryRegister(email, password));
-    };
+    const cfg = useMemo(() => getConfig(FORM_CONFIG, 'registration', t), [t]);
 
     useEffect(() => {
-        const path = registrationState.path;
-        const isRegistrationContext = path === 'account/register';
-        const isSuccess = registrationState.requestState.status === RequestStatus.Success;
+        return () => {
+            dispatch(resetUserSliceRequestState('registration'));
+        };
+    }, []);
 
-        if (isRegistrationContext && isSuccess) {
-            showRegistrationCompleteDialog(dispatch, navigate, t);
+    useEffect(() => {
+        if (isSuccess(registrationState)) {
+            showRegistrationCompleteDialog({ dispatch, translation: t, navigate });
         }
-
     }, [registrationState, t]);
 
+    const registerNewUser = useCallback((e: any) => {
+        e.preventDefault();
+        dispatch(register(email, username, password));
+    }, [email, username, password]);
+
     const renderSignUpButton = useCallback(() => {
-        if (isRegistrationContext && isRequestPending) {
+        if (isRequestPending) {
             return <Spinner theme={spinnerTheme} text={t("SIGNING_UP_PROGRESS")}/>;
         }
         return <Button type={'submit'} text={t('SIGN_UP')} theme={buttonTheme}/>;
     }, [registrationState]);
 
-    const disabled = isRegistrationContext && isRequestPending;
-
     return <StyledRegistrationPage>
-        <StyledTitles>
-            <AnimatedText {...defaultShowUpAnimation}>
-                <Text theme={titleTheme} text={t("PAGE_TITLE")}/>
-            </AnimatedText>
-        </StyledTitles>
+        <StyledCenteredSection>
+            <StyledForm onSubmit={registerNewUser}>
+                <Text theme={formTitleTheme} text={t('REGISTRATION')}/>
 
-        <StyledForm onSubmit={registerNewUser}>
-            <Text theme={formTitleTheme} text={t('REGISTRATION')}/>
+                <InputWithError
+                    value={email}
+                    onChange={e => setEmail(e.target.value)}
+                    errors={errors}
+                    disabled={isRequestPending}
+                    {...cfg['email']}/>
 
-            <ErroredInput
-                theme={formFieldTheme(disabled)}
-                id={'email'}
-                type={'email'}
-                title={'E-mail:'}
-                placeholder={t('ENTER_EMAIL_INPUT_PLACEHOLDER')}
-                onChange={onEmailChange}
-                errors={errors}
-                disabled={disabled}
-                required={true}
-                autoComplete={"on"}/>
+                <InputWithError
+                    value={username}
+                    onChange={e => setUsername(e.target.value)}
+                    errors={errors}
+                    disabled={isRequestPending}
+                    {...cfg['username']}/>
 
-            <ErroredInput
-                theme={formFieldTheme(disabled)}
-                id={'password'}
-                type={'password'}
-                title={t('INPUT_PASSWORD_TITLE')}
-                placeholder={t('ENTER_PASSWORD_INPUT_PLACEHOLDER')}
-                onChange={onPasswordChange}
-                errors={errors}
-                disabled={disabled}
-                required={true}/>
+                <InputWithError
+                    value={password}
+                    onChange={e => setPassword(e.target.value)}
+                    errors={errors}
+                    disabled={isRequestPending}
+                    {...cfg['password']}/>
 
-            <FormErrors errors={errors} translation={t}/>
+                <FormErrors errors={errors} translation={t}/>
 
-            <StyledButtonGroup>{renderSignUpButton()}</StyledButtonGroup>
+                <StyledButtonGroup>{renderSignUpButton()}</StyledButtonGroup>
 
-            <StyledQuestionWithLinkTheme>
-                <Text theme={questionTextTheme} disabled={disabled} text={t('ALREADY_HAVE_ACCOUNT')}/>
-                <StyledLink disabled={disabled} style={{marginLeft: 10}} to={'/'}>{t('SIGN_IN')}</StyledLink>
-            </StyledQuestionWithLinkTheme>
-        </StyledForm>
+                <StyledQuestionWithLinkTheme>
+                    <Text theme={questionTextTheme} disabled={isRequestPending} text={t('ALREADY_HAVE_ACCOUNT')}/>
+                    <StyledLink disabled={isRequestPending} style={{ marginLeft: 10 }}
+                                to={'/'}>{t('SIGN_IN')}</StyledLink>
+                </StyledQuestionWithLinkTheme>
+            </StyledForm>
+        </StyledCenteredSection>
     </StyledRegistrationPage>;
 };
 

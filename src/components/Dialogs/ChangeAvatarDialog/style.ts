@@ -14,42 +14,6 @@ export const titleTextTheme = {
     textAlign: "left"
 };
 
-export const uploadButtonTheme = {
-    width: "100%",
-    height: "100%",
-    background: "#414141",
-    disabledBackground: "rgba(47,47,47,0.43)",
-    hoverBackground: "#2f2f2f",
-    border: "none",
-    borderRadius: "3px",
-    margin: "0px 0px 0px 0px",
-};
-
-export const StyledUploadButtonCircle = styled.div`
-  width: 130px;
-  height: 130px;
-  background: #677767;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-
-export const StyledUploadButtonContent = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-`;
-
-export const uploadFileTextTheme = {
-    textColor: "#A9A9A9",
-    fontSize: "1em",
-    fontWeight: 600,
-    textAlign: "left",
-    margin: "15px 0px 0px 0px"
-};
-
 export const SliderWithIcons = styled.div`
   width: 100%;
   display: flex;
@@ -66,9 +30,22 @@ export interface CropContainerProps {
 
 export const CropContainer = styled.div<CropContainerProps>`
   position: relative;
-  height: ${props => props.imageSelected ? "300px" : "200px"};
-  width: ${props => props.imageSelected ? "400px" : "200px"};
+  height: ${props => props.imageSelected ? "400px" : "200px"};
+  width: ${props => props.imageSelected ? "500px" : "200px"};
   box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+`;
+
+export const StyledImage = styled.img`
+  position: relative;
+  height: 500px;
+  width: 500px;
+  box-sizing: border-box;
+  object-fit: contain;
+  border-radius: 100%;
 `;
 
 export const sliderTheme = {

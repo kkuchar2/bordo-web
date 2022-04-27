@@ -1,11 +1,11 @@
 import React, {useCallback, useState} from "react";
 
-import {tryAddItemToTable} from "appRedux/reducers/api/crud";
 import {closeDialog} from "appRedux/reducers/application";
+import {addRow} from "appRedux/services/modelService";
 import {useAppDispatch} from "appRedux/store";
 import {ConfirmationCancelSection} from "components/Dialogs/ConfirmationCancelSection";
 import {FieldRow} from "components/Dialogs/ConfirmationDialog/FieldRow/FieldRow";
-import {BaseDialogProps} from "components/Dialogs/types";
+import {DialogProps} from "components/Dialogs/types";
 import {getColumnProperties} from "components/Models/columnProperties";
 import {Text} from "kuchkr-react-component-library";
 import {useTranslation} from "react-i18next";
@@ -21,17 +21,17 @@ import {
     titleModelValueTextTheme
 } from "./style";
 
-export interface CreateNewModelItemDialogProps extends BaseDialogProps {
+export interface CreateNewModelItemDialogData {
     modelPackage: string,
     modelName: string,
-    fields: any // TODO
+    fields: any
 }
 
-const CreateNewModelItemDialog = (props: CreateNewModelItemDialogProps): JSX.Element => {
+const CreateNewModelItemDialog = (props: DialogProps<CreateNewModelItemDialogData>): JSX.Element => {
 
     const {t} = useTranslation();
 
-    const {modelPackage, modelName, fields} = props;
+    const {modelPackage, modelName, fields} = props.data;
 
     const [formData, setFormData] = useState({});
 
@@ -79,7 +79,7 @@ const CreateNewModelItemDialog = (props: CreateNewModelItemDialogProps): JSX.Ele
 
     const onConfirm = useCallback(() => {
         // TODO: do not close immediately, only if the form is valid and item was added to DB\
-        dispatch(tryAddItemToTable({modelPackage: modelPackage, model: modelName, itemData: formData}));
+        dispatch(addRow({modelPackage: modelPackage, model: modelName, itemData: formData}));
         dispatch(closeDialog());
     }, [formData, modelName, modelPackage]);
 
@@ -95,7 +95,7 @@ const CreateNewModelItemDialog = (props: CreateNewModelItemDialogProps): JSX.Ele
             {renderFields()}
         </StyledDialogContentSection>
 
-        <ConfirmationCancelSection onCancel={onCancel} onConfirm={onConfirm} translation={t} confirmDisabled={false}/>
+        <ConfirmationCancelSection onCancel={onCancel} onConfirm={onConfirm} translation={t} confirmDisabled={false} waiting={false}/>
     </StyledCreateNewModelItemDialog>;
 };
 

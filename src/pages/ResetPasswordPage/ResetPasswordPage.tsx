@@ -1,89 +1,97 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 
-import {selectorResetPassword, trySendResetPassword} from "appRedux/reducers/api/account";
+import {getResetPasswordState, resetUserSliceRequestState} from 'appRedux/reducers/api/user/userSlice';
+import {resetPassword} from "appRedux/services/userService";
+import {useAppDispatch} from "appRedux/store";
 import {descriptionTextTheme, titleTextTheme} from "components/Dialogs/commonStyles";
-import {ErroredInput} from "components/ErroredInput/ErroredInput";
+import {FormErrors} from "components/Errors/FormErrors/FormErrors";
 import {buttonTheme, spinnerTheme, StyledButtonGroup, StyledForm} from "components/Forms/commonStyles";
-import {FormErrors} from "components/Forms/FormErrors/FormErrors";
+import {InputWithError} from "components/InputWithError/InputWithError";
 import {Button, Spinner, Text} from "kuchkr-react-component-library";
 import {useTranslation} from "react-i18next";
-import {useDispatch, useSelector} from "react-redux";
-import {RouteComponentProps} from "react-router-dom";
+import { useSelector} from "react-redux";
+import { useParams} from "react-router-dom";
+
+import {isWaiting} from "../../api/api_util";
 
 import {StyledResetPasswordPage} from "./style";
 
-interface MatchParams {
-    token: string;
-}
-
-const ResetPasswordPage = (props: RouteComponentProps<MatchParams>) => {
+const ResetPasswordPage = () => {
 
     const {t} = useTranslation();
 
-    const token = props.match.params.token;
+    const params = useParams();
 
-    const [oldPassword, setOldPassword] = useState('');
-    const [newPassword1, setNewPassword1] = useState('');
-    const [newPassword2, setNewPassword2] = useState('');
+    const [password, setPassword] = useState(null);
+    const [confirmPassword, setConfirmPassword] = useState('');
 
     const [disabled, setDisabled] = useState(false);
 
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
 
-    const resetPasswordState = useSelector(selectorResetPassword);
-    const errors = resetPasswordState.errors;
+    const resetPasswordState = useSelector(getResetPasswordState);
 
-    const onOldPasswordChange = useCallback(setOldPassword, []);
+    const errors = resetPasswordState.info.errors;
 
-    const onNewPassword1Change = useCallback(setNewPassword1, []);
+    const onPasswordChange = useCallback((e)=> {
+        setPassword(e.target.value);
+    }, []);
 
-    const onNewPassword2Change = useCallback(setNewPassword2, []);
+    const onPasswordConfirmChange = useCallback((e) => {
+        setConfirmPassword(e.target.value);
+    }, []);
 
     const attemptResetPassword = useCallback(e => {
         e.preventDefault();
-        const tokenArr = token.split(':');
+        const tokenArr = params.token.split(':');
         const uid = tokenArr[0];
         const tk = tokenArr[1];
-        dispatch(trySendResetPassword(newPassword1, newPassword2, uid, tk));
+        dispatch(resetPassword(password, confirmPassword, uid, tk));
         setDisabled(true);
-    }, [token, oldPassword, newPassword1, newPassword2]);
+    }, [params, password, confirmPassword]);
 
-    useEffect(() => setDisabled(resetPasswordState.requestPending), [resetPasswordState]);
+    useEffect(() => {
+        return () => {
+            dispatch(resetUserSliceRequestState('resetPassword'));
+        };
+    }, []);
 
-    const renderButton = useCallback(() => {
-        if (!resetPasswordState.requestPending) {
-            return <Button text={"Change password"} theme={buttonTheme}/>;
-        } else {
+    useEffect(() => setDisabled(isWaiting(resetPasswordState)), [resetPasswordState]);
+
+    const renderButton = useMemo(() => {
+        if (isWaiting(resetPasswordState)) {
             return <Spinner theme={spinnerTheme} text={''}/>;
+        } else {
+            return <Button text={"Change password"} theme={buttonTheme}/>;
         }
     }, [resetPasswordState]);
 
-    return <StyledResetPasswordPage>s
+    return <StyledResetPasswordPage>
         <StyledForm onSubmit={attemptResetPassword}>
-            <Text theme={titleTextTheme} text={"Password reset"}/>
+            <Text theme={titleTextTheme} text={"Set up new password"}/>
             <Text theme={descriptionTextTheme} text={"Choose your new password"}/>
 
-            <ErroredInput
+            <InputWithError
                 id={'new_password1'}
                 title={"Password"}
                 type={'password'}
                 placeholder={"New password"}
-                onChange={onNewPassword1Change}
+                onChange={onPasswordChange}
                 errors={errors}
                 disabled={disabled}/>
 
-            <ErroredInput
+            <InputWithError
                 id={'new_password2'}
                 title={"Confirm password"}
                 type={'password'}
                 placeholder={"Confirm new password"}
-                onChange={onNewPassword2Change}
+                onChange={onPasswordConfirmChange}
                 errors={errors}
                 disabled={disabled}/>
 
             <FormErrors errors={errors} translation={t}/>
 
-            <StyledButtonGroup>{renderButton()}</StyledButtonGroup>
+            <StyledButtonGroup>{renderButton}</StyledButtonGroup>
         </StyledForm>
     </StyledResetPasswordPage>;
 };

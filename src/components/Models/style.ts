@@ -1,5 +1,5 @@
-import AddIcon from '@material-ui/icons/Add';
-import ImportExportIcon from '@material-ui/icons/ImportExport';
+import AddIcon from '@mui/icons-material/Add';
+import ImportExportIcon from '@mui/icons-material/ImportExport';
 import {motion} from "framer-motion";
 import styled from "styled-components";
 

@@ -53,6 +53,7 @@ module.exports = {
         alias: {
             images: resolvePath('assets/images/'),
             pages: resolvePath('src/pages/'),
+            tools: resolvePath('src/tools/'),
             configs: resolvePath('configs/'),
             appRedux: resolvePath('src/redux/'),
             components: resolvePath('src/components/'),
@@ -69,7 +70,7 @@ module.exports = {
         new HtmlWebPackPlugin({template: resolvePath("src/index.html")}),
         new MomentLocalesPlugin({localesToKeep: ['es-us', 'pl']}),
         new CompressionPlugin({algorithm: 'gzip', test: /\.js$/}),
-        new webpack.ProvidePlugin({ process: 'process/browser'}),
+        new webpack.ProvidePlugin({process: 'process/browser'}),
         new CopyPlugin({
             patterns: [
                 {from: resolvePath('assets/images'), to: resolvePath('dist/assets/images')},
@@ -113,7 +114,13 @@ module.exports = {
                     {loader: "css-loader"},
                     {loader: "sass-loader"}
                 ]
-            }
+            },
+            {
+                test: /\.m?js/,
+                resolve: {
+                    fullySpecified: false
+                }
+            },
         ]
     }
     //stats: "verbose"

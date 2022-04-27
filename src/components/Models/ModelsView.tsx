@@ -1,79 +1,25 @@
-import React, {ReactNode, useCallback, useEffect} from "react";
+import React, {useCallback, useEffect} from "react";
 
-import {useMediaQuery} from "@material-ui/core";
+import { useMediaQuery } from "@mui/material";
 import {
-    getAllModelData,
-    getMultiRowModelData,
-    selectorAddItemToTable,
-    selectorModelData,
-    selectorModelList,
-    tryGetListOfModels
-} from "appRedux/reducers/api/crud";
-import {
-    changeCurrentViewedModel,
-    selectorCurrentViewedModel
-} from "appRedux/reducers/application";
+    getAddRowRequestState,
+    getModelDataRequestState,
+    getModelsData,
+    getModelTypes,
+    getModelTypesRequestState
+} from "appRedux/reducers/api/crud/modelSlice";
+import {ModelType} from "appRedux/reducers/api/crud/modelSlice.types";
+import {changeCurrentViewedModel, openDialog, selectorCurrentViewedModel} from "appRedux/reducers/application";
+import {getAllModelData, getMultiRowModelData, listModels} from "appRedux/services/modelService";
 import {useAppDispatch} from "appRedux/store";
-import {showCreateModelItemDialog} from "components/Dialogs/readyDialogs";
-import {spinnerTheme} from "components/Forms/commonStyles";
 import Table from "components/Models/Table/Table";
-import {Button, Select, Spinner, Text} from "kuchkr-react-component-library";
-import {useTranslation} from "react-i18next";
+import {Button, Spinner, Text, Select} from "kuchkr-react-component-library";
 import {useSelector} from "react-redux";
-import OptionsType from "react-select";
-import StateManagedSelect from "react-select";
-import styled from "styled-components";
+import {RequestStatus} from "tools/client/client.types";
 
-import {withRequestComplete} from "../../api/util";
+import {isSuccess, isWaiting} from "../../api/api_util";
 
-import {
-    addItemButtonTheme,
-    addRowTextTheme,
-    modelSelectorTheme,
-    StyledModelsView,
-    StyledPlusIcon,
-    StyledToolbar
-} from "./style";
-
-const StyledOption = styled.div`
-  display: flex;
-  flex-direction: row;
-`;
-
-const StyledOptionValue = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin-left: 10px;
-`;
-
-const StyledOptionIcon = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  font-size: 20px;
-`;
-
-const StyledLabel = styled.div`
-  font-size: 1.1em;
-`;
-
-const StyledValue = styled.div`
-  font-size: 0.9em;
-`;
-
-const customOptionRenderer = (option: StateManagedSelect): ReactNode => {
-
-    return <StyledOption>
-        <StyledOptionIcon>
-            📚
-        </StyledOptionIcon>
-        <StyledOptionValue>
-            <StyledLabel>{option.model}</StyledLabel>
-            <StyledValue>{option.package}</StyledValue>
-        </StyledOptionValue>
-    </StyledOption>;
-};
+import {addItemButtonTheme, addRowTextTheme, modelSelectorTheme, StyledModelsView, StyledPlusIcon, StyledToolbar, } from "./style";
 
 const ModelsView = () => {
 
@@ -82,102 +28,123 @@ const ModelsView = () => {
     const currentModelPackage = currentModel.package;
     const currentModelFullName = currentModel.fullModelName;
 
-    const modelListSelector = useSelector(selectorModelList);
-    const modelDataSelector = useSelector(selectorModelData);
-    const addItemToTableSelector = useSelector(selectorAddItemToTable);
-
     const dispatch = useAppDispatch();
 
-    const {t} = useTranslation();
+    const modelListRequestState = useSelector(getModelTypesRequestState);
+    const modelDataRequestState = useSelector(getModelDataRequestState);
+    const addRowRequestState = useSelector(getAddRowRequestState);
 
-    const modelData = modelDataSelector.modelsData;
+    const modelTypes = useSelector(getModelTypes);
+    const modelsData = useSelector(getModelsData);
+    const addItemToTableSelector = useSelector(getAddRowRequestState);
 
-    const tableData = !currentModelFullName ? null : modelData[currentModelFullName];
+    const tableData = !currentModelFullName ? null : modelsData[currentModelFullName];
     const fields = tableData ? tableData.headers : null;
     const rows = tableData ? tableData.rows : null;
 
     const isMobile = useMediaQuery('(max-width: 1200px)');
 
     useEffect(() => {
-        dispatch(tryGetListOfModels());
+        dispatch(listModels());
     }, []);
 
     useEffect(() => {
         if (!currentModelPackage || !currentModelName) {
             return;
         }
+        console.log('Changed to: ', currentModelPackage, currentModelName);
         dispatch(getAllModelData(currentModelPackage, currentModelName));
     }, [currentModelName, currentModelPackage]);
 
-    withRequestComplete(modelDataSelector, 'updateModel', () => {
-        const ids = modelDataSelector.updateInfo['updated_ids'];
-        dispatch(getMultiRowModelData(currentModelPackage, currentModelName, ids));
-    });
+    useEffect(() => {
+        if (modelTypes.length === 0) {
+            return;
+        }
 
-    withRequestComplete(addItemToTableSelector, 'addItem', () => {
-        dispatch(getAllModelData(currentModelPackage, currentModelName));
-    });
+        if (!currentModelPackage || !currentModelName) {
+            const firstModel = modelTypes[0];
+            dispatch(changeCurrentViewedModel(firstModel.model, firstModel.package));
+        }
+    }, [modelTypes]);
+
+    useEffect(() => {
+        if (isSuccess(modelDataRequestState)) {
+
+            if (modelsData.updateInfo) {
+                const ids = modelsData.updateInfo['updated_ids'];
+                dispatch(getMultiRowModelData(currentModelPackage, currentModelName, ids));
+            }
+        }
+    }, [modelsData, modelDataRequestState]);
+
+    useEffect(() => {
+        if (addRowRequestState.info.status === RequestStatus.Success) {
+            dispatch(getAllModelData(currentModelPackage, currentModelName));
+        }
+    }, [addRowRequestState]);
 
     const onSelected = useCallback((selectedOption) => {
         if (!selectedOption) {
             return;
         }
 
-        const value = selectedOption.value;
+        const value = modelTypes[selectedOption.value];
 
         if (!value) {
             return;
         }
         dispatch(changeCurrentViewedModel(value.model, value.package));
-    }, []);
+    }, [modelTypes]);
 
     const renderTable = useCallback(() => {
         return <Table fields={fields} model={currentModelName} modelPackage={currentModelPackage} rows={rows}/>;
     }, [fields, currentModelName, currentModelPackage, rows]);
 
     const onAddNewItemClick = useCallback(() => {
-        showCreateModelItemDialog(dispatch, t, fields, currentModelPackage, currentModelName);
+        dispatch(openDialog({
+            component: "CreateNewModelItemDialog",
+            props: {
+                fields: fields,
+                modelPackage: currentModelPackage,
+                modelName: currentModelName
+            }
+        }));
     }, [fields, currentModelName]);
 
-    // TODO: please refactor this my god
-    let modelListResponse = modelListSelector.responseData ? modelListSelector.responseData : null;
-    let modelList = modelListResponse ? modelListResponse.data : [];
-    modelList = modelList ? modelList : [];
-
-    const modelListForSelect: OptionsType = Object.keys(modelList).length === 0 ? [] : modelList.map((x: any) => {
-        return {value: x, label: x};
-    });
+    // const modelListForSelect: OptionsType<any> = Object.keys(modelList).length === 0 ? [] : modelList.map((x: any) => {
+    //     return {value: x, label: x.model};
+    // });
 
     const renderToolbar = useCallback(() => {
-        const path = modelListSelector.path;
-        const isCtx = path === 'listModels';
-        const isPending = modelListSelector.requestState.pending;
+        const pending = isWaiting(modelListRequestState);
 
-        if (isCtx && isPending) {
-            return <div style={{marginTop: 100}}>
-                <Spinner theme={spinnerTheme} text={undefined}/>
+        if (pending) {
+            return <div style={{ marginTop: 100 }}>
+                <Spinner text={undefined}/>
             </div>;
         }
+
+        const options = modelTypes.map((v: ModelType, idx: number) => {
+            return {value: idx, label: `${v.package}.${v.model}`};
+        });
 
         return <StyledToolbar>
             <Select
                 theme={modelSelectorTheme(isMobile)}
-                options={modelListForSelect}
+                options={options}
+                defaultValue={options[0]}
                 placeholder={'Select table'}
                 disabled={false}
-                menuPortalTarget={document.body}
-                customOptionRenderer={customOptionRenderer}
-                maxMenuHeight={230}
                 isSearchable={false}
                 onChange={onSelected}
                 triggerOnDefault={true}
             />
             <Button theme={addItemButtonTheme} onClick={onAddNewItemClick}>
                 <StyledPlusIcon/>
-                <Text theme={addRowTextTheme} text={t('ADD_NEW_ROW')}/>
+                <Text theme={addRowTextTheme} text={'Add new object'}/>
             </Button>
         </StyledToolbar>;
-    }, [modelListSelector, currentModelName, modelData, isMobile]);
+    }, [modelListRequestState, currentModelName, modelsData, isMobile]);
 
     return <StyledModelsView>
         {renderToolbar()}

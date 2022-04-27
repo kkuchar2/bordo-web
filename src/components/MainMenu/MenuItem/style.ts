@@ -31,9 +31,9 @@ export const StyledMenuItem = styled.div<StyledMenuItemProps>`
   align-items: center;
   justify-content: flex-start;
   box-sizing: border-box;
-  width: 100%;
   height: 50px;
   padding-left: 10px;
+  width: 220px;
   
   &:hover {
     cursor: pointer;

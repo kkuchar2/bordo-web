@@ -8,6 +8,7 @@ const LoginPage = lazy(() => import (/* webpackChunkName: "auth-chunk" */ "pages
 const ForgotPasswordPage = lazy(() => import (/* webpackChunkName: "auth-chunk" */ "pages/ForgotPasswordPage/ForgotPasswordPage"));
 const ResetPasswordPage = lazy(() => import (/* webpackChunkName: "auth-chunk" */ "pages/ResetPasswordPage/ResetPasswordPage"));
 const HomePage = lazy(() => import (/* webpackChunkName: "home" */ "pages/HomePage/HomePage"));
+const TestPage = lazy(() => import (/* webpackChunkName: "test" */ "pages/TestPage/TestPage"));
 const NotFound = lazy(() => import (/* webpackChunkName: "not-found" */ "pages/NotFoundPage/NotFoundPage"));
 
 export const routes = [
@@ -47,6 +48,14 @@ export const routes = [
     {
         path: "/home",
         element: <HomePage />,
+        exact: false,
+        enabled: true,
+        authRequired: true,
+        hiddenForAuthenticated: false
+    },
+    {
+        path: "/test",
+        element: <TestPage />,
         exact: false,
         enabled: true,
         authRequired: true,

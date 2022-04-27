@@ -85,12 +85,19 @@ export const generateDownload = async (imageSrc, crop) => {
 };
 
 export const generateCroppedImageFile = async (imageSrc, crop, resolve) => {
+
     if (!crop || !imageSrc) {
+
+        console.log("Crop: ", crop);
         return;
     }
+
+    console.log("B");
     const canvas = await getCroppedImg(imageSrc, crop);
 
+    console.log("A");
     canvas.toBlob(function (blob) {
+        console.log("resolve", blob);
         resolve(blob);
     }, 'image/png', 1);
 };

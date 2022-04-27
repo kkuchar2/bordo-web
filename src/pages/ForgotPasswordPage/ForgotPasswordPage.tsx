@@ -1,57 +1,58 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 
-import {
-    selectorForgotPassword,
-    tryResetForgotPasswordState,
-    trySendForgotPassword
-} from "appRedux/reducers/api/account";
+import {getForgotPasswordState, resetUserSliceRequestState} from "appRedux/reducers/api/user/userSlice";
+import {forgotPassword} from "appRedux/services/userService";
 import {useAppDispatch} from "appRedux/store";
-import {RequestStatus} from "axios-client-wrapper";
 import {descriptionTextTheme} from "components/Dialogs/commonStyles";
 import {showSentResetPasswordMailDialog} from "components/Dialogs/readyDialogs";
-import {ErroredInput} from 'components/ErroredInput/ErroredInput';
+import {FormErrors} from "components/Errors/FormErrors/FormErrors";
 import * as style from "components/Forms/commonStyles";
-import {FormErrors} from "components/Forms/FormErrors/FormErrors";
+import {formTitleTheme, StyledForm, StyledQuestionWithLinkTheme} from 'components/Forms/commonStyles';
+import {InputWithError} from 'components/InputWithError/InputWithError';
 import {Button, Spinner, Text} from "kuchkr-react-component-library";
 import {useTranslation} from "react-i18next";
 import {useSelector} from "react-redux";
 import {useNavigate} from "react-router-dom";
+import {RequestStatus} from "tools/client/client.types";
+
+import {isSuccess, isWaiting} from "../../api/api_util";
+import {getConfig, FORM_CONFIG} from "../../api/formConfig";
 
 import {StyledForgotPasswordPage} from "./style";
 
 const ForgotPasswordPage = () => {
 
-    const {t} = useTranslation();
+    const { t } = useTranslation();
 
     let navigate = useNavigate();
 
     const [email, setEmail] = useState('');
-    const [disabled, setDisabled] = useState(false);
-    const [initialized, setInitialized] = useState(false);
 
-    const forgotPasswordState = useSelector(selectorForgotPassword);
-    const errors = forgotPasswordState.errors;
+    const forgotPasswordState = useSelector(getForgotPasswordState);
+    const errors = forgotPasswordState.info.errors;
+
+    const cfg = useMemo(() => getConfig(FORM_CONFIG, 'forgotPassword', t), [t]);
 
     const dispatch = useAppDispatch();
 
-    const onEmailChange = useCallback(v => setEmail(v), []);
+    const isRequestPending = useMemo(() => isWaiting(forgotPasswordState), [forgotPasswordState]);
 
-    console.log(forgotPasswordState);
-
-    useEffect(() => setDisabled(forgotPasswordState.requestState.pending), [forgotPasswordState]);
+    useEffect(() => {
+        return () => {
+            dispatch(resetUserSliceRequestState('forgotPassword'));
+        };
+    }, []);
 
     const sendResetPasswordRequest = useCallback(e => {
         e.preventDefault();
-        dispatch(trySendForgotPassword({email}));
+        dispatch(forgotPassword(email));
     }, [email]);
 
     const renderButton = useCallback(() => {
-        const path = forgotPasswordState.path;
-        const isForgotPasswordContext = path === 'account/forgotPassword';
-        const isRequestPending = forgotPasswordState.requestState.pending;
+        const isRequestPending = forgotPasswordState.info.status === RequestStatus.Waiting;
 
-        if (isForgotPasswordContext && isRequestPending) {
-            return <div style={{marginTop: 30}}>
+        if (isRequestPending) {
+            return <div style={{ marginTop: 30 }}>
                 <Spinner theme={style.spinnerTheme} text={t("SENDING_PASSWORD_RESET_REQUEST")}/>
             </div>;
         }
@@ -60,51 +61,33 @@ const ForgotPasswordPage = () => {
     }, [email, forgotPasswordState]);
 
     useEffect(() => {
-        console.log('RESSETING STATE');
-        dispatch(tryResetForgotPasswordState());
-        setInitialized(true);
-    }, []);
-
-    useEffect(() => {
-        if (!initialized) {
-            return;
+        if (isSuccess(forgotPasswordState)) {
+            showSentResetPasswordMailDialog({ dispatch, translation: t, navigate });
         }
 
-        const path = forgotPasswordState.path;
-        const isCtx = path === 'account/forgotPassword';
-        const isSuccess = forgotPasswordState.requestState.status === RequestStatus.Success;
-
-        if (isCtx && isSuccess) {
-            showSentResetPasswordMailDialog(dispatch, navigate, t);
-        }
-
-    }, [forgotPasswordState, initialized, t]);
+    }, [forgotPasswordState, t]);
 
     return <StyledForgotPasswordPage>
-        <style.StyledForm onSubmit={sendResetPasswordRequest}>
-            <Text theme={style.formTitleTheme} text={t('FORGOT_PASSWORD_FORM_TITLE')}/>
+        <StyledForm onSubmit={sendResetPasswordRequest}>
+            <Text theme={formTitleTheme} text={t('FORGOT_PASSWORD_FORM_TITLE')}/>
             <Text theme={descriptionTextTheme} text={t('FORGOT_PASSWORD_INSTRUCTION')}/>
 
-            <ErroredInput
-                theme={style.formFieldTheme(disabled)}
-                id={'email'}
-                type={'email'}
-                title={'E-mail:'}
-                placeholder={t('ENTER_EMAIL_INPUT_PLACEHOLDER')}
-                onChange={onEmailChange}
+            <InputWithError
+                value={email}
+                onChange={e => setEmail(e.target.value)}
                 errors={errors}
-                autoComplete={'on'}
-                disabled={disabled}/>
+                disabled={isRequestPending}
+                {...cfg['email']}/>
 
             <FormErrors errors={errors} translation={t}/>
 
             {renderButton()}
 
-            <style.StyledQuestionWithLinkTheme>
+            <StyledQuestionWithLinkTheme>
                 <Text theme={style.questionTextTheme} text={t('PASSWORD_JUST_REMEMBERED')}/>
                 <style.StyledLink to={'/'}>{t('SIGN_IN')}</style.StyledLink>
-            </style.StyledQuestionWithLinkTheme>
-        </style.StyledForm>
+            </StyledQuestionWithLinkTheme>
+        </StyledForm>
     </StyledForgotPasswordPage>;
 };
 

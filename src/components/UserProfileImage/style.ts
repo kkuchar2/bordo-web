@@ -1,4 +1,3 @@
-import EditIcon from '@material-ui/icons/Edit';
 import styled from "styled-components";
 
 export interface StyledProfilePictureProps {
@@ -29,45 +28,9 @@ export const spinnerTheme = {
     }
 };
 
-export const StyledUploadFileButton = styled(EditIcon)`
-  background: rgb(73, 119, 200);
-  color: white;
-  position: absolute;
-  top: -5px;
-  right: -10px;
-  border-radius: 50%;
-  padding: 2px;
-  border: 4px solid #F6F6F6;
-  width: 16px;
-  height: 16px;
-
-  @media (max-width: 600px) {
-    font-size: 0.5em;
-    padding: 7px;
-  }
-
-  &:hover {
-    background: rgb(52, 91, 161);
-    cursor: pointer;
-  }
-`;
-
 export interface StyledUserActiveIndicatorProps {
     active: boolean
 }
-
-export const StyledUserActiveIndicator = styled.div<StyledUserActiveIndicatorProps>`
-  background: ${props => props.active ? "#03A700" : "#cbcbcb"};
-  color: white;
-  position: absolute;
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  border: 4px solid #F6F6F6;
-  bottom: 0;
-  right: 0;
-  font-size: 0.7em;
-`;
 
 export const StyledEditableProfilePictureProperty = styled.div`
   display: flex;

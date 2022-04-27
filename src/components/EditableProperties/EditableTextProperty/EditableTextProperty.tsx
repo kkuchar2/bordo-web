@@ -1,6 +1,6 @@
 import React, {useCallback, useState} from "react";
 
-import {ErroredInput} from "components/ErroredInput/ErroredInput";
+import {InputWithError} from "components/InputWithError/InputWithError";
 import {Button, Text} from "kuchkr-react-component-library";
 import {useTranslation} from "react-i18next";
 
@@ -36,7 +36,7 @@ const EditableTextProperty = (props: EditableTextPropertyProps) => {
 
     const renderProperty = useCallback(() => {
         if (edit) {
-            return <ErroredInput
+            return <InputWithError
                 theme={editInputTheme}
                 style={{width: '100%', marginTop: 0}}
                 id={name}

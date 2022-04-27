@@ -53,8 +53,8 @@ export const StyledBottomSection = styled.div`
 `;
 
 export const viewTitleTextTheme = {
-    textColor: "#A9A9A9",
-    fontSize: "1.1em",
+    textColor: "#ececec",
+    fontSize: "1.2em",
     textAlign: "left",
     fontWeight: 600
 };

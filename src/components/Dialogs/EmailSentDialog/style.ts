@@ -12,7 +12,7 @@ export const StyledEmailSent = styled(motion.div)`
   }
 
   .popup {
-    border-radius: 6px;
+    border-radius: 3px;
     background: #323232;
     display: flex;
     flex-direction: column;

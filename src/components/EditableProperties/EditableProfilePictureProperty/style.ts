@@ -1,3 +1,4 @@
+import Avatar from "react-avatar";
 import styled from "styled-components";
 
 export interface StyledProfilePictureProps {
@@ -5,40 +6,25 @@ export interface StyledProfilePictureProps {
     size: number
 }
 
-export const StyledProfilePicture = styled.div<StyledProfilePictureProps>`
-  background-color: rgba(141, 141, 141, 0.46);
-  background-image: url(${props => props.url});
-  width: ${props => `${props.size}px`};
-  height: ${props => `${props.size}px`};
-  border-radius: 50%;
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center center;
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-
-export const spinnerTheme = {
-    color: "#9f9f9f",
-    disabledColor: "rgba(222,222,222,0.07)",
-
-    text: {
-        textColor: "#505050",
-        disabledTextColor: "rgba(255,255,255,0.20)",
-        fontSize: "0.8em"
-    }
-};
-
 export interface StyledUserActiveIndicatorProps {
     active: boolean
 }
+
+export const changeAvatarTextTheme = {
+    fontSize: "0.875em",
+    textColor: "#fff",
+    disabledTextColor: "rgba(255,255,255,0.20)",
+    textAlign: "center",
+    fontWeight: 600,
+    margin: "0px 10px 0px 10px",
+};
 
 export const StyledUserActiveIndicator = styled.div<StyledUserActiveIndicatorProps>`
   background: ${props => props.active ? "#03A700" : "#7a7a7a"};
   color: white;
   position: absolute;
+  top: 0;
+  left: 0;
   width: 12px;
   height: 12px;
   border-radius: 50%;
@@ -62,16 +48,48 @@ export const StyledEditableProfilePictureProperty = styled.div<EditableProfilePi
 `;
 
 export const StyledOverlay = styled.div`
-  width: 80%;
-  height: 80%;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0);
   display: flex;
   align-items: center;
   justify-content: center;
+  box-sizing: border-box;
 
   &:hover {
     background: rgba(61, 61, 61, 0.77);
+  }
+`;
+
+export const StyledAvatar = styled(Avatar)`
+  img {
+    object-fit: cover;
+  }
+`;
+
+interface StyledAvatarWithOverlayProps {
+    useImageUpload: boolean
+}
+
+export const StyledAvatarWithOverlay = styled.div<StyledAvatarWithOverlayProps>`
+  box-sizing: border-box;
+  position: relative;
+  height: 100%;
+  border-radius: 50%;
+  background: none;
+  
+  ${StyledOverlay} {
+    display: none;
+  }
+
+  &:hover {
+    ${StyledAvatar}, ${StyledOverlay} {
+      background: rgba(28, 28, 28, 0.7);
+      display: flex;
+    }
   }
 `;
 
@@ -79,6 +97,7 @@ export const StyledPropertyValues = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
+  box-sizing: border-box;
 `;
 
 export const PropertyValueSection = styled.div`

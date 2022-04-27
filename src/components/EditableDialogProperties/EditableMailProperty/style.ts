@@ -20,6 +20,23 @@ export const PropertyValueSection = styled.div`
   height: 50px;
 `;
 
+export const ReveablePropertySection = styled.div`
+  display: flex;
+  flex-direction: row;
+`;
+
+export const RevealTextButton = styled.button`
+  background: none;
+  border: none;
+  color: #219e65;
+  font-size: 0.9em;
+
+  &:hover {
+    text-decoration: underline;
+    cursor: pointer;
+  }
+`;
+
 export const PropertyEditSection = styled.div`
   flex: 1 0;
   width: 100%;
@@ -30,31 +47,31 @@ export const PropertyEditSection = styled.div`
 
 export const propertyNameTheme = {
     textColor: "#b9b9b9",
-    fontSize: "1.0em",
-    fontWeight: 700
+    fontSize: "0.8em",
+    fontWeight: 500
 };
 
 export const propertyValueTheme = {
-    textColor: "#b9b9b9",
+    textColor: "#dcdcdc",
     fontSize: "0.9em",
-    fontWeight: 600
+    fontWeight: 500
 };
 
 export const editButtonTheme = {
-    width: "120px",
-    height: "40px",
-    background: "#6363ff",
+    width: "auto",
+    height: "34px",
+    background: "#4f545c",
     disabledBackground: "rgba(47,47,47,0.43)",
-    hoverBackground: "#4e4eff",
+    hoverBackground: "#686D73",
     border: "none",
-    borderRadius: "6px",
+    borderRadius: "3px",
     margin: "0px 0px 0px 10px",
 
     text: {
         textAlign: "center",
         fontSize: "14px",
         textColor: "#e1e1e1",
-        fontWeight: "700",
+        fontWeight: "500",
         disabledTextColor: "rgba(255,255,255,0.20)",
     }
 };

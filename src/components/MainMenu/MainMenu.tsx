@@ -1,14 +1,11 @@
-import React, {useCallback} from "react";
+import React, {useCallback, useMemo} from "react";
 
-import {useMediaQuery} from "@material-ui/core";
-import FilterListOutlinedIcon from '@material-ui/icons/FilterListOutlined';
-import AccountDisplay from "components/AccountDisplay/AccountDisplay";
+import {useMediaQuery} from "@mui/material";
 import {IViewDescription, mainMenuItems} from "components/MainMenu/mainMenuItems";
 import MenuItem from "components/MainMenu/MenuItem/MenuItem";
-import {Text} from "kuchkr-react-component-library";
 import {useTranslation} from "react-i18next";
 
-import {menuTitleTheme, StyledMainMenu, StyledMenuButton, StyledMenuItems, StyledMenuSection} from "./style";
+import { StyledMainMenu, StyledMenuItems} from "./style";
 
 export interface MainMenuProps {
     onItemClick: Function,
@@ -27,7 +24,7 @@ const MainMenu = (props: MainMenuProps) => {
         onItemClick?.(key);
     }, [onItemClick]);
 
-    const renderMenuItems = useCallback(() => {
+    const menuItems = useMemo(() => {
         return Object.entries(mainMenuItems(t)).map((item, idx) => {
             const [key, value] = item;
             return <MenuItem
@@ -37,25 +34,12 @@ const MainMenu = (props: MainMenuProps) => {
                 onClick={() => onMenuItemClick(key)}
                 active={openedView.id === value.id}/>;
         });
-    }, [openedView, t]);
-
-    const renderMenu = useCallback(() => {
-        if (isMobile) {
-            return <StyledMenuButton>
-                <FilterListOutlinedIcon fontSize={'large'}/>
-            </StyledMenuButton>;
-        }
-        return <StyledMenuItems>
-            <Text theme={menuTitleTheme} text={'MENU'}/>
-            {renderMenuItems()}
-        </StyledMenuItems>;
-    }, [isMobile, openedView]);
+    }, [openedView, onMenuItemClick, t]);
 
     return <StyledMainMenu>
-        <StyledMenuSection>
-            <AccountDisplay/>
-            {renderMenu()}
-        </StyledMenuSection>
+        <StyledMenuItems>
+            {menuItems}
+        </StyledMenuItems>
     </StyledMainMenu>;
 };
 
