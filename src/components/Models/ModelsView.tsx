@@ -1,5 +1,6 @@
 import React, {useCallback, useEffect} from "react";
 
+import {PlusIcon} from "@heroicons/react/outline";
 import {
     getAddRowRequestState,
     getModelDataRequestState,
@@ -139,7 +140,7 @@ const ModelsView = () => {
                 triggerOnDefault={true}
             />
             <button className={'add_button'} onClick={onAddNewItemClick}>
-                <AddIcon/>
+                <PlusIcon className={`h-5 w-5 text-white`}/>
                 <p className={'h-[100%] text-white text-[12px] font-semibold'}>
                     {'Add new object'}
                 </p>
