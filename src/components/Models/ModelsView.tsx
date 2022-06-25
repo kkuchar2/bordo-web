@@ -1,6 +1,5 @@
 import React, {useCallback, useEffect} from "react";
 
-import { useMediaQuery } from "@mui/material";
 import {
     getAddRowRequestState,
     getModelDataRequestState,
@@ -13,13 +12,13 @@ import {changeCurrentViewedModel, openDialog, selectorCurrentViewedModel} from "
 import {getAllModelData, getMultiRowModelData, listModels} from "appRedux/services/modelService";
 import {useAppDispatch} from "appRedux/store";
 import Table from "components/Models/Table/Table";
-import {Button, Spinner, Text, Select} from "kuchkr-react-component-library";
+import {Select, Spinner} from "kuchkr-react-component-library";
 import {useSelector} from "react-redux";
 import {RequestStatus} from "tools/client/client.types";
 
 import {isSuccess, isWaiting} from "../../api/api_util";
 
-import {addItemButtonTheme, addRowTextTheme, modelSelectorTheme, StyledModelsView, StyledPlusIcon, StyledToolbar, } from "./style";
+import {modelSelectorTheme, StyledModelsView, StyledToolbar, } from "./style";
 
 const ModelsView = () => {
 
@@ -42,7 +41,8 @@ const ModelsView = () => {
     const fields = tableData ? tableData.headers : null;
     const rows = tableData ? tableData.rows : null;
 
-    const isMobile = useMediaQuery('(max-width: 1200px)');
+    // TODO: detect if is mobile
+    const isMobile = false;
 
     useEffect(() => {
         dispatch(listModels());
@@ -52,7 +52,6 @@ const ModelsView = () => {
         if (!currentModelPackage || !currentModelName) {
             return;
         }
-        console.log('Changed to: ', currentModelPackage, currentModelName);
         dispatch(getAllModelData(currentModelPackage, currentModelName));
     }, [currentModelName, currentModelPackage]);
 
@@ -125,7 +124,7 @@ const ModelsView = () => {
         }
 
         const options = modelTypes.map((v: ModelType, idx: number) => {
-            return {value: idx, label: `${v.package}.${v.model}`};
+            return { value: idx, label: `${v.package}.${v.model}` };
         });
 
         return <StyledToolbar>
@@ -139,10 +138,12 @@ const ModelsView = () => {
                 onChange={onSelected}
                 triggerOnDefault={true}
             />
-            <Button theme={addItemButtonTheme} onClick={onAddNewItemClick}>
-                <StyledPlusIcon/>
-                <Text theme={addRowTextTheme} text={'Add new object'}/>
-            </Button>
+            <button className={'add_button'} onClick={onAddNewItemClick}>
+                <AddIcon/>
+                <p className={'h-[100%] text-white text-[12px] font-semibold'}>
+                    {'Add new object'}
+                </p>
+            </button>
         </StyledToolbar>;
     }, [modelListRequestState, currentModelName, modelsData, isMobile]);
 

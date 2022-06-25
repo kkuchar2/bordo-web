@@ -1,41 +1,33 @@
-import React, {useCallback, useEffect, useMemo, useState} from 'react';
+import React, {useCallback, useEffect} from 'react';
 
-import {getForgotPasswordState, resetUserSliceRequestState} from "appRedux/reducers/api/user/userSlice";
-import {forgotPassword} from "appRedux/services/userService";
+import { useAuthSelector} from "appRedux/reducers/api/auth/accountSlice";
+import {forgotPassword, resetUserSliceRequestState} from "appRedux/services/authService";
 import {useAppDispatch} from "appRedux/store";
-import {descriptionTextTheme} from "components/Dialogs/commonStyles";
-import {showSentResetPasswordMailDialog} from "components/Dialogs/readyDialogs";
-import {FormErrors} from "components/Errors/FormErrors/FormErrors";
-import * as style from "components/Forms/commonStyles";
-import {formTitleTheme, StyledForm, StyledQuestionWithLinkTheme} from 'components/Forms/commonStyles';
-import {InputWithError} from 'components/InputWithError/InputWithError';
-import {Button, Spinner, Text} from "kuchkr-react-component-library";
+import Box from 'components/Box/Box';
+import {showDialogAfterPasswordResetRequest} from "components/DialogSystem/readyDialogs";
+import {StyledLink} from "components/Forms/commonStyles";
+import Form from "components/Forms/Form/Form";
 import {useTranslation} from "react-i18next";
-import {useSelector} from "react-redux";
-import {useNavigate} from "react-router-dom";
 import {RequestStatus} from "tools/client/client.types";
 
-import {isSuccess, isWaiting} from "../../api/api_util";
-import {getConfig, FORM_CONFIG} from "../../api/formConfig";
+import {isSuccess, useMemoRequestState} from "../../api/api_util";
+import { useFormConfig} from "../../api/formConfig";
 
 import {StyledForgotPasswordPage} from "./style";
 
 const ForgotPasswordPage = () => {
 
-    const { t } = useTranslation();
-
-    let navigate = useNavigate();
-
-    const [email, setEmail] = useState('');
-
-    const forgotPasswordState = useSelector(getForgotPasswordState);
-    const errors = forgotPasswordState.info.errors;
-
-    const cfg = useMemo(() => getConfig(FORM_CONFIG, 'forgotPassword', t), [t]);
+    const requestState = useAuthSelector('forgotPassword');
 
     const dispatch = useAppDispatch();
 
-    const isRequestPending = useMemo(() => isWaiting(forgotPasswordState), [forgotPasswordState]);
+    const { t } = useTranslation();
+
+    const pending = useMemoRequestState(requestState, RequestStatus.Waiting);
+
+    const requestErrors = requestState.info.errors;
+
+    const formConfig = useFormConfig('forgotPassword', t);
 
     useEffect(() => {
         return () => {
@@ -43,51 +35,39 @@ const ForgotPasswordPage = () => {
         };
     }, []);
 
-    const sendResetPasswordRequest = useCallback(e => {
-        e.preventDefault();
+    const requestPasswordReset = useCallback((formData: any) => {
+        const { email } = formData;
         dispatch(forgotPassword(email));
-    }, [email]);
-
-    const renderButton = useCallback(() => {
-        const isRequestPending = forgotPasswordState.info.status === RequestStatus.Waiting;
-
-        if (isRequestPending) {
-            return <div style={{ marginTop: 30 }}>
-                <Spinner theme={style.spinnerTheme} text={t("SENDING_PASSWORD_RESET_REQUEST")}/>
-            </div>;
-        }
-        return <Button text={t('FORGOT_PASSWORD_BUTTON')} theme={style.buttonTheme}
-                       onClick={sendResetPasswordRequest}/>;
-    }, [email, forgotPasswordState]);
+    }, []);
 
     useEffect(() => {
-        if (isSuccess(forgotPasswordState)) {
-            showSentResetPasswordMailDialog({ dispatch, translation: t, navigate });
+        if (isSuccess(requestState)) {
+            showDialogAfterPasswordResetRequest();
         }
 
-    }, [forgotPasswordState, t]);
+    }, [requestState, t]);
 
     return <StyledForgotPasswordPage>
-        <StyledForm onSubmit={sendResetPasswordRequest}>
-            <Text theme={formTitleTheme} text={t('FORGOT_PASSWORD_FORM_TITLE')}/>
-            <Text theme={descriptionTextTheme} text={t('FORGOT_PASSWORD_INSTRUCTION')}/>
+        <Box className={'dark_form'}>
+            <Form
+                title={t('RESET_PASSWORD')}
+                description={t('RESET_PASSWORD_DESCRIPTION')}
+                submitButtonText={t('RESET_PASSWORD')}
+                errors={requestErrors}
+                disabled={pending}
+                config={formConfig}
+                confirmButtonClassName={'main_form_button'}
+                useCancelButton={false}
+                onSubmit={requestPasswordReset}/>
 
-            <InputWithError
-                value={email}
-                onChange={e => setEmail(e.target.value)}
-                errors={errors}
-                disabled={isRequestPending}
-                {...cfg['email']}/>
-
-            <FormErrors errors={errors} translation={t}/>
-
-            {renderButton()}
-
-            <StyledQuestionWithLinkTheme>
-                <Text theme={style.questionTextTheme} text={t('PASSWORD_JUST_REMEMBERED')}/>
-                <style.StyledLink to={'/'}>{t('SIGN_IN')}</style.StyledLink>
-            </StyledQuestionWithLinkTheme>
-        </StyledForm>
+            <div className={'flex items-center justify-center mt-[10px]'}>
+                <div className={'text-white text-[14px]'}>{t('PASSWORD_JUST_REMEMBERED')}</div>
+                <StyledLink className={'ml-3 text-[14px]'} to={'/'}>{t('SIGN_IN')}</StyledLink>
+            </div>
+            <div className={'h-[10px]'}>
+                {pending ? <progress className="progress w-full mt-2 bg-gray-600 h-[10px] progress-accent"></progress> : null}
+            </div>
+        </Box>
     </StyledForgotPasswordPage>;
 };
 

@@ -1,6 +1,5 @@
 import React, {useCallback, useRef} from "react";
 
-import DeleteIcon from '@mui/icons-material/Delete';
 import {Dictionary} from "@reduxjs/toolkit";
 import {useAppDispatch} from "appRedux/store";
 import {Cell} from "components/Models/Cell/Cell";

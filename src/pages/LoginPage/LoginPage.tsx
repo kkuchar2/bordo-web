@@ -1,58 +1,38 @@
-import React, {useCallback, useEffect, useMemo, useState} from 'react';
+import React, {useCallback, useEffect} from 'react';
 
-import {CircularProgress} from '@mui/material';
-import {getLoginState, resetUserSliceRequestState} from 'appRedux/reducers/api/user/userSlice';
-import {login} from "appRedux/services/userService";
-import {useAppDispatch} from 'appRedux/store';
-import {showConfirmEmailDialog} from "components/Dialogs/readyDialogs";
-import {FormErrors} from "components/Errors/FormErrors/FormErrors";
-import {
-    buttonTheme,
-    formTitleTheme,
-    questionTextTheme,
-    StyledButtonGroup,
-    StyledCenteredSection,
-    StyledForm,
-    StyledLink,
-    StyledQuestionWithLinkTheme
-} from "components/Forms/commonStyles";
-import {InputWithError} from 'components/InputWithError/InputWithError';
+import {useAuthSelector} from "appRedux/reducers/api/auth/accountSlice";
+import {googleLogin, login, resetUserSliceRequestState} from "appRedux/services/authService";
+import { useAppDispatch} from 'appRedux/store';
+import Box from 'components/Box/Box';
+import {showConfirmEmailDialog} from "components/DialogSystem/readyDialogs";
+import {StyledCenteredSection, StyledLink} from "components/Forms/commonStyles";
+import Form from 'components/Forms/Form/Form';
+import GoogleButton from "components/GoogleButton/GoogleButton";
 import {EnsureAuthorized} from "hoc/EnsureAuthorized";
-import {Button, Text} from "kuchkr-react-component-library";
 import {useTranslation} from "react-i18next";
-import {useSelector} from "react-redux";
+import {RequestStatus} from "tools/client/client.types";
 import {isEmailNotVerifiedError} from "tools/errors/errors";
 
-import {isWaiting} from "../../api/api_util";
-import {FORM_CONFIG, getConfig} from "../../api/formConfig";
+import {useMemoRequestState} from "../../api/api_util";
+import { useFormConfig} from "../../api/formConfig";
+import {GOOGLE_CLIENT_ID} from "../../config";
 
 import {StyledLoginPage} from "./style";
+import UserAgreements from "./UserAgreements";
 
 const LoginPage = () => {
 
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-
-    const loginState = useSelector(getLoginState);
+    const requestState = useAuthSelector('login');
 
     const dispatch = useAppDispatch();
 
     const { t } = useTranslation();
 
-    const cfg = useMemo(() => getConfig(FORM_CONFIG, 'login', t), [t]);
+    const formConfig = useFormConfig('login', t);
 
-    const isRequestPending = useMemo(() => isWaiting(loginState), [loginState]);
+    const pending = useMemoRequestState(requestState, RequestStatus.Waiting);
 
-    const errors = loginState.info.errors;
-
-    useEffect(() => {
-
-        const isEmailNotVerified = isEmailNotVerifiedError(errors);
-
-        if (isEmailNotVerified) {
-            showConfirmEmailDialog({ dispatch, translation: t, data: { email: email, }});
-        }
-    }, [errors]);
+    const errors = requestState.info.errors;
 
     useEffect(() => {
         return () => {
@@ -60,51 +40,58 @@ const LoginPage = () => {
         };
     }, []);
 
-    const attemptLogin = useCallback(e => {
-        e.preventDefault();
-        dispatch(login(email, password));
-    }, [email, password]);
+    useEffect(() => {
+        const isEmailNotVerified = isEmailNotVerifiedError(errors);
 
-    // We can create one component that is either a spinner or a button
-    const renderSignInButton = useCallback(() => {
-        if (isRequestPending) {
-            return <CircularProgress/>;
+        if (isEmailNotVerified) {
+            // TODO: fill correct email
+            showConfirmEmailDialog({ data: { email: "TODO", } });
         }
-        return <Button text={t('SIGN_IN')} type={"submit"} theme={buttonTheme} disabled={isRequestPending}/>;
-    }, [loginState]);
+    }, [errors]);
+
+    const attemptLogin = useCallback((formData: any) => {
+        const { email, password } = formData;
+        dispatch(login(email, password));
+    }, []);
+
+    const onSignInWithGoogle = useCallback((credentialResponse: any) => {
+        dispatch(googleLogin(credentialResponse));
+    }, []);
 
     return <StyledLoginPage>
         <StyledCenteredSection>
-            <StyledForm onSubmit={attemptLogin}>
-                <Text theme={formTitleTheme} text={t('SIGN_IN')}/>
-
-                <InputWithError
-                    value={email}
-                    onChange={e => setEmail(e.target.value)}
+            <Box className={'dark_form'}>
+                <Form
+                    title={t('SIGN_IN')}
+                    customDescription={<UserAgreements />}
+                    submitButtonText={t('SIGN_IN')}
                     errors={errors}
-                    disabled={isRequestPending}
-                    {...cfg['email']}/>
+                    disabled={pending}
+                    config={formConfig}
+                    confirmButtonClassName={'main_form_button'}
+                    useCancelButton={false}
+                    onSubmit={attemptLogin}/>
 
-                <InputWithError
-                    value={password}
-                    onChange={e => setPassword(e.target.value)}
-                    errors={errors}
-                    disabled={isRequestPending}
-                    {...cfg['password']}/>
+                <StyledLink to={'/forgotPassword'} className={'my-4 text-[14px]'}>
+                    {t('FORGOT_PASSWORD_QUESTION')}
+                </StyledLink>
 
-                <FormErrors errors={errors} translation={t}/>
+                <GoogleButton
+                    clientId={GOOGLE_CLIENT_ID}
+                    context={'signin'}
+                    text={'continue_with'}
+                    className={'mt-3 w-[100%]'}
+                    onSuccess={onSignInWithGoogle}/>
 
-                <StyledLink style={{ marginTop: 40 }} to={'/forgotPassword'}>{t('FORGOT_PASSWORD')}</StyledLink>
-
-                <StyledButtonGroup>{renderSignInButton()}</StyledButtonGroup>
-
-                <StyledQuestionWithLinkTheme>
-                    <Text theme={questionTextTheme} text={t('NEED_ACCOUNT')}/>
-                    <StyledLink to={'/register'}>{t('CREATE_ACCOUNT')}</StyledLink>
-                </StyledQuestionWithLinkTheme>
-            </StyledForm>
+                <div className={'flex items-center justify-center mt-[20px] mb-[10px]'}>
+                    <div className={'text-white text-[14px]'}>{t('NEED_ACCOUNT')}</div>
+                    <StyledLink className={'ml-3 text-[14px]'} to={'/register'}>{t('CREATE_ACCOUNT')}</StyledLink>
+                </div>
+            </Box>
         </StyledCenteredSection>
     </StyledLoginPage>;
 };
+
+LoginPage.displayName = 'LoginPage';
 
 export default EnsureAuthorized(LoginPage) as React.FC;

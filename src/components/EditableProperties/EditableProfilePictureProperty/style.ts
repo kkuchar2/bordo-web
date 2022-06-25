@@ -41,7 +41,6 @@ export interface EditableProfilePictureProps {
 export const StyledEditableProfilePictureProperty = styled.div<EditableProfilePictureProps>`
   display: flex;
   flex-direction: row;
-
   &:hover {
     cursor: ${props => props.enableUpload ? 'pointer' : 'unset'};
   }

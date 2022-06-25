@@ -1,0 +1,70 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+
+    .dark_form {
+        @apply bg-[#313131] rounded-xl
+    }
+
+    .input {
+        @apply w-full bg-[#1F1F1F] border-none focus:ring-0 rounded-none py-4 px-4 text-white focus:outline-none focus:border-none
+    }
+
+    .error {
+        @apply text-[#ff4949] text-[14px]
+    }
+
+    .link {
+        @apply text-[#74D79F] hover:text-[#4EE28F] visited:text-[#4EE28F]
+    }
+
+    .dialog-warning {
+        @apply text-white text-[14px] font-semibold bg-[#C27D2B] p-[20px] m-[20px]
+    }
+
+    .form-title {
+        @apply text-white text-[1.7em] font-semibold
+    }
+
+    .form-description {
+        @apply text-white text-[14px] mt-4 mb-4
+    }
+
+    .base_button {
+        @apply text-white text-[12px] font-semibold
+    }
+
+    .main_form_button {
+        @apply w-[100%] bg-form-button-default hover:bg-form-button-hover rounded-xl flex p-3 items-center justify-center base_button text-white text-[15px] font-semibold
+    }
+
+    .add_button {
+        @apply bg-[#4f545c] hover:bg-[#686D73] flex p-2 items-center justify-center ml-[20px]  base_button
+    }
+
+    .editButton {
+        @apply bg-[#4f545c] hover:bg-[#686D73] w-[100px] h-[34px] base_button
+    }
+
+    .changePasswordButton {
+        @apply bg-[#4f545c] hover:bg-[#686D73] w-[150px] h-[34px] base_button
+    }
+
+    .deleteAccountButton {
+        @apply bg-[#a42929] hover:bg-[#a40000] w-[150px] h-[34px] base_button
+    }
+
+    .confirmButton {
+        @apply bg-[#4f545c] hover:bg-[#686D73] w-[150px] h-[34px] base_button disabled:bg-slate-50/5 disabled:text-slate-50/20
+    }
+
+    .cancelButton {
+        @apply hover:text-red-400 w-[150px] h-[34px] base_button
+    }
+
+    .social_connection {
+        @apply bg-gray-600 hover:bg-gray-500 text-white text-[14px] py-1 px-2 rounded
+    }
+}

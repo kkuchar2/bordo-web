@@ -1,57 +1,104 @@
 import {ElementType} from "react";
 
-import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
-import PersonRoundedIcon from '@mui/icons-material/PersonRounded';
-import SettingsApplicationsRoundedIcon from '@mui/icons-material/SettingsApplicationsRounded';
-import TableViewRoundedIcon from '@mui/icons-material/TableViewRounded';
-import { SvgIcon } from '@mui/material';
+import {GlobeIcon, HomeIcon, SparklesIcon, TableIcon, UserIcon} from "@heroicons/react/outline";
+import {logout} from "appRedux/services/authService";
+import {AppDispatch} from "appRedux/store";
 import HomeView from "components/Home/HomeView";
 import ModelsView from "components/Models/ModelsView";
 import AccountSettings from "components/Settings/AccountSettings";
-import ProfileSettings from "components/Settings/ProfileSettings";
-import {TFunction} from "react-i18next";
+import AppearanceSettings from "components/Settings/AppearanceSettings";
+import LanguageSettings from "components/Settings/LanguageSettings";
+import i18n from "i18n";
+
+import {IconProps} from "../../icon/icon.types";
 
 export interface IViewDescription {
     id: string,
     displayName: string,
     description: string,
-    icon: typeof SvgIcon,
+    icon?: IconProps,
     component: ElementType
 }
 
-export interface IMainMenuItems {
-    [menuKey: string]: IViewDescription
+export interface IActionDescription {
+    id: string,
+    displayName: string,
+    icon?: IconProps,
+    onClick: (dispatch: AppDispatch) => void
 }
 
-export const mainMenuItems = (translation: TFunction<"translation">): IMainMenuItems => {
-    return {
+export interface IMainMenuPages {
+    [pageKey: string]: IViewDescription
+}
+
+export interface IMainMenuActions {
+    [actionKey: string]: IActionDescription
+}
+
+export interface IMainMenuItems {
+    pages: IMainMenuPages
+    actions: IMainMenuActions
+}
+
+export const mainMenuItems: IMainMenuItems = {
+    pages: {
         "Home": {
             id: 'Home',
-            displayName: translation("HOME_PAGE"),
+            displayName: i18n.t("HOME_PAGE"),
             description: '',
-            icon: HomeRoundedIcon,
-            component: HomeView
+            component: HomeView,
+            icon: {
+                component: HomeIcon,
+                color: 'text-white'
+            }
         },
         "TableAdministration": {
             id: 'TableAdministration',
-            displayName: translation("TABLE_ADMINISTRATION"),
+            displayName: i18n.t("TABLE_ADMINISTRATION"),
             description: '',
-            icon: TableViewRoundedIcon,
-            component: ModelsView
-        },
-        "UserProfile": {
-            id: 'UserProfile',
-            displayName: translation("USER_PROFILE"),
-            description: '',
-            icon: PersonRoundedIcon,
-            component: ProfileSettings
+            component: ModelsView,
+            icon: {
+                component: TableIcon,
+                color: 'text-white'
+            }
         },
         "Account": {
             id: 'Account',
-            displayName: translation("ACCOUNT_SETTINGS"),
+            displayName: i18n.t("ACCOUNT_SETTINGS"),
             description: '',
-            icon: SettingsApplicationsRoundedIcon,
-            component: AccountSettings
+            component: AccountSettings,
+            icon: {
+                component: UserIcon,
+                color: 'text-white'
+            }
+        },
+        "Appearance": {
+            id: 'Appearance',
+            displayName: i18n.t("APPEARANCE"),
+            description: '',
+            component: AppearanceSettings,
+            icon: {
+                component: SparklesIcon,
+                color: 'text-white'
+            }
+        },
+        "Language": {
+            id: 'Language',
+            displayName: i18n.t("LANGUAGE"),
+            description: '',
+            component: LanguageSettings,
+            icon: {
+                component: GlobeIcon,
+                color: 'text-white'
+            }
         }
-    };
+    },
+    actions: {
+        "Logout": {
+            id: 'Logout',
+            displayName: i18n.t("LOGOUT"),
+            icon: null,
+            onClick: (dispatch: AppDispatch) => dispatch(logout())
+        },
+    }
 };

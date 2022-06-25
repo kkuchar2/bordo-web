@@ -6,15 +6,15 @@ export const textTheme = (color: string) => {
         textColor: color,
         disabledTextColor: "rgba(255,255,255,0.20)",
         fontWeight: 500,
-        margin: "0px 0px 0px 10px"
+        margin: "0px 0px 0px 0px"
     };
 };
 
 export const StyledIconWrapper = styled.div`
   display: flex;
   align-items: center;
-  justify-content: center;
-  width: 40px;
+  justify-content: flex-end;
+  flex: 1 0;
   height: 100%;
   transition: 0.2s ease-out all;
 `;
@@ -24,27 +24,24 @@ interface StyledMenuItemProps {
 }
 
 export const StyledMenuItem = styled.div<StyledMenuItemProps>`
-  background: ${props => props.active ? "rgba(0,0,0,0.26)" : "none"};
+  background: ${props => props.active ? "rgba(12,12,12,0.26)" : "none"};
   border-radius: 5px;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: flex-start;
   box-sizing: border-box;
-  height: 50px;
-  padding-left: 10px;
-  width: 220px;
-  
+  width: 250px;
+  height: 40px;
+  padding: 7px;
+
   &:hover {
-    cursor: pointer;
+    cursor: ${props => props.active ? "unset" : "pointer"};
+    background: ${props => props.active ? "rgba(100,100,100,0.26)" : "#4a4a4a"};
   }
 
-  @media (max-width: 600px) {
+  @media (max-width: 1200px) {
     flex-direction: row;
-  }
-  
-  @media (max-width: 600px) {
-    flex-direction: row;
-    justify-content: center;
+    margin-left: 0;
   }
 `;

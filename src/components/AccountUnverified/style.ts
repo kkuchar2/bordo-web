@@ -41,6 +41,14 @@ export const titleTheme = {
     margin: "20px 0px 0px 0px "
 };
 
+export const menuGroupTextTheme = {
+    textColor: "#898777",
+    textAlign: "left",
+    fontSize: "0.75em",
+    fontWeight: 600,
+    margin: "20px 0px 0px 0px "
+};
+
 export const messageTheme = {
     textColor: "#ffffff",
     fontSize: "0.8em",

@@ -3,8 +3,8 @@ import styled from "styled-components";
 
 export const StyledHomePage = styled.div`
   width: 100%;
-  height: 100%;
   box-sizing: border-box;
+  background: #282828;
 `;
 
 export const StyledHomePageContent = styled.div`
@@ -15,7 +15,7 @@ export const StyledHomePageContent = styled.div`
   flex-direction: row;
   height: 100%;
   
-  @media (max-width: 600px) {
+  @media (max-width: 1200px) {
     flex-direction: column;
   }
 `;
@@ -39,7 +39,6 @@ export const StyledTopSection = styled(motion.div)`
   flex-direction: column;
   padding: 30px;
   min-height: 60px;
-  background: #333333;
 `;
 
 export const StyledAnimatedHeader = styled(motion.div)`
@@ -49,7 +48,6 @@ export const StyledBottomSection = styled.div`
   overflow-y: auto;
   overflow-x: auto;
   flex: 1 0;
-  background: #333333;
 `;
 
 export const viewTitleTextTheme = {
@@ -57,11 +55,4 @@ export const viewTitleTextTheme = {
     fontSize: "1.2em",
     textAlign: "left",
     fontWeight: 600
-};
-
-export const viewDescriptionTextTheme = {
-    textColor: "#A9A9A9",
-    fontSize: "1.0em",
-    textAlign: "left",
-    fontWeight: 400
 };

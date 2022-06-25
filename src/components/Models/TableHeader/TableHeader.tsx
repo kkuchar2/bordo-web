@@ -1,10 +1,10 @@
+import {humanize} from "util/util";
+
 import React, {useCallback} from "react";
 
 import {ColumnHeader} from "appRedux/reducers/api/crud/modelSlice.types";
 import {getColumnProperties} from "components/Models/columnProperties";
 import {Text} from "kuchkr-react-component-library";
-
-import {humanize} from "../../../util";
 
 import {headerTextTheme, StyledTableHeader} from "./style";
 

@@ -1,4 +1,3 @@
-import {error_style, success_style} from "appRedux/middleware/logger";
 import {AxiosInstance, AxiosResponse} from "axios";
 import {StatusCodes} from "http-status-codes";
 import {Dispatch} from "redux";
@@ -8,12 +7,13 @@ import {RequestArgs, RequestType} from "../client/client.types";
 import {
     composeUrl,
     createFormDataFromFile,
-    dispatchResponseError,
     dispatchOnBefore,
-    dispatchSuccess, dispatchRequestError
+    dispatchRequestError,
+    dispatchResponseError,
+    dispatchSuccess
 } from "../client/client.utils";
 
-export const makeAxiosRequest = async <T = any> (args : RequestArgs) : Promise<AxiosResponse<T>> => {
+export const makeAxiosRequest = async <T = any>(args: RequestArgs): Promise<AxiosResponse<T>> => {
 
     const {
         axiosInstance,
@@ -22,7 +22,7 @@ export const makeAxiosRequest = async <T = any> (args : RequestArgs) : Promise<A
         requestData,
         requestType,
         file,
-        filePropertyName,
+        filePropertyName
     } = args;
 
     if (requestType === RequestType.GET) {
@@ -51,10 +51,10 @@ export const makeAxiosRequest = async <T = any> (args : RequestArgs) : Promise<A
     }
 };
 
-const refreshToken = async <T = any> (axiosInstance: AxiosInstance) : Promise<AxiosResponse<T>> => {
+const refreshToken = async <T = any>(axiosInstance: AxiosInstance): Promise<AxiosResponse<T>> => {
     return await makeAxiosRequest<T>({
         requestType: RequestType.POST,
-        url: "account/token/refresh",
+        url: "account/token-refresh",
         action: null,
         axiosInstance: axiosInstance,
         config: {
@@ -67,38 +67,49 @@ const refreshToken = async <T = any> (axiosInstance: AxiosInstance) : Promise<Ax
     });
 };
 
-export const request = <T = any> (args: RequestArgs) => {
+export const request = <T = any>(args: RequestArgs) => {
 
-    const { axiosInstance, url, action, requestData, refreshTokenOnUnauthorized } = args;
+    const { axiosInstance, url, action, requestData, refreshTokenOnUnauthorized, responseSchema } = args;
 
     return async (dispatch: Dispatch) => {
 
         dispatchOnBefore(dispatch, action, url, requestData);
 
         try {
-            dispatchSuccess(dispatch, action, args, await makeAxiosRequest<T>(args));
-        } catch (e) {
-            console.log(e);
+            const response = await makeAxiosRequest<T>(args);
+
+            if (responseSchema) {
+                const { data } = response;
+
+                try {
+                    await responseSchema.validate(data);
+                    dispatchSuccess(dispatch, action, args, response);
+                }
+                catch (err) {
+                    dispatchResponseError(dispatch, args, err.errors, StatusCodes.UNPROCESSABLE_ENTITY);
+                }
+            }
+            else {
+                dispatchSuccess(dispatch, action, args, response);
+            }
+        }
+        catch (e) {
             if (e.message === "Network Error") {
                 dispatchRequestError(dispatch, args, StatusCodes.SERVICE_UNAVAILABLE, 'SERVICE_UNAVAILABLE');
             }
-            else if (!e.response)
-            {
-                dispatchRequestError(dispatch, args,  StatusCodes.NO_CONTENT, 'NO_RESPONSE');
+            else if (!e.response) {
+                dispatchRequestError(dispatch, args, StatusCodes.NO_CONTENT, 'NO_RESPONSE');
             }
             else if (e.response.status === 401 && refreshTokenOnUnauthorized) {
                 try {
-                    console.log(`%c Refreshing token`, success_style);
                     await refreshToken(axiosInstance);
 
                     try {
                         dispatchSuccess(dispatch, action, args, await makeAxiosRequest<T>(args));
                     }
                     catch (e) {
-                        console.log(`%c Hey at least we tried`, error_style);
-
                         if (e.message === "Network Error") {
-                            dispatchRequestError(dispatch, args, StatusCodes.SERVICE_UNAVAILABLE,  'SERVICE_UNAVAILABLE');
+                            dispatchRequestError(dispatch, args, StatusCodes.SERVICE_UNAVAILABLE, 'SERVICE_UNAVAILABLE');
                         }
                         else if (!e.response) {
                             dispatchRequestError(dispatch, args, StatusCodes.NO_CONTENT, 'NO_RESPONSE');

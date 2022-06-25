@@ -1,30 +1,21 @@
-import React, {useCallback, useEffect, useMemo, useState} from 'react';
+import React, {useCallback, useEffect} from 'react';
 
-import {getRegistrationState, resetUserSliceRequestState} from 'appRedux/reducers/api/user/userSlice';
-import {register} from "appRedux/services/userService";
+import {useAuthSelector} from "appRedux/reducers/api/auth/accountSlice";
+import {googleLogin, register, resetUserSliceRequestState} from "appRedux/services/authService";
 import {useAppDispatch} from "appRedux/store";
-import {showRegistrationCompleteDialog} from "components/Dialogs/readyDialogs";
-import {FormErrors} from "components/Errors/FormErrors/FormErrors";
-import {
-    buttonTheme,
-    formTitleTheme,
-    questionTextTheme,
-    spinnerTheme,
-    StyledButtonGroup,
-    StyledCenteredSection,
-    StyledForm,
-    StyledLink,
-    StyledQuestionWithLinkTheme
-} from "components/Forms/commonStyles";
-import {InputWithError} from 'components/InputWithError/InputWithError';
+import Box from "components/Box/Box";
+import {showRegistrationCompleteDialog} from "components/DialogSystem/readyDialogs";
+import {StyledCenteredSection, StyledLink} from "components/Forms/commonStyles";
+import Form from 'components/Forms/Form/Form';
+import GoogleButton from "components/GoogleButton/GoogleButton";
 import {EnsureAuthorized} from "hoc/EnsureAuthorized";
-import {Button, Spinner, Text} from "kuchkr-react-component-library";
 import {useTranslation} from "react-i18next";
-import {useSelector} from "react-redux";
-import {useNavigate} from "react-router-dom";
+import {RequestStatus} from "tools/client/client.types";
 
-import {isSuccess, isWaiting} from "../../api/api_util";
-import {FORM_CONFIG, getConfig} from "../../api/formConfig";
+import {isSuccess, useMemoRequestState} from "../../api/api_util";
+import { useFormConfig} from "../../api/formConfig";
+import {GOOGLE_CLIENT_ID} from "../../config";
+import UserAgreements from "../LoginPage/UserAgreements";
 
 import {StyledRegistrationPage} from "./style";
 
@@ -32,18 +23,15 @@ const RegistrationPage = () => {
 
     const { t } = useTranslation();
 
-    const navigate = useNavigate();
     const dispatch = useAppDispatch();
 
-    const [email, setEmail] = useState('');
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
+    const requestState = useAuthSelector('registration');
 
-    const registrationState = useSelector(getRegistrationState);
-    const isRequestPending = useMemo(() => isWaiting(registrationState), [registrationState]);
-    const errors = registrationState.info.errors;
+    const errors = requestState.info.errors;
 
-    const cfg = useMemo(() => getConfig(FORM_CONFIG, 'registration', t), [t]);
+    const pending = useMemoRequestState(requestState, RequestStatus.Waiting);
+
+    const formConfig = useFormConfig('registration', t);
 
     useEffect(() => {
         return () => {
@@ -52,59 +40,46 @@ const RegistrationPage = () => {
     }, []);
 
     useEffect(() => {
-        if (isSuccess(registrationState)) {
-            showRegistrationCompleteDialog({ dispatch, translation: t, navigate });
+        if (isSuccess(requestState)) {
+            showRegistrationCompleteDialog();
         }
-    }, [registrationState, t]);
+    }, [requestState, t]);
 
-    const registerNewUser = useCallback((e: any) => {
-        e.preventDefault();
+    const attemptRegister = useCallback((formData: any) => {
+        const { email, username, password } = formData;
         dispatch(register(email, username, password));
-    }, [email, username, password]);
+    }, []);
 
-    const renderSignUpButton = useCallback(() => {
-        if (isRequestPending) {
-            return <Spinner theme={spinnerTheme} text={t("SIGNING_UP_PROGRESS")}/>;
-        }
-        return <Button type={'submit'} text={t('SIGN_UP')} theme={buttonTheme}/>;
-    }, [registrationState]);
+    const onSignInWithGoogle = useCallback((credentialResponse: any) => {
+        dispatch(googleLogin(credentialResponse));
+    }, []);
 
     return <StyledRegistrationPage>
         <StyledCenteredSection>
-            <StyledForm onSubmit={registerNewUser}>
-                <Text theme={formTitleTheme} text={t('REGISTRATION')}/>
-
-                <InputWithError
-                    value={email}
-                    onChange={e => setEmail(e.target.value)}
+            <Box className={'dark_form'}>
+                <Form
+                    title={t('REGISTRATION')}
+                    customDescription={<UserAgreements/>}
+                    submitButtonText={t('SIGN_UP')}
                     errors={errors}
-                    disabled={isRequestPending}
-                    {...cfg['email']}/>
+                    disabled={pending}
+                    config={formConfig}
+                    useCancelButton={false}
+                    confirmButtonClassName={'main_form_button'}
+                    onSubmit={attemptRegister}/>
 
-                <InputWithError
-                    value={username}
-                    onChange={e => setUsername(e.target.value)}
-                    errors={errors}
-                    disabled={isRequestPending}
-                    {...cfg['username']}/>
+                <GoogleButton
+                    clientId={GOOGLE_CLIENT_ID}
+                    context={'signin'}
+                    text={'signin_with'}
+                    className={'mt-5'}
+                    onSuccess={onSignInWithGoogle}/>
 
-                <InputWithError
-                    value={password}
-                    onChange={e => setPassword(e.target.value)}
-                    errors={errors}
-                    disabled={isRequestPending}
-                    {...cfg['password']}/>
-
-                <FormErrors errors={errors} translation={t}/>
-
-                <StyledButtonGroup>{renderSignUpButton()}</StyledButtonGroup>
-
-                <StyledQuestionWithLinkTheme>
-                    <Text theme={questionTextTheme} disabled={isRequestPending} text={t('ALREADY_HAVE_ACCOUNT')}/>
-                    <StyledLink disabled={isRequestPending} style={{ marginLeft: 10 }}
-                                to={'/'}>{t('SIGN_IN')}</StyledLink>
-                </StyledQuestionWithLinkTheme>
-            </StyledForm>
+                <div className={'flex items-center justify-center mt-[20px] mb-[10px]'}>
+                    <div className={'text-white text-[14px]'}>{t('ALREADY_HAVE_ACCOUNT')}</div>
+                    <StyledLink className={'ml-3 text-[14px]'} to={'/'}>{t('SIGN_IN')}</StyledLink>
+                </div>
+            </Box>
         </StyledCenteredSection>
     </StyledRegistrationPage>;
 };

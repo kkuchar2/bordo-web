@@ -4,8 +4,8 @@ import {dialogReducer} from "appRedux/reducers/application";
 import axios from "axios";
 import {TypedUseSelectorHook, useDispatch, useSelector} from "react-redux";
 
+import authReducer from './reducers/api/auth/accountSlice';
 import modelReducer from './reducers/api/crud/modelSlice';
-import userReducer from './reducers/api/user/userSlice';
 import modelViewReducer from './reducers/application/modelViewSlice';
 
 const middlewares = [loggerMiddleware] as const;
@@ -16,7 +16,7 @@ const defaultMiddlewareOptions = {
 
 export const store = configureStore({
     reducer: {
-        userSlice: userReducer,
+        accountSlice: authReducer,
         model: modelReducer,
         modelView: modelViewReducer,
         dialog: dialogReducer,
@@ -29,13 +29,15 @@ export const store = configureStore({
 export type RootState = ReturnType<typeof store.getState>
 export type AppDispatch = typeof store.dispatch
 
+export const appDispatch = store.dispatch;
+
 export const useAppDispatch = () => useDispatch<AppDispatch>();
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 
-// For development: switch to: http://0.0.0.0:8000
+// For development: switch to: http://localhost:8000
 // For production: switch to: https://api.kkucharski.com
 
-export const API_URL = "http://0.0.0.0:8000";
+export const API_URL = "http://localhost:8000";
 
 export const ApiClient = axios.create({
         baseURL: `${API_URL}/api/`,

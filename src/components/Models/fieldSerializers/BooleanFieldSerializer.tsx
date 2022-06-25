@@ -15,7 +15,7 @@ const textTheme = {
 
 export const BooleanFieldSerializer = (props: FieldSerializerProps) => {
 
-    const {name, value, inEditMode, onChange, isEditable} = props;
+    const { value, inEditMode, onChange, isEditable } = props;
 
     const onSelectChange = useCallback((v) => {
         onChange?.(v.value);
@@ -30,15 +30,15 @@ export const BooleanFieldSerializer = (props: FieldSerializerProps) => {
             theme={booleanSelectTheme}
             maxMenuHeight={105}
             menuPortalTarget={document.body}
-            defaultValue={{value: value, label: toUpperFirst(value.toString())}}
+            defaultValue={{ value: value, label: toUpperFirst(value.toString()) }}
             options={[
-                {value: true, label: "True"},
-                {value: false, label: "False"}
+                { value: true, label: "True" },
+                { value: false, label: "False" }
             ]}
             onChange={onSelectChange}
         />;
     }
-    return <Text theme={textTheme} style={{width: '100%'}} text={value ? 'True' : 'False'}/>;
+    return <Text theme={textTheme} style={{ width: '100%' }} text={value ? 'True' : 'False'}/>;
 };
 
 export default BooleanFieldSerializer;

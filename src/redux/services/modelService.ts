@@ -83,7 +83,6 @@ export const updateRow = (modelPackage: string, model: string, data: object) => 
 };
 
 export const addRow = (args: AddItemToTableArgs) => {
-    const { modelPackage, model, itemData } = args;
     return request({
         axiosInstance: ApiClient,
         requestType: RequestType.POST,

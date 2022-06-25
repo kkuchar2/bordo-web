@@ -1,25 +1,25 @@
 import React, {lazy} from "react";
 
-import {Button} from "kuchkr-react-component-library";
-
 const RegistrationPage = React.lazy(() => import(/* webpackChunkName: "auth-chunk" */ "pages/RegistrationPage/RegistrationPage"));
 const ConfirmPage = lazy(() => import (/* webpackChunkName: "auth-chunk" */ "pages/ConfirmPage/ConfirmPage"));
 const LoginPage = lazy(() => import (/* webpackChunkName: "auth-chunk" */ "pages/LoginPage/LoginPage"));
 const ForgotPasswordPage = lazy(() => import (/* webpackChunkName: "auth-chunk" */ "pages/ForgotPasswordPage/ForgotPasswordPage"));
-const ResetPasswordPage = lazy(() => import (/* webpackChunkName: "auth-chunk" */ "pages/ResetPasswordPage/ResetPasswordPage"));
+const CreateNewPasswordPage = lazy(() => import (/* webpackChunkName: "auth-chunk" */ "pages/CreateNewPasswordPage/CreateNewPasswordPage"));
 const HomePage = lazy(() => import (/* webpackChunkName: "home" */ "pages/HomePage/HomePage"));
-const TestPage = lazy(() => import (/* webpackChunkName: "test" */ "pages/TestPage/TestPage"));
+const UserAgreement = lazy(() => import (/* webpackChunkName: "user-agreement" */ "pages/UserAgreementPage/UserAgreementPage"));
 const NotFound = lazy(() => import (/* webpackChunkName: "not-found" */ "pages/NotFoundPage/NotFoundPage"));
 
 export const routes = [
     {
         path: "*",
         element: <NotFound />,
+        name: "NotFound",
         enabled: true
     },
     {
         path: "/",
         element: <LoginPage />,
+        name: "LoginPage",
         icon: '',
         title: "",
         enabled: true,
@@ -30,7 +30,7 @@ export const routes = [
     {
         path: "/register",
         element: <RegistrationPage />,
-        customComponent: <Button theme={Button.darkTheme} text={"Create account"}/>,
+        name: "RegistrationPage",
         customClass: 'registerButton',
         enabled: true,
         exact: true,
@@ -40,6 +40,7 @@ export const routes = [
     {
         path: "/verify-email/:token",
         element: <ConfirmPage />,
+        name: "ConfirmPage",
         exact: false,
         enabled: true,
         authRequired: false,
@@ -48,14 +49,7 @@ export const routes = [
     {
         path: "/home",
         element: <HomePage />,
-        exact: false,
-        enabled: true,
-        authRequired: true,
-        hiddenForAuthenticated: false
-    },
-    {
-        path: "/test",
-        element: <TestPage />,
+        name: "HomePage",
         exact: false,
         enabled: true,
         authRequired: true,
@@ -64,6 +58,7 @@ export const routes = [
     {
         path: "/forgotPassword",
         element: <ForgotPasswordPage />,
+        name: "ForgotPasswordPage",
         title: "Forgot password",
         enabled: true,
         exact: true,
@@ -71,14 +66,24 @@ export const routes = [
         hiddenForAuthenticated: true
     },
     {
-        path: "/resetPassword/:token",
-        element: <ResetPasswordPage />,
+        path: "/createNewPassword/:token",
+        element: <CreateNewPasswordPage />,
+        name: "ResetPasswordPage",
         title: "Change password",
         enabled: true,
         exact: true,
         authRequired: false,
         hiddenForAuthenticated: false
-    }
+    },
+    {
+        path: "/userAgreement",
+        element: <UserAgreement />,
+        name: "UserAgreementPage",
+        title: "User agreement",
+        enabled: true,
+        authRequired: false,
+        hiddenForAuthenticated: false
+    },
 ];
 
 const getCurrentRoute = () => routes.filter(v => v.path === window.location.pathname)[0];
@@ -90,4 +95,9 @@ export const isOnAuthenticatedPage = () => {
         return route.authRequired;
     }
     return false;
+};
+
+export const urlMatchesComponent = (componentName: any) => {
+    const route = getCurrentRoute();
+    return componentName === route.name;
 };

@@ -1,15 +1,15 @@
 import React, {useCallback, useEffect} from 'react';
 
-import {getConfirmationState} from "appRedux/reducers/api/user/userSlice";
-import {confirmAccount} from "appRedux/services/userService";
+import {useAuthSelector} from "appRedux/reducers/api/auth/accountSlice";
+import {confirmAccount} from "appRedux/services/authService";
 import {useAppDispatch} from "appRedux/store";
-import { StyledLink } from 'components/Forms/commonStyles';
+import {StyledLink} from 'components/Forms/commonStyles';
 import {Text} from "kuchkr-react-component-library";
 import {useTranslation} from "react-i18next";
-import { useSelector} from "react-redux";
 import {useParams} from "react-router-dom";
+import {RequestStatus} from "tools/client/client.types";
 
-import {isWaiting, isSuccess} from "../../api/api_util";
+import {isSuccess, useMemoRequestState} from "../../api/api_util";
 
 import {StyledConfirmPage, StyledConfirmPageTop, textTheme} from "./style";
 
@@ -19,24 +19,25 @@ const ConfirmPage = () => {
 
     const dispatch = useAppDispatch();
 
-    const {t} = useTranslation();
+    const { t } = useTranslation();
 
-    const confirmationState = useSelector(getConfirmationState);
+    const requestState = useAuthSelector('accountConfirmation');
+    const pending = useMemoRequestState(requestState, RequestStatus.Waiting);
+    const success = useMemoRequestState(requestState, RequestStatus.Success);
 
     useEffect(() => {
         dispatch(confirmAccount(params.token));
     }, []);
 
     const renderContent = useCallback(() => {
-        const success = isSuccess(confirmationState);
-        const pending = isWaiting(confirmationState);
+        const success = isSuccess(requestState);
 
         if (pending) {
-            return  <Text theme={textTheme} text={t('ACTIVATING')}/>;
+            return <Text theme={textTheme} text={t('ACTIVATING')}/>;
         }
         else if (success) {
 
-            const response = confirmationState.responseData.data;
+            const response = requestState.responseData.data;
 
             return <>
                 <Text theme={textTheme} text={t(response)}/>
@@ -49,7 +50,7 @@ const ConfirmPage = () => {
                 <StyledLink to={'/'}>{t('SIGN_IN')}</StyledLink>
             </>;
         }
-    }, [confirmationState]);
+    }, [requestState]);
 
     return <StyledConfirmPage>
         <StyledConfirmPageTop>

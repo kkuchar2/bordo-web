@@ -1,21 +1,24 @@
-import {DialogProps} from "components/Dialogs/types";
+import { IconProps } from "icon/icon.types";
 
 export interface IDialogComponentProps {
-    title: string;
-    description: string;
-    onCancel: () => void;
-    onConfirm: () => void;
+    title?: string;
+    description?: string;
+    icon?: IconProps;
+    onCancel?: () => void;
+    onConfirm?: () => void;
+    width?: number;
+    closeable?: boolean;
 }
 
-export interface IComponentProps {
+export interface DialogProps<T = any> {
     dialog: IDialogComponentProps
-    data: any;
+    data: T | null;
 }
 
 export interface DialogSliceState {
     opened: boolean,
     component: string,
-    componentProps: IComponentProps
+    componentProps: DialogProps
 }
 
 export interface ShowDialogArgs<T = any> {

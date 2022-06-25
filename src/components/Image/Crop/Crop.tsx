@@ -1,16 +1,15 @@
 import React, {useCallback, useState} from "react";
 
-import {CropContainer, sliderTheme, SliderWithIcons} from "components/Dialogs/ChangeAvatarDialog/style";
+import {CropContainer, sliderTheme, SliderWithIcons} from "components/DialogSystem/dialogs/ChangeAvatarDialog/style";
 import {Slider} from "kuchkr-react-component-library";
 import Cropper from "react-easy-crop";
 import {Area} from "react-easy-crop/types";
 
 import { CropProps } from "./Crop.types";
-import { StyledCrop } from "./style";
 
 export const Crop = (props: CropProps) => {
 
-    const {image, disabled, onCroppedAreaChange} = props;
+    const {className, image, disabled, onCroppedAreaChange} = props;
 
     const [zoom, setZoom] = useState<number>(1);
     const [crop, setCrop] = useState({ x: 0, y: 0 });
@@ -30,17 +29,13 @@ export const Crop = (props: CropProps) => {
     }, [disabled]);
 
     const onCropComplete = useCallback((croppedArea: Area, croppedAreaPixels: Area) => {
-        console.log('Crop complete: ', croppedArea, croppedAreaPixels);
         if (disabled) {
-            console.log('Not setting');
             return;
         }
-
-        console.log('Setting cropped area: ', croppedArea);
         onCroppedAreaChange(croppedAreaPixels);
     }, [disabled, onCroppedAreaChange]);
 
-    return <StyledCrop>
+    return <div className={className}>
         <CropContainer imageSelected={image != null}>
             <Cropper
                 image={image}
@@ -69,5 +64,5 @@ export const Crop = (props: CropProps) => {
             <img style={{ marginLeft: 15, marginBottom: 8 }} src={"assets/images/picture_icon.png"} width={30}
                  alt={'sliderIconBig'}/>
         </SliderWithIcons>
-    </StyledCrop>;
+    </div>;
 };

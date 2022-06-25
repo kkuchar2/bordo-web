@@ -1,48 +1,45 @@
 import React, {useCallback, useState} from "react";
 
-import { SvgIcon } from '@mui/material';
 import {Text} from "kuchkr-react-component-library";
 
-import {StyledIconWrapper, StyledMenuItem, textTheme} from "./style";
+import {IconProps} from "../../../icon/icon.types";
+
+import {StyledMenuItem, textTheme} from "./style";
 
 export interface MenuItemProps {
     name: string,
-    icon: typeof SvgIcon,
+    icon?: IconProps,
     onClick: Function,
-    active: boolean
+    active?: boolean,
 }
 
 const MenuItem = (props: MenuItemProps) => {
 
-    const {name, icon, onClick, active} = props;
+    const { name, icon, onClick, active } = props;
 
     const onMenuItemClick = useCallback(() => onClick?.(), [onClick]);
 
     const [hovered, setHovered] = useState(false);
 
-    const IconComponent = icon;
-
     const getTextColor = useCallback(() => {
         if (hovered && !active) {
-            return "#c2c2c2";
+            return "#e8e8e8";
         }
 
-        return active ? "#6776ff" : "#929292";
+        return active ? "#ffffff" : "#bababa";
     }, [active, hovered]);
 
-    const onMouseEnter = useCallback((e) => {
+    const onMouseEnter = useCallback(() => {
         setHovered(true);
     }, []);
 
-    const onMouseLeave = useCallback((e) => {
+    const onMouseLeave = useCallback(() => {
         setHovered(false);
     }, []);
 
     return <StyledMenuItem active={active} onClick={onMenuItemClick} onMouseEnter={onMouseEnter}
                            onMouseLeave={onMouseLeave}>
-        <StyledIconWrapper>
-            <IconComponent style={{color: getTextColor()}}/>
-        </StyledIconWrapper>
+        {icon ? <icon.component className={`h-4 w-4 mr-2 ${icon.color}`}/> : null}
         <Text theme={textTheme(getTextColor())} text={name}/>
     </StyledMenuItem>;
 };

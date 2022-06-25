@@ -1,17 +1,17 @@
-import React from "react";
+import React, {useEffect, useMemo, useState} from "react";
 
 import {store} from "appRedux/store";
-import Dialogs from "components/Dialogs/Dialogs";
+import Dialogs from "components/DialogSystem/Dialogs";
+import {Toaster} from "react-hot-toast";
 import {Provider} from "react-redux";
 import {BrowserRouter} from "react-router-dom";
-import {ToastContainer} from "react-toastify";
 import {createGlobalStyle} from "styled-components";
 
 import Content from "./Content";
 
 import './i18n';
 
-import 'react-toastify/dist/ReactToastify.css';
+import i18n from "./i18n";
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -39,22 +39,49 @@ const GlobalStyle = createGlobalStyle`
 `;
 
 export const App = () => {
+
+    const [translationsLoaded, setTranslationsLoaded] = useState(false);
+
+    useEffect(() => {
+        i18n.init({
+            lng: 'en',
+            backend: {
+                loadPath: '{{ns}}/{{lng}}.json'
+            },
+            fallbackLng: 'en',
+            react: {
+                useSuspense: false
+            },
+            debug: false,
+            ns: ['assets/translation'],
+            defaultNS: 'assets/translation',
+            keySeparator: false,
+            interpolation: {
+                escapeValue: false,
+                formatSeparator: ','
+            }
+        }).then(() => {
+            setTranslationsLoaded(true);
+        });
+    }, []);
+
+    const renderContent = useMemo(() => {
+        if (!translationsLoaded) {
+            console.log("Loading translations...");
+            return null;
+        }
+        console.log("Translations loaded.");
+        return <>
+            <Content/>
+            <Dialogs/>
+        </>;
+    }, [translationsLoaded]);
+
     return <Provider store={store}>
         <GlobalStyle/>
         <BrowserRouter>
-            <Content/>
-            <Dialogs/>
+            {renderContent}
         </BrowserRouter>
-        <ToastContainer
-            position="top-right"
-            autoClose={5000}
-            hideProgressBar={false}
-            newestOnTop={false}
-            closeOnClick
-            rtl={false}
-            pauseOnFocusLoss
-            draggable
-            pauseOnHover
-        />
+        <Toaster/>
     </Provider>;
 };

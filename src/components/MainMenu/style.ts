@@ -2,14 +2,14 @@ import styled from "styled-components";
 
 export const StyledMainMenu = styled.div`
   color: #c4c4c4;
-  width: 420px;
-  min-width: 300px;
   height: 100%;
-  background: #1F1F1F;
-  padding: 20px;
+  background: #2e2e2e;
+  padding: 15px;
   box-sizing: border-box;
-
-  @media (max-width: 600px) {
+  flex-direction: column;
+  align-items: flex-end;
+  
+  @media (max-width: 1200px) {
     width: 100%;
     height: unset;
     padding: 10px;
@@ -19,9 +19,16 @@ export const StyledMainMenu = styled.div`
 export const StyledMenuItems = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  row-gap: 5px;
   
-  @media (max-width: 600px) {
+  @media (max-width: 1200px) {
     flex-direction: row;
+    gap: 10px;
   }
+`;
+
+export const StyledMenuGroupTitle = styled.div`
+  display: flex;
+  width: 100%;
+  margin-bottom: 10px;
 `;

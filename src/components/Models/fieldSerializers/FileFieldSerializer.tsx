@@ -8,8 +8,6 @@ export const FileFieldSerializer = (props: FieldSerializerProps) => {
 
     const {name, value, inEditMode, onChange} = props;
 
-    console.log('URL:', value);
-
     return <Avatar
         src={value}
         style={{

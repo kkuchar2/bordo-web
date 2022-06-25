@@ -18,10 +18,22 @@ export const defaultShowUpAnimation = {
     }
 };
 
+export const dialogAnimation = {
+    initial: { opacity: 0.5, y: 50 },
+    animate: { opacity: 1, y: 0 },
+    exit: { opacity: 0, y: 0 },
+};
+
+export const dialogBgAnimation = {
+    initial: { opacity: 0 },
+    animate: { opacity: 1 },
+    exit: { opacity: 0 },
+};
+
 export const shakeAnimation = {
     initial: { y: -20 },
     animate: {
         x: 0,
-        y: 10,
+        y: 5,
     }
 };

@@ -1,8 +1,11 @@
+// noinspection SpellCheckingInspection
+
 const path = require('path');
 
 const CompressionPlugin = require('compression-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 const HtmlWebPackPlugin = require("html-webpack-plugin");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const MomentLocalesPlugin = require('moment-locales-webpack-plugin');
 const webpack = require('webpack');
 
@@ -54,15 +57,15 @@ module.exports = {
             images: resolvePath('assets/images/'),
             pages: resolvePath('src/pages/'),
             tools: resolvePath('src/tools/'),
+            util: resolvePath('src/util/'),
             configs: resolvePath('configs/'),
             appRedux: resolvePath('src/redux/'),
             components: resolvePath('src/components/'),
-            util: resolvePath('src/api/')
         }
     },
     optimization: optimization,
     devServer: {
-        port: 3000,
+        port: 3002,
         host: "0.0.0.0",
         historyApiFallback: true
     },
@@ -77,6 +80,7 @@ module.exports = {
                 {from: resolvePath('assets/translation'), to: resolvePath('dist/assets/translation')},
             ],
         }),
+        new MiniCssExtractPlugin(),
     ],
     module: {
         rules: [
@@ -107,13 +111,13 @@ module.exports = {
                     {loader: "sass-loader"}
                 ]
             },
-            { // CSS
-                test: /\.(css)$/,
+            {
+                test: /\.css$/,
                 use: [
-                    {loader: "style-loader"},
-                    {loader: "css-loader"},
-                    {loader: "sass-loader"}
-                ]
+                    MiniCssExtractPlugin.loader,
+                    "css-loader",
+                    "postcss-loader",
+                ],
             },
             {
                 test: /\.m?js/,

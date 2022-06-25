@@ -52,14 +52,14 @@ export interface IntegerFieldSerializerProps extends FieldSerializerProps {
 
 export const IntegerFieldSerializer = (props: IntegerFieldSerializerProps) => {
 
-    const {name, value, inEditMode, onChange, isEditable, inputCustomTheme} = props;
+    const { value, inEditMode, onChange, isEditable, inputCustomTheme } = props;
 
     if (inEditMode && isEditable) {
         return <Input theme={inputCustomTheme ? inputCustomTheme : inputTheme}
                       value={value ? value.toString() : ""} placeholder={'Enter value'} title={''}
                       onChange={onChange}/>;
     }
-    return <Text theme={textTheme(inEditMode)} style={{width: '100%', overflow: 'auto'}} text={value}/>;
+    return <Text theme={textTheme(inEditMode)} style={{ width: '100%', overflow: 'auto' }} text={value}/>;
 };
 
 export default IntegerFieldSerializer;

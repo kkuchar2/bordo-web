@@ -1,7 +1,7 @@
-import {TextFieldProps} from "@mui/material";
+import { HTMLProps } from "react";
 
 type ErrorProps = {
-    errors: any;
+    errors: any[];
 }
 
-export type InputWithErrorProps = ErrorProps & TextFieldProps;
+export type InputWithErrorProps = ErrorProps & HTMLProps<HTMLInputElement>

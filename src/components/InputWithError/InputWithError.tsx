@@ -1,65 +1,26 @@
-import React from "react";
+import React, {useMemo} from "react";
 
-import {OutlinedInputProps, TextField, TextFieldProps} from "@mui/material";
-import {styled} from "@mui/styles";
-import {FieldErrors} from "components/Errors/FieldErrors/FieldErrors";
+import {shakeAnimation} from "components/Forms/animation";
+import { motion } from "framer-motion";
 
-import {InputWithErrorProps} from "./InputWithError.types";
-import {InputLabelStyle} from "./style";
+export const InputWithError = ({ field, id, label, type, autoComplete, placeholder, disabled, form: { errors  } }) => {
+    const renderError = useMemo(() => {
+        const error = errors[id];
 
-const ThemedTextField = styled((props: TextFieldProps) => (
-    <TextField InputProps={{ disableUnderline: true } as Partial<OutlinedInputProps>}{...props}/>))
-
-(({ theme }) => ({
-    '& .MuiFilledInput-root': {
-        width: "100%",
-        border: 'none',
-        overflow: 'hidden',
-        borderRadius: 4,
-        backgroundColor: '#252525',
-        fontFamily: 'inherit',
-        color: "#717171",
-        fontWeight: 600,
-        fontSize: '0.9em',
-        '&:hover': {
-            backgroundColor: '#202020',
-        },
-        '&.Mui-focused': {
-            backgroundColor: '#252525',
+        if (error) {
+            return <motion.div className={'error mt-3'} {...shakeAnimation}>{error}</motion.div>;
         }
-    },
-    input: {
-        "&:-webkit-autofill": {
-            transition: "background-color 600000s 0s, color 600000s 0s",
-            WebkitBoxShadow: `0 0 0 50px ${"#1A1A1A"} inset`,
-            WebkitTextFillColor: "#b1b1b1",
-            fontWeight: 600,
-            fontSize: '0.9em'
-        },
-    }
-}));
+    }, [errors, id]);
 
-export const InputWithError = (props: InputWithErrorProps) => {
-
-    const { id, errors, placeholder, onChange, type, autoComplete, defaultValue, disabled } = props;
-
-    return <>
-        <ThemedTextField
-            label={placeholder}
-            defaultValue={defaultValue}
-            id={id}
-            disabled={disabled}
+    return <div className={'flex flex-col mb-[20px]'}>
+        {label ? <div className={'text-slate-400 text-[14px] font-semibold mb-2'}>{label?.toUpperCase()}</div> : null }
+        <input
+            className={'input'}
             type={type}
-            onChange={onChange}
-            variant="filled"
-            style={{ marginTop: 11 }}
-            spellCheck={false}
             autoComplete={autoComplete}
-            fullWidth
-            InputLabelProps={{
-                disableAnimation: true,
-                style: InputLabelStyle
-            }}/>
-        <FieldErrors responseErrors={errors} fieldId={id}/>
-    </>;
+            disabled={disabled}
+            placeholder={placeholder}
+            {...field}  />
+        {renderError}
+    </div>;
 };

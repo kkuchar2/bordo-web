@@ -1,6 +1,6 @@
 import React, {useCallback} from "react";
 
-import {logout} from "appRedux/services/userService";
+import {logout} from "appRedux/services/authService";
 import {useAppDispatch} from "appRedux/store";
 import {Button} from "kuchkr-react-component-library";
 import {Dictionary} from "kuchkr-react-component-library/build/util/BaseTypes.types";

@@ -1,11 +1,11 @@
-import React, {useCallback, useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 
 import {defaultShowUpAnimation} from "components/Forms/animation";
 import MainMenu from "components/MainMenu/MainMenu";
 import {IViewDescription, mainMenuItems} from "components/MainMenu/mainMenuItems";
+import {showSuccessToast} from "components/Toast/readyToastNotifications";
 import {EnsureAuthorized} from "hoc/EnsureAuthorized";
 import {Text} from "kuchkr-react-component-library";
-import {useTranslation} from "react-i18next";
 
 import {
     StyledBottomSection,
@@ -17,14 +17,16 @@ import {
     viewTitleTextTheme
 } from "./style";
 
-const HomePage = () => {
+const HomePage = (props: any) => {
+    const [currentView, setCurrentView] = useState<IViewDescription>(mainMenuItems.pages['Account']);
 
-    const {t} = useTranslation();
+    const {show} = props;
 
-    const [currentView, setCurrentView] = useState<IViewDescription>(mainMenuItems(t)['Account']);
+    useEffect(() => {
+        showSuccessToast("Successfully logged in");
+    }, []);
 
     const renderContent = useCallback(() => {
-
         const ViewComponent = currentView.component;
 
         return <StyledContentSection>
@@ -40,8 +42,12 @@ const HomePage = () => {
     }, [currentView]);
 
     const onMenuItemClick = useCallback((key) => {
-        setCurrentView(mainMenuItems(t)[key]);
-    }, [t]);
+        setCurrentView(mainMenuItems.pages[key]);
+    }, []);
+
+    if (!show) {
+        return <></>;
+    }
 
     return <StyledHomePage>
         {/*<Chat />*/}

@@ -12,9 +12,9 @@ const textTheme = {
 
 export const AutoFieldSerializer = (props: FieldSerializerProps) => {
 
-    const {name, value, inEditMode, onChange} = props;
+    const { value } = props;
 
-    return <Text theme={textTheme} style={{width: '100%', overflow: 'auto'}} text={value}/>;
+    return <Text theme={textTheme} style={{ width: '100%', overflow: 'auto' }} text={value}/>;
 };
 
 export default AutoFieldSerializer;

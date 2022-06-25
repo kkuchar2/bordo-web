@@ -1,7 +1,6 @@
-import {Scrollbars} from 'react-custom-scrollbars';
 import styled from "styled-components";
 
-export const StyledGIFPresentation = styled(Scrollbars)`
+export const StyledGIFPresentation = styled.div`
   width: 600px;
   height: 500px;
   overflow-y: scroll;
@@ -19,9 +18,4 @@ export const StyledGIFPresentation = styled(Scrollbars)`
     }
 
   }
-`;
-
-export const StyledVerticalTrack = styled.div`
-    background: red;
-    width: 10px;
 `;

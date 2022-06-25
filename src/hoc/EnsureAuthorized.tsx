@@ -1,124 +1,59 @@
-import React, {ComponentType, useCallback, useEffect, useState} from "react";
+import React, {ComponentType, useEffect, useMemo} from "react";
 
-import {isFailure, isWaiting, isSuccess} from "api/api_util";
-import {getAutoLoginState, getUserState} from "appRedux/reducers/api/user/userSlice";
-import {autoLogin} from "appRedux/services/userService";
+import {useMemoRequestState} from "api/api_util";
+import {getSelector} from "appRedux/reducers/api/auth/accountSlice";
+import {autoLogin} from "appRedux/services/authService";
 import {useAppDispatch} from "appRedux/store";
 import {useSelector} from "react-redux";
 import {Navigate, useLocation} from "react-router-dom";
 import {isOnAuthenticatedPage} from "routes";
+import {RequestStatus} from "tools/client/client.types";
 
 export const EnsureAuthorized = (WrappedComponent: ComponentType) => {
     const wrappedComponent = (props: any) => {
 
-        const [sentAutologinRequest, setSentAutologinRequest] = useState(false);
-
         const location = useLocation();
+
         const isOnAuthPage = isOnAuthenticatedPage();
 
-        const userState = useSelector(getUserState);
-        const autoLoginState = useSelector(getAutoLoginState);
-
-        const requestPending = isWaiting(autoLoginState);
-        const requestSuccess = isSuccess(autoLoginState);
-        const requestFailure = isFailure(autoLoginState);
-
-        const receivedResponse = !requestPending && (requestSuccess || requestFailure);
+        const userState = useSelector(getSelector('user'));
+        const autoLoginState = useSelector(getSelector('autoLogin'));
+        const autologinStateUnknown = useMemoRequestState(autoLoginState, RequestStatus.Unknown);
+        const autologinStatePending = useMemoRequestState(autoLoginState, RequestStatus.Waiting);
 
         const loggedIn = userState.loggedIn;
+        const recentlyLoggedOut = userState.recentlyLoggedOut;
 
         const dispatch = useAppDispatch();
 
-        /**
-         * Component will autologin only when user is not logged in, so most
-         * of the time, when user refreshes the page (or opens page in another window)
-         *
-         * This prevents also sending autologin request, when user logged in already with password
-         */
         useEffect(() => {
-            if (!loggedIn) {
-                setSentAutologinRequest(true);
+            if (!loggedIn && !recentlyLoggedOut) {
+                dispatch(autoLogin());
             }
         }, []);
 
-        useEffect(() => {
-            if (sentAutologinRequest) {
-                dispatch(autoLogin());
+        return useMemo(() => {
+            if (autologinStateUnknown || autologinStatePending) {
+                return null;
             }
-        }, [sentAutologinRequest]);
 
-        const redirect = useCallback((path) => <Navigate to={path}/>, [location]);
-
-        const renderWhenLoggedInAndOnPublicPage = useCallback(() => {
-            //console.log('Rendering when logged in and on auth page');
-
-            if (!requestPending && receivedResponse) {
-                return redirect("/home");
-            }
-            return null;
-        }, [requestPending, receivedResponse]);
-
-        const renderWhenLoggedOutAndOnPublicPage = useCallback(() => {
-            //console.log('Rendering when logged out and on public page');
-
-            if (requestPending) {
-                return <WrappedComponent {...props} />;
-            }
-            else {
-                if (!requestPending && !receivedResponse) {
-                    return null;
+            if (isOnAuthPage) {
+                if (loggedIn) {
+                    return <WrappedComponent show={true} {...props}/>;
                 }
-                else if ((requestPending && !receivedResponse) || (!requestPending && receivedResponse)) {
-                    return <WrappedComponent {...props} />;
+                else {
+                    return <Navigate to={'/'} state={{ from: location }}/>;
                 }
             }
-
-            return <></>;
-        }, [requestPending, receivedResponse]);
-
-        const renderWhenLoggedInAndOnAuthPage = useCallback(() => {
-            //console.log('Rendering when logged in and on auth page');
-
-            if ((!requestPending && receivedResponse) || (requestPending && !receivedResponse)) {
-                return <WrappedComponent {...props} />;
-            }
             else {
-                return <></>;
+                if (loggedIn) {
+                    return <Navigate to={'/home'} state={{ from: location }}/>;
+                }
+                else {
+                    return <WrappedComponent show={true} {...props}/>;
+                }
             }
-        }, [requestPending, receivedResponse]);
-
-        const renderWhenLoggedOutAndOnAuthPage = useCallback(() => {
-            // console.log('Rendering when logged out and on auth page');
-
-            if (!requestPending && receivedResponse) {
-                return redirect("/");
-            }
-            else if ((!requestPending && !receivedResponse) || (requestPending && !receivedResponse)) {
-                return <></>;
-            }
-        }, [requestPending, receivedResponse]);
-        /**
-         * Processing pages with authentication splits in 2 cases:
-         * 1. isOnAuthPage -> user opened page, that requires being logged in
-         * 2. !isOnAuthPage -> user opened public page
-         *
-         * When user is authenticated public pages redirect to /dashboard
-         * When user is unauthenticated auth pages redirect to /
-         * When authentication is in progress - empty component is rendered
-         */
-
-        if (isOnAuthPage) {
-            if (loggedIn) {
-                return renderWhenLoggedInAndOnAuthPage();
-            }
-            return renderWhenLoggedOutAndOnAuthPage();
-        }
-        else {
-            if (loggedIn) {
-                return renderWhenLoggedInAndOnPublicPage();
-            }
-            return renderWhenLoggedOutAndOnPublicPage();
-        }
+        }, [autologinStateUnknown, autologinStatePending, isOnAuthPage, loggedIn, recentlyLoggedOut, location, props]);
     };
 
     wrappedComponent.displayName = 'wrapped_ensure_authorized';

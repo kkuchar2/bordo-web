@@ -1,5 +1,6 @@
 import { AnyAction } from "@reduxjs/toolkit";
 import {AxiosInstance, AxiosRequestConfig} from "axios";
+import { SchemaOf } from "yup";
 
 export enum RequestStatus {
   Unknown = "UNKNOWN",
@@ -52,7 +53,7 @@ export const DefaultResponseArgs = <T>() => {
   } as ResponseArgs<T>;
 };
 
-export interface RequestArgs<T = any, D = any> {
+export interface RequestArgs<T = any, D = any, ResponseSchemaType = any> {
   axiosInstance: AxiosInstance,
   url: string;
   config?: AxiosRequestConfig<D>;
@@ -62,4 +63,5 @@ export interface RequestArgs<T = any, D = any> {
   filePropertyName?: string;
   refreshTokenOnUnauthorized?: boolean;
   action: (params: ResponseArgs<T>) => AnyAction;
+  responseSchema?: SchemaOf<ResponseSchemaType>
 }

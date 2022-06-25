@@ -1,9 +1,7 @@
-import React, {useCallback, useEffect, useMemo, useState} from "react";
+import React, {useCallback, useMemo} from "react";
 
-import {getUserAvatar, getUserState} from "appRedux/reducers/api/user/userSlice";
-import {changeAvatar} from "appRedux/services/userService";
-import {useAppDispatch} from "appRedux/store";
-import {showChangeAvatarDialog} from "components/Dialogs/readyDialogs";
+import {getUserAvatar, getUserState} from "appRedux/reducers/api/auth/accountSlice";
+import {showChangeAvatarDialog} from "components/DialogSystem/readyDialogs";
 import {Text} from "kuchkr-react-component-library";
 import {useTranslation} from "react-i18next";
 import {useSelector} from "react-redux";
@@ -18,19 +16,13 @@ import {
 } from "./style";
 
 export interface ProfilePictureProps {
-    active?: boolean;
-    useActiveIndicator?: boolean;
     pictureSize?: number;
     useImageUpload?: boolean;
 }
 
 const EditableProfilePictureProperty = (props: ProfilePictureProps) => {
 
-    const { active, useActiveIndicator, pictureSize, useImageUpload } = props;
-
-    const [selectedFile, setSelectedFile] = useState(null);
-
-    const dispatch = useAppDispatch();
+    const { pictureSize, useImageUpload } = props;
 
     const userState = useSelector(getUserState);
     const avatar = useSelector(getUserAvatar);
@@ -42,32 +34,17 @@ const EditableProfilePictureProperty = (props: ProfilePictureProps) => {
             return;
         }
 
-        showChangeAvatarDialog({ dispatch: dispatch, translation: t });
+        showChangeAvatarDialog();
 
     }, [useImageUpload]);
-
-    const onFileSelected = useCallback(() => {
-        if (!selectedFile) {
-            return;
-        }
-        dispatch(changeAvatar(selectedFile));
-    }, [selectedFile]);
-
-    const onFileChange = useCallback((e) => {
-        setSelectedFile(e.target.files[0]);
-    }, []);
-
-    useEffect(() => onFileSelected(), [selectedFile]);
 
     const renderOverlay = useMemo(() => {
         if (!useImageUpload) {
             return null;
         }
-        return (
-            <StyledOverlay>
+        return <StyledOverlay>
                 <Text theme={changeAvatarTextTheme} text={t("CHANGE_AVATAR")}/>
-            </StyledOverlay>
-        );
+            </StyledOverlay>;
     }, [useImageUpload]);
 
     return <StyledEditableProfilePictureProperty enableUpload={useImageUpload}>
@@ -76,7 +53,6 @@ const EditableProfilePictureProperty = (props: ProfilePictureProps) => {
                 <StyledAvatarWithOverlay onClick={onChangeImageClick} useImageUpload={useImageUpload}>
                     <StyledAvatar src={avatar} style={{objectFit: "cover"}} email={userState.email.email} size={pictureSize.toString()} round={true}/>
                     {renderOverlay}
-                    {/*<StyledUserActiveIndicator active={active}/>*/}
                 </StyledAvatarWithOverlay>
             </PropertyValueSection>
         </StyledPropertyValues>
