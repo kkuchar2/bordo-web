@@ -1,5 +1,6 @@
 import React, {useCallback, useRef} from "react";
 
+import {TrashIcon} from "@heroicons/react/outline";
 import {Dictionary} from "@reduxjs/toolkit";
 import {useAppDispatch} from "appRedux/store";
 import {Cell} from "components/Models/Cell/Cell";
@@ -21,7 +22,7 @@ export interface TableRowProps {
 
 const TableRow = (props: TableRowProps) => {
 
-    const {row, model, fields, saveHandler, deleteHandler, onEditModeRequest, editedId} = props;
+    const { row, model, fields, saveHandler, deleteHandler, onEditModeRequest, editedId } = props;
 
     const cellElements: Array<any> = [];
 
@@ -29,7 +30,7 @@ const TableRow = (props: TableRowProps) => {
 
     const dispatch = useAppDispatch();
 
-    const {t} = useTranslation();
+    const { t } = useTranslation();
 
     const editMode = editedId === row.id;
 
@@ -44,7 +45,8 @@ const TableRow = (props: TableRowProps) => {
     const onEditButtonClick = useCallback(() => {
         if (editMode) {
             onEditClick();
-        } else {
+        }
+        else {
             onEditModeRequest(row.id);
         }
     }, [editMode]);
@@ -68,20 +70,20 @@ const TableRow = (props: TableRowProps) => {
 
         return <StyledCell key={idx}>
             <Button theme={saveButtonTheme} onClick={onEditButtonClick}>
-                <div style={{display: 'flex'}}>
+                <div style={{ display: 'flex' }}>
                     <Text theme={saveButtonTextTheme} text={t("EDIT")}/>
                 </div>
             </Button>
             <Button theme={deleteButtonTheme} onClick={onDeleteButtonClick}>
-                <div style={{display: 'flex'}}>
-                    <DeleteIcon fontSize={'small'} style={{color: '#ffffff'}}/>
+                <div style={{ display: 'flex' }}>
+                    <TrashIcon className={`h-5 w-5 text-white`}/>
                 </div>
             </Button>
         </StyledCell>;
     }, [editMode]);
 
     const onCellChange = useCallback((name, data) => {
-        editedRowData.current = Object.assign({}, editedRowData.current, {[name]: data});
+        editedRowData.current = Object.assign({}, editedRowData.current, { [name]: data });
     }, [model]);
 
     const createCell = useCallback((type, name, value, idx) => {

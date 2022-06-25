@@ -1,12 +1,8 @@
+import {PlusIcon} from "@heroicons/react/outline";
 import {MailIcon} from "@heroicons/react/solid";
 import {getSelector} from "appRedux/reducers/api/auth/accountSlice";
 import {openDialog} from "appRedux/reducers/application";
-import {
-    askSetupPassword,
-    changeEmailAddress,
-    changePassword,
-    changeUsername
-} from "appRedux/services/authService";
+import {askSetupPassword, changeEmailAddress, changePassword, changeUsername} from "appRedux/services/authService";
 import {appDispatch} from "appRedux/store";
 import {CreateNewModelItemDialogData} from "components/DialogSystem/dialogs";
 
@@ -223,6 +219,28 @@ export const showDeleteAccountDialog = () => {
                 description: ''
             },
             data: {}
+        }
+    }));
+};
+
+export const showAddTableItemDialog = (args: ReadyDialogArgs, fields: any, modelPackage: string, modelName: string) => {
+    appDispatch(openDialog<CreateNewModelItemDialogData>({
+        component: "CreateNewModelItemDialog",
+        props: {
+            dialog: {
+                title: 'ADD_NEW_ROW',
+                icon: {
+                    component: PlusIcon,
+                    color: 'text-[#24a0ed]',
+                    backgroundColor: 'bg-[#1c3545]'
+                },
+                width: 400
+            },
+            data: {
+                fields: fields,
+                modelPackage: modelPackage,
+                modelName: modelName
+            }
         }
     }));
 };

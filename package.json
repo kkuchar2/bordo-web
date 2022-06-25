@@ -25,6 +25,7 @@
     "@babel/preset-react": "^7.17.12",
     "@babel/preset-typescript": "^7.17.12",
     "@giphy/react-components": "^5.9.2",
+    "@headlessui/react": "^1.6.5",
     "@heroicons/react": "^1.0.6",
     "@react-oauth/google": "^0.2.6",
     "@types/lodash": "^4.14.182",

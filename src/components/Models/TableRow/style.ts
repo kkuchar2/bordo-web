@@ -6,7 +6,7 @@ export const StyledCell = styled.div`
   justify-content: flex-start;
   margin-left: 20px;
   box-sizing: border-box;
-  
+
   @media (max-width: 800px) {
     flex-direction: column;
     align-items: flex-start;
@@ -23,12 +23,14 @@ export const StyledTableRow = styled.div<StyledTableRowProps>`
   width: 100%;
   min-height: 50px;
   box-sizing: border-box;
+  padding-top: 10px;
+  padding-bottom: 10px;
   position: relative;
   background: rgba(33, 33, 33, 0.35);
   outline: ${props => props.inEditMode ? '2px dashed ' + '#5d5d5d' : 'transparent'};
   border-bottom: none;
-  z-index: ${props => props.inEditMode ? 3000 : 1};
-  
+  z-index: ${props => props.inEditMode ? 30 : 1};
+
   @media (max-width: 1200px) {
     flex-direction: column;
   }

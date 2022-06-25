@@ -9,17 +9,18 @@ import {
     getModelTypesRequestState
 } from "appRedux/reducers/api/crud/modelSlice";
 import {ModelType} from "appRedux/reducers/api/crud/modelSlice.types";
-import {changeCurrentViewedModel, openDialog, selectorCurrentViewedModel} from "appRedux/reducers/application";
+import {changeCurrentViewedModel, selectorCurrentViewedModel} from "appRedux/reducers/application";
 import {getAllModelData, getMultiRowModelData, listModels} from "appRedux/services/modelService";
 import {useAppDispatch} from "appRedux/store";
+import {showAddTableItemDialog} from "components/DialogSystem/readyDialogs";
 import Table from "components/Models/Table/Table";
-import {Select, Spinner} from "kuchkr-react-component-library";
+import {Select} from "components/Select/Select";
 import {useSelector} from "react-redux";
 import {RequestStatus} from "tools/client/client.types";
 
 import {isSuccess, isWaiting} from "../../api/api_util";
 
-import {modelSelectorTheme, StyledModelsView, StyledToolbar, } from "./style";
+import {StyledModelsView, StyledToolbar, } from "./style";
 
 const ModelsView = () => {
 
@@ -101,15 +102,8 @@ const ModelsView = () => {
     }, [fields, currentModelName, currentModelPackage, rows]);
 
     const onAddNewItemClick = useCallback(() => {
-        dispatch(openDialog({
-            component: "CreateNewModelItemDialog",
-            props: {
-                fields: fields,
-                modelPackage: currentModelPackage,
-                modelName: currentModelName
-            }
-        }));
-    }, [fields, currentModelName]);
+        showAddTableItemDialog({}, fields, currentModelPackage, currentModelName);
+    }, [fields, currentModelName, currentModelPackage]);
 
     // const modelListForSelect: OptionsType<any> = Object.keys(modelList).length === 0 ? [] : modelList.map((x: any) => {
     //     return {value: x, label: x.model};
@@ -120,25 +114,19 @@ const ModelsView = () => {
 
         if (pending) {
             return <div style={{ marginTop: 100 }}>
-                <Spinner text={undefined}/>
+                {pending ?
+                    <progress className="progress w-full bg-gray-600 h-[20px] progress-accent"></progress> : null}
             </div>;
         }
 
         const options = modelTypes.map((v: ModelType, idx: number) => {
-            return { value: idx, label: `${v.package}.${v.model}` };
+            return { value: idx, name: `${v.package}.${v.model}` };
         });
 
+        console.log(options);
+
         return <StyledToolbar>
-            <Select
-                theme={modelSelectorTheme(isMobile)}
-                options={options}
-                defaultValue={options[0]}
-                placeholder={'Select table'}
-                disabled={false}
-                isSearchable={false}
-                onChange={onSelected}
-                triggerOnDefault={true}
-            />
+            <Select items={options} onChange={onSelected}/>
             <button className={'add_button'} onClick={onAddNewItemClick}>
                 <PlusIcon className={`h-5 w-5 text-white`}/>
                 <p className={'h-[100%] text-white text-[12px] font-semibold'}>

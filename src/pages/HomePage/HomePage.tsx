@@ -8,19 +8,19 @@ import {EnsureAuthorized} from "hoc/EnsureAuthorized";
 import {Text} from "kuchkr-react-component-library";
 
 import {
+    StyledAnimatedHeader,
     StyledBottomSection,
     StyledContentSection,
     StyledHomePage,
     StyledHomePageContent,
     StyledTopSection,
-    StyledAnimatedHeader,
     viewTitleTextTheme
 } from "./style";
 
 const HomePage = (props: any) => {
-    const [currentView, setCurrentView] = useState<IViewDescription>(mainMenuItems.pages['Account']);
+    const [currentView, setCurrentView] = useState<IViewDescription>(mainMenuItems.pages['TableAdministration']);
 
-    const {show} = props;
+    const { show } = props;
 
     useEffect(() => {
         showSuccessToast("Successfully logged in");

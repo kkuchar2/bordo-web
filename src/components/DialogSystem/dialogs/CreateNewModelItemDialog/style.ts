@@ -9,14 +9,8 @@ export const StyledCreateNewModelItemDialog = styled.div`
   flex-direction: column;
   padding: 20px;
   background: #282828;
+  margin-top: 20px;
 `;
-
-export const titleTextTheme = {
-    textColor: "#FFC046",
-    fontSize: "1.0em",
-    textAlign: "left",
-    fontWeight: 700
-};
 
 export const titleModelTextTheme = {
     textColor: "#d9d9d9",
@@ -45,12 +39,4 @@ export const StyledDialogContentSection = styled.div`
   display: flex;
   flex-direction: column;
   padding: 10px;
-`;
-
-export const StyledDialogButtonsSection = styled.div`
-  flex: 1 0;
-  align-items: flex-end;
-  justify-content: flex-end;
-  display: flex;
-  padding: 20px;
 `;

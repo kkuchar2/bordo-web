@@ -6,11 +6,8 @@ import {closeDialog} from "appRedux/reducers/application";
 import {DialogProps} from "appRedux/reducers/application/dialogSlice.types";
 import {addRow} from "appRedux/services/modelService";
 import {useAppDispatch} from "appRedux/store";
-import {getColumnProperties} from "components/Models/columnProperties";
 import {Text} from "kuchkr-react-component-library";
 import {useTranslation} from "react-i18next";
-
-import {ConfirmationCancelSection} from "../../ConfirmationCancelSection";
 
 import {
     CreateNewModelCustomDescription,
@@ -33,23 +30,11 @@ export const CreateNewModelItemDialog = (props: DialogProps<CreateNewModelItemDi
 
     const { modelPackage, modelName, fields } = props.data;
 
+    console.log(props);
+
     const [formData, setFormData] = useState({});
 
     const dispatch = useAppDispatch();
-
-    const createFormField = useCallback((type, name, isEditable, onChange, idx) => {
-        const colProps = getColumnProperties(type);
-
-        return <FieldRow
-            key={idx}
-            name={name}
-            title={name + ':'}
-            colProps={colProps}
-            inEditMode={true}
-            value={''} // TODO what here?
-            onChange={onChange}
-            isEditable={true}/>;
-    }, [fields]);
 
     const onFieldChange = useCallback((fieldName: string, value: any) => {
         setFormData(formData => ({ ...formData, [fieldName]: value }));
@@ -64,9 +49,7 @@ export const CreateNewModelItemDialog = (props: DialogProps<CreateNewModelItemDi
             const fieldInfo = fields[i];
             const name = humanize(fieldInfo.name);
             if (fieldInfo.isEditable) {
-                formRows.push(createFormField(fieldInfo.type, name, fieldInfo.isEditable, (name: string, v: any) => {
-                    onFieldChange(fieldInfo.name, v);
-                }, i));
+
             }
         }
 
@@ -95,7 +78,11 @@ export const CreateNewModelItemDialog = (props: DialogProps<CreateNewModelItemDi
             {renderFields()}
         </StyledDialogContentSection>
 
-        <ConfirmationCancelSection onCancel={onCancel} onConfirm={onConfirm} translation={t} confirmDisabled={false}
-                                   waiting={false}/>
+        <div className={'w-full flex justify-end'}>
+            <button type={'button'} className={'cancelButton'} onClick={onCancel}
+                    disabled={false}>{t('CANCEL')}</button>
+            <button type={'button'} className={'confirmButton'} onClick={onConfirm}
+                    disabled={false}>{t('CONFIRM')}</button>
+        </div>
     </StyledCreateNewModelItemDialog>;
 };
