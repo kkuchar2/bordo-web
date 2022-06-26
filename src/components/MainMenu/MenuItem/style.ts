@@ -10,15 +10,6 @@ export const textTheme = (color: string) => {
     };
 };
 
-export const StyledIconWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  flex: 1 0;
-  height: 100%;
-  transition: 0.2s ease-out all;
-`;
-
 interface StyledMenuItemProps {
     active: boolean;
 }
@@ -31,7 +22,7 @@ export const StyledMenuItem = styled.div<StyledMenuItemProps>`
   align-items: center;
   justify-content: flex-start;
   box-sizing: border-box;
-  width: 250px;
+  white-space: nowrap;
   height: 40px;
   padding: 7px;
 
@@ -40,8 +31,11 @@ export const StyledMenuItem = styled.div<StyledMenuItemProps>`
     background: ${props => props.active ? "rgba(100,100,100,0.26)" : "#4a4a4a"};
   }
 
-  @media (max-width: 1200px) {
-    flex-direction: row;
+  @media (max-width: 1280px) {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     margin-left: 0;
+    white-space: nowrap;
   }
 `;

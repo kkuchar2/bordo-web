@@ -7,19 +7,6 @@ export const StyledHomePage = styled.div`
   background: #282828;
 `;
 
-export const StyledHomePageContent = styled.div`
-  box-sizing: border-box;
-  overflow: hidden;
-  min-width: 200px;
-  display: flex;
-  flex-direction: row;
-  height: 100%;
-  
-  @media (max-width: 1200px) {
-    flex-direction: column;
-  }
-`;
-
 export const StyledContentSection = styled(motion.div)`
   flex: 1 0;
   min-width: 600px;

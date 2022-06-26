@@ -1,6 +1,6 @@
 import {configureStore} from '@reduxjs/toolkit';
 import {loggerMiddleware} from "appRedux/middleware/logger";
-import {dialogReducer} from "appRedux/reducers/application";
+import {dialogReducer, navbarReducer} from "appRedux/reducers/application";
 import axios from "axios";
 import {TypedUseSelectorHook, useDispatch, useSelector} from "react-redux";
 
@@ -20,6 +20,7 @@ export const store = configureStore({
         model: modelReducer,
         modelView: modelViewReducer,
         dialog: dialogReducer,
+        navbar: navbarReducer,
     },
     middleware: (getDefaultMiddleware) => {
         return getDefaultMiddleware(defaultMiddlewareOptions).concat(middlewares);

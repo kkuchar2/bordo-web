@@ -39,7 +39,7 @@ const MenuItem = (props: MenuItemProps) => {
 
     return <StyledMenuItem active={active} onClick={onMenuItemClick} onMouseEnter={onMouseEnter}
                            onMouseLeave={onMouseLeave}>
-        {icon ? <icon.component className={`h-4 w-4 mr-2 ${icon.color}`}/> : null}
+        {icon ? <icon.component className={`h-4 w-4 mr-0 hidden xl:block lg:mr-2 ${icon.color}`}/> : null}
         <Text theme={textTheme(getTextColor())} text={name}/>
     </StyledMenuItem>;
 };
