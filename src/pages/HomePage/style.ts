@@ -1,5 +1,5 @@
-import {motion} from "framer-motion";
-import styled from "styled-components";
+import { motion } from 'framer-motion';
+import styled from 'styled-components';
 
 export const StyledHomePage = styled.div`
   width: 100%;
@@ -7,12 +7,17 @@ export const StyledHomePage = styled.div`
   background: #282828;
 `;
 
-export const StyledContentSection = styled(motion.div)`
+interface NavbarOpenedProps {
+  navbarOpened: boolean;
+}
+
+export const StyledContentSection = styled(motion.div)<NavbarOpenedProps>`
   flex: 1 0;
   min-width: 600px;
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
+  filter: ${(props) => (props.navbarOpened ? 'blur(8px)' : 'none')};
 
   @media (max-width: 600px) {
     min-width: 100px;
@@ -28,8 +33,7 @@ export const StyledTopSection = styled(motion.div)`
   min-height: 60px;
 `;
 
-export const StyledAnimatedHeader = styled(motion.div)`
-`;
+export const StyledAnimatedHeader = styled(motion.div)``;
 
 export const StyledBottomSection = styled.div`
   overflow-y: auto;
@@ -38,8 +42,8 @@ export const StyledBottomSection = styled.div`
 `;
 
 export const viewTitleTextTheme = {
-    textColor: "#ececec",
-    fontSize: "1.2em",
-    textAlign: "left",
-    fontWeight: 600
+  textColor: '#ececec',
+  fontSize: '1.2em',
+  textAlign: 'left',
+  fontWeight: 600
 };
