@@ -16,6 +16,14 @@
         @apply text-[#ff4949] text-[14px]
     }
 
+    .property-title {
+        @apply text-[#b9b9b9] text-[0.7em] font-semibold
+    }
+
+    .property-value {
+        @apply text-[#dcdcdc] text-[0.9em] font-semibold
+    }
+
     .link {
         @apply text-[#74D79F] hover:text-[#4EE28F] visited:text-[#4EE28F]
     }
@@ -41,7 +49,7 @@
     }
 
     .add_button {
-        @apply bg-[#4f545c] hover:bg-[#686D73] flex p-2 items-center justify-center ml-[20px]  base_button
+        @apply bg-[#4f545c] hover:bg-[#686D73] flex p-2 gap-[20px] items-center justify-center ml-[20px]  base_button
     }
 
     .editButton {

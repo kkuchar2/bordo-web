@@ -6,6 +6,7 @@ import {IViewDescription, mainMenuItems} from "components/MainMenu/mainMenuItems
 import {showSuccessToast} from "components/Toast/readyToastNotifications";
 import {EnsureAuthorized} from "hoc/EnsureAuthorized";
 import {Text} from "kuchkr-react-component-library";
+import {useTranslation} from "react-i18next";
 
 import {
     StyledAnimatedHeader,
@@ -18,7 +19,7 @@ import {
 } from "./style";
 
 const HomePage = (props: any) => {
-    const [currentView, setCurrentView] = useState<IViewDescription>(mainMenuItems.pages['TableAdministration']);
+    const [currentView, setCurrentView] = useState<IViewDescription>(mainMenuItems.pages['Language']);
 
     const { show } = props;
 
@@ -26,20 +27,23 @@ const HomePage = (props: any) => {
         showSuccessToast("Successfully logged in");
     }, []);
 
+    const { t } = useTranslation();
+
     const renderContent = useCallback(() => {
         const ViewComponent = currentView.component;
+        console.log('Display name: ', currentView.displayName);
 
         return <StyledContentSection>
             <StyledTopSection>
                 <StyledAnimatedHeader {...defaultShowUpAnimation}>
-                    <Text theme={viewTitleTextTheme} text={currentView.displayName}/>
+                    <Text theme={viewTitleTextTheme} text={t(currentView.displayName)}/>
                 </StyledAnimatedHeader>
             </StyledTopSection>
             <StyledBottomSection>
                 <ViewComponent/>
             </StyledBottomSection>
         </StyledContentSection>;
-    }, [currentView]);
+    }, [currentView, t]);
 
     const onMenuItemClick = useCallback((key) => {
         setCurrentView(mainMenuItems.pages[key]);

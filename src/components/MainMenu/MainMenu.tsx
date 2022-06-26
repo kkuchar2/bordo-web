@@ -4,11 +4,11 @@ import {useAppDispatch} from "appRedux/store";
 import {menuGroupTextTheme} from "components/AccountUnverified/style";
 import {IViewDescription, mainMenuItems} from "components/MainMenu/mainMenuItems";
 import MenuItem from "components/MainMenu/MenuItem/MenuItem";
-import { useMediaQuery } from "hooks/useMediaQuery";
+import {useMediaQuery} from "hooks/useMediaQuery";
 import {Text} from "kuchkr-react-component-library";
 import {useTranslation} from "react-i18next";
 
-import { HamburgerButton } from "./HamburgerButton/HamburgerButton";
+import {HamburgerButton} from "./HamburgerButton/HamburgerButton";
 import {StyledMainMenu, StyledMenuGroupTitle, StyledMenuItems} from "./style";
 
 export interface MainMenuProps {
@@ -37,12 +37,12 @@ const MainMenu = (props: MainMenuProps) => {
             const [key, value] = item;
             return <MenuItem
                 key={value.id}
-                name={value.displayName}
+                name={t(value.displayName)}
                 icon={value.icon}
                 onClick={() => onMenuItemClick(key)}
                 active={openedView.id === value.id}/>;
         });
-    }, [openedView, onMenuItemClick]);
+    }, [openedView, onMenuItemClick, t]);
 
     const menuActionItems = useMemo(() => {
         return Object.entries(mainMenuItems.actions).map((item,) => {
@@ -50,7 +50,7 @@ const MainMenu = (props: MainMenuProps) => {
             return <MenuItem
                 key={value.id}
                 icon={value.icon}
-                name={value.displayName}
+                name={t(value.displayName)}
                 onClick={() => value.onClick(dispatch)}/>;
         });
     }, [openedView, onMenuItemClick, t]);
@@ -72,9 +72,9 @@ const MainMenu = (props: MainMenuProps) => {
                 <Text theme={menuGroupTextTheme} text={t("PAGES")}/>
             </StyledMenuGroupTitle>
             {menuPageItems}
-            <hr style={{border: 0, borderTop: "1px solid " + "#565656", width: "100%", background: "none"}} />
+            <hr style={{ border: 0, borderTop: "1px solid " + "#565656", width: "100%", background: "none" }}/>
             {menuActionItems}
-            <hr style={{border: 0, borderTop: "1px solid " + "#565656", width: "100%", background: "none"}} />
+            <hr style={{ border: 0, borderTop: "1px solid " + "#565656", width: "100%", background: "none" }}/>
         </StyledMenuItems>
         {renderHamburgerButton}
     </StyledMainMenu>;

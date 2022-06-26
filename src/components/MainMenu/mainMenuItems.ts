@@ -8,7 +8,6 @@ import ModelsView from "components/Models/ModelsView";
 import AccountSettings from "components/Settings/AccountSettings";
 import AppearanceSettings from "components/Settings/AppearanceSettings";
 import LanguageSettings from "components/Settings/LanguageSettings";
-import i18n from "i18n";
 
 import {IconProps} from "../../icon/icon.types";
 
@@ -44,7 +43,7 @@ export const mainMenuItems: IMainMenuItems = {
     pages: {
         "Home": {
             id: 'Home',
-            displayName: i18n.t("HOME_PAGE"),
+            displayName: "HOME_PAGE",
             description: '',
             component: HomeView,
             icon: {
@@ -54,7 +53,7 @@ export const mainMenuItems: IMainMenuItems = {
         },
         "TableAdministration": {
             id: 'TableAdministration',
-            displayName: i18n.t("TABLE_ADMINISTRATION"),
+            displayName: "TABLE_ADMINISTRATION",
             description: '',
             component: ModelsView,
             icon: {
@@ -64,7 +63,7 @@ export const mainMenuItems: IMainMenuItems = {
         },
         "Account": {
             id: 'Account',
-            displayName: i18n.t("ACCOUNT_SETTINGS"),
+            displayName: "ACCOUNT_SETTINGS",
             description: '',
             component: AccountSettings,
             icon: {
@@ -74,7 +73,7 @@ export const mainMenuItems: IMainMenuItems = {
         },
         "Appearance": {
             id: 'Appearance',
-            displayName: i18n.t("APPEARANCE"),
+            displayName: "APPEARANCE",
             description: '',
             component: AppearanceSettings,
             icon: {
@@ -84,7 +83,7 @@ export const mainMenuItems: IMainMenuItems = {
         },
         "Language": {
             id: 'Language',
-            displayName: i18n.t("LANGUAGE"),
+            displayName: "LANGUAGE",
             description: '',
             component: LanguageSettings,
             icon: {
@@ -96,7 +95,7 @@ export const mainMenuItems: IMainMenuItems = {
     actions: {
         "Logout": {
             id: 'Logout',
-            displayName: i18n.t("LOGOUT"),
+            displayName: "LOGOUT",
             icon: null,
             onClick: (dispatch: AppDispatch) => dispatch(logout())
         },

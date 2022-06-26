@@ -27,15 +27,3 @@ export const PropertyEditSection = styled.div`
   justify-content: flex-end;
   align-items: center;
 `;
-
-export const propertyNameTheme = {
-    textColor: "#b9b9b9",
-    fontSize: "0.7em",
-    fontWeight: 600
-};
-
-export const propertyValueTheme = {
-    textColor: "#dcdcdc",
-    fontSize: "0.9em",
-    fontWeight: 500
-};

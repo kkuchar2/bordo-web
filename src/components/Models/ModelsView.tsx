@@ -15,6 +15,7 @@ import {useAppDispatch} from "appRedux/store";
 import {showAddTableItemDialog} from "components/DialogSystem/readyDialogs";
 import Table from "components/Models/Table/Table";
 import {Select} from "components/Select/Select";
+import {useTranslation} from "react-i18next";
 import {useSelector} from "react-redux";
 import {RequestStatus} from "tools/client/client.types";
 
@@ -42,6 +43,8 @@ const ModelsView = () => {
     const tableData = !currentModelFullName ? null : modelsData[currentModelFullName];
     const fields = tableData ? tableData.headers : null;
     const rows = tableData ? tableData.rows : null;
+
+    const { t } = useTranslation();
 
     // TODO: detect if is mobile
     const isMobile = false;
@@ -130,7 +133,7 @@ const ModelsView = () => {
             <button className={'add_button'} onClick={onAddNewItemClick}>
                 <PlusIcon className={`h-5 w-5 text-white`}/>
                 <p className={'h-[100%] text-white text-[12px] font-semibold'}>
-                    {'Add new object'}
+                    {t('ADD_NEW_ROW')}
                 </p>
             </button>
         </StyledToolbar>;

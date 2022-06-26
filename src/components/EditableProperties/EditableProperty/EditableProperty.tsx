@@ -2,18 +2,10 @@ import React, {useCallback, useMemo} from "react";
 
 import {getUserState} from "appRedux/reducers/api/auth/accountSlice";
 import {ReadyDialogArgs} from "components/DialogSystem/readyDialogs.types";
-import {Text} from "kuchkr-react-component-library";
 import {useTranslation} from "react-i18next";
 import {useSelector} from "react-redux";
 
-import {
-    PropertyEditSection,
-    propertyNameTheme,
-    PropertyValueSection,
-    propertyValueTheme,
-    StyledEditableTextProperty,
-    StyledPropertyValues
-} from "./style";
+import {PropertyEditSection, PropertyValueSection, StyledEditableTextProperty, StyledPropertyValues} from "./style";
 
 export interface EditablePropertyProps {
     id: string;
@@ -52,10 +44,10 @@ const EditableProperty = (props: EditablePropertyProps) => {
 
     return <StyledEditableTextProperty>
         <StyledPropertyValues>
-            <Text theme={propertyNameTheme} text={name}/>
+            <div className={'property-title'}>{`${t(name)}:`}</div>
             <PropertyValueSection>
                 <div className={'flex flex-row'}>
-                    <Text theme={propertyValueTheme} text={value}/>
+                    <div className={'property-value'}>{`${t(value)}:`}</div>
                 </div>
                 {renderEdit}
             </PropertyValueSection>

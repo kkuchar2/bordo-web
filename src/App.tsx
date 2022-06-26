@@ -43,16 +43,21 @@ export const App = () => {
     const [translationsLoaded, setTranslationsLoaded] = useState(false);
 
     useEffect(() => {
+        const lang = localStorage.getItem('i18nextLng');
+
+        console.log('Initializing i18n with language: ', lang);
+
         i18n.init({
-            lng: 'en',
+            lng: lang,
             backend: {
                 loadPath: '{{ns}}/{{lng}}.json'
             },
             fallbackLng: 'en',
+            preload: ['en', 'pl'],
             react: {
                 useSuspense: false
             },
-            debug: false,
+            debug: true,
             ns: ['assets/translation'],
             defaultNS: 'assets/translation',
             keySeparator: false,
@@ -61,6 +66,7 @@ export const App = () => {
                 formatSeparator: ','
             }
         }).then(() => {
+            console.log('Loaded translations');
             setTranslationsLoaded(true);
         });
     }, []);
