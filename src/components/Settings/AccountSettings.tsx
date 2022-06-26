@@ -1,7 +1,6 @@
 import React, {useCallback, useEffect, useMemo} from "react";
 
 import {getUserAvatar, getUserState, useAuthSelector} from "appRedux/reducers/api/auth/accountSlice";
-import AccountUnverified from "components/AccountUnverified/AccountUnverified";
 import {ConnectedAccount} from "components/ConnectedAccount/ConnectedAccount";
 import {
     showChangeEmailDialog,
@@ -72,7 +71,6 @@ const AccountSettings = () => {
 
     return <StyledSettingsView>
         <StyledSettingsSection>
-            <AccountUnverified show={!userState.email.verified}/>
             <div className={'bg-black/10'}>
                 <div className={'flex items-center justify-center p-5'}>
                     <EditableProfilePictureProperty

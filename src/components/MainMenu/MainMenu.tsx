@@ -1,11 +1,9 @@
 import React, {useCallback, useMemo, useState} from "react";
 
 import {useAppDispatch} from "appRedux/store";
-import {menuGroupTextTheme} from "components/AccountUnverified/style";
 import {IViewDescription, mainMenuItems} from "components/MainMenu/mainMenuItems";
 import MenuItem from "components/MainMenu/MenuItem/MenuItem";
 import {useMediaQuery} from "hooks/useMediaQuery";
-import {Text} from "kuchkr-react-component-library";
 import {useTranslation} from "react-i18next";
 
 import {HamburgerButton} from "./HamburgerButton/HamburgerButton";
@@ -69,7 +67,7 @@ const MainMenu = (props: MainMenuProps) => {
     return <StyledMainMenu>
         <StyledMenuItems>
             <StyledMenuGroupTitle>
-                <Text theme={menuGroupTextTheme} text={t("PAGES")}/>
+                <div className={'text-white'}>{t("PAGES")}</div>
             </StyledMenuGroupTitle>
             {menuPageItems}
             <hr style={{ border: 0, borderTop: "1px solid " + "#565656", width: "100%", background: "none" }}/>
