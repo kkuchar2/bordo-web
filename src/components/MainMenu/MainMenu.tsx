@@ -26,7 +26,7 @@ const MainMenu = (props: MainMenuProps) => {
   const navbarState = useSelector(selectorNavbar);
 
   const onMenuItemClick = useCallback(
-    (key) => {
+    key => {
       onItemClick?.(key);
       dispatch(closeNavbar());
     },
@@ -34,7 +34,7 @@ const MainMenu = (props: MainMenuProps) => {
   );
 
   const menuPageItems = useMemo(() => {
-    return Object.entries(mainMenuItems.pages).map((item) => {
+    return Object.entries(mainMenuItems.pages).map(item => {
       const [key, value] = item;
       return (
         <MenuItem
@@ -49,7 +49,7 @@ const MainMenu = (props: MainMenuProps) => {
   }, [openedView, onMenuItemClick, t]);
 
   const menuActionItems = useMemo(() => {
-    return Object.entries(mainMenuItems.actions).map((item) => {
+    return Object.entries(mainMenuItems.actions).map(item => {
       const [, value] = item;
       return (
         <MenuItem
@@ -90,7 +90,7 @@ const MainMenu = (props: MainMenuProps) => {
     return (
       <div
         className={
-          'absolute top-0 right-0 flex h-full w-[300px] w-[75%] flex-col gap-[15px] bg-[#2e2e2e]/50 p-3 pt-3 pb-3 ' +
+          'absolute top-0 right-0 flex h-full w-[75%] flex-col gap-[15px] bg-[#2e2e2e]/50 p-3 pt-3 pb-3 sm:w-[100%] ' +
           'backdrop-blur-xl sm:relative sm:flex-row sm:bg-none sm:p-0 lg:flex-row xl:flex-col xl:gap-[5px] xl:pt-0 xl:pb-0'
         }
       >
@@ -109,7 +109,7 @@ const MainMenu = (props: MainMenuProps) => {
 
   return (
     <div
-      className={'absolute z-[15] box-border h-full w-full p-[15px] sm:relative sm:h-auto sm:w-auto sm:bg-[#2e2e2e]'}
+      className={'absolute z-[15] box-border h-full w-full p-[15px] sm:relative sm:h-auto sm:w-[300px] sm:bg-[#2e2e2e]'}
     >
       {renderMenuItems}
     </div>

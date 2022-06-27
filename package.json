@@ -74,6 +74,7 @@
     "postcss": "^8.4.14",
     "postcss-loader": "^7.0.0",
     "prettier": "^2.7.1",
+    "prettier-plugin-sort-json": "^0.0.2",
     "prettier-plugin-tailwindcss": "^0.1.11",
     "process": "^0.11.10",
     "react-avatar": "^5.0.1",

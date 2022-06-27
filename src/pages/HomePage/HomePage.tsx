@@ -53,7 +53,7 @@ const HomePage = (props: any) => {
     );
   }, [currentView, navbarState, t]);
 
-  const onMenuItemClick = useCallback((key) => {
+  const onMenuItemClick = useCallback(key => {
     setCurrentView(mainMenuItems.pages[key]);
   }, []);
 

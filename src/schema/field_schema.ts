@@ -9,11 +9,11 @@ export const ConfirmPasswordSchema = (reference: string) => string()
     .required('Password confirmation is required')
     .oneOf([ref(reference), null], 'Passwords do not match');
 
-export const RequiredStringSchema = string()
-    .required('This field may not be blank');
+export const RequiredStringSchema = (t: any) => string()
+    .required(t('FIELD_REQUIRED'));
 
-export const RequiredCurrentPasswordSchema = string()
-    .required('You must provide current password');
+export const RequiredCurrentPasswordSchema = (t: any) => string()
+    .required(t('CURRENT_PASSWORD_REQUIRED'));
 
 export const EmailSchema = string()
     .email('Please enter valid E-mail address')

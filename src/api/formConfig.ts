@@ -6,7 +6,8 @@ import {object, SchemaOf} from "yup";
 import {
     ConfirmPasswordSchema,
     EmailSchema,
-    NewPasswordSchema, RequiredCurrentPasswordSchema,
+    NewPasswordSchema,
+    RequiredCurrentPasswordSchema,
     RequiredStringSchema,
     UsernameSchema
 } from "../schema/field_schema";
@@ -14,9 +15,12 @@ import {
 import {fieldTypes} from "./fieldTypes";
 import {
     ChangeEmailFormArgs,
-    ChangeUsernameFormArgs, CreateNewPasswordFormArgs, DeleteAccountFormArgs,
+    ChangeUsernameFormArgs,
+    CreateNewPasswordFormArgs,
+    DeleteAccountFormArgs,
     ForgotPasswordFormArgs,
-    LoginFormArgs, ResetPasswordFormArgs,
+    LoginFormArgs,
+    ResetPasswordFormArgs,
     SignupFormArgs
 } from "./formConfig.types";
 
@@ -41,88 +45,90 @@ export interface FormConfigs {
     emptyForm: FormConfig,
 }
 
-export const FORM_CONFIG: FormConfigs = {
-    login: {
-        fields: [
-            { name: 'email' },
-            { name: 'password' },
-        ],
-        validationSchema: object({
-            email: EmailSchema,
-            password: RequiredStringSchema,
-        })
-    },
-    registration: {
-        fields: [
-            { name: 'email' },
-            { name: 'password' },
-        ],
-        validationSchema: object({
-            email: EmailSchema,
-            password: NewPasswordSchema,
-        })
-    },
-    forgotPassword: {
-        fields: [
-            { name: 'email' },
-        ],
-        validationSchema: object({
-            email: EmailSchema,
-        })
-    },
-    createNewPassword: {
-        fields: [
-            { name: 'new_password' },
-            { name: 'new_password_confirm' },
-        ],
-        validationSchema: object({
-            new_password: NewPasswordSchema,
-            new_password_confirm: ConfirmPasswordSchema('new_password'),
-        })
-    },
-    changeEmail: {
-        fields: [
-            { name: 'new_email' },
-            { name: 'current_password' },
-        ]
-    },
-    changeUsername: {
-        fields: [
-            { name: 'username' },
-            { name: 'current_password' },
-        ],
-        validationSchema: object({
-            username: UsernameSchema,
-            current_password: RequiredCurrentPasswordSchema
-        })
-    },
-    resetPassword: {
-        fields: [
-            { name: 'current_password' },
-            { name: 'new_password' },
-            { name: 'new_password_confirm' },
-        ],
-        validationSchema: object({
-            current_password: RequiredCurrentPasswordSchema,
-            new_password: NewPasswordSchema,
-            new_password_confirm: ConfirmPasswordSchema('new_password'),
-        })
-    },
-    deleteAccount: {
-        fields: [
-            { name: 'current_password' },
-        ],
-        validationSchema: object({
-            current_password: RequiredCurrentPasswordSchema
-        })
-    },
-    emptyForm: {
-        fields: [],
-        validationSchema: object({})
-    },
+export const FORM_CONFIG = (t: any): FormConfigs => {
+    return {
+        login: {
+            fields: [
+                { name: 'email' },
+                { name: 'password' },
+            ],
+            validationSchema: object({
+                email: EmailSchema,
+                password: RequiredStringSchema,
+            })
+        },
+        registration: {
+            fields: [
+                { name: 'email' },
+                { name: 'password' },
+            ],
+            validationSchema: object({
+                email: EmailSchema,
+                password: NewPasswordSchema,
+            })
+        },
+        forgotPassword: {
+            fields: [
+                { name: 'email' },
+            ],
+            validationSchema: object({
+                email: EmailSchema,
+            })
+        },
+        createNewPassword: {
+            fields: [
+                { name: 'new_password' },
+                { name: 'new_password_confirm' },
+            ],
+            validationSchema: object({
+                new_password: NewPasswordSchema,
+                new_password_confirm: ConfirmPasswordSchema('new_password'),
+            })
+        },
+        changeEmail: {
+            fields: [
+                { name: 'new_email' },
+                { name: 'current_password' },
+            ]
+        },
+        changeUsername: {
+            fields: [
+                { name: 'username' },
+                { name: 'current_password' },
+            ],
+            validationSchema: object({
+                username: UsernameSchema,
+                current_password: RequiredCurrentPasswordSchema(t)
+            })
+        },
+        resetPassword: {
+            fields: [
+                { name: 'current_password' },
+                { name: 'new_password' },
+                { name: 'new_password_confirm' },
+            ],
+            validationSchema: object({
+                current_password: RequiredCurrentPasswordSchema(t),
+                new_password: NewPasswordSchema,
+                new_password_confirm: ConfirmPasswordSchema('new_password'),
+            })
+        },
+        deleteAccount: {
+            fields: [
+                { name: 'current_password' },
+            ],
+            validationSchema: object({
+                current_password: RequiredCurrentPasswordSchema(t)
+            })
+        },
+        emptyForm: {
+            fields: [],
+            validationSchema: object({})
+        }
+    };
 };
 
-export const getField = (fieldName: string,  translation: TFunction<"translation">): FieldConfig => {
+export const getField = (fieldName: string, translation: TFunction<"translation">): FieldConfig => {
 
     if (!fieldTypes[fieldName]) {
         console.error(`Field type ${fieldName} not found`);
@@ -132,9 +138,9 @@ export const getField = (fieldName: string,  translation: TFunction<"translation
     return fieldTypes[fieldName](translation);
 };
 
-export const getConfig  = (configs : FormConfigs, configName, t) : FormConfig => {
+export const getConfig = (configs: FormConfigs, configName, t): FormConfig => {
 
-    const config : FormConfig = configs[configName];
+    const config: FormConfig = configs[configName];
 
     if (!config) {
         console.error(`Config key ${configName} not found`);
@@ -158,5 +164,5 @@ export const getConfig  = (configs : FormConfigs, configName, t) : FormConfig =>
 };
 
 export const useFormConfig = (configName: string, translation: any) => {
-    return useMemo(() => getConfig(FORM_CONFIG, configName, translation), [translation]);
+    return useMemo(() => getConfig(FORM_CONFIG(translation), configName, translation), [translation]);
 };

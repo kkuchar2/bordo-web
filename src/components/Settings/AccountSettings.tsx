@@ -61,13 +61,13 @@ const AccountSettings = () => {
             return null;
         }
 
-        return <SettingsSection title={"CONNECTED ACCOUNTS"}>
+        return <SettingsSection title={t("CONNECTED_ACCOUNTS")}>
             <div className={'flex items-center justify-start w-full'}>
                 {supportedProviders.map((provider, idx) => <ConnectedAccount key={idx} supportedProvider={provider}
                                                                              connections={connections}/>)}
             </div>
         </SettingsSection>;
-    }, [userState]);
+    }, [userState, t]);
 
     return <StyledSettingsView>
         <StyledSettingsSection>
@@ -103,7 +103,7 @@ const AccountSettings = () => {
 
             <StyledSettingsPropertiesSection>
 
-                <SettingsSection title={"PASSWORD AND AUTHENTICATION"} show={!isOnlySocial}>
+                <SettingsSection title={t("PASSWORD AND AUTHENTICATION")} show={!isOnlySocial}>
                     <button type={'button'} onClick={showChangePasswordDialog} className={'changePasswordButton'}>
                         {t('CHANGE_PASSWORD')}
                     </button>

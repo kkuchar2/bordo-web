@@ -1,58 +1,63 @@
-import React, {useCallback, useMemo} from "react";
+import React, { useCallback, useMemo } from 'react';
 
-import {getUserState} from "appRedux/reducers/api/auth/accountSlice";
-import {ReadyDialogArgs} from "components/DialogSystem/readyDialogs.types";
-import {useTranslation} from "react-i18next";
-import {useSelector} from "react-redux";
+import { getUserState } from 'appRedux/reducers/api/auth/accountSlice';
+import { ReadyDialogArgs } from 'components/DialogSystem/readyDialogs.types';
+import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
 
-import {PropertyEditSection, PropertyValueSection, StyledEditableTextProperty, StyledPropertyValues} from "./style";
+import { PropertyEditSection, PropertyValueSection, StyledEditableTextProperty, StyledPropertyValues } from './style';
 
 export interface EditablePropertyProps {
-    id: string;
-    name: string,
-    value: string,
-    type?: string,
-    editText?: string;
-    obfuscate: boolean,
-    canEdit?: boolean,
-    passwordRequired: boolean,
-    showDialogFunc: (args: ReadyDialogArgs) => (isOnlySocial: boolean) => void;
+  id: string;
+  name: string;
+  value: string;
+  type?: string;
+  editText?: string;
+  obfuscate: boolean;
+  canEdit?: boolean;
+  passwordRequired: boolean;
+  showDialogFunc: (args: ReadyDialogArgs) => (isOnlySocial: boolean) => void;
 }
 
 const EditableProperty = (props: EditablePropertyProps) => {
+  const { name, value, showDialogFunc, canEdit } = props;
 
-    const { name, value, showDialogFunc, canEdit } = props;
+  const { t } = useTranslation();
 
-    const { t } = useTranslation();
+  const userState = useSelector(getUserState);
 
-    const userState = useSelector(getUserState);
+  const isOnlySocial = userState.social.only_social;
 
-    const isOnlySocial = userState.social.only_social;
+  const onEditButtonClick = useCallback(() => {
+    showDialogFunc({})(isOnlySocial);
+  }, [isOnlySocial]);
 
-    const onEditButtonClick = useCallback(() => {
-        showDialogFunc({})(isOnlySocial);
-    }, [isOnlySocial]);
+  const renderEdit = useMemo(() => {
+    if (!canEdit) {
+      return null;
+    }
+    return (
+      <PropertyEditSection>
+        <button type="button" onClick={onEditButtonClick} className={'editButton'}>
+          {t('EDIT')}
+        </button>
+      </PropertyEditSection>
+    );
+  }, [canEdit, onEditButtonClick]);
 
-    const renderEdit = useMemo(() => {
-        if (!canEdit) {
-            return null;
-        }
-        return <PropertyEditSection>
-            <button type='button' onClick={onEditButtonClick} className={'editButton'}>{t('EDIT')}</button>
-        </PropertyEditSection>;
-    }, [canEdit, onEditButtonClick]);
-
-    return <StyledEditableTextProperty>
-        <StyledPropertyValues>
-            <div className={'property-title'}>{`${t(name)}:`}</div>
-            <PropertyValueSection>
-                <div className={'flex flex-row'}>
-                    <div className={'property-value'}>{`${t(value)}:`}</div>
-                </div>
-                {renderEdit}
-            </PropertyValueSection>
-        </StyledPropertyValues>
-    </StyledEditableTextProperty>;
+  return (
+    <StyledEditableTextProperty>
+      <StyledPropertyValues>
+        <div className={'property-title'}>{`${t(name).toUpperCase()}:`}</div>
+        <PropertyValueSection>
+          <div className={'flex flex-row'}>
+            <div className={'property-value'}>{`${t(value)}:`}</div>
+          </div>
+          {renderEdit}
+        </PropertyValueSection>
+      </StyledPropertyValues>
+    </StyledEditableTextProperty>
+  );
 };
 
 export default EditableProperty;
