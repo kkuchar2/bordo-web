@@ -1,25 +1,24 @@
-import { motion } from 'framer-motion';
+import {motion} from 'framer-motion';
 import styled from 'styled-components';
 
 export const StyledHomePage = styled.div`
   width: 100%;
   box-sizing: border-box;
-  background: #282828;
 `;
 
 interface NavbarOpenedProps {
-  navbarOpened: boolean;
+    navbarOpened: boolean;
 }
 
-export const StyledContentSection = styled(motion.div)<NavbarOpenedProps>`
+export const StyledContentSection = styled.div<NavbarOpenedProps>`
   flex: 1 0;
   min-width: 600px;
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
-  filter: ${(props) => (props.navbarOpened ? 'blur(8px)' : 'none')};
+  filter: ${props => (props.navbarOpened ? 'blur(8px)' : 'none')};
 
-  @media (max-width: 600px) {
+  @media (max-width: 1024px) {
     min-width: 100px;
   }
 `;
@@ -42,8 +41,8 @@ export const StyledBottomSection = styled.div`
 `;
 
 export const viewTitleTextTheme = {
-  textColor: '#ececec',
-  fontSize: '1.2em',
-  textAlign: 'left',
-  fontWeight: 600
+    textColor: '#ececec',
+    fontSize: '1.2em',
+    textAlign: 'left',
+    fontWeight: 600
 };

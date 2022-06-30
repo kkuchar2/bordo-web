@@ -12,9 +12,7 @@ const es6 = {};
 
 const react = {};
 
-const typescript = {
-
-};
+const typescript = {};
 
 const stylistic = {
     'no-multiple-empty-lines': ['error', {max: 1, maxBOF: 0, maxEOF: 0}],
@@ -22,6 +20,7 @@ const stylistic = {
     'comma-spacing': 'error',
     'comma-style': 'error',
     "react/no-unescaped-entities": 0,
+    "react/jsx-wrap-multilines": "off",
     "react/prop-types": 0,
     "no-var": 0,
     "semi": 'error',
@@ -53,7 +52,7 @@ const stylistic = {
     "unused-imports/no-unused-imports": "error",
     "unused-imports/no-unused-vars": [
         "warn",
-        { "vars": "all", "varsIgnorePattern": "^_", "args": "after-used", "argsIgnorePattern": "^_" }
+        {"vars": "all", "varsIgnorePattern": "^_", "args": "after-used", "argsIgnorePattern": "^_"}
     ],
 };
 

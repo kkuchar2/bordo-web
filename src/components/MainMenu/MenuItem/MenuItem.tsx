@@ -1,20 +1,17 @@
-import React, {useCallback, useState} from "react";
+import React, {useCallback, useState} from 'react';
 
-import {Text} from "kuchkr-react-component-library";
+import {IconProps} from '../../../icon/icon.types';
 
-import {IconProps} from "../../../icon/icon.types";
-
-import {StyledMenuItem, textTheme} from "./style";
+import {StyledMenuItem} from './style';
 
 export interface MenuItemProps {
-    name: string,
-    icon?: IconProps,
-    onClick: Function,
-    active?: boolean,
+    name: string;
+    icon?: IconProps;
+    onClick?: Function;
+    active?: boolean;
 }
 
 const MenuItem = (props: MenuItemProps) => {
-
     const { name, icon, onClick, active } = props;
 
     const onMenuItemClick = useCallback(() => onClick?.(), [onClick]);
@@ -23,10 +20,10 @@ const MenuItem = (props: MenuItemProps) => {
 
     const getTextColor = useCallback(() => {
         if (hovered && !active) {
-            return "#e8e8e8";
+            return '#e8e8e8';
         }
 
-        return active ? "#ffffff" : "#bababa";
+        return active ? '#ffffff' : '#d7d7d7';
     }, [active, hovered]);
 
     const onMouseEnter = useCallback(() => {
@@ -39,8 +36,11 @@ const MenuItem = (props: MenuItemProps) => {
 
     return <StyledMenuItem active={active} onClick={onMenuItemClick} onMouseEnter={onMouseEnter}
                            onMouseLeave={onMouseLeave}>
-        {icon ? <icon.component className={`h-4 w-4 mr-0 hidden xl:block lg:mr-2 ${icon.color}`}/> : null}
-        <Text theme={textTheme(getTextColor())} text={name}/>
+        <div className={'text-[14px] text-[#e8e8e8] hover:text-white'}>{name}</div>
+        <div className={'flex-grow flex justify-end'}>
+            {icon ? <icon.component
+                className={`mr-0 block sm:hidden lg:block h-4 w-4  ${icon.color}`}/> : null}
+        </div>
     </StyledMenuItem>;
 };
 

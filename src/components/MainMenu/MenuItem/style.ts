@@ -5,7 +5,7 @@ export const textTheme = (color: string) => {
         fontSize: "0.875em",
         textColor: color,
         disabledTextColor: "rgba(255,255,255,0.20)",
-        fontWeight: 500,
+        fontWeight: 400,
         margin: "0px 0px 0px 0px"
     };
 };
@@ -15,7 +15,7 @@ interface StyledMenuItemProps {
 }
 
 export const StyledMenuItem = styled.div<StyledMenuItemProps>`
-  background: ${props => props.active ? "rgba(12,12,12,0.26)" : "none"};
+  background: ${props => props.active ? "rgba(255, 255, 255, 0.07)" : "none"};
   border-radius: 5px;
   display: flex;
   flex-direction: row;
@@ -23,17 +23,24 @@ export const StyledMenuItem = styled.div<StyledMenuItemProps>`
   justify-content: flex-start;
   box-sizing: border-box;
   white-space: nowrap;
-  height: 40px;
-  padding: 7px;
+  padding: 6px 10px;
 
   &:hover {
     cursor: ${props => props.active ? "unset" : "pointer"};
-    background: ${props => props.active ? "rgba(100,100,100,0.26)" : "#4a4a4a"};
+    background: rgba(255, 255, 255, 0.07);
   }
 
-  @media (max-width: 1280px) {
+  @media (max-width: 1024px) {
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
+    justify-content: center;
+    margin-left: 0;
+    white-space: nowrap;
+  }
+
+  @media (max-width: 640px) {
+    flex-direction: row;
+    align-items: flex-start;
     justify-content: center;
     margin-left: 0;
     white-space: nowrap;

@@ -1,119 +1,129 @@
-import React, { useCallback, useMemo } from 'react';
+import React, {useCallback, useEffect, useMemo} from 'react';
 
-import { MenuAlt3Icon } from '@heroicons/react/solid';
-import { closeNavbar, openNavbar, selectorNavbar } from 'appRedux/reducers/application';
-import { useAppDispatch } from 'appRedux/store';
-import { IViewDescription, mainMenuItems } from 'components/MainMenu/mainMenuItems';
+import {MenuAlt3Icon} from '@heroicons/react/solid';
+import {closeNavbar, openNavbar, selectorNavbar} from 'appRedux/reducers/application';
+import {useAppDispatch} from 'appRedux/store';
+import {Group, GroupItem, mainMenuItems} from 'components/MainMenu/mainMenuItems';
 import MenuItem from 'components/MainMenu/MenuItem/MenuItem';
-import { useMediaQuery } from 'hooks/useMediaQuery';
-import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
+import {useMediaQuery} from 'hooks/useMediaQuery';
+import {useTranslation} from 'react-i18next';
+import {useSelector} from 'react-redux';
 
 export interface MainMenuProps {
-  onItemClick: Function;
-  openedView: IViewDescription;
+    openedView: GroupItem;
 }
 
 const MainMenu = (props: MainMenuProps) => {
-  const { onItemClick, openedView } = props;
+    const { openedView } = props;
 
-  const dispatch = useAppDispatch();
+    const dispatch = useAppDispatch();
 
-  const { t } = useTranslation();
+    const { t } = useTranslation();
 
-  const isMobile = useMediaQuery('(max-width: 640px)');
+    const isSmall = useMediaQuery('(max-width: 1280px)');
 
-  const navbarState = useSelector(selectorNavbar);
+    const navbarState = useSelector(selectorNavbar);
 
-  const onMenuItemClick = useCallback(
-    key => {
-      onItemClick?.(key);
-      dispatch(closeNavbar());
-    },
-    [onItemClick]
-  );
+    const onHamburgerClick = useCallback(() => {
+        dispatch(openNavbar());
+    }, []);
 
-  const menuPageItems = useMemo(() => {
-    return Object.entries(mainMenuItems.pages).map(item => {
-      const [key, value] = item;
-      return (
-        <MenuItem
-          key={value.id}
-          name={t(value.displayName)}
-          icon={value.icon}
-          onClick={() => onMenuItemClick(key)}
-          active={openedView.id === value.id}
-        />
-      );
-    });
-  }, [openedView, onMenuItemClick, t]);
+    console.log('Opened view: ', openedView);
 
-  const menuActionItems = useMemo(() => {
-    return Object.entries(mainMenuItems.actions).map(item => {
-      const [, value] = item;
-      return (
-        <MenuItem
-          key={value.id}
-          icon={value.icon}
-          name={t(value.displayName)}
-          onClick={() => value.onClick(dispatch)}
-        />
-      );
-    });
-  }, [openedView, onMenuItemClick, t]);
-
-  const onHamburgerClick = useCallback(() => {
-    dispatch(openNavbar());
-  }, []);
-
-  const renderHamburgerButton = useMemo(() => {
-    if (navbarState.opened) {
-      return null;
-    }
-
-    if (!isMobile) {
-      return null;
-    }
-    return (
-      <MenuAlt3Icon
-        className={`absolute top-[25px] right-[25px] mr-0 h-10 w-10 cursor-pointer text-white`}
-        onClick={onHamburgerClick}
-      />
-    );
-  }, [isMobile, navbarState]);
-
-  const renderSeparator = useMemo(() => {
-    return <hr className={`border-solid border-gray-300 border-opacity-25`} />;
-  }, []);
-
-  const renderMenuItems = useMemo(() => {
-    return (
-      <div
-        className={
-          'absolute top-0 right-0 flex h-full w-[75%] flex-col gap-[15px] bg-[#2e2e2e]/50 p-3 pt-3 pb-3 sm:w-[100%] ' +
-          'backdrop-blur-xl sm:relative sm:flex-row sm:bg-none sm:p-0 lg:flex-row xl:flex-col xl:gap-[5px] xl:pt-0 xl:pb-0'
+    const renderHamburgerButton = useMemo(() => {
+        if (navbarState.opened) {
+            return null;
         }
-      >
-        <div className={'mb-[10px] hidden text-white xl:block'}>{t('PAGES')}</div>
-        {menuPageItems}
-        {renderSeparator}
-        {menuActionItems}
-        {renderSeparator}
-      </div>
+
+        if (!isSmall) {
+            return null;
+        }
+        return <MenuAlt3Icon
+            className={`absolute top-[25px] right-[25px] mr-0 h-10 w-10 cursor-pointer text-white`}
+            onClick={onHamburgerClick}
+        />;
+    }, [isSmall, navbarState]);
+
+    const renderGroup = useCallback((group: Group) => {
+            const groupName = group.groupName;
+            const items = group.groupItems;
+
+            if (Array.isArray(items)) {
+                return <div className={'pt-[10px] pb-[10px] flex flex-col gap-1'}>
+                    {items.map((item: GroupItem, idx: number) => {
+                        return <MenuItem icon={item.icon} key={idx} name={t(item.displayName)} onClick={item.onClick}/>;
+                    })}
+                </div>;
+            }
+
+            return <div className={'lg:pt-[20px] pb-[10px] flex flex-col gap-1'}>
+                <div
+                    className={'text-[12px] ml-[10px] font-semibold text-gray-400'}>{t(groupName).toUpperCase()}</div>
+
+                {Object.entries(items).map(([key, item]) => {
+                    return <MenuItem
+                        key={key}
+                        name={t(item.displayName)}
+                        active={openedView !== null && openedView.id === item.id}
+                        icon={item.icon} onClick={item.onClick}/>;
+                })}
+            </div>;
+        },
+        [openedView, t]
     );
-  }, [t]);
 
-  if (isMobile && !navbarState.opened) {
-    return renderHamburgerButton;
-  }
+    const getTranslation = useCallback(() => {
+        if (!isSmall) {
+            return '';
+        }
 
-  return (
-    <div
-      className={'absolute z-[15] box-border h-full w-full p-[15px] sm:relative sm:h-auto sm:w-[300px] sm:bg-[#2e2e2e]'}
-    >
-      {renderMenuItems}
-    </div>
-  );
+        return navbarState.opened ? 'translate-x-0' : 'translate-x-[100%]';
+    }, [isSmall, navbarState]);
+
+    const getTransition = useCallback(() => {
+        return isSmall ? 'transition duration-300 ease-in-out' : '';
+    }, [isSmall]);
+
+    useEffect(() => {
+        if (!isSmall) {
+            dispatch(closeNavbar());
+        }
+    }, [isSmall]);
+
+    const navbarItems = useMemo(() => {
+        return <div
+            className={'flex flex-col h-full sm:gap-[20px] lg:gap-[0px] md:w-full lg:w-[75%]'}>
+            {Object.entries(mainMenuItems).map(([key, group]) =>
+                <div key={key}>
+                    {renderGroup(group)}
+                    <hr className={`ml-[10px] border-1 border-gray-300 border-opacity-10`}/>
+                </div>)}
+        </div>;
+    }, [t]);
+
+    const renderLargeScreenNavbar = useMemo(() => {
+        return <nav
+            className={`backdrop-blur-xl bg-[#2e2e2e]/90 flex h-full justify-end p-[15px] w-[300px]`}>
+            {navbarItems}
+        </nav>;
+    }, [t, navbarItems]);
+
+    const renderSmallScreenNavbar = useMemo(() => {
+        return <>
+            {!navbarState.opened ? renderHamburgerButton : null}
+            <nav
+                className={`${getTranslation()} ${getTransition()}  fixed backdrop-blur-xl bg-[#1d1d1d]/90 top-0 right-0 z-[15] h-full w-[75%] max-w-[300px] items-end p-[15px]`}>
+                {navbarItems}
+            </nav>
+        </>;
+    }, [navbarItems, navbarState, isSmall, t]);
+
+    return useMemo(() => {
+        if (isSmall) {
+            return renderSmallScreenNavbar;
+        }
+        return renderLargeScreenNavbar;
+    }, [isSmall, navbarState, t]);
 };
 
 export default MainMenu;

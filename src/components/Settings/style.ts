@@ -23,7 +23,7 @@ export const StyledSettingsSection = styled(motion.div)`
   flex-direction: column;
   box-sizing: border-box;
   width: 600px;
-  
+
   @media (max-width: 1200px) {
     width: 100%;
     max-width: 100%;
@@ -34,6 +34,12 @@ export const StyledSettingsSection = styled(motion.div)`
 
 export const StyledAccountSummaryBottom = styled.div`
   position: relative;
+  
+  @media (max-width: 1200px) {
+    background: rgba(255, 255, 255, 0.06);
+    margin: 10px;
+    border-radius: 5px;
+  }
 `;
 
 export const StyledAccountSummaryFields = styled.div`

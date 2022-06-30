@@ -1,17 +1,17 @@
-import React, {useEffect, useMemo, useState} from "react";
+import React, {useEffect, useMemo, useState} from 'react';
 
-import {store} from "appRedux/store";
-import Dialogs from "components/DialogSystem/Dialogs";
-import {Toaster} from "react-hot-toast";
-import {Provider} from "react-redux";
-import {BrowserRouter} from "react-router-dom";
-import {createGlobalStyle} from "styled-components";
+import {store} from 'appRedux/store';
+import Dialogs from 'components/DialogSystem/Dialogs';
+import {Toaster} from 'react-hot-toast';
+import {Provider} from 'react-redux';
+import {BrowserRouter} from 'react-router-dom';
+import {createGlobalStyle} from 'styled-components';
 
-import Content from "./Content";
+import Content from './Content';
 
 import './i18n';
 
-import i18n from "./i18n";
+import i18n from './i18n';
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -39,7 +39,6 @@ const GlobalStyle = createGlobalStyle`
 `;
 
 export const App = () => {
-
     const [translationsLoaded, setTranslationsLoaded] = useState(false);
 
     useEffect(() => {
@@ -47,47 +46,49 @@ export const App = () => {
 
         console.log('Initializing i18n with language: ', lang);
 
-        i18n.init({
-            lng: lang,
-            backend: {
-                loadPath: '{{ns}}/{{lng}}.json'
-            },
-            fallbackLng: 'en',
-            preload: ['en', 'pl'],
-            react: {
-                useSuspense: false
-            },
-            debug: true,
-            ns: ['assets/translation'],
-            defaultNS: 'assets/translation',
-            keySeparator: false,
-            interpolation: {
-                escapeValue: false,
-                formatSeparator: ','
-            }
-        }).then(() => {
-            console.log('Loaded translations');
-            setTranslationsLoaded(true);
-        });
+        i18n
+            .init({
+                lng: lang,
+                backend: {
+                    loadPath: '{{ns}}/{{lng}}.json'
+                },
+                fallbackLng: 'en',
+                preload: ['en', 'pl'],
+                react: {
+                    useSuspense: false
+                },
+                debug: false,
+                ns: ['assets/translation'],
+                defaultNS: 'assets/translation',
+                keySeparator: false,
+                interpolation: {
+                    escapeValue: false,
+                    formatSeparator: ','
+                }
+            })
+            .then(() => {
+                console.log('Loaded translations');
+                setTranslationsLoaded(true);
+            });
     }, []);
 
     const renderContent = useMemo(() => {
         if (!translationsLoaded) {
-            console.log("Loading translations...");
+            console.log('Loading translations...');
             return null;
         }
-        console.log("Translations loaded.");
-        return <>
-            <Content/>
-            <Dialogs/>
-        </>;
+        console.log('Translations loaded.');
+        return (
+            <>
+                <Content/>
+                <Dialogs/>
+            </>
+        );
     }, [translationsLoaded]);
 
     return <Provider store={store}>
         <GlobalStyle/>
-        <BrowserRouter>
-            {renderContent}
-        </BrowserRouter>
+        <BrowserRouter>{renderContent}</BrowserRouter>
         <Toaster/>
     </Provider>;
 };
