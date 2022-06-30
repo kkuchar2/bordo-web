@@ -46,7 +46,7 @@
   "FORGOT_PASSWORD_BUTTON": "Send password reset link",
   "FORGOT_PASSWORD_FORM_TITLE": "Reset forgotten password",
   "FORGOT_PASSWORD_QUESTION": "Forgot password?",
-  "GIF_SELECT_TITLE": "Select GIF",
+  "GIF_SELECT_TITLE": "Animated avatar",
   "HOME_PAGE": "Home",
   "INPUT_PASSWORD_CONFIRM_PLACEHOLDER": "Confirm password",
   "INPUT_PASSWORD_CONFIRM_TITLE": "Confirm password:",
@@ -103,5 +103,6 @@
   "USER_PROFILE": "User profile",
   "VERIFICATION_EMAIL_SENT_DESCRIPTION": "We have sent you confirmation email. Please check your inbox and follow the instructions to activate your account",
   "WELCOME_BACK": "Welcome back!",
-  "WRONG_PASSWORD": "Password is incorrect"
+  "WRONG_PASSWORD": "Password is incorrect",
+  "GIPHY_SEARCH_PLACEHOLDER": "Search for GIF"
 }

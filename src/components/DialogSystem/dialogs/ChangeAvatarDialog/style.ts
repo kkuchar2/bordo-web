@@ -11,27 +11,19 @@ export const SliderWithIcons = styled.div`
 `;
 
 export interface CropContainerProps {
-    imageSelected: boolean
+    imageSelected: boolean;
+    width: number;
 }
 
 export const CropContainer = styled.div<CropContainerProps>`
   position: relative;
   height: ${props => props.imageSelected ? "400px" : "200px"};
-  width: ${props => props.imageSelected ? "500px" : "200px"};
+  width: ${props => props.imageSelected ? props.width : "200px"};
   box-sizing: border-box;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
-`;
-
-export const StyledImage = styled.img`
-  position: relative;
-  height: 500px;
-  width: 500px;
-  box-sizing: border-box;
-  object-fit: contain;
-  border-radius: 100%;
 `;
 
 export const sliderTheme = {

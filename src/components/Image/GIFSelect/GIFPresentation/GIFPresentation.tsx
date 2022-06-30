@@ -7,7 +7,7 @@ import {GIFPresentationProps} from "./GIFPresentation.types";
 
 export const GIFPresentation = (props: GIFPresentationProps) => {
 
-    const { searchText, onGifClick, giphyFetch } = props;
+    const { searchText, onGifClick, giphyFetch, width } = props;
 
     const getFetchFunc = useMemo(() => {
         if (!searchText || searchText.length === 0) {
@@ -22,7 +22,7 @@ export const GIFPresentation = (props: GIFPresentationProps) => {
         <Grid onGifClick={onGifClick}
               fetchGifs={getFetchFunc}
               borderRadius={10}
-              width={570}
+              width={width}
               columns={2}
               key={searchText}
               gutter={10}

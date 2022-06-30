@@ -43,7 +43,7 @@
   "FIELD_REQUIRED": "To pole jest wymagane",
   "FORGOT_PASSWORD_BUTTON": "Zresetuj hasło",
   "FORGOT_PASSWORD_FORM_TITLE": "Nie pamiętasz hasła?",
-  "GIF_SELECT_TITLE": "Wybierz GIF",
+  "GIF_SELECT_TITLE": "Animowany awatar",
   "HELLO_WORLD": "Witaj świecie!",
   "HOME_PAGE": "Strona główna",
   "INPUT_PASSWORD_TITLE": "Hasło:",
@@ -101,5 +101,6 @@
   "USER_PROFILE": "Profil użytkownika",
   "Unable to log in with provided credentials.": "Nieprawidłowa nazwa użytkownika lub hasło",
   "WELCOME_BACK": "Witamy z powrotem!",
-  "WRONG_PASSWORD": "Podane hasło jest niepoprawne"
+  "WRONG_PASSWORD": "Podane hasło jest niepoprawne",
+  "GIPHY_SEARCH_PLACEHOLDER": "Szukaj GIFa"
 }
