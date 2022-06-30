@@ -102,5 +102,6 @@
   "Unable to log in with provided credentials.": "Nieprawidłowa nazwa użytkownika lub hasło",
   "WELCOME_BACK": "Witamy z powrotem!",
   "WRONG_PASSWORD": "Podane hasło jest niepoprawne",
-  "GIPHY_SEARCH_PLACEHOLDER": "Szukaj GIFa"
+  "GIPHY_SEARCH_PLACEHOLDER": "Szukaj GIFa",
+  "ACCOUNT_REMOVAL_SECTION_TITLE": "Usuwanie konta"
 }

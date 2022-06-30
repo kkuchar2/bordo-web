@@ -111,7 +111,7 @@ const AccountSettings = () => {
 
                 {renderSocialAccountConnections}
 
-                <SettingsSection title={"ACCOUNT REMOVAL"}>
+                <SettingsSection title={t("ACCOUNT_REMOVAL_SECTION_TITLE")}>
                     <button type={'button'} className={'deleteAccountButton'} onClick={onDeleteAccountAction}>
                         {t('DELETE_ACCOUNT')}
                     </button>

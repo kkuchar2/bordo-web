@@ -105,5 +105,6 @@
   "WELCOME_BACK": "Welcome back!",
   "WRONG_PASSWORD": "Password is incorrect",
   "GIPHY_SEARCH_PLACEHOLDER": "Search for GIF",
-  "CHANGE_USERNAME_DESCRIPTION": "To set a new username, you need to provide your current password"
+  "CHANGE_USERNAME_DESCRIPTION": "To set a new username, you need to provide your current password",
+  "ACCOUNT_REMOVAL_SECTION_TITLE": "Delete account"
 }
