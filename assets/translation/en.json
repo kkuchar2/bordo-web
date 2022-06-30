@@ -104,5 +104,6 @@
   "VERIFICATION_EMAIL_SENT_DESCRIPTION": "We have sent you confirmation email. Please check your inbox and follow the instructions to activate your account",
   "WELCOME_BACK": "Welcome back!",
   "WRONG_PASSWORD": "Password is incorrect",
-  "GIPHY_SEARCH_PLACEHOLDER": "Search for GIF"
+  "GIPHY_SEARCH_PLACEHOLDER": "Search for GIF",
+  "CHANGE_USERNAME_DESCRIPTION": "To set a new username, you need to provide your current password"
 }

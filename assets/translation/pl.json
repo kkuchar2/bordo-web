@@ -18,7 +18,7 @@
   "CHANGE_EMAIL": "Zmień adres E-mail",
   "CHANGE_PASSWORD": "Zmień hasło",
   "CHANGE_USERNAME": "Zmień nazwę użytkownika",
-  "CHANGE_USERNAME_DESCRIPTION": "Wprowadź aktualne hasło, a następnie nową nazwę użytkownika",
+  "CHANGE_USERNAME_DESCRIPTION": "Aby zmienić nazwę użytkownika, musisz potwierdzić swoje aktualne hasło.",
   "CONFIRM": "Potwierdź",
   "CONNECTED_ACCOUNTS": "Połączone konta",
   "CREATE_ACCOUNT": "Utwórz nowe",
