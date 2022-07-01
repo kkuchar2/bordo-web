@@ -14,7 +14,7 @@ export const InputWithError = ({ field, id, label, type, autoComplete, placehold
 
     return <div className={'flex flex-col mb-[20px]'}>
         {label ? <div
-            className={'text-input-title-default text-[14px] font-semibold mb-2'}>{label?.toUpperCase()}</div> : null}
+            className={'text-input-title text-[14px] font-semibold mb-2'}>{`${label?.toUpperCase()}:`}</div> : null}
         <input
             className={'input'}
             type={type}

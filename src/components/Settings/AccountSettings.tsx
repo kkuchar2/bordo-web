@@ -82,7 +82,7 @@ const AccountSettings = () => {
                     <StyledAccountSummaryFields>
                         <EditableProperty
                             id={'username'}
-                            name={'USERNAME'}
+                            name={t('USERNAME')}
                             value={userState.username}
                             canEdit={true}
                             obfuscate={false}
@@ -90,7 +90,7 @@ const AccountSettings = () => {
                             showDialogFunc={showChangeUsernameDialog}/>
                         <EditableProperty
                             id={'email'}
-                            name={'EMAIL'}
+                            name={t('EMAIL')}
                             value={userState.email.email}
                             canEdit={true}
                             obfuscate={true}

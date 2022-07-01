@@ -39,8 +39,10 @@ module.exports = {
                     default: '#0B5830',
                     hover: '#0c6a39',
                 },
-                'input-title': {
-                    default: '#C1C1C1',
+                'input': {
+                    title: '#C1C1C1',
+                    default: '#1F1F1F',
+                    disabled: 'rgba(31,31,31,0.47)',
                 },
                 'ua-link': {
                     default: '#74D79F',
