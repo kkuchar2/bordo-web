@@ -29,18 +29,14 @@ const MainMenu = (props: MainMenuProps) => {
     }, []);
 
     const renderHamburgerButton = useMemo(() => {
-        if (navbarState.opened) {
-            return null;
-        }
-
         if (!isSmall) {
             return null;
         }
         return <MenuAlt3Icon
-            className={`absolute top-[25px] right-[25px] mr-0 h-10 w-10 cursor-pointer text-white`}
+            className={`absolute top-[25px] right-[25px] mr-0 h-10 w-10 z-10 cursor-pointer text-white`}
             onClick={onHamburgerClick}
         />;
-    }, [isSmall, navbarState]);
+    }, [isSmall]);
 
     const renderGroup = useCallback((group: Group) => {
         const groupName = group.groupName;
@@ -84,10 +80,10 @@ const MainMenu = (props: MainMenuProps) => {
     }, [isSmall]);
 
     useEffect(() => {
-        if (!isSmall) {
+        if (!isSmall && navbarState.opened) {
             dispatch(closeNavbar());
         }
-    }, [isSmall]);
+    }, [isSmall, navbarState]);
 
     const navbarItems = useMemo(() => {
         return <div
