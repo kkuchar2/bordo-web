@@ -1,6 +1,7 @@
-import React, {useCallback, useState} from "react";
+import React, {useCallback} from "react";
 
 import {CredentialResponse, GoogleLogin, GoogleOAuthProvider} from "@react-oauth/google";
+import {useMeasure} from "react-use";
 
 interface GoogleButtonProps {
     clientId: string;
@@ -15,13 +16,7 @@ const GoogleButton = (props: GoogleButtonProps) => {
 
     const { clientId, text, onSuccess, onError, className } = props;
 
-    const [width, setWidth] = useState(null);
-
-    const div = useCallback(node => {
-        if (node !== null) {
-            setWidth(node.getBoundingClientRect().width);
-        }
-    }, []);
+    const [ref, bounds] = useMeasure();
 
     const innerOnSuccess = useCallback((credentialResponse: CredentialResponse) => {
         if (onSuccess) {
@@ -36,19 +31,27 @@ const GoogleButton = (props: GoogleButtonProps) => {
         }
     }, [onError]);
 
-    return <div className={className} ref={div}>
+    const onPromptMomentNotification = useCallback((v) => {
+        console.log('Google login prompt moment notification', v);
+    }, []);
+
+    const targetWidth = bounds.width === 0 ? 200 : bounds.width > 400 ? 400 : bounds.width;
+
+    return <div className={className} ref={ref}>
         <GoogleOAuthProvider clientId={clientId}>
             <GoogleLogin
                 useOneTap={false}
                 auto_select={true}
-                width={`${width}`}
+                width={`${targetWidth}`}
                 theme={"filled_black"}
                 size={"large"}
                 shape={"rectangular"}
                 text={text}
                 locale={'en'}
+                type={'standard'}
                 context={'signup'}
                 ux_mode={"popup"}
+                promptMomentNotification={onPromptMomentNotification}
                 onSuccess={innerOnSuccess}
                 onError={innerOnError}/>
         </GoogleOAuthProvider>

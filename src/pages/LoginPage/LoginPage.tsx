@@ -2,7 +2,7 @@ import React, {useCallback, useEffect} from 'react';
 
 import {useAuthSelector} from "appRedux/reducers/api/auth/accountSlice";
 import {googleLogin, login, resetUserSliceRequestState} from "appRedux/services/authService";
-import { useAppDispatch} from 'appRedux/store';
+import {useAppDispatch} from 'appRedux/store';
 import Box from 'components/Box/Box';
 import {showConfirmEmailDialog} from "components/DialogSystem/readyDialogs";
 import {StyledCenteredSection, StyledLink} from "components/Forms/commonStyles";
@@ -14,7 +14,7 @@ import {RequestStatus} from "tools/client/client.types";
 import {isEmailNotVerifiedError} from "tools/errors/errors";
 
 import {useMemoRequestState} from "../../api/api_util";
-import { useFormConfig} from "../../api/formConfig";
+import {useFormConfig} from "../../api/formConfig";
 import {GOOGLE_CLIENT_ID} from "../../config";
 
 import {StyledLoginPage} from "./style";
@@ -63,7 +63,7 @@ const LoginPage = () => {
             <Box className={'dark_form'}>
                 <Form
                     title={t('SIGN_IN')}
-                    customDescription={<UserAgreements />}
+                    customDescription={<UserAgreements/>}
                     submitButtonText={t('SIGN_IN')}
                     errors={errors}
                     disabled={pending}
@@ -72,7 +72,7 @@ const LoginPage = () => {
                     useCancelButton={false}
                     onSubmit={attemptLogin}/>
 
-                <StyledLink to={'/forgotPassword'} className={'my-4 text-[14px]'}>
+                <StyledLink to={'/forgotPassword'} className={'my-8 text-[14px]'}>
                     {t('FORGOT_PASSWORD_QUESTION')}
                 </StyledLink>
 
@@ -80,10 +80,10 @@ const LoginPage = () => {
                     clientId={GOOGLE_CLIENT_ID}
                     context={'signin'}
                     text={'continue_with'}
-                    className={'mt-3 w-[100%]'}
+                    className={'flex justify-center'}
                     onSuccess={onSignInWithGoogle}/>
 
-                <div className={'flex items-center justify-center mt-[20px] mb-[10px]'}>
+                <div className={'flex items-center justify-center mt-8 mb-[10px]'}>
                     <div className={'text-white text-[14px]'}>{t('NEED_ACCOUNT')}</div>
                     <StyledLink className={'ml-3 text-[14px]'} to={'/register'}>{t('CREATE_ACCOUNT')}</StyledLink>
                 </div>

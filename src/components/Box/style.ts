@@ -14,8 +14,8 @@ export const StyledBox = styled.div`
   @media (max-width: 600px) {
     display: flex;
     flex-direction: column;
-    margin: 10px;
     width: 100%;
+    height: 100%;
     border-radius: 0;
   }
 `;

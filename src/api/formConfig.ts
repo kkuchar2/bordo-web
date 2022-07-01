@@ -53,8 +53,8 @@ export const FORM_CONFIG = (t: any): FormConfigs => {
                 { name: 'password' },
             ],
             validationSchema: object({
-                email: EmailSchema,
-                password: RequiredStringSchema,
+                email: EmailSchema(t),
+                password: RequiredStringSchema(t),
             })
         },
         registration: {
@@ -63,8 +63,8 @@ export const FORM_CONFIG = (t: any): FormConfigs => {
                 { name: 'password' },
             ],
             validationSchema: object({
-                email: EmailSchema,
-                password: NewPasswordSchema,
+                email: EmailSchema(t),
+                password: NewPasswordSchema(t),
             })
         },
         forgotPassword: {
@@ -72,7 +72,7 @@ export const FORM_CONFIG = (t: any): FormConfigs => {
                 { name: 'email' },
             ],
             validationSchema: object({
-                email: EmailSchema,
+                email: EmailSchema(t),
             })
         },
         createNewPassword: {
@@ -81,7 +81,7 @@ export const FORM_CONFIG = (t: any): FormConfigs => {
                 { name: 'new_password_confirm' },
             ],
             validationSchema: object({
-                new_password: NewPasswordSchema,
+                new_password: NewPasswordSchema(t),
                 new_password_confirm: ConfirmPasswordSchema('new_password'),
             })
         },
@@ -97,7 +97,7 @@ export const FORM_CONFIG = (t: any): FormConfigs => {
                 { name: 'current_password' },
             ],
             validationSchema: object({
-                username: UsernameSchema,
+                username: UsernameSchema(t),
                 current_password: RequiredCurrentPasswordSchema(t)
             })
         },
@@ -109,7 +109,7 @@ export const FORM_CONFIG = (t: any): FormConfigs => {
             ],
             validationSchema: object({
                 current_password: RequiredCurrentPasswordSchema(t),
-                new_password: NewPasswordSchema,
+                new_password: NewPasswordSchema(t),
                 new_password_confirm: ConfirmPasswordSchema('new_password'),
             })
         },

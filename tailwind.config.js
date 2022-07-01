@@ -36,8 +36,16 @@ module.exports = {
             },
             colors: {
                 'form-button': {
-                    default: '#33710f',
-                    hover: '#387b11',
+                    default: '#0B5830',
+                    hover: '#0c6a39',
+                },
+                'input-title': {
+                    default: '#C1C1C1',
+                },
+                'ua-link': {
+                    default: '#74D79F',
+                    hover: '#00f7ff',
+                    visited: '#74D79F',
                 },
                 toast: {
                     '50': '#FFF6DF',

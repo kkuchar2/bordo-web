@@ -83,6 +83,7 @@
   "SIGNING_UP_PROGRESS": "Tworzenie konta",
   "SIGNIN_WTH_GOOGLE": "Kontynuuj z Google",
   "SIGN_IN": "Zaloguj się",
+  "FORGOT_PASSWORD_QUESTION": "Nie pamiętasz hasła?",
   "SIGN_UP": "Utwórz nowe konto",
   "TABLE_ADMINISTRATION": "Zarządzanie tabelami",
   "THANK_YOU": "Dziękujemy!",
@@ -103,5 +104,7 @@
   "WELCOME_BACK": "Witamy z powrotem!",
   "WRONG_PASSWORD": "Podane hasło jest niepoprawne",
   "GIPHY_SEARCH_PLACEHOLDER": "Szukaj GIFa",
-  "ACCOUNT_REMOVAL_SECTION_TITLE": "Usuwanie konta"
+  "ACCOUNT_REMOVAL_SECTION_TITLE": "Usuwanie konta",
+  "PASSWORD_TOO_SHORT": "Hasło jest zbyt krótkie - wymagane minimum 8 znaków",
+  "PASSWORD_SPECIAL_CHARACTERS": "Hasło musi zawierać co najmniej jeden znak specjalny"
 }

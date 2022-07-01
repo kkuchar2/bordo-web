@@ -1,9 +1,9 @@
 import React, {useMemo} from "react";
 
 import {shakeAnimation} from "components/Forms/animation";
-import { motion } from "framer-motion";
+import {motion} from "framer-motion";
 
-export const InputWithError = ({ field, id, label, type, autoComplete, placeholder, disabled, form: { errors  } }) => {
+export const InputWithError = ({ field, id, label, type, autoComplete, placeholder, disabled, form: { errors } }) => {
     const renderError = useMemo(() => {
         const error = errors[id];
 
@@ -13,7 +13,8 @@ export const InputWithError = ({ field, id, label, type, autoComplete, placehold
     }, [errors, id]);
 
     return <div className={'flex flex-col mb-[20px]'}>
-        {label ? <div className={'text-slate-400 text-[14px] font-semibold mb-2'}>{label?.toUpperCase()}</div> : null }
+        {label ? <div
+            className={'text-input-title-default text-[14px] font-semibold mb-2'}>{label?.toUpperCase()}</div> : null}
         <input
             className={'input'}
             type={type}

@@ -106,5 +106,7 @@
   "WRONG_PASSWORD": "Password is incorrect",
   "GIPHY_SEARCH_PLACEHOLDER": "Search for GIF",
   "CHANGE_USERNAME_DESCRIPTION": "To set a new username, you need to provide your current password",
-  "ACCOUNT_REMOVAL_SECTION_TITLE": "Delete account"
+  "ACCOUNT_REMOVAL_SECTION_TITLE": "Delete account",
+  "PASSWORD_TOO_SHORT": "Password is too short, it should be at least 8 characters long",
+  "PASSWORD_SPECIAL_CHARACTERS": "Password should contain at least one special character"
 }

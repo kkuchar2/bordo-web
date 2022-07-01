@@ -12,7 +12,7 @@ export interface StyledLinkProps {
 
 export const StyledLink = styled(Link)<LinkProps & StyledLinkProps>`
   color: ${props => props.disabled ? "rgba(0,137,88,0.4)" : "#74D79F"};
-  
+
   &[disabled] {
     pointer-events: none;
   }
@@ -27,7 +27,7 @@ export const StyledCenteredSection = styled.div`
     height: 100%;
     width: 100%;
     display: flex;
-    align-items: flex-end;
+    align-items: flex-start;
   }
 
   @media (min-width: 600px) {

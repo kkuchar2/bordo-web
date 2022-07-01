@@ -13,7 +13,7 @@ import {useTranslation} from "react-i18next";
 import {RequestStatus} from "tools/client/client.types";
 
 import {isSuccess, useMemoRequestState} from "../../api/api_util";
-import { useFormConfig} from "../../api/formConfig";
+import {useFormConfig} from "../../api/formConfig";
 import {GOOGLE_CLIENT_ID} from "../../config";
 import UserAgreements from "../LoginPage/UserAgreements";
 
@@ -65,6 +65,7 @@ const RegistrationPage = () => {
                     disabled={pending}
                     config={formConfig}
                     useCancelButton={false}
+                    buttonsClasses={'pt-[20px] flex justify-center'}
                     confirmButtonClassName={'main_form_button'}
                     onSubmit={attemptRegister}/>
 
@@ -72,7 +73,7 @@ const RegistrationPage = () => {
                     clientId={GOOGLE_CLIENT_ID}
                     context={'signin'}
                     text={'signin_with'}
-                    className={'mt-5'}
+                    className={'mt-8 flex justify-center'}
                     onSuccess={onSignInWithGoogle}/>
 
                 <div className={'flex items-center justify-center mt-[20px] mb-[10px]'}>

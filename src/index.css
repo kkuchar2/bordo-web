@@ -4,7 +4,7 @@
 @layer components {
 
     .dark_form {
-        @apply bg-[#313131] rounded-xl
+        @apply bg-[#292929]
     }
 
     .input {
@@ -27,6 +27,10 @@
         @apply text-[#74D79F] hover:text-[#4EE28F] visited:text-[#4EE28F]
     }
 
+    .link-no-underline {
+        @apply text-ua-link-default hover:text-ua-link-hover visited:text-ua-link-visited no-underline
+    }
+
     .dialog-warning {
         @apply text-white text-[14px] font-semibold bg-[#C27D2B] p-[20px] m-[20px]
     }
@@ -44,7 +48,7 @@
     }
 
     .main_form_button {
-        @apply w-[100%] bg-form-button-default hover:bg-form-button-hover rounded-xl flex p-3 items-center justify-center base_button text-white text-[15px] font-semibold
+        @apply w-[100%] max-w-[400px] bg-form-button-default hover:bg-form-button-hover flex p-3 items-center justify-center base_button text-white text-[15px] font-semibold
     }
 
     .add_button {
