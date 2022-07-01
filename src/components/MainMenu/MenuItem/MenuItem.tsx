@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from 'react';
+import React, {useCallback} from 'react';
 
 import {IconProps} from '../../../icon/icon.types';
 
@@ -16,26 +16,7 @@ const MenuItem = (props: MenuItemProps) => {
 
     const onMenuItemClick = useCallback(() => onClick?.(), [onClick]);
 
-    const [hovered, setHovered] = useState(false);
-
-    const getTextColor = useCallback(() => {
-        if (hovered && !active) {
-            return '#e8e8e8';
-        }
-
-        return active ? '#ffffff' : '#d7d7d7';
-    }, [active, hovered]);
-
-    const onMouseEnter = useCallback(() => {
-        setHovered(true);
-    }, []);
-
-    const onMouseLeave = useCallback(() => {
-        setHovered(false);
-    }, []);
-
-    return <StyledMenuItem active={active} onClick={onMenuItemClick} onMouseEnter={onMouseEnter}
-                           onMouseLeave={onMouseLeave}>
+    return <StyledMenuItem active={active} onClick={onMenuItemClick}>
         <div className={'text-[14px] text-[#e8e8e8] hover:text-white'}>{name}</div>
         <div className={'flex-grow flex justify-end'}>
             {icon ? <icon.component

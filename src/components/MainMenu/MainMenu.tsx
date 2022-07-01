@@ -43,33 +43,32 @@ const MainMenu = (props: MainMenuProps) => {
     }, [isSmall, navbarState]);
 
     const renderGroup = useCallback((group: Group) => {
-            const groupName = group.groupName;
-            const items = group.groupItems;
+        const groupName = group.groupName;
+        const items = group.groupItems;
 
-            if (Array.isArray(items)) {
-                return <div className={'pt-[10px] pb-[10px] flex flex-col gap-1'}>
-                    {items.map((item: Item, idx: number) => {
-                        return <MenuItem icon={item.icon} key={idx} name={t(item.displayName)} onClick={item.onClick}/>;
-                    })}
-                </div>;
-            }
-
-            return <div className={'lg:pt-[20px] pb-[10px] flex flex-col gap-1'}>
-                <div
-                    className={'text-[12px] ml-[10px] font-semibold text-gray-400'}>{t(groupName).toUpperCase()}</div>
-
-                {Object.entries(items).map(([key, item]) => {
-                    return <MenuItem
-                        key={key}
-                        name={t(item.displayName)}
-                        active={currentViewId === item.id}
-                        icon={item.icon}
-                        onClick={item.onClick}/>;
+        if (Array.isArray(items)) {
+            return <div className={'pt-[10px] pb-[10px] flex flex-col gap-1'}>
+                {items.map((item: Item, idx: number) => {
+                    return <MenuItem icon={item.icon} key={idx} name={t(item.displayName)} onClick={item.onClick}/>;
                 })}
             </div>;
-        },
-        [currentViewId, t]
-    );
+        }
+
+        return <div className={'lg:pt-[20px] pb-[10px] flex flex-col gap-1'}>
+            <div className={'text-[12px] ml-[10px] font-semibold text-gray-400'}>
+                {t(groupName).toUpperCase()}
+            </div>
+
+            {Object.entries(items).map(([key, item]) => {
+                return <MenuItem
+                    key={key}
+                    name={t(item.displayName)}
+                    active={currentViewId === item.id}
+                    icon={item.icon}
+                    onClick={item.onClick}/>;
+            })}
+        </div>;
+    }, [currentViewId, t]);
 
     const getTranslation = useCallback(() => {
         if (!isSmall) {
@@ -98,7 +97,7 @@ const MainMenu = (props: MainMenuProps) => {
                     <hr className={`ml-[10px] border-1 border-gray-300 border-opacity-10`}/>
                 </div>)}
         </div>;
-    }, [t]);
+    }, [currentViewId, t]);
 
     const renderLargeScreenNavbar = useMemo(() => {
         return <nav
@@ -122,7 +121,7 @@ const MainMenu = (props: MainMenuProps) => {
             return renderSmallScreenNavbar;
         }
         return renderLargeScreenNavbar;
-    }, [isSmall, navbarState, t]);
+    }, [currentViewId, isSmall, navbarState, t]);
 };
 
 export default MainMenu;
