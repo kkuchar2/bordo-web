@@ -1,24 +1,16 @@
 import React, {useCallback, useEffect} from 'react';
 
-import {closeNavbar, loadLastView, selectorNavbar, selectorView} from 'appRedux/reducers/application';
+import {closeNavbar, loadLastView, selectorNavbar, selectorTheme, selectorView} from 'appRedux/reducers/application';
 import {useAppDispatch} from 'appRedux/store';
 import {defaultShowUpAnimation} from 'components/Forms/animation';
 import MainMenu from 'components/MainMenu/MainMenu';
 import {findView} from 'components/MainMenu/mainMenuItems';
 import {showSuccessToast} from 'components/Toast/readyToastNotifications';
 import {EnsureAuthorized} from 'hoc/EnsureAuthorized';
-import {Text} from 'kuchkr-react-component-library';
 import {useTranslation} from 'react-i18next';
 import {useSelector} from 'react-redux';
 
-import {
-    StyledAnimatedHeader,
-    StyledBottomSection,
-    StyledContentSection,
-    StyledHomePage,
-    StyledTopSection,
-    viewTitleTextTheme
-} from './style';
+import {StyledAnimatedHeader, StyledBottomSection, StyledHomePage, StyledTopSection} from './style';
 
 const HomePage = (props: any) => {
     const { show } = props;
@@ -28,6 +20,8 @@ const HomePage = (props: any) => {
     const navbarState = useSelector(selectorNavbar);
 
     const currentViewId = useSelector(selectorView);
+
+    const currentTheme = useSelector(selectorTheme);
 
     useEffect(() => {
         showSuccessToast('Successfully logged in');
@@ -45,16 +39,18 @@ const HomePage = (props: any) => {
 
         const ViewComponent = view.component;
 
-        return <StyledContentSection navbarOpened={navbarState.opened}>
+        return <div
+            className={`duration-[600ms] transition ease-in-out bg-home-bg-light dark:bg-home-bg-dark flex flex-grow min-w-[600px] flex-col box-border ${navbarState.opened ? 'blur-[8px]' : 'blur-none'}`}>
             <StyledTopSection>
                 <StyledAnimatedHeader {...defaultShowUpAnimation}>
-                    <Text theme={viewTitleTextTheme} text={t(view.displayName)}/>
+                    <div
+                        className={'text-[1.2em] font-semibold text-home-title-light dark:text-home-title-dark'}>{t(view.displayName)}</div>
                 </StyledAnimatedHeader>
             </StyledTopSection>
             <StyledBottomSection>
                 <ViewComponent/>
             </StyledBottomSection>
-        </StyledContentSection>;
+        </div>;
     }, [currentViewId, navbarState, t]);
 
     const onPageClick = useCallback(() => {
@@ -67,14 +63,17 @@ const HomePage = (props: any) => {
         return <></>;
     }
 
-    return (
-        <StyledHomePage className={'font-sarabun font-semibold'} onClick={onPageClick}>
-            <div className={'box-border flex h-auto min-w-[200px] flex-col overflow-hidden lg:h-full lg:flex-row'}>
-                <MainMenu currentViewId={currentViewId}/>
-                {renderContent()}
-            </div>
-        </StyledHomePage>
-    );
+    const getTheme = useCallback(() => {
+        const theme = localStorage.getItem('theme');
+        return theme === 'dark' ? 'dark' : 'light';
+    }, [currentTheme]);
+
+    return <StyledHomePage className={`${getTheme()} font-sarabun font-semibold`} onClick={onPageClick}>
+        <div className={'box-border flex h-auto min-w-[200px] flex-col overflow-hidden lg:h-full lg:flex-row'}>
+            <MainMenu currentViewId={currentViewId}/>
+            {renderContent()}
+        </div>
+    </StyledHomePage>;
 };
 
 export default EnsureAuthorized(HomePage) as React.FC;

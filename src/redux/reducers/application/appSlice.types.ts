@@ -1,3 +1,4 @@
 export interface AppSliceState {
-  currentView: string;
+    currentView: string;
+    theme: string;
 }

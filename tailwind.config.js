@@ -1,5 +1,6 @@
 module.exports = {
     mode: 'jit',
+    darkMode: 'class',
     content: [
         "./src/**/*.{js,jsx,ts,tsx}",
     ],
@@ -35,6 +36,32 @@ module.exports = {
                 },
             },
             colors: {
+                home: {
+                    bg: {
+                        dark: '#363636',
+                        light: '#fafafa',
+                    },
+                    title: {
+                        dark: '#fafafa',
+                        light: '#535353',
+                    }
+                },
+                navbar: {
+                    bg: {
+                        'lg-light': '#e3e3e3',
+                        'lg-dark': '#2e2e2e',
+                    },
+                    'group-title': {
+                        dark: '#a7a7a7',
+                        light: '#1a1a1a',
+                    },
+                    item: {
+                        'color-light': '#747474',
+                        'color-dark': '#cecece',
+                        'hover-light': '#fafafa',
+                        'hover-dark': '#2e2e2e',
+                    }
+                },
                 'form-button': {
                     default: '#0B5830',
                     hover: '#0c6a39',

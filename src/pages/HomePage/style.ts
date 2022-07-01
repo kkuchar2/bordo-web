@@ -6,23 +6,6 @@ export const StyledHomePage = styled.div`
   box-sizing: border-box;
 `;
 
-interface NavbarOpenedProps {
-    navbarOpened: boolean;
-}
-
-export const StyledContentSection = styled.div<NavbarOpenedProps>`
-  flex: 1 0;
-  min-width: 600px;
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
-  filter: ${props => (props.navbarOpened ? 'blur(8px)' : 'none')};
-
-  @media (max-width: 1024px) {
-    min-width: 100px;
-  }
-`;
-
 export const StyledTopSection = styled(motion.div)`
   display: flex;
   justify-content: center;
@@ -39,10 +22,3 @@ export const StyledBottomSection = styled.div`
   overflow-x: auto;
   flex: 1 0;
 `;
-
-export const viewTitleTextTheme = {
-    textColor: '#ececec',
-    fontSize: '1.2em',
-    textAlign: 'left',
-    fontWeight: 600
-};

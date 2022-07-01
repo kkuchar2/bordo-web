@@ -20,7 +20,7 @@ const MainMenu = (props: MainMenuProps) => {
 
     const { t } = useTranslation();
 
-    const isSmall = useMediaQuery('(max-width: 1280px)');
+    const isSmall = useMediaQuery('(max-width: 1024px)');
 
     const navbarState = useSelector(selectorNavbar);
 
@@ -55,7 +55,8 @@ const MainMenu = (props: MainMenuProps) => {
         }
 
         return <div className={'lg:pt-[20px] pb-[10px] flex flex-col gap-1'}>
-            <div className={'text-[12px] ml-[10px] font-semibold text-gray-400'}>
+            <div
+                className={'text-[13px] ml-[10px] font-bold text-navbar-group-title-light dark:text-navbar-group-title-dark'}>
                 {t(groupName).toUpperCase()}
             </div>
 
@@ -101,7 +102,7 @@ const MainMenu = (props: MainMenuProps) => {
 
     const renderLargeScreenNavbar = useMemo(() => {
         return <nav
-            className={`backdrop-blur-xl bg-[#2e2e2e]/90 flex h-full justify-end p-[15px] w-[300px]`}>
+            className={`backdrop-blur-xl duration-[600ms] transition ease-in-out bg-navbar-bg-lg-light dark:bg-navbar-bg-lg-dark flex h-full justify-end p-[15px] w-[300px]`}>
             {navbarItems}
         </nav>;
     }, [t, navbarItems]);

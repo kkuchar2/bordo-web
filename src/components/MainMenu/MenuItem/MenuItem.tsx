@@ -17,7 +17,8 @@ const MenuItem = (props: MenuItemProps) => {
     const onMenuItemClick = useCallback(() => onClick?.(), [onClick]);
 
     return <StyledMenuItem active={active} onClick={onMenuItemClick}>
-        <div className={'text-[14px] text-[#e8e8e8] hover:text-white'}>{name}</div>
+        <div
+            className={'duration-[600ms] transition ease-in-out text-[14px] text-navbar-item-color-light dark:text-navbar-item-color-dark hover:text-white'}>{name}</div>
         <div className={'flex-grow flex justify-end'}>
             {icon ? <icon.component
                 className={`mr-0 block sm:hidden lg:block h-4 w-4  ${icon.color}`}/> : null}
