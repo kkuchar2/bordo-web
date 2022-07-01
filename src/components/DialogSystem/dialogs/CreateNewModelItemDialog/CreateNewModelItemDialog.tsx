@@ -30,8 +30,6 @@ export const CreateNewModelItemDialog = (props: DialogProps<CreateNewModelItemDi
 
     const { modelPackage, modelName, fields } = props.data;
 
-    console.log(props);
-
     const [formData, setFormData] = useState({});
 
     const dispatch = useAppDispatch();

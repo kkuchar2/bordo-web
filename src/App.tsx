@@ -7,10 +7,9 @@ import {Provider} from 'react-redux';
 import {BrowserRouter} from 'react-router-dom';
 import {createGlobalStyle} from 'styled-components';
 
-import Content from './Content';
-
 import './i18n';
 
+import Content from "./Content";
 import i18n from './i18n';
 
 const GlobalStyle = createGlobalStyle`
@@ -43,9 +42,6 @@ export const App = () => {
 
     useEffect(() => {
         const lang = localStorage.getItem('i18nextLng');
-
-        console.log('Initializing i18n with language: ', lang);
-
         i18n
             .init({
                 lng: lang,
@@ -67,17 +63,14 @@ export const App = () => {
                 }
             })
             .then(() => {
-                console.log('Loaded translations');
                 setTranslationsLoaded(true);
             });
     }, []);
 
     const renderContent = useMemo(() => {
         if (!translationsLoaded) {
-            console.log('Loading translations...');
             return null;
         }
-        console.log('Translations loaded.');
         return (
             <>
                 <Content/>

@@ -1,6 +1,6 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useEffect} from 'react';
 
-import {closeNavbar, loadLastView, openView, selectorNavbar, selectorView} from 'appRedux/reducers/application';
+import {closeNavbar, loadLastView, selectorNavbar, selectorView} from 'appRedux/reducers/application';
 import {useAppDispatch} from 'appRedux/store';
 import {defaultShowUpAnimation} from 'components/Forms/animation';
 import MainMenu from 'components/MainMenu/MainMenu';
@@ -23,29 +23,25 @@ import {
 const HomePage = (props: any) => {
     const { show } = props;
 
-    const [view, setView] = useState(null);
-
     const dispatch = useAppDispatch();
 
     const navbarState = useSelector(selectorNavbar);
 
-    const viewState = useSelector(selectorView);
+    const currentViewId = useSelector(selectorView);
 
     useEffect(() => {
         showSuccessToast('Successfully logged in');
         dispatch(loadLastView());
     }, []);
 
-    useEffect(() => {
-        setView(findView(viewState));
-    }, [viewState]);
-
     const { t } = useTranslation();
 
     const renderContent = useCallback(() => {
-        if (!view) {
+        if (!currentViewId) {
             return null;
         }
+
+        const view = findView(currentViewId);
 
         const ViewComponent = view.component;
 
@@ -59,11 +55,7 @@ const HomePage = (props: any) => {
                 <ViewComponent/>
             </StyledBottomSection>
         </StyledContentSection>;
-    }, [view, navbarState, t]);
-
-    const onMenuItemClick = useCallback(key => {
-        dispatch(openView(key));
-    }, []);
+    }, [currentViewId, navbarState, t]);
 
     const onPageClick = useCallback(() => {
         if (navbarState.opened) {
@@ -77,9 +69,8 @@ const HomePage = (props: any) => {
 
     return (
         <StyledHomePage className={'font-sarabun font-semibold'} onClick={onPageClick}>
-            {/*<Chat />*/}
             <div className={'box-border flex h-auto min-w-[200px] flex-col overflow-hidden lg:h-full lg:flex-row'}>
-                <MainMenu onItemClick={onMenuItemClick} openedView={view}/>
+                <MainMenu currentViewId={currentViewId}/>
                 {renderContent()}
             </div>
         </StyledHomePage>

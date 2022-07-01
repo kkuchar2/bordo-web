@@ -87,9 +87,6 @@ export const generateDownload = async (imageSrc, crop) => {
 export const generateCroppedImageFile = async (imageSrc, crop, resolve) => {
 
     if (!crop || !imageSrc) {
-        console.log("no crop or imageSrc");
-        console.log(crop);
-        console.log(imageSrc);
         return;
     }
 

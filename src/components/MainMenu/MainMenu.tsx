@@ -3,18 +3,18 @@ import React, {useCallback, useEffect, useMemo} from 'react';
 import {MenuAlt3Icon} from '@heroicons/react/solid';
 import {closeNavbar, openNavbar, selectorNavbar} from 'appRedux/reducers/application';
 import {useAppDispatch} from 'appRedux/store';
-import {Group, GroupItem, mainMenuItems} from 'components/MainMenu/mainMenuItems';
+import {Group, Item, mainMenuItems} from 'components/MainMenu/mainMenuItems';
 import MenuItem from 'components/MainMenu/MenuItem/MenuItem';
 import {useMediaQuery} from 'hooks/useMediaQuery';
 import {useTranslation} from 'react-i18next';
 import {useSelector} from 'react-redux';
 
 export interface MainMenuProps {
-    openedView: GroupItem;
+    currentViewId: string;
 }
 
 const MainMenu = (props: MainMenuProps) => {
-    const { openedView } = props;
+    const { currentViewId } = props;
 
     const dispatch = useAppDispatch();
 
@@ -27,8 +27,6 @@ const MainMenu = (props: MainMenuProps) => {
     const onHamburgerClick = useCallback(() => {
         dispatch(openNavbar());
     }, []);
-
-    console.log('Opened view: ', openedView);
 
     const renderHamburgerButton = useMemo(() => {
         if (navbarState.opened) {
@@ -50,7 +48,7 @@ const MainMenu = (props: MainMenuProps) => {
 
             if (Array.isArray(items)) {
                 return <div className={'pt-[10px] pb-[10px] flex flex-col gap-1'}>
-                    {items.map((item: GroupItem, idx: number) => {
+                    {items.map((item: Item, idx: number) => {
                         return <MenuItem icon={item.icon} key={idx} name={t(item.displayName)} onClick={item.onClick}/>;
                     })}
                 </div>;
@@ -64,12 +62,13 @@ const MainMenu = (props: MainMenuProps) => {
                     return <MenuItem
                         key={key}
                         name={t(item.displayName)}
-                        active={openedView !== null && openedView.id === item.id}
-                        icon={item.icon} onClick={item.onClick}/>;
+                        active={currentViewId === item.id}
+                        icon={item.icon}
+                        onClick={item.onClick}/>;
                 })}
             </div>;
         },
-        [openedView, t]
+        [currentViewId, t]
     );
 
     const getTranslation = useCallback(() => {

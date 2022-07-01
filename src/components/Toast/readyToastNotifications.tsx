@@ -20,8 +20,6 @@ export const showSuccessToast = (message: string) => {
 
 export const showSuccessAvatar = (message: string, avatar: string) => {
     toast.custom((t) => {
-
-        console.log('avatar: ', avatar);
         return <div
             className={`flex items-center justify-center bg-toast-900 text-white px-6 py-4 ${t.visible ? 'animate-enter' : 'animate-leave'}`}>
             <div>Successfully changed avatar</div>

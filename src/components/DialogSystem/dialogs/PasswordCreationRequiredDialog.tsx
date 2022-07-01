@@ -41,8 +41,6 @@ export const PasswordCreationRequiredDialog = (props: DialogProps<ChangeProperty
         };
     }, []);
 
-    console.log("requestState", requestState);
-
     useEffect(() => {
 
         if (isSuccess(requestState)) {

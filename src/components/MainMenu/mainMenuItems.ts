@@ -124,8 +124,6 @@ export const mainMenuItems: MenuItems = {
 };
 
 export const findView = (id: string): Item | undefined => {
-    console.log('Looking for view: ' + id);
-
     for (const key in mainMenuItems) {
         const group = mainMenuItems[key];
 

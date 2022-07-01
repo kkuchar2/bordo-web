@@ -126,8 +126,6 @@ const ModelsView = () => {
             return { value: idx, name: `${v.package}.${v.model}` };
         });
 
-        console.log(options);
-
         return <StyledToolbar>
             <Select items={options} onChange={onSelected}/>
             <button className={'add_button'} onClick={onAddNewItemClick}>

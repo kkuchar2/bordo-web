@@ -12,7 +12,6 @@ const appSlice = createSlice({
     initialState: defaultState,
     reducers: {
         onLoadLastView: state => {
-            console.log('onLoadLastView');
             const persistedView = localStorage.getItem('currentView');
             state.currentView = persistedView !== 'undefined' ? persistedView : 'home';
         },
@@ -23,7 +22,7 @@ const appSlice = createSlice({
     }
 });
 
-export const openView = (viewName: string) => async (dispatch: AppDispatch) => dispatch(onChangeView(viewName));
+export const openView = (viewId: string) => async (dispatch: AppDispatch) => dispatch(onChangeView(viewId));
 
 export const loadLastView = () => async (dispatch: AppDispatch) => dispatch(onLoadLastView());
 

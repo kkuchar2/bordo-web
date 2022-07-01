@@ -94,11 +94,9 @@ export const showChangeUsernameDialog = (args: ReadyDialogArgs) => (isOnlySocial
     const { data } = args;
 
     if (isOnlySocial) {
-        console.log('showChangeUsernameDialog: isOnlySocial');
         showPasswordCreationRequiredDialog('CHANGE_USERNAME', 'CHANGE_USERNAME_PASSWORD_SETUP');
     }
     else {
-        console.log('showChangeUsernameDialog: !isOnlySocial');
         appDispatch(
             openDialog({
                 component: 'ChangePropertyDialog',

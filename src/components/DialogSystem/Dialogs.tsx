@@ -115,8 +115,6 @@ const Dialogs = () => {
 
     const Component = componentMap[componentName];
 
-    console.log('Dialog width: ', componentProps.dialog);
-
     return <StyledDialogs id={'dialogWrapper'} onKeyDown={handleKeyDown} onMouseDown={onClick} {...dialogBgAnimation}>
         <StyledDialog width={componentProps.dialog.width} {...dialogAnimation}>
             <StyledDialogTopSection>
