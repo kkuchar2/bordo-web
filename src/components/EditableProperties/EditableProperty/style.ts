@@ -1,16 +1,5 @@
 import styled from "styled-components";
 
-export const StyledEditableTextProperty = styled.div`
-  display: flex;
-  flex-direction: row;
-`;
-
-export const StyledPropertyValues = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-`;
-
 export const PropertyValueSection = styled.div`
   box-sizing: border-box;
   width: 100%;

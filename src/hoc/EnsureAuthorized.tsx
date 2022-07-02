@@ -23,11 +23,12 @@ export const EnsureAuthorized = (WrappedComponent: ComponentType) => {
 
         const loggedIn = userState.loggedIn;
         const recentlyLoggedOut = userState.recentlyLoggedOut;
+        const lastAutologinFailed = userState.lastAutologinFailed;
 
         const dispatch = useAppDispatch();
 
         useEffect(() => {
-            if (!loggedIn && !recentlyLoggedOut) {
+            if (!loggedIn && !recentlyLoggedOut && !lastAutologinFailed) {
                 dispatch(autoLogin());
             }
         }, []);

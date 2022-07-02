@@ -1,6 +1,8 @@
-import React, {lazy} from "react";
+import React from "react";
 
-const RegistrationPage = React.lazy(() => import(/* webpackChunkName: "auth-chunk" */ "pages/RegistrationPage/RegistrationPage"));
+import lazy from "react-lazy-with-preload";
+
+const RegistrationPage = lazy(() => import(/* webpackChunkName: "auth-chunk" */ "pages/RegistrationPage/RegistrationPage"));
 const ConfirmPage = lazy(() => import (/* webpackChunkName: "auth-chunk" */ "pages/ConfirmPage/ConfirmPage"));
 const LoginPage = lazy(() => import (/* webpackChunkName: "auth-chunk" */ "pages/LoginPage/LoginPage"));
 const ForgotPasswordPage = lazy(() => import (/* webpackChunkName: "auth-chunk" */ "pages/ForgotPasswordPage/ForgotPasswordPage"));
@@ -9,16 +11,20 @@ const HomePage = lazy(() => import (/* webpackChunkName: "home" */ "pages/HomePa
 const UserAgreement = lazy(() => import (/* webpackChunkName: "user-agreement" */ "pages/UserAgreementPage/UserAgreementPage"));
 const NotFound = lazy(() => import (/* webpackChunkName: "not-found" */ "pages/NotFoundPage/NotFoundPage"));
 
+LoginPage.preload();
+RegistrationPage.preload();
+ForgotPasswordPage.preload();
+
 export const routes = [
     {
         path: "*",
-        element: <NotFound />,
+        element: <NotFound/>,
         name: "NotFound",
         enabled: true
     },
     {
         path: "/",
-        element: <LoginPage />,
+        element: <LoginPage/>,
         name: "LoginPage",
         icon: '',
         title: "",
@@ -29,7 +35,7 @@ export const routes = [
     },
     {
         path: "/register",
-        element: <RegistrationPage />,
+        element: <RegistrationPage/>,
         name: "RegistrationPage",
         customClass: 'registerButton',
         enabled: true,
@@ -39,7 +45,7 @@ export const routes = [
     },
     {
         path: "/verify-email/:token",
-        element: <ConfirmPage />,
+        element: <ConfirmPage/>,
         name: "ConfirmPage",
         exact: false,
         enabled: true,
@@ -48,7 +54,7 @@ export const routes = [
     },
     {
         path: "/home",
-        element: <HomePage />,
+        element: <HomePage/>,
         name: "HomePage",
         exact: false,
         enabled: true,
@@ -57,7 +63,7 @@ export const routes = [
     },
     {
         path: "/forgotPassword",
-        element: <ForgotPasswordPage />,
+        element: <ForgotPasswordPage/>,
         name: "ForgotPasswordPage",
         title: "Forgot password",
         enabled: true,
@@ -67,7 +73,7 @@ export const routes = [
     },
     {
         path: "/createNewPassword/:token",
-        element: <CreateNewPasswordPage />,
+        element: <CreateNewPasswordPage/>,
         name: "ResetPasswordPage",
         title: "Change password",
         enabled: true,
@@ -77,7 +83,7 @@ export const routes = [
     },
     {
         path: "/userAgreement",
-        element: <UserAgreement />,
+        element: <UserAgreement/>,
         name: "UserAgreementPage",
         title: "User agreement",
         enabled: true,

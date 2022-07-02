@@ -5,7 +5,7 @@ import {ReadyDialogArgs} from 'components/DialogSystem/readyDialogs.types';
 import {useTranslation} from 'react-i18next';
 import {useSelector} from 'react-redux';
 
-import {PropertyEditSection, PropertyValueSection, StyledEditableTextProperty, StyledPropertyValues} from './style';
+import {PropertyEditSection, PropertyValueSection} from './style';
 
 export interface EditablePropertyProps {
     id: string;
@@ -43,8 +43,8 @@ const EditableProperty = (props: EditablePropertyProps) => {
         </PropertyEditSection>;
     }, [canEdit, onEditButtonClick]);
 
-    return <StyledEditableTextProperty>
-        <StyledPropertyValues>
+    return <div className={'flex flex-row'}>
+        <div className={'flex flex-col w-full'}>
             <div className={'property-title'}>{`${name.toUpperCase()}:`}</div>
             <PropertyValueSection>
                 <div className={'flex flex-row'}>
@@ -52,8 +52,8 @@ const EditableProperty = (props: EditablePropertyProps) => {
                 </div>
                 {renderEdit}
             </PropertyValueSection>
-        </StyledPropertyValues>
-    </StyledEditableTextProperty>;
+        </div>
+    </div>;
 };
 
 export default EditableProperty;

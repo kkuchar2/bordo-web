@@ -40,7 +40,7 @@ const HomePage = (props: any) => {
         const ViewComponent = view.component;
 
         return <div
-            className={`duration-[600ms] transition ease-in-out bg-home-bg-light dark:bg-home-bg-dark flex flex-grow min-w-[600px] flex-col box-border ${navbarState.opened ? 'blur-[8px]' : 'blur-none'}`}>
+            className={`duration-[600ms] transition ease-in-out bg-home-bg-light dark:bg-home-bg-dark flex flex-grow flex-col box-border ${navbarState.opened ? 'blur-[8px]' : 'blur-none'}`}>
             <StyledTopSection>
                 <StyledAnimatedHeader {...defaultShowUpAnimation}>
                     <div

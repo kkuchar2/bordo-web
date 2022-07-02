@@ -26,10 +26,7 @@ export interface UserInfo {
     profile: UserProfile,
     role?: string;
     social?: SocialInfo
-}
-
-export interface DatabaseInfo {
-    name
+    lastAutologinFailed?: boolean
 }
 
 export type User = UserAuth & UserInfo;

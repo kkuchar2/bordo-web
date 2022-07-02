@@ -1,11 +1,6 @@
 import Avatar from "react-avatar";
 import styled from "styled-components";
 
-export interface StyledProfilePictureProps {
-    url: string,
-    size: number
-}
-
 export interface StyledUserActiveIndicatorProps {
     active: boolean
 }
@@ -41,6 +36,7 @@ export interface EditableProfilePictureProps {
 export const StyledEditableProfilePictureProperty = styled.div<EditableProfilePictureProps>`
   display: flex;
   flex-direction: row;
+
   &:hover {
     cursor: ${props => props.enableUpload ? 'pointer' : 'unset'};
   }
@@ -79,7 +75,7 @@ export const StyledAvatarWithOverlay = styled.div<StyledAvatarWithOverlayProps>`
   height: 100%;
   border-radius: 50%;
   background: none;
-  
+
   ${StyledOverlay} {
     display: none;
   }
@@ -105,8 +101,4 @@ export const PropertyValueSection = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-
-  @media (max-width: 600px) {
-    padding: 20px;
-  }
 `;

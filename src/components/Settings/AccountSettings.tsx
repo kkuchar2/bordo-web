@@ -18,13 +18,7 @@ import {useSelector} from "react-redux";
 
 import {isSuccess} from "../../api/api_util";
 
-import {
-    StyledAccountSummaryBottom,
-    StyledAccountSummaryFields,
-    StyledSettingsPropertiesSection,
-    StyledSettingsSection,
-    StyledSettingsView
-} from "./style";
+import {StyledSettingsPropertiesSection, StyledSettingsView} from "./style";
 
 const AccountSettings = () => {
 
@@ -70,7 +64,7 @@ const AccountSettings = () => {
     }, [userState, t]);
 
     return <StyledSettingsView>
-        <StyledSettingsSection>
+        <div className={'lg:ml-[10px] flex flex-col box-border w-full lg:w-[600px] '}>
             <div className={'bg-black/10'}>
                 <div className={'flex items-center justify-center p-5'}>
                     <EditableProfilePictureProperty
@@ -78,8 +72,8 @@ const AccountSettings = () => {
                         useActiveIndicator={false}
                         pictureSize={150}/>
                 </div>
-                <StyledAccountSummaryBottom>
-                    <StyledAccountSummaryFields>
+                <div className={'w-full'}>
+                    <div className={'relative p-[20px] box-border w-full'}>
                         <EditableProperty
                             id={'username'}
                             name={t('USERNAME')}
@@ -96,8 +90,8 @@ const AccountSettings = () => {
                             obfuscate={true}
                             passwordRequired={true}
                             showDialogFunc={showChangeEmailDialog}/>
-                    </StyledAccountSummaryFields>
-                </StyledAccountSummaryBottom>
+                    </div>
+                </div>
 
             </div>
 
@@ -118,7 +112,7 @@ const AccountSettings = () => {
                 </SettingsSection>
 
             </StyledSettingsPropertiesSection>
-        </StyledSettingsSection>
+        </div>
     </StyledSettingsView>;
 };
 

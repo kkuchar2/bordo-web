@@ -1,13 +1,13 @@
 import {mapFrom} from "util/util";
 
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
-import { User} from "appRedux/reducers/api/auth/accountSlice.types";
+import {User} from "appRedux/reducers/api/auth/accountSlice.types";
 import {RequestAction, requestReducer, requestSelectors} from "appRedux/reducers/tools";
 import {RootState} from "appRedux/store";
 import {useSelector} from "react-redux";
 import {DefaultResponseArgs, RequestStatus, ResponseArgs} from "tools/client/client.types";
 
-import {isSuccess, isWaiting} from "../../../../api/api_util";
+import {isFailure, isSuccess, isWaiting} from "../../../../api/api_util";
 
 import {IAuthSliceMap, IAuthSliceState, requestList} from "./accountSlice.requests";
 
@@ -16,6 +16,7 @@ const emptyUser = (recentlyLoggedOut: boolean = false): User => ({
     email: {},
     role: null,
     loggedIn: false,
+    lastAutologinFailed: false,
     recentlyLoggedOut: recentlyLoggedOut,
     profile: {},
     social: {
@@ -27,7 +28,7 @@ const emptyUser = (recentlyLoggedOut: boolean = false): User => ({
 
 const onLoginResponse = (state: IAuthSliceState, action: PayloadAction<ResponseArgs>) => {
     if (isSuccess(action.payload)) {
-        state.user  = {...state.user, loggedIn: true, recentlyLoggedOut: false, ...action.payload.responseData};
+        state.user = { ...state.user, loggedIn: true, recentlyLoggedOut: false, ...action.payload.responseData };
     }
     else if (isWaiting(action.payload)) {
         state.user = emptyUser();
@@ -65,6 +66,13 @@ export const accountSlice = createSlice({
         autoLogin: (state: IAuthSliceState, action: RequestAction) => {
             state.requests.autoLogin.info = action.payload.info;
             onLoginResponse(state, action);
+
+            if (isFailure(action.payload)) {
+                state.user.lastAutologinFailed = true;
+            }
+            else if (isSuccess(action.payload)) {
+                state.user.lastAutologinFailed = false;
+            }
         },
         logout: (state: IAuthSliceState, action: RequestAction) => {
             state.requests.logout = action.payload;
