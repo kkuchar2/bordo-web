@@ -166,7 +166,7 @@ export const sendEmailVerification = (email: string) => {
     });
 };
 
-export const changeUsername = ({ username, password }) => {
+export const changeUsername = ({ new_username, current_password }) => {
     return request({
         axiosInstance: ApiClient,
         requestType: RequestType.POST,
@@ -174,8 +174,8 @@ export const changeUsername = ({ username, password }) => {
         action: actions.changeUsername,
         refreshTokenOnUnauthorized: true,
         requestData: {
-            username: username,
-            current_password: password
+            new_username: new_username,
+            current_password: current_password
         },
         config: AxiosConfigs.WITH_CREDENTIALS_AND_CSRF
     });
@@ -266,5 +266,6 @@ export const askSetupPassword = () => {
 };
 
 export const resetAccountSliceRequestState = (requestStateName: string) => {
+    console.log('Reset account slice request state: ', requestStateName);
     return async (dispatch: Dispatch) => dispatch(actions.resetRequestState(requestStateName));
 };

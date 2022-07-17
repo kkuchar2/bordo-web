@@ -93,11 +93,11 @@ export const FORM_CONFIG = (t: any): FormConfigs => {
         },
         changeUsername: {
             fields: [
-                { name: 'username' },
+                { name: 'new_username' },
                 { name: 'current_password' },
             ],
             validationSchema: object({
-                username: UsernameSchema(t),
+                new_username: UsernameSchema(t),
                 current_password: RequiredCurrentPasswordSchema(t)
             })
         },

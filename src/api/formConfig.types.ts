@@ -18,7 +18,7 @@ export interface CreateNewPasswordFormArgs {
 }
 
 export interface ChangeUsernameFormArgs {
-    username: string;
+    new_username: string;
     current_password: string;
 }
 

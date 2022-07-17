@@ -109,6 +109,8 @@ export const showChangeUsernameDialog = (args: ReadyDialogArgs) => {
                     },
                     data: {
                         formConfigKey: 'changeUsername',
+                        propertyName: 'username',
+                        requestStateName: 'changeUsername',
                         requestStateSelector: (state: RootState) => state.account.requests.changeUsername,
                         dispatchFunc: changeUsername,
                         initialArgs: data

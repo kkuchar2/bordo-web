@@ -2,13 +2,14 @@ import React, {useCallback, useEffect} from "react";
 
 import {useCloseWithRequestSuccess} from "components/DialogSystem/hooks";
 import Form from "components/Forms/Form/Form";
+import {showSuccessPropertyChange} from "components/Toast/readyToastNotifications";
 import {useSelector} from "react-redux";
 import {closeDialog} from "state/reducers/dialog/dialogSlice";
 import {BaseDialogProps, DialogProps} from "state/reducers/dialog/dialogSlice.types";
 import {resetAccountSliceRequestState} from "state/services/accountService";
 import {RequestStatus, ResponseArgs} from "tools/client/client.types";
 
-import {useRequestState} from "../../../api/api_util";
+import {isSuccess, useRequestState} from "../../../api/api_util";
 import {useFormConfig} from "../../../api/formConfig";
 
 export interface ChangePropertyDialogProps {
@@ -16,6 +17,7 @@ export interface ChangePropertyDialogProps {
     dispatchFunc: any;
     formConfigKey: string;
     requestStateName: string;
+    propertyName: string;
     initialArgs: any;
 }
 
@@ -25,12 +27,20 @@ export const ChangePropertyDialog = (props: DialogProps<ChangePropertyDialogProp
 
     const { onCancel } = dialog;
 
-    const { formConfigKey, requestStateSelector, dispatchFunc, requestStateName, initialArgs } = data;
+    const { formConfigKey, requestStateSelector, dispatchFunc, requestStateName, initialArgs, propertyName } = data;
 
     const requestState = useSelector(requestStateSelector);
     const errors = requestState.info.errors;
     const pending = useRequestState(requestState, RequestStatus.Waiting);
     const formConfig = useFormConfig(formConfigKey, t);
+
+    console.log('Request state name', requestStateName);
+
+    useEffect(() => {
+        if (isSuccess(requestState)) {
+            showSuccessPropertyChange('Changed successfully', propertyName);
+        }
+    }, [requestState, propertyName]);
 
     useEffect(() => {
         return () => {

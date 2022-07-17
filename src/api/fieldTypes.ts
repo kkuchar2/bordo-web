@@ -17,6 +17,15 @@ export const fieldTypes = {
         required: true,
         autoComplete: 'on',
     }),
+    new_username: (t: any) => ({
+        id: 'new_username',
+        name: 'new_username',
+        type: 'text',
+        label: t('NEW_USERNAME'),
+        placeholder: t('ENTER_NEW_USERNAME_INPUT_PLACEHOLDER'),
+        required: true,
+        autoComplete: 'on',
+    }),
     username: (t: any) => ({
         id: 'username',
         name: 'username',

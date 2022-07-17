@@ -2,24 +2,36 @@ import React, {useMemo} from "react";
 
 import {shakeAnimation} from "components/Forms/animation";
 import {motion} from "framer-motion";
+import {useTranslation} from "react-i18next";
 
-export const InputWithError = ({ field, id, label, type, autoComplete, placeholder, disabled, form: { errors } }) => {
-    const renderError = useMemo(() => {
-        const error = errors[id];
+export const InputWithError = ({ field, id, label, type, autoComplete, placeholder, disabled, errors, form }) => {
 
-        if (error) {
-            return <motion.div className={'error mt-3'} {...shakeAnimation}>{error}</motion.div>;
+    const { t } = useTranslation();
+
+    const { errors: formErrors } = form;
+
+    const renderErrors = useMemo(() => {
+        if (!errors) {
+            return null;
         }
+        return <motion.div className={'error mt-3'} {...shakeAnimation}>{errors.map((el,) => t(el))}</motion.div>;
     }, [errors, id]);
+
+    const renderFormError = useMemo(() => {
+        const formError = formErrors[id];
+
+        if (formError) {
+            return <motion.div className={'error mt-3'} {...shakeAnimation}>{formError}</motion.div>;
+        }
+    }, [formErrors, id]);
 
     const outlineClass = useMemo(() => {
-        const error = errors[id];
-
-        if (error) {
-            return 'outline outline-1 outline-offset-1 outline-red-500';
+        if (!errors && formErrors) {
+            return null;
         }
-        return '';
-    }, [errors, id]);
+
+        return 'outline outline-1 outline-offset-1 outline-red-500';
+    }, [errors, formErrors, id]);
 
     return <div className={'flex flex-col mb-[20px]'}>
         {label ? <div
@@ -31,6 +43,7 @@ export const InputWithError = ({ field, id, label, type, autoComplete, placehold
             disabled={disabled}
             placeholder={placeholder}
             {...field}  />
-        {renderError}
+        {renderErrors}
+        {renderFormError}
     </div>;
 };
