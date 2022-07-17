@@ -6,6 +6,5 @@ export interface AccountSliceState {
     requests: {
         [name: string]: ResponseArgs;
     }
-    user: User,
-    databaseInfo: any,
+    user: User
 }

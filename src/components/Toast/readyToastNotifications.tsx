@@ -37,11 +37,11 @@ export const showSuccessAvatar = (message: string, avatar: string) => {
     });
 };
 
-export const showSuccessPropertyChange = (message: string, propertyName: string) => {
+export const showSuccess = (message: string) => {
     toast.custom((t) => {
         return <div
             className={`flex items-center justify-center bg-toast-900 text-white px-6 py-4 ${t.visible ? 'animate-enter' : 'animate-leave'}`}>
-            <div>Successfully changed {propertyName} 🎉</div>
+            <div>{message}</div>
         </div>;
     }, {
         position: 'bottom-center',

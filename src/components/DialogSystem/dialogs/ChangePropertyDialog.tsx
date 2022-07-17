@@ -2,7 +2,7 @@ import React, {useCallback, useEffect} from "react";
 
 import {useCloseWithRequestSuccess} from "components/DialogSystem/hooks";
 import Form from "components/Forms/Form/Form";
-import {showSuccessPropertyChange} from "components/Toast/readyToastNotifications";
+import {showSuccess} from "components/Toast/readyToastNotifications";
 import {useSelector} from "react-redux";
 import {closeDialog} from "state/reducers/dialog/dialogSlice";
 import {BaseDialogProps, DialogProps} from "state/reducers/dialog/dialogSlice.types";
@@ -38,7 +38,7 @@ export const ChangePropertyDialog = (props: DialogProps<ChangePropertyDialogProp
 
     useEffect(() => {
         if (isSuccess(requestState)) {
-            showSuccessPropertyChange('Changed successfully', propertyName);
+            showSuccess(`${t('SUCCESS')} 🎉`);
         }
     }, [requestState, propertyName]);
 

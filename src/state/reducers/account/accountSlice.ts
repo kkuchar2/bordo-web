@@ -38,8 +38,7 @@ export const accountSlice = createSlice({
     name: "accountSlice",
     initialState: {
         requests: mapFrom(requestList, DefaultResponseArgs()),
-        user: emptyUser(),
-        databaseInfo: {}
+        user: emptyUser()
     } as AccountSliceState,
     reducers: {
         login: (state: AccountSliceState, action: RequestAction) => {
@@ -114,13 +113,15 @@ export const accountSlice = createSlice({
                 state.user.profile.use_animated_avatar = action.payload.responseData.use_animated_avatar;
             }
         },
-        getDatabaseInfo: (state: AccountSliceState, action: RequestAction) => {
+        changeUsername: (state: AccountSliceState, action: RequestAction) => {
+            state.requests.changeUsername = action.payload;
+
             if (isSuccess(action.payload)) {
-                state.databaseInfo = action.payload.responseData;
+                console.log(action.payload.responseData);
+                state.user = { ...state.user, username: action.payload.responseData.user.username };
             }
         },
         changeEmailAddress: requestReducer("changeEmailAddress"),
-        changeUsername: requestReducer("changeUsername"),
         changePassword: requestReducer("changePassword"),
         forgotPassword: requestReducer("forgotPassword"),
         resetPassword: requestReducer("resetPassword"),
