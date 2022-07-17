@@ -1,7 +1,5 @@
 import React, {useCallback, useEffect} from 'react';
 
-import {closeNavbar, loadLastView, selectorNavbar, selectorTheme, selectorView} from 'appRedux/reducers/application';
-import {useAppDispatch} from 'appRedux/store';
 import {defaultShowUpAnimation} from 'components/Forms/animation';
 import MainMenu from 'components/MainMenu/MainMenu';
 import {findView} from 'components/MainMenu/mainMenuItems';
@@ -9,19 +7,21 @@ import {showSuccessToast} from 'components/Toast/readyToastNotifications';
 import {EnsureAuthorized} from 'hoc/EnsureAuthorized';
 import {useTranslation} from 'react-i18next';
 import {useSelector} from 'react-redux';
+import {loadLastView} from 'state/reducers/application/appSlice';
+import {closeNavbar} from "state/reducers/navbar/navbarSlice";
+import {RootState, useAppDispatch} from "state/store";
 
 import {StyledAnimatedHeader, StyledBottomSection, StyledHomePage, StyledTopSection} from './style';
 
 const HomePage = (props: any) => {
+
     const { show } = props;
 
     const dispatch = useAppDispatch();
 
-    const navbarState = useSelector(selectorNavbar);
-
-    const currentViewId = useSelector(selectorView);
-
-    const currentTheme = useSelector(selectorTheme);
+    const navbarState = useSelector((state: RootState) => state.navbar);
+    const currentViewId = useSelector((state: RootState) => state.app.currentView);
+    const currentTheme = useSelector((state: RootState) => state.app.theme);
 
     useEffect(() => {
         showSuccessToast('Successfully logged in');

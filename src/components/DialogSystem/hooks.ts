@@ -1,7 +1,7 @@
 import {useEffect} from "react";
 
-import {closeDialog} from "appRedux/reducers/application";
-import {AppDispatch} from "appRedux/store";
+import {closeDialog} from "state/reducers/dialog/dialogSlice";
+import {AppDispatch} from "state/store";
 
 import {isSuccess} from "../../api/api_util";
 

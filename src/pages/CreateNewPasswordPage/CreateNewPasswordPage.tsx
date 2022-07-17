@@ -1,15 +1,15 @@
 import React, {useCallback, useEffect, useMemo} from 'react';
 
-import {useAuthSelector} from 'appRedux/reducers/api/auth/accountSlice';
-import {createNewPassword, resetUserSliceRequestState} from "appRedux/services/authService";
-import {useAppDispatch} from "appRedux/store";
 import Box from "components/Box/Box";
 import Form from "components/Forms/Form/Form";
 import {useTranslation} from "react-i18next";
+import {useSelector} from "react-redux";
 import {useParams} from "react-router-dom";
+import {createNewPassword, resetAccountSliceRequestState} from "state/services/accountService";
+import {RootState, useAppDispatch} from 'state/store';
 import {RequestStatus} from "tools/client/client.types";
 
-import {useMemoRequestState} from "../../api/api_util";
+import {useRequestState} from "../../api/api_util";
 import {useFormConfig} from "../../api/formConfig";
 
 const CreateNewPasswordPage = () => {
@@ -22,9 +22,9 @@ const CreateNewPasswordPage = () => {
 
     const dispatch = useAppDispatch();
 
-    const requestState = useAuthSelector('createNewPassword');
+    const requestState = useSelector((state: RootState) => state.account.requests.createNewPassword);
 
-    const pending = useMemoRequestState(requestState, RequestStatus.Waiting);
+    const pending = useRequestState(requestState, RequestStatus.Waiting);
 
     const errors = requestState.info.errors;
 
@@ -43,7 +43,7 @@ const CreateNewPasswordPage = () => {
 
     useEffect(() => {
         return () => {
-            dispatch(resetUserSliceRequestState('createNewPassword'));
+            dispatch(resetAccountSliceRequestState('createNewPassword'));
         };
     }, []);
 
@@ -72,7 +72,8 @@ const CreateNewPasswordPage = () => {
                     useCancelButton={false}
                     onSubmit={onSubmit}/>
                 <div className={'flex'}>
-                    {pending ? <progress className="progress w-full bg-gray-600 h-[20px] progress-accent"></progress> : null}
+                    {pending ?
+                        <progress className="progress w-full bg-gray-600 h-[20px] progress-accent"></progress> : null}
                 </div>
             </Box>
         </div>

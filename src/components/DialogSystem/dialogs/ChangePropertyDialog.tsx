@@ -1,16 +1,14 @@
 import React, {useCallback, useEffect} from "react";
 
-import {closeDialog} from "appRedux/reducers/application";
-import {DialogProps} from "appRedux/reducers/application/dialogSlice.types";
-import {resetUserSliceRequestState} from "appRedux/services/authService";
-import {useAppDispatch} from "appRedux/store";
 import {useCloseWithRequestSuccess} from "components/DialogSystem/hooks";
 import Form from "components/Forms/Form/Form";
-import {useTranslation} from "react-i18next";
 import {useSelector} from "react-redux";
+import {closeDialog} from "state/reducers/dialog/dialogSlice";
+import {BaseDialogProps, DialogProps} from "state/reducers/dialog/dialogSlice.types";
+import {resetAccountSliceRequestState} from "state/services/accountService";
 import {RequestStatus, ResponseArgs} from "tools/client/client.types";
 
-import {useMemoRequestState} from "../../../api/api_util";
+import {useRequestState} from "../../../api/api_util";
 import {useFormConfig} from "../../../api/formConfig";
 
 export interface ChangePropertyDialogProps {
@@ -21,26 +19,22 @@ export interface ChangePropertyDialogProps {
     initialArgs: any;
 }
 
-export const ChangePropertyDialog = (props: DialogProps<ChangePropertyDialogProps>) => {
+export const ChangePropertyDialog = (props: DialogProps<ChangePropertyDialogProps> & BaseDialogProps) => {
 
-    const { dialog, data } = props;
+    const { dialog, data, dispatch, t } = props;
 
     const { onCancel } = dialog;
 
     const { formConfigKey, requestStateSelector, dispatchFunc, requestStateName, initialArgs } = data;
 
-    const { t } = useTranslation();
-
-    const dispatch = useAppDispatch();
-
     const requestState = useSelector(requestStateSelector);
     const errors = requestState.info.errors;
-    const pending = useMemoRequestState(requestState, RequestStatus.Waiting);
+    const pending = useRequestState(requestState, RequestStatus.Waiting);
     const formConfig = useFormConfig(formConfigKey, t);
 
     useEffect(() => {
         return () => {
-            dispatch(resetUserSliceRequestState(requestStateName));
+            dispatch(resetAccountSliceRequestState(requestStateName));
         };
     }, []);
 

@@ -1,6 +1,6 @@
 import React, {useCallback} from "react";
 
-import {booleanSelectTheme} from "components/Models/TableRow/style";
+import {booleanSelectTheme} from "components/TableRow/style";
 import {Select, Text} from "kuchkr-react-component-library";
 
 import {FieldSerializerProps} from "./fieldSerializer.types";

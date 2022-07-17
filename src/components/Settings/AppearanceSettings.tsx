@@ -2,8 +2,8 @@ import React, {useCallback, useEffect, useState} from "react";
 
 import {RadioGroup} from "@headlessui/react";
 import {CheckIcon} from "@heroicons/react/outline";
-import {changeTheme} from "appRedux/reducers/application";
-import {useAppDispatch} from "appRedux/store";
+import {changeTheme} from "state/reducers/application/appSlice";
+import {useAppDispatch} from "state/store";
 
 const availableThemes = {
     light: {

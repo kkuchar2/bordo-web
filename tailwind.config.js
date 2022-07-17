@@ -76,6 +76,22 @@ module.exports = {
                     hover: '#00f7ff',
                     visited: '#74D79F',
                 },
+                settings: {
+                    section: {
+                        light: '#fafafa',
+                        dark: '#2e2e2e',
+                    }
+                },
+                btn: {
+                    edit: {
+                        full: {
+                            'default-dark': '#2e2e2e',
+                            'default-light': '#fafafa',
+                            'hover-light': '#2e2e2e',
+                            'hover-dark': '#454545',
+                        }
+                    }
+                },
                 toast: {
                     '50': '#FFF6DF',
                     '100': '#fdf7f1',

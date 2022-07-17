@@ -59,7 +59,7 @@ module.exports = {
             tools: resolvePath('src/tools/'),
             util: resolvePath('src/util/'),
             configs: resolvePath('configs/'),
-            appRedux: resolvePath('src/redux/'),
+            state: resolvePath('src/state/'),
             components: resolvePath('src/components/'),
         }
     },

@@ -1,14 +1,14 @@
 import React, {useCallback, useEffect} from "react";
 
-import {useAuthSelector} from "appRedux/reducers/api/auth/accountSlice";
-import {closeDialog} from "appRedux/reducers/application";
-import {deleteAccount, resetUserSliceRequestState} from "appRedux/services/authService";
-import {useAppDispatch} from "appRedux/store";
 import Form from "components/Forms/Form/Form";
 import {useTranslation} from "react-i18next";
+import {useSelector} from "react-redux";
+import {closeDialog} from "state/reducers/dialog/dialogSlice";
+import {deleteAccount, resetAccountSliceRequestState} from "state/services/accountService";
+import {RootState, useAppDispatch} from "state/store";
 import {RequestStatus} from "tools/client/client.types";
 
-import {isSuccess, useMemoRequestState} from "../../../api/api_util";
+import {isSuccess, useRequestState} from "../../../api/api_util";
 import {useFormConfig} from "../../../api/formConfig";
 
 export const DeleteAccountDialog = () => {
@@ -17,16 +17,16 @@ export const DeleteAccountDialog = () => {
 
     const dispatch = useAppDispatch();
 
-    const userState = useAuthSelector('user');
-    const requestState = useAuthSelector('deleteAccount');
-    const pending = useMemoRequestState(requestState, RequestStatus.Waiting);
+    const userState = useSelector((state: RootState) => state.account.user);
+    const requestState = useSelector((state: RootState) => state.account.requests.deleteAccount);
+    const pending = useRequestState(requestState, RequestStatus.Waiting);
     const errors = requestState.info.errors;
 
     const formConfig = useFormConfig('deleteAccount', t);
 
     useEffect(() => {
         return () => {
-            dispatch(resetUserSliceRequestState('deleteAccount'));
+            dispatch(resetAccountSliceRequestState('deleteAccount'));
         };
     }, []);
 

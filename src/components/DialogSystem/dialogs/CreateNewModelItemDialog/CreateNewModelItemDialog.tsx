@@ -2,12 +2,12 @@ import {humanize} from "util/util";
 
 import React, {useCallback, useState} from "react";
 
-import {closeDialog} from "appRedux/reducers/application";
-import {DialogProps} from "appRedux/reducers/application/dialogSlice.types";
-import {addRow} from "appRedux/services/modelService";
-import {useAppDispatch} from "appRedux/store";
 import {Text} from "kuchkr-react-component-library";
 import {useTranslation} from "react-i18next";
+import {closeDialog} from "state/reducers/dialog/dialogSlice";
+import {DialogProps} from "state/reducers/dialog/dialogSlice.types";
+import {addRow} from "state/services/modelService";
+import {useAppDispatch} from "state/store";
 
 import {
     CreateNewModelCustomDescription,

@@ -1,22 +1,15 @@
 import React, {useCallback, useEffect} from "react";
 
 import {PlusIcon} from "@heroicons/react/outline";
-import {
-    getAddRowRequestState,
-    getModelDataRequestState,
-    getModelsData,
-    getModelTypes,
-    getModelTypesRequestState
-} from "appRedux/reducers/api/crud/modelSlice";
-import {ModelType} from "appRedux/reducers/api/crud/modelSlice.types";
-import {changeCurrentViewedModel, selectorCurrentViewedModel} from "appRedux/reducers/application";
-import {getAllModelData, getMultiRowModelData, listModels} from "appRedux/services/modelService";
-import {useAppDispatch} from "appRedux/store";
 import {showAddTableItemDialog} from "components/DialogSystem/readyDialogs";
-import Table from "components/Models/Table/Table";
 import {Select} from "components/Select/Select";
+import Table from "components/Table/Table";
 import {useTranslation} from "react-i18next";
 import {useSelector} from "react-redux";
+import {changeCurrentViewedModel} from "state/reducers/application/appSlice";
+import {ModelType} from "state/reducers/crud/modelSlice.types";
+import {getAllModelData, getMultiRowModelData, listModels} from "state/services/modelService";
+import {RootState, useAppDispatch} from "state/store";
 import {RequestStatus} from "tools/client/client.types";
 
 import {isSuccess, isWaiting} from "../../api/api_util";
@@ -25,20 +18,19 @@ import {StyledModelsView, StyledToolbar, } from "./style";
 
 const ModelsView = () => {
 
-    const currentModel = useSelector(selectorCurrentViewedModel);
+    const currentModel = useSelector((state: RootState) => state.app.currentModel);
     const currentModelName = currentModel.model;
     const currentModelPackage = currentModel.package;
     const currentModelFullName = currentModel.fullModelName;
 
     const dispatch = useAppDispatch();
 
-    const modelListRequestState = useSelector(getModelTypesRequestState);
-    const modelDataRequestState = useSelector(getModelDataRequestState);
-    const addRowRequestState = useSelector(getAddRowRequestState);
+    const modelListRequestState = useSelector((state: RootState) => state.model.requests.getModelTypes);
+    const modelDataRequestState = useSelector((state: RootState) => state.model.requests.getModelData);
+    const addRowRequestState = useSelector((state: RootState) => state.model.requests.addRow);
 
-    const modelTypes = useSelector(getModelTypes);
-    const modelsData = useSelector(getModelsData);
-    const addItemToTableSelector = useSelector(getAddRowRequestState);
+    const modelTypes = useSelector((state: RootState) => state.model.modelTypes);
+    const modelsData = useSelector((state: RootState) => state.model.modelsData);
 
     const tableData = !currentModelFullName ? null : modelsData[currentModelFullName];
     const fields = tableData ? tableData.headers : null;

@@ -1,15 +1,15 @@
 import React, {useCallback, useEffect} from 'react';
 
-import {useAuthSelector} from "appRedux/reducers/api/auth/accountSlice";
-import {confirmAccount} from "appRedux/services/authService";
-import {useAppDispatch} from "appRedux/store";
 import {StyledLink} from 'components/Forms/commonStyles';
 import {Text} from "kuchkr-react-component-library";
 import {useTranslation} from "react-i18next";
+import {useSelector} from "react-redux";
 import {useParams} from "react-router-dom";
+import {confirmAccount} from "state/services/accountService";
+import {RootState, useAppDispatch} from "state/store";
 import {RequestStatus} from "tools/client/client.types";
 
-import {isSuccess, useMemoRequestState} from "../../api/api_util";
+import {isSuccess, useRequestState} from "../../api/api_util";
 
 import {StyledConfirmPage, StyledConfirmPageTop, textTheme} from "./style";
 
@@ -21,9 +21,8 @@ const ConfirmPage = () => {
 
     const { t } = useTranslation();
 
-    const requestState = useAuthSelector('accountConfirmation');
-    const pending = useMemoRequestState(requestState, RequestStatus.Waiting);
-    const success = useMemoRequestState(requestState, RequestStatus.Success);
+    const requestState = useSelector((state: RootState) => state.account.requests.accountConfirmation);
+    const pending = useRequestState(requestState, RequestStatus.Waiting);
 
     useEffect(() => {
         dispatch(confirmAccount(params.token));

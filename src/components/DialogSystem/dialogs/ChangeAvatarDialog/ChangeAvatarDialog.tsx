@@ -1,14 +1,14 @@
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
 
 import {IGif} from '@giphy/js-types';
-import {useAuthSelector} from 'appRedux/reducers/api/auth/accountSlice';
-import {changeDialogTitle, closeDialog} from 'appRedux/reducers/application';
-import {DialogProps} from 'appRedux/reducers/application/dialogSlice.types';
-import {changeAnimatedAvatar, changeAvatar, resetUserSliceRequestState} from 'appRedux/services/authService';
-import {useAppDispatch} from 'appRedux/store';
 import {Crop} from 'components/Image/Crop/Crop';
 import {GIFSelect} from 'components/Image/GIFSelect/GIFSelect';
 import {useTranslation} from 'react-i18next';
+import {useSelector} from "react-redux";
+import {changeDialogTitle, closeDialog} from "state/reducers/dialog/dialogSlice";
+import {DialogProps} from "state/reducers/dialog/dialogSlice.types";
+import {changeAnimatedAvatar, changeAvatar, resetAccountSliceRequestState} from 'state/services/accountService';
+import {RootState, useAppDispatch} from "state/store";
 import {v4 as uuidv4} from 'uuid';
 
 import {isFailure, isSuccess} from '../../../../api/api_util';
@@ -35,13 +35,13 @@ export const ChangeAvatarDialog = (props: DialogProps) => {
 
     const dispatch = useAppDispatch();
 
-    const changeAvatarState = useAuthSelector('changeAvatar');
-    const changeAnimatedAvatarState = useAuthSelector('changeAnimatedAvatar');
+    const changeAvatarState = useSelector((state: RootState) => state.account.requests.changeAvatar);
+    const changeAnimatedAvatarState = useSelector((state: RootState) => state.account.requests.changeAnimatedAvatar);
 
     useEffect(() => {
         return () => {
-            dispatch(resetUserSliceRequestState('changeAvatar'));
-            dispatch(resetUserSliceRequestState('changeAnimatedAvatar'));
+            dispatch(resetAccountSliceRequestState('changeAvatar'));
+            dispatch(resetAccountSliceRequestState('changeAnimatedAvatar'));
         };
     }, []);
 

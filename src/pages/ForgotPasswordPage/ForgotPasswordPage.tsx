@@ -1,29 +1,29 @@
 import React, {useCallback, useEffect} from 'react';
 
-import { useAuthSelector} from "appRedux/reducers/api/auth/accountSlice";
-import {forgotPassword, resetUserSliceRequestState} from "appRedux/services/authService";
-import {useAppDispatch} from "appRedux/store";
 import Box from 'components/Box/Box';
 import {showDialogAfterPasswordResetRequest} from "components/DialogSystem/readyDialogs";
 import {StyledLink} from "components/Forms/commonStyles";
 import Form from "components/Forms/Form/Form";
 import {useTranslation} from "react-i18next";
+import {useSelector} from 'react-redux';
+import {forgotPassword, resetAccountSliceRequestState} from "state/services/accountService";
+import {RootState, useAppDispatch} from "state/store";
 import {RequestStatus} from "tools/client/client.types";
 
-import {isSuccess, useMemoRequestState} from "../../api/api_util";
-import { useFormConfig} from "../../api/formConfig";
+import {isSuccess, useRequestState} from "../../api/api_util";
+import {useFormConfig} from "../../api/formConfig";
 
 import {StyledForgotPasswordPage} from "./style";
 
 const ForgotPasswordPage = () => {
 
-    const requestState = useAuthSelector('forgotPassword');
+    const requestState = useSelector((state: RootState) => state.account.requests.forgotPassword);
 
     const dispatch = useAppDispatch();
 
     const { t } = useTranslation();
 
-    const pending = useMemoRequestState(requestState, RequestStatus.Waiting);
+    const pending = useRequestState(requestState, RequestStatus.Waiting);
 
     const requestErrors = requestState.info.errors;
 
@@ -31,7 +31,7 @@ const ForgotPasswordPage = () => {
 
     useEffect(() => {
         return () => {
-            dispatch(resetUserSliceRequestState('forgotPassword'));
+            dispatch(resetAccountSliceRequestState('forgotPassword'));
         };
     }, []);
 
@@ -65,7 +65,8 @@ const ForgotPasswordPage = () => {
                 <StyledLink className={'ml-3 text-[14px]'} to={'/'}>{t('SIGN_IN')}</StyledLink>
             </div>
             <div className={'h-[10px]'}>
-                {pending ? <progress className="progress w-full mt-2 bg-gray-600 h-[10px] progress-accent"></progress> : null}
+                {pending ?
+                    <progress className="progress w-full mt-2 bg-gray-600 h-[10px] progress-accent"></progress> : null}
             </div>
         </Box>
     </StyledForgotPasswordPage>;

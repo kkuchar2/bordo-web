@@ -59,6 +59,15 @@
         @apply bg-[#4f545c] hover:bg-[#686D73] w-[100px] h-[34px] base_button
     }
 
+    .fullEditButton {
+        @apply
+        bg-btn-edit-full-default-light hover:bg-btn-edit-full-hover-light
+        dark:bg-btn-edit-full-default-dark dark:hover:bg-btn-edit-full-hover-dark
+        w-full h-[50px]
+        text-[14px]
+        base_button flex justify-start items-center pl-[10px]
+    }
+
     .changePasswordButton {
         @apply bg-[#4f545c] hover:bg-[#686D73] w-[150px] h-[34px] base_button
     }
@@ -76,6 +85,6 @@
     }
 
     .social_connection {
-        @apply bg-gray-600 hover:bg-gray-500 text-white text-[14px] py-1 px-2 rounded
+        @apply bg-none w-[100px] h-[34px] text-[#74D79F] text-[14px] hover:underline font-semibold
     }
 }

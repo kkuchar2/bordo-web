@@ -1,16 +1,10 @@
 import React, {useCallback} from "react";
 
-import {closeDialog} from "appRedux/reducers/application";
-import {useAppDispatch} from "appRedux/store";
 import {confirmButtonTheme} from "components/DialogSystem/commonStyles";
 import {Button} from "kuchkr-react-component-library";
-import {useTranslation} from "react-i18next";
+import {closeDialog} from "state/reducers/dialog/dialogSlice";
 
-export const RegistrationCompleteDialog = () => {
-
-    const {t} = useTranslation();
-
-    const dispatch = useAppDispatch();
+export const RegistrationCompleteDialog = ({ t, dispatch }) => {
 
     const onSignInClick = useCallback(() => {
         dispatch(closeDialog());

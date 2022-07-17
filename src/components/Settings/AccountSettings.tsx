@@ -1,6 +1,6 @@
-import React, {useCallback, useEffect, useMemo} from "react";
+import React, {useCallback, useMemo} from "react";
 
-import {getUserAvatar, getUserState, useAuthSelector} from "appRedux/reducers/api/auth/accountSlice";
+import {KeyIcon} from "@heroicons/react/solid";
 import {ConnectedAccount} from "components/ConnectedAccount/ConnectedAccount";
 import {
     showChangeEmailDialog,
@@ -10,38 +10,19 @@ import {
 } from "components/DialogSystem/readyDialogs";
 import EditableProfilePictureProperty
     from "components/EditableProperties/EditableProfilePictureProperty/EditableProfilePictureProperty";
-import EditableProperty from "components/EditableProperties/EditableProperty/EditableProperty";
+import EditableProperty from "components/EditableProperties/EditableProperty";
 import {SettingsSection} from "components/Settings/SettingsSection";
-import {showSuccessAvatar} from "components/Toast/readyToastNotifications";
 import {useTranslation} from "react-i18next";
 import {useSelector} from "react-redux";
-
-import {isSuccess} from "../../api/api_util";
-
-import {StyledSettingsPropertiesSection, StyledSettingsView} from "./style";
+import {RootState} from "state/store";
 
 const AccountSettings = () => {
 
-    const userState = useSelector(getUserState);
-
     const { t } = useTranslation();
 
+    const userState = useSelector((state: RootState) => state.account.user);
+
     const isOnlySocial = userState.social.only_social;
-    const changeAvatarState = useAuthSelector('changeAvatar');
-    const changeAnimatedAvatarState = useAuthSelector('changeAnimatedAvatar');
-    const avatar = useSelector(getUserAvatar);
-
-    useEffect(() => {
-        if (isSuccess(changeAvatarState)) {
-            showSuccessAvatar('Avatar changed successfully', avatar);
-        }
-    }, [changeAvatarState, avatar]);
-
-    useEffect(() => {
-        if (isSuccess(changeAnimatedAvatarState)) {
-            showSuccessAvatar('Avatar changed successfully', avatar);
-        }
-    }, [changeAnimatedAvatarState, avatar]);
 
     const onDeleteAccountAction = useCallback(() => {
         showDeleteAccount(isOnlySocial);
@@ -63,7 +44,7 @@ const AccountSettings = () => {
         </SettingsSection>;
     }, [userState, t]);
 
-    return <StyledSettingsView>
+    return <div className={'flex-grow w-full p-0 sm:p-[20px] flex flex-col items-start justify-start box-border'}>
         <div className={'lg:ml-[10px] flex flex-col box-border w-full lg:w-[600px] '}>
             <div className={'bg-black/10'}>
                 <div className={'flex items-center justify-center p-5'}>
@@ -79,7 +60,6 @@ const AccountSettings = () => {
                             name={t('USERNAME')}
                             value={userState.username}
                             canEdit={true}
-                            obfuscate={false}
                             passwordRequired={true}
                             showDialogFunc={showChangeUsernameDialog}/>
                         <EditableProperty
@@ -87,7 +67,6 @@ const AccountSettings = () => {
                             name={t('EMAIL')}
                             value={userState.email.email}
                             canEdit={true}
-                            obfuscate={true}
                             passwordRequired={true}
                             showDialogFunc={showChangeEmailDialog}/>
                     </div>
@@ -95,12 +74,23 @@ const AccountSettings = () => {
 
             </div>
 
-            <StyledSettingsPropertiesSection>
+            <div className={'w-full flex flex-col flex-start pt-[50px]'}>
 
                 <SettingsSection title={t("PASSWORD AND AUTHENTICATION")} show={!isOnlySocial}>
-                    <button type={'button'} onClick={showChangePasswordDialog} className={'changePasswordButton'}>
-                        {t('CHANGE_PASSWORD')}
-                    </button>
+
+                    <EditableProperty
+                        id={'password'}
+                        name={t('CHANGE_PASSWORD')}
+                        editText={'CHANGE_PASSWORD'}
+                        value={null}
+                        canEdit={true}
+                        passwordRequired={true}
+                        icon={{
+                            component: KeyIcon,
+                            color: 'text-pink-500',
+                        }}
+                        showDialogFunc={showChangePasswordDialog}
+                    />
                 </SettingsSection>
 
                 {renderSocialAccountConnections}
@@ -111,9 +101,9 @@ const AccountSettings = () => {
                     </button>
                 </SettingsSection>
 
-            </StyledSettingsPropertiesSection>
+            </div>
         </div>
-    </StyledSettingsView>;
+    </div>;
 };
 
 export default AccountSettings;

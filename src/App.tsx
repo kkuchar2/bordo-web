@@ -1,10 +1,10 @@
 import React, {useEffect, useMemo, useState} from 'react';
 
-import {store} from 'appRedux/store';
 import Dialogs from 'components/DialogSystem/Dialogs';
 import {Toaster} from 'react-hot-toast';
 import {Provider} from 'react-redux';
 import {BrowserRouter} from 'react-router-dom';
+import {store} from "state/store";
 import {createGlobalStyle} from 'styled-components';
 
 import './i18n';

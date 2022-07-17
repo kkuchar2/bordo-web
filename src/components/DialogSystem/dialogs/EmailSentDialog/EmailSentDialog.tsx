@@ -1,9 +1,9 @@
 import React from "react";
 
-import {useAppDispatch} from "appRedux/store";
 import {defaultShowUpAnimation} from "components/Forms/animation";
 import {StyledLink} from "components/Forms/commonStyles";
 import {Text} from "kuchkr-react-component-library";
+import {useAppDispatch} from "state/store";
 
 import {StyledEmailSent, textThemeDescription, textThemeTitle} from "./style";
 
@@ -13,9 +13,9 @@ export interface EmailSentDialogProps {
     resetFunc: Function
 }
 
-const EmailSentDialog = (props: EmailSentDialogProps) => {
+export const EmailSentDialog = (props: EmailSentDialogProps) => {
 
-    const {title, message, resetFunc} = props;
+    const { title, message, resetFunc } = props;
 
     const dispatch = useAppDispatch();
 
@@ -27,13 +27,11 @@ const EmailSentDialog = (props: EmailSentDialogProps) => {
                 <img className={"emailSentIcon"} src={'assets/images/sent_mail_icon.png'} width={60} height={60}
                      alt={""}/>
             </div>
-            <Text style={{marginTop: 20, textAlign: 'center'}} theme={textThemeTitle} text={title}/>
-            <Text style={{textAlign: 'center'}} theme={textThemeDescription} text={message}/>
+            <Text style={{ marginTop: 20, textAlign: 'center' }} theme={textThemeTitle} text={title}/>
+            <Text style={{ textAlign: 'center' }} theme={textThemeDescription} text={message}/>
             <div className={"buttonGroup"}>
                 <StyledLink onClick={onLoginClick} to={'/'}>Back to sign in</StyledLink>
             </div>
         </div>
     </StyledEmailSent>;
 };
-
-export default EmailSentDialog;

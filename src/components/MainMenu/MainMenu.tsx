@@ -1,13 +1,13 @@
 import React, {useCallback, useEffect, useMemo} from 'react';
 
 import {MenuAlt3Icon} from '@heroicons/react/solid';
-import {closeNavbar, openNavbar, selectorNavbar} from 'appRedux/reducers/application';
-import {useAppDispatch} from 'appRedux/store';
 import {Group, Item, mainMenuItems} from 'components/MainMenu/mainMenuItems';
 import MenuItem from 'components/MainMenu/MenuItem/MenuItem';
 import {useMediaQuery} from 'hooks/useMediaQuery';
 import {useTranslation} from 'react-i18next';
 import {useSelector} from 'react-redux';
+import {closeNavbar, openNavbar} from "state/reducers/navbar/navbarSlice";
+import {RootState, useAppDispatch} from "state/store";
 
 export interface MainMenuProps {
     currentViewId: string;
@@ -22,7 +22,7 @@ const MainMenu = (props: MainMenuProps) => {
 
     const isSmall = useMediaQuery('(max-width: 1024px)');
 
-    const navbarState = useSelector(selectorNavbar);
+    const navbarState = useSelector((state: RootState) => state.navbar);
 
     const onHamburgerClick = useCallback(() => {
         dispatch(openNavbar());

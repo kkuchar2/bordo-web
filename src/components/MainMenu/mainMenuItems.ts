@@ -2,14 +2,15 @@ import {ElementType} from 'react';
 
 import {GlobeIcon, HomeIcon, SparklesIcon, TableIcon, UserIcon} from '@heroicons/react/outline';
 import {LogoutIcon} from "@heroicons/react/solid";
-import {closeNavbar, openView} from 'appRedux/reducers/application';
-import {logout} from 'appRedux/services/authService';
-import {store} from 'appRedux/store';
 import HomeView from 'components/Home/HomeView';
 import ModelsView from 'components/Models/ModelsView';
 import AccountSettings from 'components/Settings/AccountSettings';
 import AppearanceSettings from 'components/Settings/AppearanceSettings';
 import LanguageSettings from 'components/Settings/LanguageSettings';
+import {openView} from "state/reducers/application/appSlice";
+import {closeNavbar} from "state/reducers/navbar/navbarSlice";
+import {logout} from "state/services/accountService";
+import {store} from "state/store";
 
 import {IconProps} from '../../icon/icon.types';
 

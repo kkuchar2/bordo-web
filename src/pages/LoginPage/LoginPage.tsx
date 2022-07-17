@@ -1,8 +1,5 @@
 import React, {useCallback, useEffect} from 'react';
 
-import {useAuthSelector} from "appRedux/reducers/api/auth/accountSlice";
-import {googleLogin, login, resetUserSliceRequestState} from "appRedux/services/authService";
-import {useAppDispatch} from 'appRedux/store';
 import Box from 'components/Box/Box';
 import {showConfirmEmailDialog} from "components/DialogSystem/readyDialogs";
 import {StyledCenteredSection, StyledLink} from "components/Forms/commonStyles";
@@ -10,10 +7,13 @@ import Form from 'components/Forms/Form/Form';
 import GoogleButton from "components/GoogleButton/GoogleButton";
 import {EnsureAuthorized} from "hoc/EnsureAuthorized";
 import {useTranslation} from "react-i18next";
+import {useSelector} from 'react-redux';
+import {googleLogin, login, resetAccountSliceRequestState} from "state/services/accountService";
+import {RootState, useAppDispatch} from "state/store";
 import {RequestStatus} from "tools/client/client.types";
 import {isEmailNotVerifiedError} from "tools/errors/errors";
 
-import {useMemoRequestState} from "../../api/api_util";
+import {useRequestState} from "../../api/api_util";
 import {useFormConfig} from "../../api/formConfig";
 import {GOOGLE_CLIENT_ID} from "../../config";
 
@@ -22,21 +22,21 @@ import UserAgreements from "./UserAgreements";
 
 const LoginPage = () => {
 
-    const requestState = useAuthSelector('login');
+    const { t } = useTranslation();
+
+    const requestState = useSelector((state: RootState) => state.account.requests.login);
 
     const dispatch = useAppDispatch();
 
-    const { t } = useTranslation();
-
     const formConfig = useFormConfig('login', t);
 
-    const pending = useMemoRequestState(requestState, RequestStatus.Waiting);
+    const pending = useRequestState(requestState, RequestStatus.Waiting);
 
     const errors = requestState.info.errors;
 
     useEffect(() => {
         return () => {
-            dispatch(resetUserSliceRequestState('login'));
+            dispatch(resetAccountSliceRequestState('login'));
         };
     }, []);
 

@@ -1,12 +1,11 @@
 import React, {ComponentType, useEffect, useMemo} from "react";
 
-import {useMemoRequestState} from "api/api_util";
-import {getSelector} from "appRedux/reducers/api/auth/accountSlice";
-import {autoLogin} from "appRedux/services/authService";
-import {useAppDispatch} from "appRedux/store";
+import {useRequestState} from "api/api_util";
 import {useSelector} from "react-redux";
 import {Navigate, useLocation} from "react-router-dom";
 import {isOnAuthenticatedPage} from "routes";
+import {autoLogin} from "state/services/accountService";
+import {RootState, useAppDispatch} from "state/store";
 import {RequestStatus} from "tools/client/client.types";
 
 export const EnsureAuthorized = (WrappedComponent: ComponentType) => {
@@ -16,10 +15,11 @@ export const EnsureAuthorized = (WrappedComponent: ComponentType) => {
 
         const isOnAuthPage = isOnAuthenticatedPage();
 
-        const userState = useSelector(getSelector('user'));
-        const autoLoginState = useSelector(getSelector('autoLogin'));
-        const autologinStateUnknown = useMemoRequestState(autoLoginState, RequestStatus.Unknown);
-        const autologinStatePending = useMemoRequestState(autoLoginState, RequestStatus.Waiting);
+        const userState = useSelector((state: RootState) => state.account.user);
+        const autoLoginState = useSelector((state: RootState) => state.account.requests.autoLogin);
+
+        const autologinStateUnknown = useRequestState(autoLoginState, RequestStatus.Unknown);
+        const autologinStatePending = useRequestState(autoLoginState, RequestStatus.Waiting);
 
         const loggedIn = userState.loggedIn;
         const recentlyLoggedOut = userState.recentlyLoggedOut;

@@ -1,10 +1,11 @@
 import React, {useCallback, useEffect, useMemo} from 'react';
 
-import {closeDialog, selectorDialogs} from 'appRedux/reducers/application';
-import {useAppDispatch} from 'appRedux/store';
 import {dialogAnimation, dialogBgAnimation} from 'components/Forms/animation';
 import {useTranslation} from 'react-i18next';
 import {useSelector} from 'react-redux';
+import {closeDialog} from "state/reducers/dialog/dialogSlice";
+import {DialogSliceState} from "state/reducers/dialog/dialogSlice.types";
+import {RootState, useAppDispatch} from "state/store";
 
 import {StyledDialogCloseButton, StyledDialogTopSection} from './commonStyles';
 import * as dialogs from './dialogs';
@@ -26,7 +27,7 @@ const componentMap: IDialogComponentMap = {
 };
 
 const Dialogs = () => {
-    const dialogState = useSelector(selectorDialogs);
+    const dialogState = useSelector<RootState, DialogSliceState>((state: RootState) => state.dialog);
 
     const isOpened = dialogState.opened;
     const componentName = dialogState.component;
@@ -122,7 +123,7 @@ const Dialogs = () => {
                 {renderTitle}
                 {renderDescription}
             </StyledDialogTopSection>
-            <Component {...componentProps} />
+            <Component dispatch={dispatch} t={t} {...componentProps} />
         </StyledDialog>
     </StyledDialogs>;
 };

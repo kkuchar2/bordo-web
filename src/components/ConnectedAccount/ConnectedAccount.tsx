@@ -1,8 +1,10 @@
 import React, {useCallback, useMemo} from "react";
 
-import {useAuthSelector} from "appRedux/reducers/api/auth/accountSlice";
 import {showPasswordCreationRequiredDialog} from "components/DialogSystem/readyDialogs";
 import GoogleButton from "components/GoogleButton/GoogleButton";
+import {GoogleIcon} from "components/Icons/GoogleIcon";
+import {useSelector} from "react-redux";
+import {RootState} from "state/store";
 
 import {GOOGLE_CLIENT_ID} from "../../config";
 
@@ -17,7 +19,7 @@ export const ConnectedAccount = (props: ConnectedAccountProps) => {
 
     const { supportedProvider, connections } = props;
 
-    const userState = useAuthSelector('user');
+    const userState = useSelector((state: RootState) => state.account.user);
 
     const connected = connections.includes(supportedProvider);
 
@@ -52,10 +54,16 @@ export const ConnectedAccount = (props: ConnectedAccountProps) => {
         </button>;
     }, [connected]);
 
-    return <div className={'flex items-center justify-start w-full'}>
+    const renderIcon = useMemo(() => {
+
+        return <GoogleIcon/>;
+    }, []);
+
+    return <div className={'flex items-center justify-start w-full gap-3 bg-[#2e2e2e] p-2 pl-3 pr-3'}>
+        {renderIcon}
         <div className={'flex items-start justify-center flex-col grow'}>
-            <div className={'text-white text-[20px]'}>{capitalizeFirstLetter(supportedProvider)}</div>
-            {connected ? <div className={'text-white/70 text-[14px]'}>{userState.email.email}</div> : null}
+            <div className={'text-white text-[16px]'}>{capitalizeFirstLetter(supportedProvider)}</div>
+            {connected ? <div className={'text-white/70 text-[14px] font-normal'}>{userState.email.email}</div> : null}
         </div>
 
         {renderButton}

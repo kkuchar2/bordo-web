@@ -1,10 +1,9 @@
 import {PlusIcon} from '@heroicons/react/outline';
 import {MailIcon} from '@heroicons/react/solid';
-import {getSelector} from 'appRedux/reducers/api/auth/accountSlice';
-import {openDialog} from 'appRedux/reducers/application';
-import {askSetupPassword, changeEmailAddress, changePassword, changeUsername} from 'appRedux/services/authService';
-import {appDispatch} from 'appRedux/store';
 import {CreateNewModelItemDialogData} from 'components/DialogSystem/dialogs';
+import {openDialog} from "state/reducers/dialog/dialogSlice";
+import {askSetupPassword, changeEmailAddress, changePassword, changeUsername} from "state/services/accountService";
+import {RootState, store} from 'state/store';
 
 import {ReadyDialogArgs, SentEmailDialogArgs} from './readyDialogs.types';
 
@@ -20,7 +19,7 @@ export const showRegistrationCompleteDialog = () => {
 export const showSentEmailDialog = (args: SentEmailDialogArgs) => {
     const { component, title, description, closeable } = args;
 
-    appDispatch(
+    store.dispatch(
         openDialog({
             component: component,
             props: {
@@ -59,7 +58,7 @@ export const showDialogAfterFirstPasswordSetupRequest = () => {
 };
 
 export const showChangeAvatarDialog = () => {
-    appDispatch(
+    store.dispatch(
         openDialog({
             component: 'ChangeAvatarDialog',
             props: {
@@ -77,7 +76,7 @@ export const showChangeAvatarDialog = () => {
 export const showConfirmEmailDialog = (args: ReadyDialogArgs) => {
     const { data } = args;
 
-    appDispatch(
+    store.dispatch(
         openDialog({
             component: 'SendConfirmationMailDialog',
             props: {
@@ -90,14 +89,16 @@ export const showConfirmEmailDialog = (args: ReadyDialogArgs) => {
     );
 };
 
-export const showChangeUsernameDialog = (args: ReadyDialogArgs) => (isOnlySocial: boolean) => {
+export const showChangeUsernameDialog = (args: ReadyDialogArgs) => {
     const { data } = args;
 
-    if (isOnlySocial) {
+    const onlySocial = store.getState().account.user.social.only_social;
+
+    if (onlySocial) {
         showPasswordCreationRequiredDialog('CHANGE_USERNAME', 'CHANGE_USERNAME_PASSWORD_SETUP');
     }
     else {
-        appDispatch(
+        store.dispatch(
             openDialog({
                 component: 'ChangePropertyDialog',
                 props: {
@@ -108,7 +109,7 @@ export const showChangeUsernameDialog = (args: ReadyDialogArgs) => (isOnlySocial
                     },
                     data: {
                         formConfigKey: 'changeUsername',
-                        requestStateSelector: getSelector('changeUsername'),
+                        requestStateSelector: (state: RootState) => state.account.requests.changeUsername,
                         dispatchFunc: changeUsername,
                         initialArgs: data
                     }
@@ -118,12 +119,15 @@ export const showChangeUsernameDialog = (args: ReadyDialogArgs) => (isOnlySocial
     }
 };
 
-export const showChangeEmailDialog = (args: ReadyDialogArgs) => (isOnlySocial: boolean) => {
-    if (isOnlySocial) {
+export const showChangeEmailDialog = (args: ReadyDialogArgs = {}) => {
+
+    const onlySocial = store.getState().account.user.social.only_social;
+
+    if (onlySocial) {
         showPasswordCreationRequiredDialog('CHANGE_EMAIL', 'CHANGE_EMAIL_PASSWORD_SETUP');
     }
     else {
-        appDispatch(
+        store.dispatch(
             openDialog({
                 component: 'ChangePropertyDialog',
                 props: {
@@ -139,7 +143,7 @@ export const showChangeEmailDialog = (args: ReadyDialogArgs) => (isOnlySocial: b
                     },
                     data: {
                         formConfigKey: 'changeEmail',
-                        requestStateSelector: getSelector('changeEmailAddress'),
+                        requestStateSelector: (state: RootState) => state.account.requests.changeEmailAddress,
                         dispatchFunc: changeEmailAddress
                     }
                 }
@@ -149,7 +153,7 @@ export const showChangeEmailDialog = (args: ReadyDialogArgs) => (isOnlySocial: b
 };
 
 export const showChangePasswordDialog = () => {
-    appDispatch(
+    store.dispatch(
         openDialog({
             component: 'ChangePropertyDialog',
             props: {
@@ -160,7 +164,7 @@ export const showChangePasswordDialog = () => {
                 },
                 data: {
                     formConfigKey: 'resetPassword',
-                    requestStateSelector: getSelector('resetPassword'),
+                    requestStateSelector: (state: RootState) => state.account.requests.resetPassword,
                     requestStateName: 'resetPasswordState',
                     dispatchFunc: changePassword
                 }
@@ -170,7 +174,7 @@ export const showChangePasswordDialog = () => {
 };
 
 export const showPasswordCreationRequiredDialog = (title_key: string, description_key: string) => {
-    appDispatch(
+    store.dispatch(
         openDialog({
             component: 'PasswordCreationRequiredDialog',
             props: {
@@ -186,7 +190,7 @@ export const showPasswordCreationRequiredDialog = (title_key: string, descriptio
                 },
                 data: {
                     formConfigKey: 'emptyForm',
-                    requestStateSelector: getSelector('askSetupPassword'),
+                    requestStateSelector: (state: RootState) => state.account.requests.askSetupPassword,
                     requestStateName: 'askSetupPassword',
                     dispatchFunc: askSetupPassword
                 }
@@ -210,7 +214,7 @@ export const showCreateModelItemDialog = (
     modelPackage: string,
     modelName: string
 ) => {
-    appDispatch(
+    store.dispatch(
         openDialog<CreateNewModelItemDialogData>({
             component: 'CreateNewModelItemDialog',
             props: {
@@ -228,7 +232,7 @@ export const showCreateModelItemDialog = (
 };
 
 export const showDeleteAccountDialog = () => {
-    appDispatch(
+    store.dispatch(
         openDialog({
             component: 'DeleteAccountDialog',
             props: {
@@ -243,7 +247,7 @@ export const showDeleteAccountDialog = () => {
 };
 
 export const showAddTableItemDialog = (args: ReadyDialogArgs, fields: any, modelPackage: string, modelName: string) => {
-    appDispatch(
+    store.dispatch(
         openDialog<CreateNewModelItemDialogData>({
             component: 'CreateNewModelItemDialog',
             props: {
