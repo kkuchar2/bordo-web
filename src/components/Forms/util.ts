@@ -1,6 +1,5 @@
 const mapFieldError = (fieldError: any) => {
-    if (!fieldError.code || !fieldError.message)
-    {
+    if (!fieldError.code || !fieldError.message) {
         return null;
     }
 
@@ -16,6 +15,9 @@ const mapFieldError = (fieldError: any) => {
     else if (fieldError.code === 'invalid') {
         return fieldError.message;
     }
+    else if (fieldError.code === 'max_length') {
+        return fieldError.message;
+    }
     else if (fieldError.code === 'already_exists') {
         return fieldError.message;
     }
@@ -26,29 +28,25 @@ const mapFieldError = (fieldError: any) => {
 export const getFormFieldErrors = (errors: any, fieldName: string) => {
     let responseError = errors.responseError;
 
-    if (!responseError)
-    {
+    if (!responseError) {
         return null;
     }
 
     const detail = responseError.detail;
 
-    if (!detail)
-    {
+    if (!detail) {
         return null;
     }
 
     const formErrors = detail.form;
 
-    if (!formErrors)
-    {
+    if (!formErrors) {
         return null;
     }
 
     const fieldErrors = formErrors[fieldName];
 
-    if (!fieldErrors)
-    {
+    if (!fieldErrors) {
         return null;
     }
 

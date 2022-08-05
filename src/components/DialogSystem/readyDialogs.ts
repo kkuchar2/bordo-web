@@ -145,6 +145,8 @@ export const showChangeEmailDialog = (args: ReadyDialogArgs = {}) => {
                     },
                     data: {
                         formConfigKey: 'changeEmail',
+                        propertyName: 'email',
+                        requestStateName: 'changeEmail',
                         requestStateSelector: (state: RootState) => state.account.requests.changeEmailAddress,
                         dispatchFunc: changeEmailAddress
                     }

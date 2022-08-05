@@ -34,8 +34,6 @@ export const ChangePropertyDialog = (props: DialogProps<ChangePropertyDialogProp
     const pending = useRequestState(requestState, RequestStatus.Waiting);
     const formConfig = useFormConfig(formConfigKey, t);
 
-    console.log('Request state name', requestStateName);
-
     useEffect(() => {
         if (isSuccess(requestState)) {
             showSuccess(`${t('SUCCESS')} 🎉`);
@@ -60,6 +58,7 @@ export const ChangePropertyDialog = (props: DialogProps<ChangePropertyDialogProp
     }, [onCancel]);
 
     const onSubmit = useCallback((formData: any) => {
+        console.log('Submit form data: ', formData);
         dispatch(dispatchFunc({ ...formData }));
     }, []);
 

@@ -26,7 +26,15 @@ export const InputWithError = ({ field, id, label, type, autoComplete, placehold
     }, [formErrors, id]);
 
     const outlineClass = useMemo(() => {
-        if (!errors && formErrors) {
+        if (!errors && !formErrors) {
+            return null;
+        }
+
+        if (errors && Object.keys(errors).length === 0) {
+            return null;
+        }
+
+        if (formErrors && Object.keys(formErrors).length === 0) {
             return null;
         }
 

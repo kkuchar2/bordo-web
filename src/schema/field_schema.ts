@@ -21,4 +21,5 @@ export const EmailSchema = (t: any) => string()
 
 export const UsernameSchema = (t: any) => string()
     .min(5, 'Username must be at least 5 characters long')
+    .max(50, 'Username must be at most 50 characters long')
     .required(t('FIELD_REQUIRED'));
