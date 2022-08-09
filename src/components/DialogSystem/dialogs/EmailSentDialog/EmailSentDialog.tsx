@@ -1,11 +1,11 @@
-import React from "react";
+import React from 'react';
 
-import {defaultShowUpAnimation} from "components/Forms/animation";
-import {StyledLink} from "components/Forms/commonStyles";
-import {Text} from "kuchkr-react-component-library";
-import {useAppDispatch} from "state/store";
+import {Text} from '@chakra-ui/react';
+import {NavLink} from 'components/chakra/NavLink/NavLink';
+import {defaultShowUpAnimation} from 'components/Forms/animation';
+import {useAppDispatch} from 'state/store';
 
-import {StyledEmailSent, textThemeDescription, textThemeTitle} from "./style";
+import {StyledEmailSent} from './style';
 
 export interface EmailSentDialogProps {
     title: string,
@@ -24,13 +24,13 @@ export const EmailSentDialog = (props: EmailSentDialogProps) => {
     return <StyledEmailSent {...defaultShowUpAnimation}>
         <div className={'popup'}>
             <div className={'imageWrapper'}>
-                <img className={"emailSentIcon"} src={'assets/images/sent_mail_icon.png'} width={60} height={60}
-                     alt={""}/>
+                <img className={'emailSentIcon'} src={'assets/images/sent_mail_icon.png'} width={60} height={60}
+                     alt={''}/>
             </div>
-            <Text style={{ marginTop: 20, textAlign: 'center' }} theme={textThemeTitle} text={title}/>
-            <Text style={{ textAlign: 'center' }} theme={textThemeDescription} text={message}/>
-            <div className={"buttonGroup"}>
-                <StyledLink onClick={onLoginClick} to={'/'}>Back to sign in</StyledLink>
+            <Text>{title}</Text>
+            <Text>{message}</Text>
+            <div className={'buttonGroup'}>
+                <NavLink onClick={onLoginClick} to={'/'}>{'Back to sign in'}</NavLink>
             </div>
         </div>
     </StyledEmailSent>;

@@ -1,15 +1,17 @@
 import React, {useCallback, useEffect, useMemo} from 'react';
 
+import {Button, chakra, Circle, HStack, Text, VStack} from '@chakra-ui/react';
+import {XIcon} from '@heroicons/react/outline';
 import {dialogAnimation, dialogBgAnimation} from 'components/Forms/animation';
+import {isValidMotionProp, motion} from 'framer-motion';
 import {useTranslation} from 'react-i18next';
 import {useSelector} from 'react-redux';
-import {closeDialog} from "state/reducers/dialog/dialogSlice";
-import {DialogSliceState} from "state/reducers/dialog/dialogSlice.types";
-import {RootState, useAppDispatch} from "state/store";
+import {closeDialog} from 'state/reducers/dialog/dialogSlice';
+import {DialogSliceState} from 'state/reducers/dialog/dialogSlice.types';
+import {RootState, useAppDispatch} from 'state/store';
 
-import {StyledDialogCloseButton, StyledDialogTopSection} from './commonStyles';
 import * as dialogs from './dialogs';
-import {StyledDialog, StyledDialogs} from './style';
+import {StyledDialog} from './style';
 
 interface IDialogComponentMap {
     [componentKey: string]: (props: any) => JSX.Element;
@@ -25,6 +27,13 @@ const componentMap: IDialogComponentMap = {
     ChangePropertyDialog: dialogs.ChangePropertyDialog,
     PasswordCreationRequiredDialog: dialogs.PasswordCreationRequiredDialog
 };
+
+const ChakraBox = chakra(motion.div, {
+    shouldForwardProp: (prop) => {
+        return isValidMotionProp(prop)
+            || prop === 'children' || prop === 'onMouseDown' || prop === 'onKeyDown';
+    },
+});
 
 const Dialogs = () => {
     const dialogState = useSelector<RootState, DialogSliceState>((state: RootState) => state.dialog);
@@ -66,43 +75,34 @@ const Dialogs = () => {
 
     const renderDescription = useMemo(() => {
         if (isOpened && componentProps.dialog?.description) {
-            return <div className="my-[30px] text-[15px] text-slate-50">{t(componentProps.dialog.description)}</div>;
+            return <Text>{t(componentProps.dialog.description)}</Text>;
         }
     }, [componentProps, isOpened, t]);
 
-    const onClick = useCallback(
-        (e) => {
-            const id = e.target.id;
+    const onClick = useCallback((e) => {
+        if (!componentProps?.dialog?.closeable) {
+            return;
+        }
 
-            if (!componentProps?.dialog?.closeable) {
-                return;
-            }
-
-            if (id && id === 'dialogWrapper' && componentProps?.dialog && isOpened) {
-                handleCancel();
-            }
-        },
-        [componentProps, isOpened]
-    );
-
-    const renderCloseButton = useMemo(() => {
-        return componentProps?.dialog?.closeable ? <StyledDialogCloseButton onClick={handleCancel}/> : null;
-    }, [componentProps, handleCancel]);
+        if (e.target.classList.contains('dialogScene')) {
+            handleCancel();
+        }
+    }, [componentProps, isOpened]);
 
     const renderTitle = useMemo(() => {
         const title = componentProps?.dialog?.title;
         const icon = componentProps?.dialog?.icon;
 
-        if (!icon) {
-            return <div className="text-[20px] font-bold text-white">{t(title)}</div>;
-        }
-
-        return <div className={'flex items-center space-x-2'}>
-            <div className={`flex h-[40px] w-[40px] items-center justify-center ${icon.backgroundColor} rounded-full`}>
-                <icon.component className={`h-5 w-5 ${icon.color}`}/>
-            </div>
-            <div className="text-[20px] font-bold text-white">{t(title)}</div>
-        </div>;
+        return <HStack spacing={'10px'} justifyContent={'flex-start'} align={'center'}>
+            {icon ?
+                <Circle bg={icon.backgroundColor} size={'40px'}>
+                    <icon.component width={20} height={20} color={icon.color}/>
+                </Circle> : null}
+            <Text flexGrow={1} fontSize={'md'} fontWeight={'bold'}>{t(title)}</Text>
+            <Button title={'Close dialog'} onClick={handleCancel}>
+                <XIcon width={'20px'} height={'20px'}/>
+            </Button>
+        </HStack>;
     }, [componentProps, t]);
 
     if (!componentName) {
@@ -116,16 +116,27 @@ const Dialogs = () => {
 
     const Component = componentMap[componentName];
 
-    return <StyledDialogs id={'dialogWrapper'} onKeyDown={handleKeyDown} onMouseDown={onClick} {...dialogBgAnimation}>
+    return <ChakraBox
+        className={'dialogScene'}
+        onKeyDown={handleKeyDown}
+        w={'100%'}
+        h={'100%'}
+        display={'flex'}
+        alignItems={'center'}
+        justifyContent={'center'}
+        zIndex={1}
+        bg={'rgba(47,47,47,0.8)'}
+        position={'absolute'}
+        boxSizing={'border-box'}
+        onMouseDown={onClick}{...dialogBgAnimation}>
         <StyledDialog width={componentProps.dialog.width} {...dialogAnimation}>
-            <StyledDialogTopSection>
-                {renderCloseButton}
+            <VStack p={3} align={'stretch'} spacing={5}>
                 {renderTitle}
                 {renderDescription}
-            </StyledDialogTopSection>
+            </VStack>
             <Component dispatch={dispatch} t={t} {...componentProps} />
         </StyledDialog>
-    </StyledDialogs>;
+    </ChakraBox>;
 };
 
 export default Dialogs;

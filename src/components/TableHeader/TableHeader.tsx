@@ -1,15 +1,15 @@
-import {humanize} from "util/util";
+import {humanize} from 'util/util';
 
-import React, {useCallback} from "react";
+import React, {useCallback} from 'react';
 
-import {getColumnProperties} from "components/Models/columnProperties";
-import {Text} from "kuchkr-react-component-library";
-import {ColumnHeader} from "state/reducers/crud/modelSlice.types";
+import {Text} from '@chakra-ui/react';
+import {getColumnProperties} from 'components/Models/columnProperties';
+import {BackendTableColumn} from 'state/reducers/crud/modelSlice.types';
 
-import {headerTextTheme, StyledTableHeader} from "./style";
+import {StyledTableHeader} from './style';
 
 export interface TableHeaderProps {
-    fields: Array<ColumnHeader>
+    fields: Array<BackendTableColumn>
 }
 
 const TableHeader = (props: TableHeaderProps) => {
@@ -20,10 +20,10 @@ const TableHeader = (props: TableHeaderProps) => {
         if (!fields) {
             return;
         }
-        return fields.map((field: ColumnHeader, idx: number) => {
+        return fields.map((field: BackendTableColumn, idx: number) => {
             const colProps = getColumnProperties(field.type);
             return <div style={{
-                height: "100%",
+                height: '100%',
                 width: colProps.width,
                 maxWidth: colProps.width,
                 display: 'flex',
@@ -31,7 +31,7 @@ const TableHeader = (props: TableHeaderProps) => {
                 justifyContent: 'flex-start',
                 marginLeft: 20
             }} key={idx}>
-                <Text theme={headerTextTheme} text={humanize(field.name.toUpperCase())}/>
+                <Text>{humanize(field.name.toUpperCase())}</Text>
             </div>;
         });
     }, [fields]);

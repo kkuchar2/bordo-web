@@ -4,13 +4,17 @@ import Dialogs from 'components/DialogSystem/Dialogs';
 import {Toaster} from 'react-hot-toast';
 import {Provider} from 'react-redux';
 import {BrowserRouter} from 'react-router-dom';
-import {store} from "state/store";
+import {store} from 'state/store';
 import {createGlobalStyle} from 'styled-components';
 
 import './i18n';
 
-import Content from "./Content";
+import Content from './Content';
 import i18n from './i18n';
+
+import {ChakraProvider} from '@chakra-ui/react';
+
+import theme from './theme';
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -71,12 +75,10 @@ export const App = () => {
         if (!translationsLoaded) {
             return null;
         }
-        return (
-            <>
-                <Content/>
-                <Dialogs/>
-            </>
-        );
+        return <ChakraProvider theme={theme} resetCSS={true}>
+            <Content/>
+            <Dialogs/>
+        </ChakraProvider>;
     }, [translationsLoaded]);
 
     return <Provider store={store}>

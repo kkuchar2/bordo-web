@@ -1,36 +1,38 @@
 import React, {useCallback, useEffect} from 'react';
 
-import Box from 'components/Box/Box';
-import {showConfirmEmailDialog} from "components/DialogSystem/readyDialogs";
-import {StyledCenteredSection, StyledLink} from "components/Forms/commonStyles";
+import {Heading, Text, VStack} from '@chakra-ui/react';
+import {CenterFlex} from 'components/chakra/CenterFlex/CenterFlex';
+import {NavLink} from 'components/chakra/NavLink/NavLink';
+import {showConfirmEmailDialog} from 'components/DialogSystem/readyDialogs';
 import Form from 'components/Forms/Form/Form';
-import GoogleButton from "components/GoogleButton/GoogleButton";
-import {EnsureAuthorized} from "hoc/EnsureAuthorized";
-import {useTranslation} from "react-i18next";
+import GoogleButton from 'components/GoogleButton/GoogleButton';
+import {EnsureAuthorized} from 'hoc/EnsureAuthorized';
+import {useTranslation} from 'react-i18next';
 import {useSelector} from 'react-redux';
-import {googleLogin, login, resetAccountSliceRequestState} from "state/services/accountService";
-import {RootState, useAppDispatch} from "state/store";
-import {RequestStatus} from "tools/client/client.types";
-import {isEmailNotVerifiedError} from "tools/errors/errors";
+import {googleLogin, login, resetAccountSliceRequestState} from 'state/services/accountService';
+import {RootState, useAppDispatch} from 'state/store';
+import {RequestStatus} from 'tools/client/client.types';
+import {isEmailNotVerifiedError} from 'tools/errors/errors';
 
-import {useRequestState} from "../../api/api_util";
-import {useFormConfig} from "../../api/formConfig";
-import {GOOGLE_CLIENT_ID} from "../../config";
+import {useRequestState} from '../../api/api_util';
+import {useFormConfig} from '../../api/formConfig';
+import {GOOGLE_CLIENT_ID} from '../../config';
 
-import {StyledLoginPage} from "./style";
-import UserAgreements from "./UserAgreements";
+import UserAgreements from './UserAgreements';
 
 const LoginPage = () => {
 
     const { t } = useTranslation();
 
     const requestState = useSelector((state: RootState) => state.account.requests.login);
+    const googleRequestState = useSelector((state: RootState) => state.account.requests.googleLogin);
 
     const dispatch = useAppDispatch();
 
     const formConfig = useFormConfig('login', t);
 
-    const pending = useRequestState(requestState, RequestStatus.Waiting);
+    const loginPending = useRequestState(requestState, RequestStatus.Waiting);
+    const googleLoginPending = useRequestState(googleRequestState, RequestStatus.Waiting);
 
     const errors = requestState.info.errors;
 
@@ -45,7 +47,7 @@ const LoginPage = () => {
 
         if (isEmailNotVerified) {
             // TODO: fill correct email
-            showConfirmEmailDialog({ data: { email: "TODO", } });
+            showConfirmEmailDialog({ data: { email: 'TODO', } });
         }
     }, [errors]);
 
@@ -58,38 +60,40 @@ const LoginPage = () => {
         dispatch(googleLogin(credentialResponse));
     }, []);
 
-    return <StyledLoginPage>
-        <StyledCenteredSection>
-            <Box className={'dark_form'}>
-                <Form
-                    title={t('SIGN_IN')}
-                    customDescription={<UserAgreements/>}
-                    submitButtonText={t('SIGN_IN')}
-                    errors={errors}
-                    disabled={pending}
-                    config={formConfig}
-                    confirmButtonClassName={'main_form_button'}
-                    useCancelButton={false}
-                    onSubmit={attemptLogin}/>
+    return <CenterFlex width={'100%'} height={'100%'}>
+        <VStack borderRadius={8}
+                bg={'#333333'}
+                align={'stretch'}
+                width={'400px'}
+                padding={'20px'}
+                spacing={'20px'}>
 
-                <StyledLink to={'/forgotPassword'} className={'my-8 text-[14px]'}>
-                    {t('FORGOT_PASSWORD_QUESTION')}
-                </StyledLink>
+            <Heading fontSize={'2xl'}>{t('SIGN_IN')}</Heading>
+            <UserAgreements/>
 
-                <GoogleButton
-                    clientId={GOOGLE_CLIENT_ID}
-                    context={'signin'}
-                    text={'continue_with'}
-                    className={'flex justify-center'}
-                    onSuccess={onSignInWithGoogle}/>
+            <Form
+                submitButtonText={t('SIGN_IN')}
+                errors={errors}
+                disabled={loginPending || googleLoginPending}
+                config={formConfig}
+                useCancelButton={false}
+                onSubmit={attemptLogin}/>
 
-                <div className={'flex items-center justify-center mt-8 mb-[10px]'}>
-                    <div className={'text-white text-[14px]'}>{t('NEED_ACCOUNT')}</div>
-                    <StyledLink className={'ml-3 text-[14px]'} to={'/register'}>{t('CREATE_ACCOUNT')}</StyledLink>
-                </div>
-            </Box>
-        </StyledCenteredSection>
-    </StyledLoginPage>;
+            <NavLink to={'/forgotPassword'}>{t('FORGOT_PASSWORD_QUESTION')}</NavLink>
+
+            <GoogleButton
+                clientId={GOOGLE_CLIENT_ID}
+                context={'signin'}
+                disabled={loginPending || googleLoginPending}
+                text={'continue_with'}
+                onSuccess={onSignInWithGoogle}/>
+
+            <CenterFlex gap={'20px'}>
+                <Text>{t('NEED_ACCOUNT')}</Text>
+                <NavLink to={'/register'}>{t('CREATE_ACCOUNT')}</NavLink>
+            </CenterFlex>
+        </VStack>
+    </CenterFlex>;
 };
 
 LoginPage.displayName = 'LoginPage';

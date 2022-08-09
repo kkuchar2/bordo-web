@@ -1,34 +1,30 @@
-import React, {useCallback, useEffect, useMemo} from "react";
+import React, {useCallback, useEffect, useMemo} from 'react';
 
-import {showChangeAvatarDialog} from "components/DialogSystem/readyDialogs";
-import {showSuccessAvatar} from "components/Toast/readyToastNotifications";
-import {Text} from "kuchkr-react-component-library";
-import {useTranslation} from "react-i18next";
-import {useSelector} from "react-redux";
-import {RootState} from "state/store";
+import {Image, Text} from '@chakra-ui/react';
+import {showChangeAvatarDialog} from 'components/DialogSystem/readyDialogs';
+import {showSuccessAvatar} from 'components/Toast/readyToastNotifications';
+import {useTranslation} from 'react-i18next';
+import {useSelector} from 'react-redux';
+import {RootState} from 'state/store';
 
-import {isSuccess} from "../../../api/api_util";
+import {isSuccess} from '../../../api/api_util';
 
 import {
-    changeAvatarTextTheme,
     PropertyValueSection,
-    StyledAvatar,
     StyledAvatarWithOverlay,
     StyledEditableProfilePictureProperty,
     StyledOverlay,
     StyledPropertyValues
-} from "./style";
+} from './style';
 
 export interface ProfilePictureProps {
-    pictureSize?: number;
     useImageUpload?: boolean;
 }
 
 const EditableProfilePictureProperty = (props: ProfilePictureProps) => {
 
-    const { pictureSize, useImageUpload } = props;
+    const { useImageUpload } = props;
 
-    const userState = useSelector((state: RootState) => state.account.user);
     const changeAvatarState = useSelector((state: RootState) => state.account.requests.changeAvatar);
     const changeAnimatedAvatarState = useSelector((state: RootState) => state.account.requests.changeAnimatedAvatar);
 
@@ -69,7 +65,7 @@ const EditableProfilePictureProperty = (props: ProfilePictureProps) => {
             return null;
         }
         return <StyledOverlay>
-            <Text theme={changeAvatarTextTheme} text={t("CHANGE_AVATAR")}/>
+            <Text>{t('CHANGE_AVATAR')}</Text>
         </StyledOverlay>;
     }, [useImageUpload]);
 
@@ -77,8 +73,11 @@ const EditableProfilePictureProperty = (props: ProfilePictureProps) => {
         <StyledPropertyValues>
             <PropertyValueSection>
                 <StyledAvatarWithOverlay onClick={onChangeImageClick} useImageUpload={useImageUpload}>
-                    <StyledAvatar src={avatar} style={{ objectFit: "cover" }} email={userState.email.email}
-                                  size={pictureSize.toString()} round={true}/>
+                    <Image src={avatar}
+                           borderRadius={'100%'}
+                           width={'200px'}
+                           height={'200px'}
+                           objectFit={'cover'}/>
                     {renderOverlay}
                 </StyledAvatarWithOverlay>
             </PropertyValueSection>

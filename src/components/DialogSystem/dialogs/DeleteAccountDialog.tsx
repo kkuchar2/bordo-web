@@ -1,15 +1,16 @@
-import React, {useCallback, useEffect} from "react";
+import React, {useCallback, useEffect} from 'react';
 
-import Form from "components/Forms/Form/Form";
-import {useTranslation} from "react-i18next";
-import {useSelector} from "react-redux";
-import {closeDialog} from "state/reducers/dialog/dialogSlice";
-import {deleteAccount, resetAccountSliceRequestState} from "state/services/accountService";
-import {RootState, useAppDispatch} from "state/store";
-import {RequestStatus} from "tools/client/client.types";
+import {Box, Text, VStack} from '@chakra-ui/react';
+import Form from 'components/Forms/Form/Form';
+import {useTranslation} from 'react-i18next';
+import {useSelector} from 'react-redux';
+import {closeDialog} from 'state/reducers/dialog/dialogSlice';
+import {deleteAccount, resetAccountSliceRequestState} from 'state/services/accountService';
+import {RootState, useAppDispatch} from 'state/store';
+import {RequestStatus} from 'tools/client/client.types';
 
-import {isSuccess, useRequestState} from "../../../api/api_util";
-import {useFormConfig} from "../../../api/formConfig";
+import {isSuccess, useRequestState} from '../../../api/api_util';
+import {useFormConfig} from '../../../api/formConfig';
 
 export const DeleteAccountDialog = () => {
 
@@ -44,18 +45,16 @@ export const DeleteAccountDialog = () => {
         }
     }, [requestState]);
 
-    return <div className={'w-[400px]'}>
-        <div className={'dialog-warning'}>
-            {t('DELETE_ACCOUNT_WARNING')}
-        </div>
+    return <VStack align={'stretch'} spacing={5} p={3}>
+        <Box p={4} bg={'red.600'} borderRadius={4}>
+            <Text fontWeight={'semibold'} fontSize={'sm'}>{t('DELETE_ACCOUNT_WARNING')}</Text>
+        </Box>
 
         <Form
             config={formConfig}
-            className={'mb-[20px] ml-[20px] mr-[20px]'}
-            buttonsClasses={'w-full flex justify-end mt-[20px]'}
             errors={errors}
             disabled={pending}
             onCancel={onCancelRequest}
             onSubmit={onSubmit}/>
-    </div>;
+    </VStack>;
 };

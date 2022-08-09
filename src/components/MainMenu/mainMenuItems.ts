@@ -1,18 +1,17 @@
 import {ElementType} from 'react';
 
-import {GlobeIcon, HomeIcon, SparklesIcon, TableIcon, UserIcon} from '@heroicons/react/outline';
-import {LogoutIcon} from "@heroicons/react/solid";
+import {GlobeIcon, HomeIcon, TableIcon, UserIcon} from '@heroicons/react/outline';
+import {LogoutIcon} from '@heroicons/react/solid';
 import HomeView from 'components/Home/HomeView';
-import ModelsView from 'components/Models/ModelsView';
-import AccountSettings from 'components/Settings/AccountSettings';
-import AppearanceSettings from 'components/Settings/AppearanceSettings';
-import LanguageSettings from 'components/Settings/LanguageSettings';
-import {openView} from "state/reducers/application/appSlice";
-import {closeNavbar} from "state/reducers/navbar/navbarSlice";
-import {logout} from "state/services/accountService";
-import {store} from "state/store";
+import {openView} from 'state/reducers/application/appSlice';
+import {closeNavbar} from 'state/reducers/navbar/navbarSlice';
+import {logout} from 'state/services/accountService';
+import {store} from 'state/store';
+import TableAdministration from 'views/TableAdministration';
 
 import {IconProps} from '../../icon/icon.types';
+import AccountSettings from '../../views/AccountSettings';
+import LanguageSettings from '../../views/LanguageSettings';
 
 export interface Item {
     id: string;
@@ -28,7 +27,7 @@ export interface ItemsMap {
 }
 
 export interface Group {
-    groupName: string;
+    groupName?: string;
     groupItems: ItemsMap | Item[];
 }
 
@@ -60,7 +59,7 @@ export const mainMenuItems: MenuItems = {
                 id: 'TableAdministration',
                 displayName: 'TABLE_ADMINISTRATION',
                 description: '',
-                component: ModelsView,
+                component: TableAdministration,
                 icon: {
                     component: TableIcon,
                     color: 'text-white'
@@ -83,17 +82,17 @@ export const mainMenuItems: MenuItems = {
     personalisation: {
         groupName: 'PERSONALISATION',
         groupItems: {
-            Appearance: {
-                id: 'Appearance',
-                displayName: 'APPEARANCE',
-                description: '',
-                component: AppearanceSettings,
-                icon: {
-                    component: SparklesIcon,
-                    color: 'text-white'
-                },
-                onClick: switchView('Appearance')
-            },
+            // Appearance: {
+            //     id: 'Appearance',
+            //     displayName: 'APPEARANCE',
+            //     description: '',
+            //     component: AppearanceSettings,
+            //         component: SparklesIcon,
+            //     icon: {
+            //         color: 'text-white'
+            //     },
+            //     onClick: switchView('Appearance')
+            // },
             Language: {
                 id: 'Language',
                 displayName: 'LANGUAGE',
@@ -108,11 +107,10 @@ export const mainMenuItems: MenuItems = {
         }
     },
     actions: {
-        groupName: 'ACTIONS',
         groupItems: [
             {
                 id: 'Logout',
-                displayName: 'LOGOUT',
+                displayName: 'Logout',
                 description: '',
                 icon: {
                     component: LogoutIcon,

@@ -1,4 +1,6 @@
-import React, {ReactNode} from "react";
+import React, {ReactNode} from 'react';
+
+import {Box, Divider, Text} from '@chakra-ui/react';
 
 interface SettingsSectionProps {
     title: string;
@@ -15,15 +17,12 @@ export const SettingsSection = (props: SettingsSectionProps) => {
         return null;
     }
 
-    return <div className={'flex items-start justify-center flex-col mb-[80px] flex-grow flex-shrink-0'}>
-        <div className={'text-gray-400 bold text-[0.8em] font-bold ml-3 sm:ml-0'}>{title.toUpperCase()}</div>
-        <hr className={'hidden sm:block border-y-1 border-white opacity-20 w-[100%] my-[10px]'}/>
-        {description ? <div className={'text-gray-400 bold text-[0.7em]'}>{description}</div> : null}
-        <div
-            className={'sm:p-0 mt-[20px] sm:mt-0 w-full'}>
-            {children}
-        </div>
-    </div>;
+    return <Box>
+        <Text fontSize={'12px'} fontWeight={'semibold'}>{title.toUpperCase()}</Text>
+        <Divider mt={2} mb={2}/>
+        <Text>{description}</Text>
+        <Box w={'100%'} pt={10} pb={10}>{children}</Box>
+    </Box>;
 };
 
 SettingsSection.defaultProps = {

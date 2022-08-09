@@ -1,7 +1,7 @@
-import {createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {DefaultResponseArgs, RequestStatus, ResponseArgs} from "tools/client/client.types";
+import {createSlice, PayloadAction} from '@reduxjs/toolkit';
+import {DefaultResponseArgs, RequestStatus, ResponseArgs} from 'tools/client/client.types';
 
-import {IModelSliceState, ModelDeleteResponse, ModelType} from "./modelSlice.types";
+import {BackendModelInfo, IModelSliceState, ModelDeleteResponse} from './modelSlice.types';
 
 export const modelSlice = createSlice({
     name: 'getModelData',
@@ -13,7 +13,7 @@ export const modelSlice = createSlice({
             deleteRow: DefaultResponseArgs(),
             addRow: DefaultResponseArgs(),
         },
-        modelTypes: <ModelType[]>[],
+        modelTypes: <BackendModelInfo[]>[],
         modelsData: {}
     } as IModelSliceState,
     reducers: {

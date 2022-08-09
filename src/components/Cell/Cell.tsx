@@ -1,7 +1,7 @@
 import React, {useCallback} from "react";
 
+import {Text} from '@chakra-ui/react';
 import {StyledCell} from "components/TableRow/style";
-import {Text} from "kuchkr-react-component-library";
 
 export interface CellProps {
     name: string,
@@ -23,7 +23,7 @@ export const Cell = (props: CellProps) => {
 
     const renderTitle = useCallback(() => {
         if (title) {
-            return <Text style={{ minWidth: titleWidth }} text={title}/>;
+            return <Text>{title}</Text>;
         }
     }, [title]);
 

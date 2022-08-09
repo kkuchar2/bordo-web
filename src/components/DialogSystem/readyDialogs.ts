@@ -1,9 +1,9 @@
 import {PlusIcon} from '@heroicons/react/outline';
-import {MailIcon} from '@heroicons/react/solid';
+import {MailIcon, TrashIcon} from '@heroicons/react/solid';
 import {CreateNewModelItemDialogData} from 'components/DialogSystem/dialogs';
-import {openDialog} from "state/reducers/dialog/dialogSlice";
-import {askSetupPassword, changeEmailAddress, changePassword, changeUsername} from "state/services/accountService";
-import {RootState, store} from 'state/store';
+import {openDialog} from 'state/reducers/dialog/dialogSlice';
+import {askSetupPassword, changeEmailAddress, changePassword, changeUsername} from 'state/services/accountService';
+import {store} from 'state/store';
 
 import {ReadyDialogArgs, SentEmailDialogArgs} from './readyDialogs.types';
 
@@ -27,8 +27,8 @@ export const showSentEmailDialog = (args: SentEmailDialogArgs) => {
                     title: title,
                     icon: {
                         component: MailIcon,
-                        color: 'text-[#24a0ed]',
-                        backgroundColor: 'bg-[#1c3545]'
+                        color: '#24a0ed',
+                        backgroundColor: '#1c3545'
                     },
                     description: description,
                     closeable: closeable
@@ -65,7 +65,7 @@ export const showChangeAvatarDialog = () => {
                 dialog: {
                     title: 'CHANGE_AVATAR',
                     description: '',
-                    width: 600
+                    width: 400
                 },
                 data: {}
             }
@@ -111,7 +111,7 @@ export const showChangeUsernameDialog = (args: ReadyDialogArgs) => {
                         formConfigKey: 'changeUsername',
                         propertyName: 'username',
                         requestStateName: 'changeUsername',
-                        requestStateSelector: (state: RootState) => state.account.requests.changeUsername,
+                        requestStateSelectorName: 'changeUsername',
                         dispatchFunc: changeUsername,
                         initialArgs: data
                     }
@@ -138,8 +138,8 @@ export const showChangeEmailDialog = (args: ReadyDialogArgs = {}) => {
                         description: 'CHANGE_EMAIL_DESCRIPTION',
                         icon: {
                             component: MailIcon,
-                            color: 'text-[#24a0ed]',
-                            backgroundColor: 'bg-[#1c3545]'
+                            color: '#8ed3ed',
+                            backgroundColor: '#265e80'
                         },
                         width: 400
                     },
@@ -147,7 +147,7 @@ export const showChangeEmailDialog = (args: ReadyDialogArgs = {}) => {
                         formConfigKey: 'changeEmail',
                         propertyName: 'email',
                         requestStateName: 'changeEmail',
-                        requestStateSelector: (state: RootState) => state.account.requests.changeEmailAddress,
+                        requestStateSelectorName: 'changeEmailAddress',
                         dispatchFunc: changeEmailAddress
                     }
                 }
@@ -167,9 +167,9 @@ export const showChangePasswordDialog = () => {
                     width: 400
                 },
                 data: {
-                    formConfigKey: 'resetPassword',
-                    requestStateSelector: (state: RootState) => state.account.requests.resetPassword,
-                    requestStateName: 'resetPasswordState',
+                    formConfigKey: 'changePassword',
+                    requestStateSelector: 'changePassword',
+                    requestStateName: 'changePassword',
                     dispatchFunc: changePassword
                 }
             }
@@ -183,18 +183,18 @@ export const showPasswordCreationRequiredDialog = (title_key: string, descriptio
             component: 'PasswordCreationRequiredDialog',
             props: {
                 dialog: {
+                    width: 400,
                     title: title_key,
                     description: description_key,
                     icon: {
                         component: MailIcon,
-                        color: 'text-[#24a0ed]',
-                        backgroundColor: 'bg-[#1c3545]'
+                        color: '#24a0ed',
+                        backgroundColor: '#1c3545'
                     },
-                    width: 400
                 },
                 data: {
                     formConfigKey: 'emptyForm',
-                    requestStateSelector: (state: RootState) => state.account.requests.askSetupPassword,
+                    requestStateSelector: 'askSetupPassword',
                     requestStateName: 'askSetupPassword',
                     dispatchFunc: askSetupPassword
                 }
@@ -241,8 +241,14 @@ export const showDeleteAccountDialog = () => {
             component: 'DeleteAccountDialog',
             props: {
                 dialog: {
+                    width: 400,
                     title: 'DELETE_ACCOUNT',
                     description: '',
+                    icon: {
+                        component: TrashIcon,
+                        color: 'red.900',
+                        backgroundColor: '#1c3545'
+                    },
                 },
                 data: {}
             }
@@ -259,8 +265,8 @@ export const showAddTableItemDialog = (args: ReadyDialogArgs, fields: any, model
                     title: 'ADD_NEW_ROW',
                     icon: {
                         component: PlusIcon,
-                        color: 'text-[#24a0ed]',
-                        backgroundColor: 'bg-[#1c3545]'
+                        color: '#24a0ed',
+                        backgroundColor: '#1c3545'
                     },
                     width: 400
                 },

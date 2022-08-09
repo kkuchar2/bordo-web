@@ -1,6 +1,6 @@
-import {Dispatch} from "@reduxjs/toolkit";
-import {Middleware} from "redux";
-import {RequestStatus} from "tools/client/client.types";
+import {Dispatch} from '@reduxjs/toolkit';
+import {Middleware} from 'redux';
+import {RequestStatus} from 'tools/client/client.types';
 
 const styleOf = (bgColor: string) => `background: ${bgColor}; color: #ffffff; padding: 5px; margin: 5px; font-weight: bold`;
 
@@ -22,6 +22,7 @@ export const loggerMiddleware: Middleware = () => (next: Dispatch) => (action) =
 
         if (status === RequestStatus.Failure) {
             console.log(`%c ${action.type} %c HTTP ${code} ${url}  %c payload:`, error, error, style2, action.payload);
+            console.log(action.payload.info.errors);
         }
         else if (status === RequestStatus.Waiting) {
             console.log(`%c ${action.type} %c PENDING %c payload:`, waiting, waiting, style2, action.payload);

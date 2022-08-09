@@ -1,19 +1,19 @@
-import React from "react";
+import React from 'react';
 
-import Avatar from "react-avatar";
+import Avatar from 'react-avatar';
 
-import {FieldSerializerProps} from "./fieldSerializer.types";
+import {FieldSerializerProps} from './fieldSerializer.types';
 
 export const FileFieldSerializer = (props: FieldSerializerProps) => {
 
-    const {name, value, inEditMode, onChange} = props;
+    const { name, value, inEditMode, onChange } = props;
 
     return <Avatar
         src={value}
         style={{
-            objectFit: "cover",
+            objectFit: 'cover',
         }}
-        size={"90px"}
+        size={'90px'}
         round={true}/>;
 };
 

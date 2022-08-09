@@ -1,11 +1,15 @@
-import React, {useCallback, useEffect, useState} from "react";
+import React, {useCallback, useReducer, useState} from 'react';
 
-import TableHeader from "components/TableHeader/TableHeader";
-import TableRow from "components/TableRow/TableRow";
-import {deleteRow, updateRow} from "state/services/modelService";
-import {useAppDispatch} from "state/store";
-
-import {StyledTable, StyledTableRows} from "./style";
+import {Box, Flex, Table as ChakraTable, Tbody, Td, Text, Thead, Tr} from '@chakra-ui/react';
+import {
+    createColumnHelper,
+    flexRender,
+    getCoreRowModel,
+    Header,
+    HeaderGroup,
+    Row,
+    useReactTable,
+} from '@tanstack/react-table';
 
 export interface TableProps {
     fields: any, // TODO
@@ -14,52 +18,144 @@ export interface TableProps {
     modelPackage: string
 }
 
+type Person = {
+    firstName: string
+    lastName: string
+    age: number
+    visits: number
+    status: string
+    progress: number
+}
+
+const defaultData: Person[] = [
+    {
+        firstName: 'tanner',
+        lastName: 'linsley',
+        age: 24,
+        visits: 100,
+        status: 'In Relationship',
+        progress: 50,
+    },
+    {
+        firstName: 'tandy',
+        lastName: 'miller',
+        age: 40,
+        visits: 40,
+        status: 'Single',
+        progress: 80,
+    },
+    {
+        firstName: 'joe',
+        lastName: 'dirte',
+        age: 45,
+        visits: 20,
+        status: 'Complicated',
+        progress: 10,
+    },
+];
+
+const columnHelper = createColumnHelper<Person>();
+
+interface CustomHeaderProps {
+    children: React.ReactNode;
+}
+
+const CustomHeader = (props: CustomHeaderProps) => {
+
+    const { children } = props;
+
+    return <Flex minW={{ base: '50px', sm: '100px', md: '150px' }} justify={'flex-start'} align={'center'}
+                 bg={'rgba(255,255,255,0.07)'} pt={2} pb={2} pl={2}>
+        <Text fontSize={'xl'}>{children}</Text>
+    </Flex>;
+};
+
+const CustomCell = (props: CustomHeaderProps) => {
+
+    const { children } = props;
+
+    return <Flex bg={'rgba(0,0,0,0.04)'} justify={'flex-start'} align={'center'} pt={3} pb={3} pl={2}>
+        <Text fontSize={'md'}>{children}</Text>
+    </Flex>;
+};
+
+const columns = [
+    columnHelper.accessor('firstName', {
+        header: () => <CustomHeader>{'First Name'}</CustomHeader>,
+        cell: info => <CustomCell>{info.getValue()}</CustomCell>,
+        footer: info => info.column.id,
+    }),
+    columnHelper.accessor(row => row.lastName, {
+        id: 'lastName',
+        header: () => <CustomHeader>{'Last Name'}</CustomHeader>,
+        cell: info => <CustomCell>{info.getValue()}</CustomCell>,
+        footer: info => info.column.id,
+    }),
+    columnHelper.accessor('age', {
+        header: () => <CustomHeader>{'Age'}</CustomHeader>,
+        cell: info => <CustomCell>{info.getValue()}</CustomCell>,
+        footer: info => info.column.id,
+    }),
+    columnHelper.accessor('visits', {
+        header: () => <CustomHeader>{'Visits'}</CustomHeader>,
+        cell: info => <CustomCell>{info.getValue()}</CustomCell>,
+        footer: info => info.column.id,
+    }),
+    columnHelper.accessor('status', {
+        header: () => <CustomHeader>{'Status'}</CustomHeader>,
+        cell: info => <CustomCell>{info.getValue()}</CustomCell>,
+        footer: info => info.column.id,
+    }),
+    columnHelper.accessor('progress', {
+        header: () => <CustomHeader>{'Profile Progress'}</CustomHeader>,
+        cell: info => <CustomCell>{info.getValue()}</CustomCell>,
+        footer: info => info.column.id,
+    }),
+];
+
 const Table = (props: TableProps) => {
 
-    const { fields, rows, model, modelPackage } = props;
+    const [data, setData] = useState(() => [...defaultData]);
+    const rerender = useReducer(() => ({}), {})[1];
 
-    const dispatch = useAppDispatch();
+    const table = useReactTable({
+        data,
+        columns,
+        getCoreRowModel: getCoreRowModel(),
+    });
 
-    const [editedId, setEditedId] = useState(-1);
+    const renderHeader = useCallback((header: Header<Person, unknown>) => {
+        return <th key={header.id}>
+            {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
+        </th>;
+    }, []);
 
-    useEffect(() => {
-        setEditedId(-1);
-    }, [model, modelPackage]);
+    const renderHeaderGroup = useCallback((headerGroup: HeaderGroup<Person>) => {
+        return <Tr key={headerGroup.id}>
+            {headerGroup.headers.map(renderHeader)}
+        </Tr>;
+    }, []);
 
-    const onRowSave = useCallback((data) => {
-        setEditedId(-1);
-        dispatch(updateRow(modelPackage, model, data));
-    }, [modelPackage, model]);
+    const renderRow = useCallback((row: Row<Person>) => {
+        return <Tr key={row.id}>
+            {row.getVisibleCells().map(cell => {
+                return <Td padding={0} border={'none'} key={cell.id}>
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                </Td>;
+            })}
+        </Tr>;
+    }, []);
 
-    const onRowDelete = useCallback((rowId) => {
-        setEditedId(-1);
-        dispatch(deleteRow(modelPackage, model, rowId));
-    }, [modelPackage, model]);
-
-    const editModeRequest = useCallback((rowId) => {
-        setEditedId(rowId);
-    }, [editedId]);
-
-    const renderRows = useCallback(() => {
-
-        if (!rows) {
-            return;
-        }
-
-        return Object.entries(rows).map((row, idx) => {
-            const [, value] = row;
-            return <TableRow key={idx + model} model={model} row={value} fields={fields} saveHandler={onRowSave}
-                             deleteHandler={onRowDelete}
-                             onEditModeRequest={editModeRequest} editedId={editedId}/>;
-        });
-    }, [rows, fields, model, fields, onRowSave, editedId]);
-
-    return <StyledTable>
-        <TableHeader fields={fields}/>
-        <StyledTableRows>
-            {renderRows()}
-        </StyledTableRows>
-    </StyledTable>;
+    return <Box w={'100%'} overflowX={'auto'}>
+        <ChakraTable>
+            <Thead>
+                {table.getHeaderGroups().map(renderHeaderGroup)}
+            </Thead>
+            <Tbody>
+                {table.getRowModel().rows.map(renderRow)}
+            </Tbody>
+        </ChakraTable>
+    </Box>;
 };
 
 export default Table;

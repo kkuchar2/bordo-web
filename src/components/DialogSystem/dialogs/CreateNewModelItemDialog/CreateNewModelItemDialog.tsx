@@ -1,22 +1,20 @@
-import {humanize} from "util/util";
+import {humanize} from 'util/util';
 
-import React, {useCallback, useState} from "react";
+import React, {useCallback, useState} from 'react';
 
-import {Text} from "kuchkr-react-component-library";
-import {useTranslation} from "react-i18next";
-import {closeDialog} from "state/reducers/dialog/dialogSlice";
-import {DialogProps} from "state/reducers/dialog/dialogSlice.types";
-import {addRow} from "state/services/modelService";
-import {useAppDispatch} from "state/store";
+import {Button, Text} from '@chakra-ui/react';
+import {useTranslation} from 'react-i18next';
+import {closeDialog} from 'state/reducers/dialog/dialogSlice';
+import {DialogProps} from 'state/reducers/dialog/dialogSlice.types';
+import {addRow} from 'state/services/modelService';
+import {useAppDispatch} from 'state/store';
 
 import {
     CreateNewModelCustomDescription,
     StyledCreateNewModelItemDialog,
     StyledDialogContentSection,
-    StyledModelDescription,
-    titleModelTextTheme,
-    titleModelValueTextTheme
-} from "./style";
+    StyledModelDescription
+} from './style';
 
 export interface CreateNewModelItemDialogData {
     modelPackage: string,
@@ -67,8 +65,8 @@ export const CreateNewModelItemDialog = (props: DialogProps<CreateNewModelItemDi
     return <StyledCreateNewModelItemDialog>
         <CreateNewModelCustomDescription>
             <StyledModelDescription>
-                <Text theme={titleModelTextTheme} text={'Model:'}/>
-                <Text theme={titleModelValueTextTheme} text={modelName}/>
+                <Text>{'Model:'}</Text>
+                <Text>{modelName}</Text>
             </StyledModelDescription>
         </CreateNewModelCustomDescription>
 
@@ -77,10 +75,10 @@ export const CreateNewModelItemDialog = (props: DialogProps<CreateNewModelItemDi
         </StyledDialogContentSection>
 
         <div className={'w-full flex justify-end'}>
-            <button type={'button'} className={'cancelButton'} onClick={onCancel}
-                    disabled={false}>{t('CANCEL')}</button>
-            <button type={'button'} className={'confirmButton'} onClick={onConfirm}
-                    disabled={false}>{t('CONFIRM')}</button>
+            <Button type={'button'} className={'cancelButton'} onClick={onCancel}
+                    disabled={false}>{t('CANCEL')}</Button>
+            <Button type={'button'} className={'confirmButton'} onClick={onConfirm}
+                    disabled={false}>{t('CONFIRM')}</Button>
         </div>
     </StyledCreateNewModelItemDialog>;
 };

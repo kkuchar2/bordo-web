@@ -33,6 +33,12 @@ export interface ResetPasswordFormArgs {
     new_password_confirm: string;
 }
 
+export interface ChangePasswordFormArgs {
+    current_password: string;
+    new_password: string;
+    new_password_confirm: string;
+}
+
 export interface DeleteAccountFormArgs {
     current_password: string;
 }

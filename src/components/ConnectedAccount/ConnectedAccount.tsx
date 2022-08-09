@@ -1,12 +1,13 @@
-import React, {useCallback, useMemo} from "react";
+import React, {useCallback, useMemo} from 'react';
 
-import {showPasswordCreationRequiredDialog} from "components/DialogSystem/readyDialogs";
-import GoogleButton from "components/GoogleButton/GoogleButton";
-import {GoogleIcon} from "components/Icons/GoogleIcon";
-import {useSelector} from "react-redux";
-import {RootState} from "state/store";
+import {Button, HStack, Text, VStack} from '@chakra-ui/react';
+import {showPasswordCreationRequiredDialog} from 'components/DialogSystem/readyDialogs';
+import GoogleButton from 'components/GoogleButton/GoogleButton';
+import {GoogleIcon} from 'components/Icons/GoogleIcon';
+import {useSelector} from 'react-redux';
+import {RootState} from 'state/store';
 
-import {GOOGLE_CLIENT_ID} from "../../config";
+import {GOOGLE_CLIENT_ID} from '../../config';
 
 interface ConnectedAccountProps {
     supportedProvider: string;
@@ -39,33 +40,25 @@ export const ConnectedAccount = (props: ConnectedAccountProps) => {
 
     const renderButton = useMemo(() => {
         if (!connected) {
-            return <div>
-                <GoogleButton
-                    clientId={GOOGLE_CLIENT_ID}
-                    context={'signin'}
-                    text={'signin_with'}
-                    onSuccess={() => {
-                    }}/>
-            </div>;
+            return <GoogleButton
+                clientId={GOOGLE_CLIENT_ID}
+                context={'signin'}
+                text={'signin_with'}
+                onSuccess={() => {
+                }}/>;
         }
 
-        return <button className={'social_connection'} onClick={onClick}>
-            Disconnect
-        </button>;
+        return <Button onClick={onClick}>
+            <Text fontSize={'13px'}>{'Disconnect'}</Text>
+        </Button>;
     }, [connected]);
 
-    const renderIcon = useMemo(() => {
-
-        return <GoogleIcon/>;
-    }, []);
-
-    return <div className={'flex items-center justify-start w-full gap-3 bg-[#2e2e2e] p-2 pl-3 pr-3'}>
-        {renderIcon}
-        <div className={'flex items-start justify-center flex-col grow'}>
-            <div className={'text-white text-[16px]'}>{capitalizeFirstLetter(supportedProvider)}</div>
-            {connected ? <div className={'text-white/70 text-[14px] font-normal'}>{userState.email.email}</div> : null}
-        </div>
-
+    return <HStack spacing={'20px'} w={'100%'}>
+        <GoogleIcon/>
+        <VStack flexGrow={1} spacing={0} align={'stretch'}>
+            <Text fontSize={'lg'}>{capitalizeFirstLetter(supportedProvider)}</Text>
+            {connected ? <Text fontSize={'xs'}>{userState.email.email}</Text> : null}
+        </VStack>
         {renderButton}
-    </div>;
+    </HStack>;
 };

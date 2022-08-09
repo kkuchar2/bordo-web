@@ -1,124 +1,82 @@
-import React, {useCallback, useEffect, useMemo} from 'react';
+import React, {ReactNode, useCallback, useMemo} from 'react';
 
-import {MenuAlt3Icon} from '@heroicons/react/solid';
-import {Group, Item, mainMenuItems} from 'components/MainMenu/mainMenuItems';
-import MenuItem from 'components/MainMenu/MenuItem/MenuItem';
-import {useMediaQuery} from 'hooks/useMediaQuery';
+import {Button, Divider, Flex, Text} from '@chakra-ui/react';
+import {Group, Item, ItemsMap, MenuItems} from 'components/MainMenu/mainMenuItems';
 import {useTranslation} from 'react-i18next';
-import {useSelector} from 'react-redux';
-import {closeNavbar, openNavbar} from "state/reducers/navbar/navbarSlice";
-import {RootState, useAppDispatch} from "state/store";
 
-export interface MainMenuProps {
-    currentViewId: string;
+interface MainMenuProps {
+    items: MenuItems,
+    currentViewId: string,
 }
 
 const MainMenu = (props: MainMenuProps) => {
-    const { currentViewId } = props;
 
-    const dispatch = useAppDispatch();
+    const { items, currentViewId } = props;
 
     const { t } = useTranslation();
 
-    const isSmall = useMediaQuery('(max-width: 1024px)');
-
-    const navbarState = useSelector((state: RootState) => state.navbar);
-
-    const onHamburgerClick = useCallback(() => {
-        dispatch(openNavbar());
-    }, []);
-
-    const renderHamburgerButton = useMemo(() => {
-        if (!isSmall) {
-            return null;
+    const renderGroupItems = useCallback((groupItems: ItemsMap | Item[]): ReactNode => {
+        if (Array.isArray(groupItems)) {
+            return groupItems.map((item: Item) => {
+                return <Button display={'flex'}
+                               key={item.id}
+                               borderRadius={5}
+                               paddingLeft={3}
+                               paddingRight={2}
+                               paddingTop={0}
+                               justifyContent={'flex-start'}
+                               alignItems={'center'}
+                               width={'200px'}
+                               paddingBottom={0}
+                               onClick={item.onClick}
+                               h={'35px'}
+                               gap={2}
+                               bg={currentViewId === item.id ? 'rgba(255,255,255,0.1)' : 'transparent'}>
+                    {item.icon ? <item.icon.component width={20}/> : null}
+                    <Text fontSize={'14px'}
+                          lineHeight={'35px'}
+                          fontWeight={'medium'}
+                          color={'#bcbcbc'}
+                          textOverflow={'ellipsis'}
+                          whiteSpace={'nowrap'}
+                          overflow={'hidden'}>{t(item.displayName)}</Text>
+                </Button>;
+            });
         }
-        return <MenuAlt3Icon
-            className={`absolute top-[25px] right-[25px] mr-0 h-10 w-10 z-10 cursor-pointer text-white`}
-            onClick={onHamburgerClick}
-        />;
-    }, [isSmall]);
-
-    const renderGroup = useCallback((group: Group) => {
-        const groupName = group.groupName;
-        const items = group.groupItems;
-
-        if (Array.isArray(items)) {
-            return <div className={'pt-[10px] pb-[10px] flex flex-col gap-1'}>
-                {items.map((item: Item, idx: number) => {
-                    return <MenuItem icon={item.icon} key={idx} name={t(item.displayName)} onClick={item.onClick}/>;
-                })}
-            </div>;
+        else {
+            return renderGroupItems(Object.values(groupItems));
         }
 
-        return <div className={'lg:pt-[20px] pb-[10px] flex flex-col gap-1'}>
-            <div
-                className={'text-[13px] ml-[10px] font-bold text-navbar-group-title-light dark:text-navbar-group-title-dark'}>
-                {t(groupName).toUpperCase()}
-            </div>
+    }, [currentViewId]);
 
-            {Object.entries(items).map(([key, item]) => {
-                return <MenuItem
-                    key={key}
-                    name={t(item.displayName)}
-                    active={currentViewId === item.id}
-                    icon={item.icon}
-                    onClick={item.onClick}/>;
-            })}
-        </div>;
+    const renderGroup = useCallback((group: Group): ReactNode => {
+        return <Flex direction={'column'} gap={2}>
+            {group.groupName ? <Text fontSize={'12px'}
+                                     marginLeft={2}
+                                     color={'#848484'}
+                                     fontWeight={'semibold'}>
+                {t(group.groupName)}
+            </Text> : null}
+            <Flex className={'a'} direction={'column'} align={'flex-start'} gap={1}>
+                {renderGroupItems(group.groupItems)}
+            </Flex>
+        </Flex>;
     }, [currentViewId, t]);
 
-    const getTranslation = useCallback(() => {
-        if (!isSmall) {
-            return '';
-        }
+    const groups = useMemo(() => Object.keys(items)
+        .map((k, idx) => {
+            return <Flex direction={'column'} gap={3} key={idx}>
+                {idx > 0 ? <Divider w={'80%'} marginLeft={2}/> : null}
+                {renderGroup(items[k])}
+            </Flex>;
+        }), [currentViewId, t]);
 
-        return navbarState.opened ? 'translate-x-0' : 'translate-x-[100%]';
-    }, [isSmall, navbarState]);
-
-    const getTransition = useCallback(() => {
-        return isSmall ? 'transition duration-300 ease-in-out' : '';
-    }, [isSmall]);
-
-    useEffect(() => {
-        if (!isSmall && navbarState.opened) {
-            dispatch(closeNavbar());
-        }
-    }, [isSmall, navbarState]);
-
-    const navbarItems = useMemo(() => {
-        return <div
-            className={'flex flex-col h-full sm:gap-[20px] lg:gap-[0px] md:w-full lg:w-[75%]'}>
-            {Object.entries(mainMenuItems).map(([key, group]) =>
-                <div key={key}>
-                    {renderGroup(group)}
-                    <hr className={`ml-[10px] border-1 border-gray-300 border-opacity-10`}/>
-                </div>)}
-        </div>;
-    }, [currentViewId, t]);
-
-    const renderLargeScreenNavbar = useMemo(() => {
-        return <nav
-            className={`backdrop-blur-xl duration-[600ms] transition ease-in-out bg-navbar-bg-lg-light dark:bg-navbar-bg-lg-dark flex h-full justify-end p-[15px] w-[300px]`}>
-            {navbarItems}
-        </nav>;
-    }, [t, navbarItems]);
-
-    const renderSmallScreenNavbar = useMemo(() => {
-        return <>
-            {!navbarState.opened ? renderHamburgerButton : null}
-            <nav
-                className={`${getTranslation()} ${getTransition()}  fixed backdrop-blur-xl bg-[#1d1d1d]/90 top-0 right-0 z-[15] h-full w-[75%] max-w-[300px] items-end p-[15px]`}>
-                {navbarItems}
-            </nav>
-        </>;
-    }, [navbarItems, navbarState, isSmall, t]);
-
-    return useMemo(() => {
-        if (isSmall) {
-            return renderSmallScreenNavbar;
-        }
-        return renderLargeScreenNavbar;
-    }, [currentViewId, isSmall, navbarState, t]);
+    return <Flex direction={'column'} align={'flex-end'}
+                 width={400} bg={'#2a2a2a'} paddingTop={'20px'}>
+        <Flex direction={'column'} gap={'15px'} padding={3}>
+            {groups}
+        </Flex>
+    </Flex>;
 };
 
 export default MainMenu;

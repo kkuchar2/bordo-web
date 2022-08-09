@@ -1,16 +1,16 @@
 import React from 'react';
 
-import { StyledLink } from 'components/Forms/commonStyles';
-import {Text} from "kuchkr-react-component-library";
+import {Text} from '@chakra-ui/react';
+import {NavLink} from 'components/chakra/NavLink/NavLink';
 
-import {StyledNotFound, StyledNotFoundTextWithIcon, textTheme} from "./style";
+import {StyledNotFound, StyledNotFoundTextWithIcon} from './style';
 
 const NotFoundPage = () => {
     return <StyledNotFound>
         <StyledNotFoundTextWithIcon>
-            <Text text={'Page not found'} theme={textTheme}/>
+            <Text>{'Page not found'}</Text>
         </StyledNotFoundTextWithIcon>
-        <StyledLink style={{marginLeft: 10, marginBottom: 0}} to={'/'} className={"signInLink"}>Home</StyledLink>
+        <NavLink to={'/'} className={'signInLink'}>{'Home'}</NavLink>
     </StyledNotFound>;
 };
 

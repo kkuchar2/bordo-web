@@ -1,13 +1,13 @@
-import {ChangeEventHandler} from "react";
+import {ChangeEventHandler} from 'react';
 
-import {TFunction} from "react-i18next";
+import {TFunction} from 'react-i18next';
 
 export interface StyledSelectGIFCircleProps {
-  url: string;
+    url: string;
 }
 
 export interface ChangeAvatarModeSelectorProps {
-  translation?: TFunction<"translation">,
-  onFileSelected: ChangeEventHandler<HTMLInputElement>;
-  onAnimatedAvatarSelected: (e: Event) => void
+    translation?: TFunction<'translation'>,
+    onFileSelected: ChangeEventHandler<HTMLInputElement>;
+    onAnimatedAvatarSelected: () => void
 }

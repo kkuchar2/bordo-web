@@ -1,17 +1,15 @@
 import React, {useCallback, useEffect} from 'react';
 
-import {defaultShowUpAnimation} from 'components/Forms/animation';
+import {Box, Flex, Text} from '@chakra-ui/react';
 import MainMenu from 'components/MainMenu/MainMenu';
-import {findView} from 'components/MainMenu/mainMenuItems';
+import {findView, mainMenuItems} from 'components/MainMenu/mainMenuItems';
 import {showSuccessToast} from 'components/Toast/readyToastNotifications';
 import {EnsureAuthorized} from 'hoc/EnsureAuthorized';
 import {useTranslation} from 'react-i18next';
 import {useSelector} from 'react-redux';
 import {loadLastView} from 'state/reducers/application/appSlice';
-import {closeNavbar} from "state/reducers/navbar/navbarSlice";
-import {RootState, useAppDispatch} from "state/store";
-
-import {StyledAnimatedHeader, StyledBottomSection, StyledHomePage, StyledTopSection} from './style';
+import {closeNavbar} from 'state/reducers/navbar/navbarSlice';
+import {RootState, useAppDispatch} from 'state/store';
 
 const HomePage = (props: any) => {
 
@@ -21,7 +19,7 @@ const HomePage = (props: any) => {
 
     const navbarState = useSelector((state: RootState) => state.navbar);
     const currentViewId = useSelector((state: RootState) => state.app.currentView);
-    const currentTheme = useSelector((state: RootState) => state.app.theme);
+    const view = findView(currentViewId);
 
     useEffect(() => {
         showSuccessToast('Successfully logged in');
@@ -29,29 +27,6 @@ const HomePage = (props: any) => {
     }, []);
 
     const { t } = useTranslation();
-
-    const renderContent = useCallback(() => {
-        if (!currentViewId) {
-            return null;
-        }
-
-        const view = findView(currentViewId);
-
-        const ViewComponent = view.component;
-
-        return <div
-            className={`duration-[600ms] transition ease-in-out bg-home-bg-light dark:bg-home-bg-dark flex flex-grow flex-col box-border ${navbarState.opened ? 'blur-[8px]' : 'blur-none'}`}>
-            <StyledTopSection>
-                <StyledAnimatedHeader {...defaultShowUpAnimation}>
-                    <div
-                        className={'text-[1.2em] font-semibold text-home-title-light dark:text-home-title-dark'}>{t(view.displayName)}</div>
-                </StyledAnimatedHeader>
-            </StyledTopSection>
-            <StyledBottomSection>
-                <ViewComponent/>
-            </StyledBottomSection>
-        </div>;
-    }, [currentViewId, navbarState, t]);
 
     const onPageClick = useCallback(() => {
         if (navbarState.opened) {
@@ -63,17 +38,17 @@ const HomePage = (props: any) => {
         return <></>;
     }
 
-    const getTheme = useCallback(() => {
-        const theme = localStorage.getItem('theme');
-        return theme === 'dark' ? 'dark' : 'light';
-    }, [currentTheme]);
-
-    return <StyledHomePage className={`${getTheme()} font-sarabun font-semibold`} onClick={onPageClick}>
-        <div className={'box-border flex h-auto min-w-[200px] flex-col overflow-hidden lg:h-full lg:flex-row'}>
-            <MainMenu currentViewId={currentViewId}/>
-            {renderContent()}
-        </div>
-    </StyledHomePage>;
+    return <Box width={'100%'} onClick={onPageClick}>
+        <Flex height={'100%'}>
+            <MainMenu items={mainMenuItems} currentViewId={currentViewId}/>
+            <Box width={'100%'}>
+                <Flex justify={'flex-start'} padding={'30px'}>
+                    <Text>{t(view.displayName)}</Text>
+                </Flex>
+                <view.component/>
+            </Box>
+        </Flex>
+    </Box>;
 };
 
 export default EnsureAuthorized(HomePage) as React.FC;

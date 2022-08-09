@@ -1,10 +1,12 @@
-import React, {useCallback} from "react";
+import React, {useCallback} from 'react';
 
-import {CredentialResponse, GoogleLogin, GoogleOAuthProvider} from "@react-oauth/google";
-import {useMeasure} from "react-use";
+import {Center} from '@chakra-ui/react';
+import {CredentialResponse, GoogleLogin, GoogleOAuthProvider} from '@react-oauth/google';
+import {useMeasure} from 'react-use';
 
 interface GoogleButtonProps {
     clientId: string;
+    disabled?: boolean;
     context?: 'signin' | 'signup' | 'use';
     text?: 'signin_with' | 'signup_with' | 'continue_with' | 'signin';
     onSuccess?: (credentialResponse: CredentialResponse) => void
@@ -14,7 +16,7 @@ interface GoogleButtonProps {
 
 const GoogleButton = (props: GoogleButtonProps) => {
 
-    const { clientId, text, onSuccess, onError, className } = props;
+    const { clientId, text, onSuccess, onError, disabled, className } = props;
 
     const [ref, bounds] = useMeasure();
 
@@ -37,25 +39,27 @@ const GoogleButton = (props: GoogleButtonProps) => {
 
     const targetWidth = bounds.width === 0 ? 200 : bounds.width > 400 ? 400 : bounds.width;
 
-    return <div className={className} ref={ref}>
+    console.log('targetWidth', targetWidth);
+
+    return <Center className={className} style={{ colorScheme: 'light' }} ref={ref}>
         <GoogleOAuthProvider clientId={clientId}>
             <GoogleLogin
                 useOneTap={false}
                 auto_select={true}
                 width={`${targetWidth}`}
-                theme={"filled_black"}
-                size={"large"}
-                shape={"rectangular"}
+                theme={'filled_black'}
+                size={'large'}
+                shape={'rectangular'}
                 text={text}
                 locale={'en'}
                 type={'standard'}
                 context={'signup'}
-                ux_mode={"popup"}
+                ux_mode={'popup'}
                 promptMomentNotification={onPromptMomentNotification}
                 onSuccess={innerOnSuccess}
                 onError={innerOnError}/>
         </GoogleOAuthProvider>
-    </div>;
+    </Center>;
 };
 
 GoogleButton.defaultProps = {

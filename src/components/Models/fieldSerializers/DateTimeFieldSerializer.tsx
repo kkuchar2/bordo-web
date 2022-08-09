@@ -1,17 +1,14 @@
-import React from "react";
+import React from 'react';
 
-import {Text} from "kuchkr-react-component-library";
+import {Text} from '@chakra-ui/react';
 
-import {FieldSerializerProps} from "./fieldSerializer.types";
+import {FieldSerializerProps} from './fieldSerializer.types';
 
 export const DateTimeFieldSerializer = (props: FieldSerializerProps) => {
 
-    const {name, value, inEditMode, onChange} = props;
+    const { name, value, inEditMode, onChange } = props;
 
-    if (inEditMode) {
-        return <Text text={value}/>;
-    }
-    return <Text text={value}/>;
+    return <Text>{value}</Text>;
 };
 
 export default DateTimeFieldSerializer;

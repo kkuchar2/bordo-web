@@ -1,14 +1,14 @@
-import React from "react";
+import React from 'react';
 
-import {Text} from "kuchkr-react-component-library";
+import {Text} from '@chakra-ui/react';
 
-import {FieldSerializerProps} from "./fieldSerializer.types";
+import {FieldSerializerProps} from './fieldSerializer.types';
 
 export const DefaultFieldSerializer = (props: FieldSerializerProps) => {
 
-    const {name, value, inEditMode, onChange} = props;
+    const { name, value, inEditMode, onChange } = props;
 
-    return <Text style={{width: '100%', overflow: 'auto'}} text={value}/>;
+    return <Text>{value}</Text>;
 };
 
 export default DefaultFieldSerializer;

@@ -1,7 +1,7 @@
-import {useMemo} from "react";
+import {useMemo} from 'react';
 
-import {TFunction} from "react-i18next";
-import {object, SchemaOf} from "yup";
+import {TFunction} from 'react-i18next';
+import {object, SchemaOf} from 'yup';
 
 import {
     ConfirmPasswordSchema,
@@ -10,11 +10,12 @@ import {
     RequiredCurrentPasswordSchema,
     RequiredStringSchema,
     UsernameSchema
-} from "../schema/field_schema";
+} from '../schema/field_schema';
 
-import {fieldTypes} from "./fieldTypes";
+import {fieldTypes} from './fieldTypes';
 import {
     ChangeEmailFormArgs,
+    ChangePasswordFormArgs,
     ChangeUsernameFormArgs,
     CreateNewPasswordFormArgs,
     DeleteAccountFormArgs,
@@ -22,7 +23,7 @@ import {
     LoginFormArgs,
     ResetPasswordFormArgs,
     SignupFormArgs
-} from "./formConfig.types";
+} from './formConfig.types';
 
 export interface FieldConfig {
     name: string;
@@ -41,6 +42,7 @@ export interface FormConfigs {
     changeEmail: FormConfig<ChangeEmailFormArgs>,
     changeUsername: FormConfig<ChangeUsernameFormArgs>,
     resetPassword: FormConfig<ResetPasswordFormArgs>,
+    changePassword: FormConfig<ChangePasswordFormArgs>,
     deleteAccount: FormConfig<DeleteAccountFormArgs>,
     emptyForm: FormConfig,
 }
@@ -117,6 +119,18 @@ export const FORM_CONFIG = (t: any): FormConfigs => {
                 new_password_confirm: ConfirmPasswordSchema('new_password'),
             })
         },
+        changePassword: {
+            fields: [
+                { name: 'current_password' },
+                { name: 'new_password' },
+                { name: 'new_password_confirm' },
+            ],
+            validationSchema: object({
+                current_password: RequiredCurrentPasswordSchema(t),
+                new_password: NewPasswordSchema(t),
+                new_password_confirm: ConfirmPasswordSchema('new_password'),
+            })
+        },
         deleteAccount: {
             fields: [
                 { name: 'current_password' },
@@ -132,7 +146,7 @@ export const FORM_CONFIG = (t: any): FormConfigs => {
     };
 };
 
-export const getField = (fieldName: string, translation: TFunction<"translation">): FieldConfig => {
+export const getField = (fieldName: string, translation: TFunction<'translation'>): FieldConfig => {
 
     if (!fieldTypes[fieldName]) {
         console.error(`Field type ${fieldName} not found`);

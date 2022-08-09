@@ -1,17 +1,8 @@
-import React, {useCallback} from "react";
+import React, {useCallback} from 'react';
 
-import {booleanSelectTheme} from "components/TableRow/style";
-import {Select, Text} from "kuchkr-react-component-library";
+import {Text} from '@chakra-ui/react';
 
-import {FieldSerializerProps} from "./fieldSerializer.types";
-
-const textTheme = {
-    textColor: "#d0d0d0",
-    fontSize: "1.0em",
-    fontWeight: 600,
-    textAlign: "left",
-    margin: "0px 0px 0px 0px",
-};
+import {FieldSerializerProps} from './fieldSerializer.types';
 
 export const BooleanFieldSerializer = (props: FieldSerializerProps) => {
 
@@ -26,19 +17,9 @@ export const BooleanFieldSerializer = (props: FieldSerializerProps) => {
     }, []);
 
     if (inEditMode && isEditable) {
-        return <Select
-            theme={booleanSelectTheme}
-            maxMenuHeight={105}
-            menuPortalTarget={document.body}
-            defaultValue={{ value: value, label: toUpperFirst(value.toString()) }}
-            options={[
-                { value: true, label: "True" },
-                { value: false, label: "False" }
-            ]}
-            onChange={onSelectChange}
-        />;
+        return <Text>{'TODO ADD Select'}</Text>;
     }
-    return <Text theme={textTheme} style={{ width: '100%' }} text={value ? 'True' : 'False'}/>;
+    return <Text>{value ? 'True' : 'False'}</Text>;
 };
 
 export default BooleanFieldSerializer;

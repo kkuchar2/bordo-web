@@ -1,16 +1,16 @@
 import React, {useCallback, useEffect, useMemo} from 'react';
 
-import Box from "components/Box/Box";
-import Form from "components/Forms/Form/Form";
-import {useTranslation} from "react-i18next";
-import {useSelector} from "react-redux";
-import {useParams} from "react-router-dom";
-import {createNewPassword, resetAccountSliceRequestState} from "state/services/accountService";
+import {Box, Heading} from '@chakra-ui/react';
+import Form from 'components/Forms/Form/Form';
+import {useTranslation} from 'react-i18next';
+import {useSelector} from 'react-redux';
+import {useParams} from 'react-router-dom';
+import {createNewPassword, resetAccountSliceRequestState} from 'state/services/accountService';
 import {RootState, useAppDispatch} from 'state/store';
-import {RequestStatus} from "tools/client/client.types";
+import {RequestStatus} from 'tools/client/client.types';
 
-import {useRequestState} from "../../api/api_util";
-import {useFormConfig} from "../../api/formConfig";
+import {useRequestState} from '../../api/api_util';
+import {useFormConfig} from '../../api/formConfig';
 
 const CreateNewPasswordPage = () => {
 
@@ -50,7 +50,7 @@ const CreateNewPasswordPage = () => {
     const renderProgress = useMemo(() => {
         if (pending) {
             // TODO: replace with loading component
-            return <div>PROGRESS</div>;
+            return <div>{'PROGRESS'}</div>;
         }
         return null;
     }, [pending]);
@@ -58,8 +58,8 @@ const CreateNewPasswordPage = () => {
     return <div className={'w-full flex items-center justify-start'}>
         <div className={'flex flex-col w-[500px] ml-[100px] mb-[200px]'}>
 
-            <Box className={'dark_form'}>
-                <h1 className={'text-white text-[1.5em]'}>{"Set up new password"}</h1>
+            <Box>
+                <Heading>{'Set up new password'}</Heading>
 
                 <Form
                     config={formConfig}
@@ -73,7 +73,7 @@ const CreateNewPasswordPage = () => {
                     onSubmit={onSubmit}/>
                 <div className={'flex'}>
                     {pending ?
-                        <progress className="progress w-full bg-gray-600 h-[20px] progress-accent"></progress> : null}
+                        <progress className={'progress w-full bg-gray-600 h-[20px] progress-accent'}></progress> : null}
                 </div>
             </Box>
         </div>

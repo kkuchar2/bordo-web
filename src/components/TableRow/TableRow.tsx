@@ -1,14 +1,14 @@
-import React, {useCallback, useRef} from "react";
+import React, {useCallback, useRef} from 'react';
 
-import {TrashIcon} from "@heroicons/react/outline";
-import {Dictionary} from "@reduxjs/toolkit";
-import {Cell} from "components/Cell/Cell";
-import {getColumnProperties} from "components/Models/columnProperties";
-import {Button, Text} from "kuchkr-react-component-library";
-import {useTranslation} from "react-i18next";
-import {useAppDispatch} from "state/store";
+import {Button, Text} from '@chakra-ui/react';
+import {TrashIcon} from '@heroicons/react/outline';
+import {Dictionary} from '@reduxjs/toolkit';
+import {Cell} from 'components/Cell/Cell';
+import {getColumnProperties} from 'components/Models/columnProperties';
+import {useTranslation} from 'react-i18next';
+import {useAppDispatch} from 'state/store';
 
-import {deleteButtonTheme, saveButtonTextTheme, saveButtonTheme, StyledCell, StyledTableRow} from "./style";
+import {StyledCell, StyledTableRow} from './style';
 
 export interface TableRowProps {
     row: any, // TODO
@@ -69,14 +69,14 @@ const TableRow = (props: TableRowProps) => {
         }
 
         return <StyledCell key={idx}>
-            <Button theme={saveButtonTheme} onClick={onEditButtonClick}>
+            <Button onClick={onEditButtonClick}>
                 <div style={{ display: 'flex' }}>
-                    <Text theme={saveButtonTextTheme} text={t("EDIT")}/>
+                    <Text>{t('EDIT')}</Text>
                 </div>
             </Button>
-            <Button theme={deleteButtonTheme} onClick={onDeleteButtonClick}>
+            <Button onClick={onDeleteButtonClick}>
                 <div style={{ display: 'flex' }}>
-                    <TrashIcon className={`h-5 w-5 text-white`}/>
+                    <TrashIcon className={'h-5 w-5 text-white'}/>
                 </div>
             </Button>
         </StyledCell>;

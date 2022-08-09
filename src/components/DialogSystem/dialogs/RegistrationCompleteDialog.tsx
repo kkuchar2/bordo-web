@@ -1,8 +1,7 @@
-import React, {useCallback} from "react";
+import React, {useCallback} from 'react';
 
-import {confirmButtonTheme} from "components/DialogSystem/commonStyles";
-import {Button} from "kuchkr-react-component-library";
-import {closeDialog} from "state/reducers/dialog/dialogSlice";
+import {Button} from '@chakra-ui/react';
+import {closeDialog} from 'state/reducers/dialog/dialogSlice';
 
 export const RegistrationCompleteDialog = ({ t, dispatch }) => {
 
@@ -11,6 +10,6 @@ export const RegistrationCompleteDialog = ({ t, dispatch }) => {
     }, []);
 
     return <div className={'flex-grow flex items-end justify-end p-[20px] box-border w-full'}>
-        <Button theme={confirmButtonTheme} text={t('SIGN_IN')} onClick={onSignInClick}/>
+        <Button onClick={onSignInClick}>{"t('SIGN_IN')"}</Button>
     </div>;
 };

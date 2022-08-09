@@ -1,11 +1,13 @@
-import {Dispatch} from "redux";
-import {UserInfoSchema} from "state/reducers/account/accountSlice.schemas";
-import {ApiClient} from "state/store";
-import {RequestType} from "tools/client/client.types";
-import {request} from "tools/requests/request";
+import {FormData} from 'util/util';
 
-import {accountActions as actions} from "./../reducers/account/accountSlice";
-import {AxiosConfigs} from "./config";
+import {Dispatch} from 'redux';
+import {UserInfoSchema} from 'state/reducers/account/accountSlice.schemas';
+import {ApiClient} from 'state/store';
+import {RequestType} from 'tools/client/client.types';
+import {request} from 'tools/requests/request';
+
+import {accountActions as actions} from './../reducers/account/accountSlice';
+import {AxiosConfigs} from './config';
 
 export const login = (user: string, password: string) => {
     return request({
@@ -109,7 +111,7 @@ export const changeAvatar = (file: File) => {
         requestData: {
             use_animated_avatar: false
         },
-        filePropertyName: "avatar",
+        filePropertyName: 'avatar',
         refreshTokenOnUnauthorized: true,
         config: {
             onUploadProgress: () => {
@@ -128,7 +130,7 @@ export const changeAnimatedAvatar = (url: string) => {
             animated_avatar: url,
             use_animated_avatar: true
         },
-        filePropertyName: "avatar",
+        filePropertyName: 'avatar',
         refreshTokenOnUnauthorized: true,
         config: {
             onUploadProgress: () => {
@@ -137,18 +139,14 @@ export const changeAnimatedAvatar = (url: string) => {
     });
 };
 
-export const changeEmailAddress = (currentEmail: string, newEmail: string, password: string) => {
+export const changeEmailAddress = (formData: FormData) => {
     return request({
         axiosInstance: ApiClient,
         requestType: RequestType.POST,
         url: 'account/change-email',
         action: actions.changeEmailAddress,
         refreshTokenOnUnauthorized: true,
-        requestData: {
-            current_email: currentEmail,
-            new_email: newEmail,
-            current_password: password
-        },
+        requestData: formData,
         config: AxiosConfigs.WITH_CREDENTIALS_AND_CSRF
     });
 };
@@ -166,49 +164,37 @@ export const sendEmailVerification = (email: string) => {
     });
 };
 
-export const changeUsername = ({ new_username, current_password }) => {
+export const changeUsername = (formData: FormData) => {
     return request({
         axiosInstance: ApiClient,
         requestType: RequestType.POST,
         url: 'account/change-username',
         action: actions.changeUsername,
         refreshTokenOnUnauthorized: true,
-        requestData: {
-            new_username: new_username,
-            current_password: current_password
-        },
+        requestData: formData,
         config: AxiosConfigs.WITH_CREDENTIALS_AND_CSRF
     });
 };
 
-export const changePassword = (currentEmail: string, oldPassword: string, newPassword1: string, newPassword2: string) => {
+export const changePassword = (formData: FormData) => {
     return request({
         axiosInstance: ApiClient,
         requestType: RequestType.POST,
         url: 'account/change-password',
         action: actions.changePassword,
         config: AxiosConfigs.WITH_CREDENTIALS_AND_CSRF,
-        requestData: {
-            current_email: currentEmail,
-            current_password: oldPassword,
-            new_password1: newPassword1,
-            new_password2: newPassword2
-        }
+        requestData: formData
     });
 };
 
-export const disconnectFromGoogle = (currentEmail: string, newPassword1: string, newPassword2: string) => {
+export const disconnectFromGoogle = (formData: FormData) => {
     return request({
         axiosInstance: ApiClient,
         requestType: RequestType.POST,
         url: 'account/google-disconnect',
         action: actions.disconnectFromGoogle,
         config: AxiosConfigs.WITH_CREDENTIALS_AND_CSRF,
-        requestData: {
-            current_email: currentEmail,
-            new_password1: newPassword1,
-            new_password2: newPassword2
-        }
+        requestData: formData
     });
 };
 
@@ -266,6 +252,5 @@ export const askSetupPassword = () => {
 };
 
 export const resetAccountSliceRequestState = (requestStateName: string) => {
-    console.log('Reset account slice request state: ', requestStateName);
     return async (dispatch: Dispatch) => dispatch(actions.resetRequestState(requestStateName));
 };

@@ -1,9 +1,9 @@
-import {AnyAction} from "@reduxjs/toolkit";
-import {AxiosResponse} from "axios";
-import {StatusCodes} from "http-status-codes";
-import {Dispatch} from "redux";
+import {AnyAction} from '@reduxjs/toolkit';
+import {AxiosResponse} from 'axios';
+import {StatusCodes} from 'http-status-codes';
+import {Dispatch} from 'redux';
 
-import {RequestArgs, RequestStatus, ResponseArgs} from "./client.types";
+import {RequestArgs, RequestStatus, ResponseArgs} from './client.types';
 
 export const statusCodeOf = (code: number) => {
     let keys = Object.keys(StatusCodes).filter(x => StatusCodes[x] == code);
@@ -70,7 +70,7 @@ export const dispatchSuccess = (
         status: RequestStatus.Success,
         requestData: requestArgs.requestData,
         httpCode: responseData ? responseData.status : -1,
-        errors: { },
+        errors: {},
     },
     responseData: !responseData ? {} : responseData.data
 }));
@@ -87,7 +87,7 @@ export const dispatchOnBefore = (
             status: RequestStatus.Waiting,
             requestData: requestData,
             httpCode: -1,
-            errors: { }
+            errors: {}
         },
         responseData: null,
     }));

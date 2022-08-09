@@ -1,20 +1,12 @@
-import React from "react";
+import React from 'react';
 
-import {Text} from "kuchkr-react-component-library";
+import {Text} from '@chakra-ui/react';
 
-import {FieldSerializerProps} from "./fieldSerializer.types";
-
-const textTheme = {
-    textColor: "#dadada",
-    fontSize: "1.0em",
-    textAlign: "left"
-};
+import {FieldSerializerProps} from './fieldSerializer.types';
 
 export const AutoFieldSerializer = (props: FieldSerializerProps) => {
-
     const { value } = props;
-
-    return <Text theme={textTheme} style={{ width: '100%', overflow: 'auto' }} text={value}/>;
+    return <Text>{value}</Text>;
 };
 
 export default AutoFieldSerializer;

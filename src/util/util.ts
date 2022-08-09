@@ -1,4 +1,4 @@
-import _ from "lodash";
+import _ from 'lodash';
 
 export const humanize = (str: string) => {
     let i, frags = str.split('_');
@@ -8,14 +8,18 @@ export const humanize = (str: string) => {
     return frags.join(' ');
 };
 
-export const mapFrom = <T> (arr: string[], defaultValue: T)  => {
+export const mapFrom = <T>(arr: string[], defaultValue: T) => {
     const map = {};
     _.each(arr, val => map[val] = defaultValue);
     return map;
 };
 
-export const mapOfSelectors = (arr: string[], selectorProvider: (key: string) => any)  => {
+export const mapOfSelectors = (arr: string[], selectorProvider: (key: string) => any) => {
     const map = {};
     _.each(arr, val => map[val] = selectorProvider(val));
     return map;
 };
+
+export interface FormData {
+    [key: string]: any;
+}

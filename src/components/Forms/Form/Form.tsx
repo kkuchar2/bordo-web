@@ -1,11 +1,12 @@
 import React, {useCallback, useMemo} from 'react';
 
-import {getFormFieldErrors} from "components/Forms/util";
-import {InputWithError} from "components/InputWithError/InputWithError";
-import {Field, Form as FormikForm, Formik} from "formik";
-import {useTranslation} from "react-i18next";
+import {Button, Heading, HStack, Text, VStack} from '@chakra-ui/react';
+import {getFormFieldErrors} from 'components/Forms/util';
+import {InputWithError} from 'components/InputWithError/InputWithError';
+import {Field, Form as FormikForm, Formik} from 'formik';
+import {useTranslation} from 'react-i18next';
 
-import {FormProps} from "./Form.types";
+import {FormProps} from './Form.types';
 
 const Form = (props: FormProps) => {
 
@@ -14,9 +15,8 @@ const Form = (props: FormProps) => {
     const {
         initialValues,
         onSubmit, onCancel, config, disabled,
-        errors, title, description, customDescription, submitButtonText,
-        useCancelButton, confirmButtonClassName,
-        className, buttonsClasses
+        errors, title, description, submitButtonText,
+        useCancelButton
     } = props;
 
     const onFormSubmitted = useCallback((values): any => {
@@ -41,17 +41,18 @@ const Form = (props: FormProps) => {
     }, [config, errors, disabled, initialValues]);
 
     const renderCancelButton = useMemo(() => {
-        return useCancelButton ? <button type={'button'} className={'cancelButton'} onClick={onCancel}
-                                         disabled={false}>{t('CANCEL')}</button> : null;
-    }, [useCancelButton]);
-
-    // render description
-    const renderDescription = useMemo(() => {
-        if (customDescription) {
-            return customDescription;
+        if (!useCancelButton) {
+            return null;
         }
-        return description ? <h1 className={'form-description'}>{description}</h1> : null;
-    }, [description, customDescription]);
+
+        return <Button type={'button'}
+                       minWidth={'100px'}
+                       className={'cancelButton'}
+                       onClick={onCancel}
+                       isDisabled={disabled}>
+            {t('CANCEL')}
+        </Button>;
+    }, [useCancelButton, disabled]);
 
     const getInitialValues = useCallback((): any => {
 
@@ -84,16 +85,22 @@ const Form = (props: FormProps) => {
         validateOnMount={false}
         onSubmit={onFormSubmitted}>
         {() => (
-            <FormikForm className={className}>
-                {title ? <h1 className={'form-title'}>{title}</h1> : null}
-                {renderDescription}
-                {renderFields(disabled)}
-                <div className={buttonsClasses}>
-                    {renderCancelButton}
-                    <button type={'submit'} className={confirmButtonClassName} disabled={disabled}>
-                        {t(submitButtonText)}
-                    </button>
-                </div>
+            <FormikForm>
+                <VStack spacing={'10px'} align={'stretch'}>
+                    <Heading fontSize={'2xl'}>{title}</Heading>
+                    <Text>{description}</Text>
+                    <VStack spacing={'20px'} align={'stretch'}>
+                        {renderFields(disabled)}
+                    </VStack>
+                    <HStack paddingTop={10}>
+                        {renderCancelButton}
+                        <Button bg={'teal.600'} _hover={{
+                            bg: 'teal.500'
+                        }} type={'submit'} width={'100%'} isDisabled={disabled}>
+                            {t(submitButtonText)}
+                        </Button>
+                    </HStack>
+                </VStack>
             </FormikForm>
         )}
     </Formik>;
@@ -101,8 +108,6 @@ const Form = (props: FormProps) => {
 
 Form.defaultProps = {
     useCancelButton: true,
-    buttonsClasses: 'pt-[20px]',
-    confirmButtonClassName: 'confirmButton',
     submitButtonText: 'Confirm',
     initialValues: {},
 };

@@ -1,21 +1,15 @@
-import React, {useCallback, useRef} from "react";
+import React, {useCallback, useRef} from 'react';
 
-import {
-    ChangeAvatarModeSelectorProps
-} from "components/DialogSystem/dialogs/ChangeAvatarDialog/ChangeAvatarModeSelector/ChangeAvatarModeSelector.types";
-import {Button, Text} from "kuchkr-react-component-library";
+import {Button, Input, Text} from '@chakra-ui/react';
+import {UploadIcon} from '@heroicons/react/outline';
+import {CenterFlex} from 'components/chakra/CenterFlex/CenterFlex';
 
-import {
-    StyledModeSelector,
-    StyledSelectGifButtonContent, StyledSelectGIFCircle,
-    StyledUploadButtonCircle,
-    StyledUploadButtonContent,
-    uploadButtonTheme, uploadFileTextTheme
-} from "./style";
+import {ChangeAvatarModeSelectorProps} from './ChangeAvatarModeSelector.types';
+import {StyledSelectGIFCircle} from './style';
 
 export const ChangeAvatarModeSelector = (props: ChangeAvatarModeSelectorProps) => {
 
-    const {translation, onFileSelected, onAnimatedAvatarSelected} = props;
+    const { translation, onFileSelected, onAnimatedAvatarSelected } = props;
 
     const inputRef = useRef<HTMLInputElement>(null);
 
@@ -23,27 +17,39 @@ export const ChangeAvatarModeSelector = (props: ChangeAvatarModeSelectorProps) =
         inputRef.current?.click();
     }, [inputRef]);
 
-    return <StyledModeSelector>
-        <Button theme={uploadButtonTheme} style={{ zIndex: 1000, padding: 0 }} onClick={openFileSelectionWindow}>
-            <StyledUploadButtonContent>
-                <StyledUploadButtonCircle>
-                    <img src={"assets/images/picture_add_icon_white.png"} width={30} alt={'avatar'}/>
-                </StyledUploadButtonCircle>
-                <Text theme={uploadFileTextTheme} text={translation("UPLOAD_IMAGE")}/>
-            </StyledUploadButtonContent>
-        </Button>
+    return <CenterFlex gap={'20px'} paddingTop={10} paddingBottom={10}>
+        <CenterFlex direction={'column'} gap={'20px'}>
+            <Button onClick={openFileSelectionWindow}
+                    borderRadius={'full'}
+                    width={'150px'}
+                    height={'150px'}
+                    display={'flex'}
+                    alignItems={'center'}
+                    justifyContent={'center'}
+                    flexDirection={'column'}
+                    gap={'20px'}>
 
-        <Button theme={uploadButtonTheme} style={{ zIndex: 1000, padding: 0 }} onClick={onAnimatedAvatarSelected}>
-            <StyledSelectGifButtonContent>
-                <StyledSelectGIFCircle url={"https://media3.giphy.com/media/lgcUUCXgC8mEo/giphy.gif?"}/>
-                <Text theme={uploadFileTextTheme} text={translation("ANIMATED_AVATAR")}/>
-            </StyledSelectGifButtonContent>
-        </Button>
+                <UploadIcon width={40} color={'#a5a5a5'}/>
+            </Button>
+            <Input type={'file'} accept={'image/*'} ref={inputRef} onChange={onFileSelected}
+                   style={{ display: 'none' }}/>
+            <Text>{translation('UPLOAD_IMAGE')}</Text>
+        </CenterFlex>
 
-        <input type='file'
-               accept='image/*'
-               ref={inputRef}
-               onChange={onFileSelected}
-               style={{ display: "none" }}/>
-    </StyledModeSelector>;
+        <CenterFlex direction={'column'} gap={'20px'}>
+            <Button onClick={onAnimatedAvatarSelected}
+                    borderRadius={'full'}
+                    width={'150px'}
+                    height={'150px'}
+                    display={'flex'}
+                    alignItems={'center'}
+                    justifyContent={'center'}
+                    flexDirection={'column'}
+                    gap={'20px'}>
+
+                <StyledSelectGIFCircle url={'https://media3.giphy.com/media/lgcUUCXgC8mEo/giphy.gif?'}/>
+            </Button>
+            <Text>{translation('ANIMATED_AVATAR')}</Text>
+        </CenterFlex>
+    </CenterFlex>;
 };
