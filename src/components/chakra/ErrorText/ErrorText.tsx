@@ -10,7 +10,11 @@ export const ErrorText = (props: TextProps) => {
 
     const { children, ...rest } = props;
 
-    return <MotionText color={'#ff4949'} fontSize={'14px'} {...rest} {...shakeAnimation}>
+    return <MotionText color={'#ff4949'}
+                       fontSize={'14px'}
+                       key={Math.random()}
+                       {...rest}
+                       {...shakeAnimation}>
         {children}
     </MotionText>;
 };

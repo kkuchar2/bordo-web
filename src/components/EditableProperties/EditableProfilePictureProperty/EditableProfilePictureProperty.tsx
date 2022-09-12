@@ -1,55 +1,33 @@
-import React, {useCallback, useEffect, useMemo} from 'react';
+import React, {useCallback, useMemo} from 'react';
 
-import {Image, Text} from '@chakra-ui/react';
+import {Avatar, Circle, Text} from '@chakra-ui/react';
 import {showChangeAvatarDialog} from 'components/DialogSystem/readyDialogs';
-import {showSuccessAvatar} from 'components/Toast/readyToastNotifications';
 import {useTranslation} from 'react-i18next';
-import {useSelector} from 'react-redux';
-import {RootState} from 'state/store';
+import {getAvatar} from 'util/util';
 
-import {isSuccess} from '../../../api/api_util';
+import {getUser} from '../../../queries/account';
 
 import {
     PropertyValueSection,
     StyledAvatarWithOverlay,
     StyledEditableProfilePictureProperty,
-    StyledOverlay,
     StyledPropertyValues
 } from './style';
 
 export interface ProfilePictureProps {
     useImageUpload?: boolean;
+    username: string;
 }
 
 const EditableProfilePictureProperty = (props: ProfilePictureProps) => {
 
-    const { useImageUpload } = props;
-
-    const changeAvatarState = useSelector((state: RootState) => state.account.requests.changeAvatar);
-    const changeAnimatedAvatarState = useSelector((state: RootState) => state.account.requests.changeAnimatedAvatar);
-
-    const avatar = useSelector((state: RootState) => {
-        const profile = state.account.user.profile;
-
-        if (profile.use_animated_avatar) {
-            return profile.animated_avatar;
-        }
-        return profile.avatar;
-    });
+    const { useImageUpload, username } = props;
 
     const { t } = useTranslation();
 
-    useEffect(() => {
-        if (isSuccess(changeAvatarState)) {
-            showSuccessAvatar('Avatar changed successfully', avatar);
-        }
-    }, [changeAvatarState, avatar]);
+    const { data: user } = getUser();
 
-    useEffect(() => {
-        if (isSuccess(changeAnimatedAvatarState)) {
-            showSuccessAvatar('Avatar changed successfully', avatar);
-        }
-    }, [changeAnimatedAvatarState, avatar]);
+    const avatar = getAvatar(user);
 
     const onChangeImageClick = useCallback(() => {
         if (!useImageUpload) {
@@ -64,20 +42,31 @@ const EditableProfilePictureProperty = (props: ProfilePictureProps) => {
         if (!useImageUpload) {
             return null;
         }
-        return <StyledOverlay>
-            <Text>{t('CHANGE_AVATAR')}</Text>
-        </StyledOverlay>;
+        return <Circle position={'absolute'}
+                       top={0}
+                       left={0}
+                       size={'100%'}
+                       bg={'#2e2e2e'}
+                       opacity={0}
+                       _hover={{
+                           opacity: 1,
+                           bg: 'rgba(46,46,46,0.8)'
+                       }}>
+            <Text fontWeight={'semibold'}>{t('CHANGE_AVATAR')}</Text>
+        </Circle>;
     }, [useImageUpload]);
 
     return <StyledEditableProfilePictureProperty enableUpload={useImageUpload}>
         <StyledPropertyValues>
             <PropertyValueSection>
                 <StyledAvatarWithOverlay onClick={onChangeImageClick} useImageUpload={useImageUpload}>
-                    <Image src={avatar}
-                           borderRadius={'100%'}
-                           width={'200px'}
-                           height={'200px'}
-                           objectFit={'cover'}/>
+                    <Avatar src={avatar}
+                            name={username}
+                            borderRadius={'100%'}
+                            width={'150px'}
+                            height={'150px'}
+                            objectFit={'cover'}
+                            {...avatar ? { bg: 'none' } : null} />
                     {renderOverlay}
                 </StyledAvatarWithOverlay>
             </PropertyValueSection>

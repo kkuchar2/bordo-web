@@ -1,7 +1,7 @@
 export const defaultShowUpAnimation = {
-    initial: "hidden",
-    exit: "hidden",
-    animate: "visible",
+    initial: 'hidden',
+    exit: 'hidden',
+    animate: 'visible',
     variants: {
         visible: {
             x: 0,
@@ -24,6 +24,27 @@ export const dialogAnimation = {
     exit: { opacity: 0, y: 0 },
 };
 
+export const opacityShowUpAnimation = {
+    initial: { opacity: 0 },
+    animate: { opacity: 1 },
+    exit: { opacity: 0 },
+    variants: {
+        visible: {
+            opacity: 1,
+            transition: {
+                duration: 0.3,
+                ease: 'easeIn'
+            }
+        },
+        hidden: {
+            opacity: 0,
+            transition: {
+                duration: 0.3,
+                ease: 'easeIn'
+            }
+        }
+    }
+};
 export const dialogBgAnimation = {
     initial: { opacity: 0 },
     animate: { opacity: 1 },

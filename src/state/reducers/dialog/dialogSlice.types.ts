@@ -1,6 +1,7 @@
-import {IconProps} from "icon/icon.types";
-import {TFunction} from "react-i18next";
-import {AppDispatch} from "state/store";
+import {FlexProps} from '@chakra-ui/layout';
+import {IconProps} from 'icon/icon.types';
+import {TFunction} from 'react-i18next';
+import {AppDispatch} from 'state/store';
 
 export interface IDialogComponentProps {
     title?: string;
@@ -8,7 +9,7 @@ export interface IDialogComponentProps {
     icon?: IconProps;
     onCancel?: () => void;
     onConfirm?: () => void;
-    width?: number;
+    flexProps?: FlexProps;
     closeable?: boolean;
 }
 
@@ -19,7 +20,7 @@ export interface BaseDialogProps {
 
 export interface DialogProps<T = any> {
     dialog: IDialogComponentProps,
-    data: T | null;
+    data?: T;
 }
 
 export interface DialogSliceState {

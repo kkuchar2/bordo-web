@@ -1,11 +1,14 @@
-import {PlusIcon} from '@heroicons/react/outline';
-import {MailIcon, TrashIcon} from '@heroicons/react/solid';
-import {CreateNewModelItemDialogData} from 'components/DialogSystem/dialogs';
+import {ExclamationCircleIcon} from '@heroicons/react/24/outline';
+import {EnvelopeIcon, KeyIcon, TrashIcon} from '@heroicons/react/24/solid';
+import {VerifyAccountDialogProps} from 'components/DialogSystem/dialogs';
+import {User} from 'state/reducers/account/accountSlice.types';
 import {openDialog} from 'state/reducers/dialog/dialogSlice';
-import {askSetupPassword, changeEmailAddress, changePassword, changeUsername} from 'state/services/accountService';
 import {store} from 'state/store';
 
-import {ReadyDialogArgs, SentEmailDialogArgs} from './readyDialogs.types';
+import {queryClient} from '../../App';
+import {changeEmail, changePassword, changeUsername} from '../../queries/account';
+
+import {SentEmailDialogArgs} from './readyDialogs.types';
 
 export const showRegistrationCompleteDialog = () => {
     return showSentEmailDialog({
@@ -16,24 +19,45 @@ export const showRegistrationCompleteDialog = () => {
     });
 };
 
-export const showSentEmailDialog = (args: SentEmailDialogArgs) => {
-    const { component, title, description, closeable } = args;
+export const showSentEmailDialog = <T = any>(args: SentEmailDialogArgs<T>) => {
+    const { component, title, description, closeable, data } = args;
 
     store.dispatch(
-        openDialog({
+        openDialog<T>({
             component: component,
             props: {
                 dialog: {
                     title: title,
                     icon: {
-                        component: MailIcon,
+                        component: EnvelopeIcon,
                         color: '#24a0ed',
                         backgroundColor: '#1c3545'
                     },
                     description: description,
                     closeable: closeable
                 },
-                data: {}
+                data: data
+            }
+        })
+    );
+};
+
+export const showVerifyAccountDialog = (data: VerifyAccountDialogProps) => {
+    store.dispatch(
+        openDialog<VerifyAccountDialogProps>({
+            component: 'VerifyAccountDialog',
+            props: {
+                dialog: {
+                    title: 'ACCOUNT_UNVERIFIED',
+                    icon: {
+                        component: EnvelopeIcon,
+                        color: '#24a0ed',
+                        backgroundColor: '#1c3545'
+                    },
+                    description: 'VERIFY_ACCOUNT_DESCRIPTION',
+                    closeable: true
+                },
+                data: data
             }
         })
     );
@@ -65,7 +89,9 @@ export const showChangeAvatarDialog = () => {
                 dialog: {
                     title: 'CHANGE_AVATAR',
                     description: '',
-                    width: 400
+                    flexProps: {
+                        minWidth: 400
+                    },
                 },
                 data: {}
             }
@@ -73,8 +99,7 @@ export const showChangeAvatarDialog = () => {
     );
 };
 
-export const showConfirmEmailDialog = (args: ReadyDialogArgs) => {
-    const { data } = args;
+export const showConfirmEmailDialog = <T>(data: T) => {
 
     store.dispatch(
         openDialog({
@@ -89,10 +114,10 @@ export const showConfirmEmailDialog = (args: ReadyDialogArgs) => {
     );
 };
 
-export const showChangeUsernameDialog = (args: ReadyDialogArgs) => {
-    const { data } = args;
+export const showChangeUsernameDialog = (initialArgs: any) => {
+    const { data } = initialArgs;
 
-    const onlySocial = store.getState().account.user.social.only_social;
+    const onlySocial = queryClient.getQueryData<User>(['user'])?.social.only_social;
 
     if (onlySocial) {
         showPasswordCreationRequiredDialog('CHANGE_USERNAME', 'CHANGE_USERNAME_PASSWORD_SETUP');
@@ -105,14 +130,15 @@ export const showChangeUsernameDialog = (args: ReadyDialogArgs) => {
                     dialog: {
                         title: 'CHANGE_USERNAME',
                         description: 'CHANGE_USERNAME_DESCRIPTION',
-                        width: 400
+                        flexProps: {
+                            minWidth: 200,
+                            maxWidth: 400
+                        },
                     },
                     data: {
                         formConfigKey: 'changeUsername',
                         propertyName: 'username',
-                        requestStateName: 'changeUsername',
-                        requestStateSelectorName: 'changeUsername',
-                        dispatchFunc: changeUsername,
+                        queryFunc: changeUsername,
                         initialArgs: data
                     }
                 }
@@ -121,9 +147,9 @@ export const showChangeUsernameDialog = (args: ReadyDialogArgs) => {
     }
 };
 
-export const showChangeEmailDialog = (args: ReadyDialogArgs = {}) => {
+export const showChangeEmailDialog = (initialArgs: any) => {
 
-    const onlySocial = store.getState().account.user.social.only_social;
+    const onlySocial = queryClient.getQueryData<User>(['user'])?.social.only_social;
 
     if (onlySocial) {
         showPasswordCreationRequiredDialog('CHANGE_EMAIL', 'CHANGE_EMAIL_PASSWORD_SETUP');
@@ -137,18 +163,18 @@ export const showChangeEmailDialog = (args: ReadyDialogArgs = {}) => {
                         title: 'CHANGE_EMAIL',
                         description: 'CHANGE_EMAIL_DESCRIPTION',
                         icon: {
-                            component: MailIcon,
+                            component: EnvelopeIcon,
                             color: '#8ed3ed',
                             backgroundColor: '#265e80'
                         },
-                        width: 400
+                        flexProps: {
+                            minWidth: 400
+                        },
                     },
                     data: {
                         formConfigKey: 'changeEmail',
                         propertyName: 'email',
-                        requestStateName: 'changeEmail',
-                        requestStateSelectorName: 'changeEmailAddress',
-                        dispatchFunc: changeEmailAddress
+                        queryFunc: changeEmail,
                     }
                 }
             })
@@ -164,14 +190,40 @@ export const showChangePasswordDialog = () => {
                 dialog: {
                     title: 'CHANGE_PASSWORD',
                     description: 'CHANGE_PASSWORD_DESCRIPTION',
-                    width: 400
+                    flexProps: {
+                        minWidth: 400
+                    },
+                    icon: {
+                        component: KeyIcon,
+                        color: '#ffb700',
+                        backgroundColor: 'rgba(255,255,255,0.11)'
+                    },
                 },
                 data: {
                     formConfigKey: 'changePassword',
-                    requestStateSelector: 'changePassword',
-                    requestStateName: 'changePassword',
-                    dispatchFunc: changePassword
+                    queryFunc: changePassword,
                 }
+            }
+        })
+    );
+};
+
+export const showServiceUnavailableDialog = () => {
+    store.dispatch(
+        openDialog({
+            component: 'ServiceUnavailableDialog',
+            props: {
+                dialog: {
+                    title: 'SERVICE_UNAVAILABLE_TITLE',
+                    description: 'SERVICE_UNAVAILABLE_DESCRIPTION',
+                    icon: {
+                        component: ExclamationCircleIcon,
+                        color: '#ca1717',
+                        backgroundColor: '#451c1c'
+                    },
+                    closeable: true
+                },
+                data: {}
             }
         })
     );
@@ -183,20 +235,17 @@ export const showPasswordCreationRequiredDialog = (title_key: string, descriptio
             component: 'PasswordCreationRequiredDialog',
             props: {
                 dialog: {
-                    width: 400,
-                    title: title_key,
+                    title: 'PASSWORD_CREATION_REQUIRED_TITLE',
                     description: description_key,
+                    flexProps: {
+                        minW: 400,
+                        maxW: 500
+                    },
                     icon: {
-                        component: MailIcon,
+                        component: EnvelopeIcon,
                         color: '#24a0ed',
                         backgroundColor: '#1c3545'
                     },
-                },
-                data: {
-                    formConfigKey: 'emptyForm',
-                    requestStateSelector: 'askSetupPassword',
-                    requestStateName: 'askSetupPassword',
-                    dispatchFunc: askSetupPassword
                 }
             }
         })
@@ -212,36 +261,16 @@ export const showDeleteAccount = (isOnlySocial: boolean) => {
     }
 };
 
-export const showCreateModelItemDialog = (
-    args: ReadyDialogArgs,
-    fields: any,
-    modelPackage: string,
-    modelName: string
-) => {
-    store.dispatch(
-        openDialog<CreateNewModelItemDialogData>({
-            component: 'CreateNewModelItemDialog',
-            props: {
-                dialog: {
-                    title: 'ADD_NEW_ROW'
-                },
-                data: {
-                    fields: fields,
-                    modelPackage: modelPackage,
-                    modelName: modelName
-                }
-            }
-        })
-    );
-};
-
 export const showDeleteAccountDialog = () => {
     store.dispatch(
         openDialog({
             component: 'DeleteAccountDialog',
             props: {
                 dialog: {
-                    width: 400,
+                    flexProps: {
+                        minWidth: 200,
+                        maxWidth: 400
+                    },
                     title: 'DELETE_ACCOUNT',
                     description: '',
                     icon: {
@@ -251,30 +280,6 @@ export const showDeleteAccountDialog = () => {
                     },
                 },
                 data: {}
-            }
-        })
-    );
-};
-
-export const showAddTableItemDialog = (args: ReadyDialogArgs, fields: any, modelPackage: string, modelName: string) => {
-    store.dispatch(
-        openDialog<CreateNewModelItemDialogData>({
-            component: 'CreateNewModelItemDialog',
-            props: {
-                dialog: {
-                    title: 'ADD_NEW_ROW',
-                    icon: {
-                        component: PlusIcon,
-                        color: '#24a0ed',
-                        backgroundColor: '#1c3545'
-                    },
-                    width: 400
-                },
-                data: {
-                    fields: fields,
-                    modelPackage: modelPackage,
-                    modelName: modelName
-                }
             }
         })
     );

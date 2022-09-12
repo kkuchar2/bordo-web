@@ -62,7 +62,6 @@ export interface RequestArgs<T = any, D = any, ResponseSchemaType = any> {
     requestType: RequestType;
     file?: File,
     filePropertyName?: string;
-    refreshTokenOnUnauthorized?: boolean;
     action: (params: ResponseArgs<T>) => AnyAction;
     responseSchema?: SchemaOf<ResponseSchemaType>
 }

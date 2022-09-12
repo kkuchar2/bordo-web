@@ -1,10 +1,7 @@
-export interface ReadyDialogArgs {
-    data?: object
-}
-
-export interface SentEmailDialogArgs extends ReadyDialogArgs {
+export interface SentEmailDialogArgs<T> {
     component: string
     title: string,
     description: string,
     closeable?: boolean
+    data?: T
 }

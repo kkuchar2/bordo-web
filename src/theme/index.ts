@@ -80,6 +80,7 @@ const styles = {
             MozOsxFontSmoothing: 'grayscale',
             zIndex: 0,
             color: 'text-default',
+            position: 'relative'
         }
     }
 };

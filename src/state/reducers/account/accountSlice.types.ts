@@ -8,10 +8,17 @@ export interface EmailAddress {
     verified: boolean;
 }
 
+export interface Friend {
+    id: string;
+    username: string;
+}
+
 export interface UserProfile {
+    about: string | null;
     avatar: string | null;
     animated_avatar: string | null;
     use_animated_avatar: boolean;
+    friends: Friend[];
 }
 
 export interface SocialInfo {

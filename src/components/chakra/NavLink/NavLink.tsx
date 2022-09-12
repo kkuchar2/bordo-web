@@ -1,13 +1,20 @@
 import React from 'react';
 
-import {Link} from '@chakra-ui/react';
+import {Link, LinkProps as ChakraLinkProps} from '@chakra-ui/react';
 import {Link as ReactRouterLink, LinkProps} from 'react-router-dom';
 
-export const NavLink = (props: LinkProps) => {
+interface NavLinkProps {
+    disabled?: boolean;
+}
 
-    const { children, ...rest } = props;
+export const NavLink = (props: LinkProps & ChakraLinkProps & NavLinkProps) => {
 
-    return <Link as={ReactRouterLink} {...rest}>
+    const { children, disabled, ...rest } = props;
+
+    return <Link pointerEvents={disabled ? 'none' : 'auto'}
+                 opacity={disabled ? 0.3 : 1}
+                 as={ReactRouterLink}
+                 {...rest}>
         {children}
     </Link>;
 };

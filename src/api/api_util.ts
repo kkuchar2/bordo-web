@@ -1,6 +1,6 @@
-import {useMemo} from "react";
+import {useMemo} from 'react';
 
-import {RequestStatus, ResponseArgs} from "tools/client/client.types";
+import {RequestStatus, ResponseArgs} from 'tools/client/client.types';
 
 const isRequestState = (args: ResponseArgs, status: RequestStatus) => args.info.status === status;
 

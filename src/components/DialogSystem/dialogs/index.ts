@@ -1,5 +1,4 @@
 export * from './ChangeAvatarDialog/ChangeAvatarDialog';
-export * from './CreateNewModelItemDialog/CreateNewModelItemDialog';
 export * from './EmailSentDialog/EmailSentDialog';
 export * from './RegistrationCompleteDialog';
 export * from './ChangePropertyDialog';
@@ -8,3 +7,5 @@ export * from './RegistrationCompleteDialog';
 export * from './SentPasswordResetMailDialog';
 export * from './VerificationEmailSentDialog';
 export * from './PasswordCreationRequiredDialog';
+export * from './ServiceUnavailableDialog';
+export * from './VerifyAccountDialog';

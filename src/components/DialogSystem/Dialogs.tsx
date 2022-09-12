@@ -1,7 +1,8 @@
 import React, {useCallback, useEffect, useMemo} from 'react';
 
-import {Button, chakra, Circle, HStack, Text, VStack} from '@chakra-ui/react';
-import {XIcon} from '@heroicons/react/outline';
+import {chakra, Circle, Flex, HStack, Text, VStack} from '@chakra-ui/react';
+import {XMarkIcon} from '@heroicons/react/24/outline';
+import {ButtonWithIcon} from 'components/chakra/ButtonWithIcon/ButtonWithIcon';
 import {dialogAnimation, dialogBgAnimation} from 'components/Forms/animation';
 import {isValidMotionProp, motion} from 'framer-motion';
 import {useTranslation} from 'react-i18next';
@@ -11,7 +12,8 @@ import {DialogSliceState} from 'state/reducers/dialog/dialogSlice.types';
 import {RootState, useAppDispatch} from 'state/store';
 
 import * as dialogs from './dialogs';
-import {StyledDialog} from './style';
+
+const MotionFlex = motion(Flex);
 
 interface IDialogComponentMap {
     [componentKey: string]: (props: any) => JSX.Element;
@@ -20,11 +22,12 @@ interface IDialogComponentMap {
 const componentMap: IDialogComponentMap = {
     RegistrationCompleteDialog: dialogs.RegistrationCompleteDialog,
     DeleteAccountDialog: dialogs.DeleteAccountDialog,
-    CreateNewModelItemDialog: dialogs.CreateNewModelItemDialog,
     VerificationEmailSentDialog: dialogs.VerificationEmailSentDialog,
+    VerifyAccountDialog: dialogs.VerifyAccountDialog,
     ChangeAvatarDialog: dialogs.ChangeAvatarDialog,
     SentPasswordResetMailDialog: dialogs.SentPasswordResetMailDialog,
     ChangePropertyDialog: dialogs.ChangePropertyDialog,
+    ServiceUnavailableDialog: dialogs.ServiceUnavailableDialog,
     PasswordCreationRequiredDialog: dialogs.PasswordCreationRequiredDialog
 };
 
@@ -46,15 +49,12 @@ const Dialogs = () => {
 
     const { t } = useTranslation();
 
-    const handleKeyDown = useCallback(
-        (event) => {
-            if (componentProps?.dialog && isOpened && event.keyCode === 27) {
-                // escape
-                handleCancel();
-            }
-        },
-        [componentProps, isOpened]
-    );
+    const handleKeyDown = useCallback((event) => {
+        if (componentProps?.dialog && isOpened && event.keyCode === 27) {
+            // escape
+            handleCancel();
+        }
+    }, [componentProps, isOpened]);
 
     const handleCancel = useCallback(() => {
         if (componentProps.dialog.onCancel) {
@@ -75,7 +75,7 @@ const Dialogs = () => {
 
     const renderDescription = useMemo(() => {
         if (isOpened && componentProps.dialog?.description) {
-            return <Text>{t(componentProps.dialog.description)}</Text>;
+            return <Text maxW={'400px'} fontSize={'sm'}>{t(componentProps.dialog.description)}</Text>;
         }
     }, [componentProps, isOpened, t]);
 
@@ -99,10 +99,41 @@ const Dialogs = () => {
                     <icon.component width={20} height={20} color={icon.color}/>
                 </Circle> : null}
             <Text flexGrow={1} fontSize={'md'} fontWeight={'bold'}>{t(title)}</Text>
-            <Button title={'Close dialog'} onClick={handleCancel}>
-                <XIcon width={'20px'} height={'20px'}/>
-            </Button>
+            <ButtonWithIcon title={'Close'}
+                            width={'40px'}
+                            height={'40px'}
+                            bg={'none'}
+                            _hover={{ bg: 'none' }}
+                            _active={{ bg: 'none' }}
+                            _focus={{ bg: 'none' }}
+                            padding={0}
+                            iconSize={30}
+                            iconColor={'rgba(255,255,255,0.48)'}
+                            iconColorHover={'white'}
+                            IconComponent={XMarkIcon}
+                            onClick={handleCancel}/>
         </HStack>;
+    }, [componentProps, t]);
+
+    const dialog = useMemo(() => {
+        if (!componentName) {
+            return null;
+        }
+
+        const Component = componentMap[componentName];
+
+        return <MotionFlex direction={'column'}
+                           key={componentName}
+                           bg={'#2f2f2f'}
+                           borderRadius={'md'}
+                           {...componentProps.dialog.flexProps}
+                           {...dialogAnimation}>
+            <VStack p={3} align={'stretch'} spacing={5}>
+                {renderTitle}
+                {renderDescription}
+            </VStack>
+            <Component dispatch={dispatch} t={t} {...componentProps} />
+        </MotionFlex>;
     }, [componentProps, t]);
 
     if (!componentName) {
@@ -114,8 +145,6 @@ const Dialogs = () => {
         return null;
     }
 
-    const Component = componentMap[componentName];
-
     return <ChakraBox
         className={'dialogScene'}
         onKeyDown={handleKeyDown}
@@ -125,17 +154,13 @@ const Dialogs = () => {
         alignItems={'center'}
         justifyContent={'center'}
         zIndex={1}
-        bg={'rgba(47,47,47,0.8)'}
+        bg={'rgba(30,30,30,0.8)'}
         position={'absolute'}
+        top={0}
+        left={0}
         boxSizing={'border-box'}
         onMouseDown={onClick}{...dialogBgAnimation}>
-        <StyledDialog width={componentProps.dialog.width} {...dialogAnimation}>
-            <VStack p={3} align={'stretch'} spacing={5}>
-                {renderTitle}
-                {renderDescription}
-            </VStack>
-            <Component dispatch={dispatch} t={t} {...componentProps} />
-        </StyledDialog>
+        {dialog}
     </ChakraBox>;
 };
 

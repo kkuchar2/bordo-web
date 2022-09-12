@@ -1,7 +1,6 @@
-import {AxiosInstance, AxiosResponse} from 'axios';
+import {AxiosResponse} from 'axios';
 import {StatusCodes} from 'http-status-codes';
 import {Dispatch} from 'redux';
-import Cookies from 'universal-cookie';
 
 import {RequestArgs, RequestType} from '../client/client.types';
 import {
@@ -51,25 +50,9 @@ export const makeAxiosRequest = async <T = any>(args: RequestArgs): Promise<Axio
     }
 };
 
-const refreshToken = async <T = any>(axiosInstance: AxiosInstance): Promise<AxiosResponse<T>> => {
-    return await makeAxiosRequest<T>({
-        requestType: RequestType.POST,
-        url: 'account/token-refresh',
-        action: null,
-        axiosInstance: axiosInstance,
-        config: {
-            withCredentials: true,
-            headers: {
-                'X-CSRFTOKEN': new Cookies().get('csrftoken'),
-            }
-        },
-        requestData: {},
-    });
-};
-
 export const request = <T = any>(args: RequestArgs) => {
 
-    const { axiosInstance, url, action, requestData, refreshTokenOnUnauthorized, responseSchema } = args;
+    const { url, action, requestData, responseSchema } = args;
 
     return async (dispatch: Dispatch) => {
 
@@ -99,29 +82,6 @@ export const request = <T = any>(args: RequestArgs) => {
             }
             else if (!e.response) {
                 dispatchRequestError(dispatch, args, StatusCodes.NO_CONTENT, 'NO_RESPONSE');
-            }
-            else if (e.response.status === 401 && refreshTokenOnUnauthorized) {
-                try {
-                    await refreshToken(axiosInstance);
-
-                    try {
-                        dispatchSuccess(dispatch, action, args, await makeAxiosRequest<T>(args));
-                    }
-                    catch (e) {
-                        if (e.message === 'Network Error') {
-                            dispatchRequestError(dispatch, args, StatusCodes.SERVICE_UNAVAILABLE, 'SERVICE_UNAVAILABLE');
-                        }
-                        else if (!e.response) {
-                            dispatchRequestError(dispatch, args, StatusCodes.NO_CONTENT, 'NO_RESPONSE');
-                        }
-                        else {
-                            dispatchResponseError(dispatch, args, e.response, e.response.status);
-                        }
-                    }
-                }
-                catch (e) {
-                    dispatchResponseError(dispatch, args, 'UNAUTHORIZED', StatusCodes.UNAUTHORIZED);
-                }
             }
             else {
                 dispatchResponseError(dispatch, args, e.response.data, e.response.status);

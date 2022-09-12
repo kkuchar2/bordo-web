@@ -1,45 +1,30 @@
-import React, {useEffect, useMemo, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 
-import Dialogs from 'components/DialogSystem/Dialogs';
-import {Toaster} from 'react-hot-toast';
+import {QueryClient, QueryClientProvider,} from '@tanstack/react-query';
 import {Provider} from 'react-redux';
 import {BrowserRouter} from 'react-router-dom';
 import {store} from 'state/store';
-import {createGlobalStyle} from 'styled-components';
 
 import './i18n';
-
-import Content from './Content';
+import ContentWithRouter from './ContentWithRouter';
 import i18n from './i18n';
 
-import {ChakraProvider} from '@chakra-ui/react';
+import {ReactQueryDevtools} from '@tanstack/react-query-devtools';
 
-import theme from './theme';
+export const SUPPORTED_LANGUAGES = ['en', 'pl'];
 
-const GlobalStyle = createGlobalStyle`
-  body {
-    height: 100%;
-    margin: 0;
-    background-size: cover;
-
-    .root {
-      width: 100%;
-      height: 100%;
-      margin: 0;
-      padding: 0;
-      display: flex;
-
-      .page {
-        width: 100%;
-        height: 100%;
-        min-height: 0;
-        flex: 1;
-        user-select: none;
-        box-sizing: border-box;
-      }
+export const queryClient = new QueryClient({
+    defaultOptions: {
+        queries: {
+            refetchOnWindowFocus: false,
+            refetchOnReconnect: true,
+            refetchOnMount: true,
+            retry: 0,
+            staleTime: 5 * 1000,
+            cacheTime: 120000
+        },
     }
-  }
-`;
+});
 
 export const App = () => {
     const [translationsLoaded, setTranslationsLoaded] = useState(false);
@@ -52,8 +37,11 @@ export const App = () => {
                 backend: {
                     loadPath: '{{ns}}/{{lng}}.json'
                 },
-                fallbackLng: 'en',
-                preload: ['en', 'pl'],
+                saveMissing: false,
+                parseMissingKeyHandler: (key: string) => {
+                    return `NO_TRANSLATION__${key}`;
+                },
+                preload: SUPPORTED_LANGUAGES,
                 react: {
                     useSuspense: false
                 },
@@ -69,21 +57,19 @@ export const App = () => {
             .then(() => {
                 setTranslationsLoaded(true);
             });
+
     }, []);
 
-    const renderContent = useMemo(() => {
-        if (!translationsLoaded) {
-            return null;
-        }
-        return <ChakraProvider theme={theme} resetCSS={true}>
-            <Content/>
-            <Dialogs/>
-        </ChakraProvider>;
-    }, [translationsLoaded]);
+    if (!translationsLoaded) {
+        return null;
+    }
 
     return <Provider store={store}>
-        <GlobalStyle/>
-        <BrowserRouter>{renderContent}</BrowserRouter>
-        <Toaster/>
+        <BrowserRouter>
+            <QueryClientProvider client={queryClient}>
+                <ReactQueryDevtools initialIsOpen={false} position={'top-right'}/>
+                <ContentWithRouter/>
+            </QueryClientProvider>
+        </BrowserRouter>
     </Provider>;
 };

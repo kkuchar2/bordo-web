@@ -1,5 +1,5 @@
 export interface LoginFormArgs {
-    email: string;
+    username_or_email: string;
     password: string;
 }
 
@@ -28,7 +28,6 @@ export interface ChangeEmailFormArgs {
 }
 
 export interface ResetPasswordFormArgs {
-    current_password: string;
     new_password: string;
     new_password_confirm: string;
 }

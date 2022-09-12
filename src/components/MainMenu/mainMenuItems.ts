@@ -1,25 +1,25 @@
-import {ElementType} from 'react';
+import {
+    ArrowLeftIcon,
+    ChatBubbleLeftRightIcon,
+    GlobeEuropeAfricaIcon,
+    HomeIcon,
+    UserGroupIcon,
+    UserIcon
+} from '@heroicons/react/24/outline';
+import {AxiosConfigs} from 'queries/base';
 
-import {GlobeIcon, HomeIcon, TableIcon, UserIcon} from '@heroicons/react/outline';
-import {LogoutIcon} from '@heroicons/react/solid';
-import HomeView from 'components/Home/HomeView';
-import {openView} from 'state/reducers/application/appSlice';
-import {closeNavbar} from 'state/reducers/navbar/navbarSlice';
-import {logout} from 'state/services/accountService';
-import {store} from 'state/store';
-import TableAdministration from 'views/TableAdministration';
-
+import {queryClient} from '../../App';
+import ApiClient from '../../client';
 import {IconProps} from '../../icon/icon.types';
-import AccountSettings from '../../views/AccountSettings';
-import LanguageSettings from '../../views/LanguageSettings';
 
 export interface Item {
     id: string;
+    url: string;
     displayName: string;
     description: string;
-    icon?: IconProps;
-    component?: ElementType;
+    isAction?: boolean;
     onClick?: () => void;
+    icon?: IconProps;
 }
 
 export interface ItemsMap {
@@ -35,74 +35,64 @@ export interface MenuItems {
     [groupKey: string]: Group
 }
 
-const switchView = (viewName: string) => () => {
-    store.dispatch(closeNavbar());
-    store.dispatch(openView(viewName));
-};
-
 export const mainMenuItems: MenuItems = {
     pages: {
         groupName: 'PAGES',
         groupItems: {
             Home: {
                 id: 'Home',
+                url: '/home',
                 displayName: 'HOME_PAGE',
                 description: '',
-                component: HomeView,
                 icon: {
                     component: HomeIcon,
                     color: 'text-white'
-                },
-                onClick: switchView('Home')
+                }
             },
-            TableAdministration: {
-                id: 'TableAdministration',
-                displayName: 'TABLE_ADMINISTRATION',
+            Friends: {
+                id: 'Friends',
+                url: '/friends',
+                displayName: 'FRIENDS',
                 description: '',
-                component: TableAdministration,
                 icon: {
-                    component: TableIcon,
+                    component: UserGroupIcon,
                     color: 'text-white'
-                },
-                onClick: switchView('TableAdministration')
+                }
+            },
+            Chats: {
+                id: 'Chats',
+                url: '/chats',
+                displayName: 'CHATS',
+                description: '',
+                icon: {
+                    component: ChatBubbleLeftRightIcon,
+                    color: 'text-white'
+                }
             },
             Account: {
                 id: 'Account',
+                url: '/account',
                 displayName: 'ACCOUNT_SETTINGS',
                 description: '',
-                component: AccountSettings,
                 icon: {
                     component: UserIcon,
                     color: 'text-white'
-                },
-                onClick: switchView('Account')
+                }
             }
         }
     },
     personalisation: {
         groupName: 'PERSONALISATION',
         groupItems: {
-            // Appearance: {
-            //     id: 'Appearance',
-            //     displayName: 'APPEARANCE',
-            //     description: '',
-            //     component: AppearanceSettings,
-            //         component: SparklesIcon,
-            //     icon: {
-            //         color: 'text-white'
-            //     },
-            //     onClick: switchView('Appearance')
-            // },
             Language: {
                 id: 'Language',
+                url: '/language',
                 displayName: 'LANGUAGE',
                 description: '',
-                component: LanguageSettings,
                 icon: {
-                    component: GlobeIcon,
+                    component: GlobeEuropeAfricaIcon,
                     color: 'text-white'
                 },
-                onClick: switchView('Language')
             }
         }
     },
@@ -110,13 +100,21 @@ export const mainMenuItems: MenuItems = {
         groupItems: [
             {
                 id: 'Logout',
-                displayName: 'Logout',
+                url: '/logout',
+                displayName: 'LOGOUT',
                 description: '',
+                isAction: true,
+                onClick: async () => {
+                    const response = await ApiClient.post('account/logout', {}, { ...AxiosConfigs.WITH_CREDENTIALS_AND_CSRF });
+                    if (response.status === 200) {
+                        queryClient.removeQueries(['user']);
+                        window.location.href = '/';
+                    }
+                },
                 icon: {
-                    component: LogoutIcon,
+                    component: ArrowLeftIcon,
                     color: 'text-white'
                 },
-                onClick: () => store.dispatch(logout())
             }
         ]
     }

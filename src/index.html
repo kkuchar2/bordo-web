@@ -2,11 +2,11 @@
 
 <html lang="en">
     <head>
-        <title>React Django Administration</title>
+        <title>App</title>
         <base href="/">
         <meta charset="UTF-8">
         <meta content="width=device-width, initial-scale=1, maximum-scale=5" name="viewport"/>
-        <meta content="React Django Administration" name="Description">
+        <meta content="App" name="Description">
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap"
               rel="stylesheet"/>
 
@@ -14,18 +14,34 @@
         <style>
             html {
                 width: 100%;
-                height: 100vh;
-                background: #363636;
+                height: 100%;
+                background: #312E2B;
+            }
+
+            .root {
+                display: flex;
+                height: 100%;
+            }
+
+            em-emoji-picker {
+                --background-rgb: 85, 170, 255;
+                --category-icon-size: 24px;
+                --color-border: rgba(0, 0, 0, 0.05);
+                --font-size: 15px;
+                --rgb-background: 30, 30, 30;
+                --rgb-input: 44, 44, 44;
+                --rgb-accent: 80, 80, 80;
+                --border-radius: 4px;
+                --shadow: none;
+
+                height: 30vh;
+                min-height: 400px;
+                max-height: 800px;
             }
         </style>
     </head>
-
     <body>
-        <noscript>
-            You need to enable JavaScript to run this app.
-        </noscript>
-
+        <noscript>You need to enable JavaScript to run this app.</noscript>
         <div class="root" id="root"></div>
     </body>
-
 </html>

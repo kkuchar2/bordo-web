@@ -1,18 +1,17 @@
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
 
+import {Box} from '@chakra-ui/react';
 import {IGif} from '@giphy/js-types';
+import {DelayedTransition} from 'components/chakra/DelayedTransition/DelayedTransition';
 import {Crop} from 'components/Image/Crop/Crop';
 import {GIFSelect} from 'components/Image/GIFSelect/GIFSelect';
 import {useTranslation} from 'react-i18next';
-import {useSelector} from "react-redux";
-import {changeDialogTitle, closeDialog} from "state/reducers/dialog/dialogSlice";
-import {DialogProps} from "state/reducers/dialog/dialogSlice.types";
-import {changeAnimatedAvatar, changeAvatar, resetAccountSliceRequestState} from 'state/services/accountService';
-import {RootState, useAppDispatch} from "state/store";
-import {v4 as uuidv4} from 'uuid';
+import {changeDialogTitle, closeDialog} from 'state/reducers/dialog/dialogSlice';
+import {DialogProps} from 'state/reducers/dialog/dialogSlice.types';
+import {useAppDispatch} from 'state/store';
 
-import {isFailure, isSuccess} from '../../../../api/api_util';
 import {giphyFetch} from '../../../../api/config';
+import {changeAnimatedAvatar, changeAvatar} from '../../../../queries/account';
 
 import {ChangeAvatarModeSelector} from './ChangeAvatarModeSelector/ChangeAvatarModeSelector';
 import {generateCroppedImageFile} from './cropImage';
@@ -22,48 +21,46 @@ const FILE_SIZE_LIMIT_BYTES = 5 * 1024 * 1024;
 export const ChangeAvatarDialog = (props: DialogProps) => {
     const { onConfirm, onCancel } = props.dialog;
 
+    const { t } = useTranslation();
+
     const [file, setFile] = useState(null);
     const [mode, setMode] = useState(null);
     const [image, setImage] = useState(null);
     const [extension, setExtension] = useState('.png');
 
-    const [pending, setPending] = useState(false);
-
     const [croppedArea, setCroppedArea] = useState(null);
-
-    const { t } = useTranslation();
 
     const dispatch = useAppDispatch();
 
-    const changeAvatarState = useSelector((state: RootState) => state.account.requests.changeAvatar);
-    const changeAnimatedAvatarState = useSelector((state: RootState) => state.account.requests.changeAnimatedAvatar);
+    const {
+        isIdle: changeAvatarIdle,
+        isLoading: changeAvatarIsPending,
+        isError: changeAvatarIsError,
+        error: changeAvatarError,
+        isSuccess: changeAvatarSuccess,
+        mutate: changeAvatarMutate
+    } = changeAvatar();
+
+    const {
+        isIdle: changeAnimatedAvatarIdle,
+        isLoading: changeAnimatedAvatarIsPending,
+        isError: changeAnimatedAvatarIsError,
+        error: changeAnimatedAvatarError,
+        isSuccess: changeAnimatedAvatarSuccess,
+        mutate: changeAnimatedAvatarMutate
+    } = changeAnimatedAvatar();
 
     useEffect(() => {
-        return () => {
-            dispatch(resetAccountSliceRequestState('changeAvatar'));
-            dispatch(resetAccountSliceRequestState('changeAnimatedAvatar'));
-        };
-    }, []);
-
-    useEffect(() => {
-        if (isSuccess(changeAvatarState)) {
-            setPending(false);
+        if (changeAvatarSuccess) {
             dispatch(closeDialog());
         }
-        else if (isFailure(changeAvatarState)) {
-            setPending(false);
-        }
-    }, [changeAvatarState]);
+    }, [changeAvatarSuccess]);
 
     useEffect(() => {
-        if (isSuccess(changeAnimatedAvatarState)) {
-            setPending(false);
+        if (changeAnimatedAvatarSuccess) {
             dispatch(closeDialog());
         }
-        else if (isFailure(changeAnimatedAvatarState)) {
-            setPending(false);
-        }
-    }, [changeAnimatedAvatarState]);
+    }, [changeAnimatedAvatarSuccess]);
 
     const validateBlobSize = useCallback((blob: Blob) => {
         return blob.size <= FILE_SIZE_LIMIT_BYTES;
@@ -78,7 +75,7 @@ export const ChangeAvatarDialog = (props: DialogProps) => {
                 // TODO: show error
                 return;
             }
-            dispatch(changeAvatar(new File([blob], ` ${uuidv4()}${extension}`)));
+            //changeAvatarMutate(new File([blob], ` ${uuidv4()}${extension}`)));
         },
         [extension]
     );
@@ -94,12 +91,9 @@ export const ChangeAvatarDialog = (props: DialogProps) => {
                 // TODO: show error
                 return;
             }
-
-            setPending(true);
-            dispatch(changeAvatar(new File([blob], `${uuidv4()}.gif`, { type: 'image/gif' })));
+            //changeAvatarMutate(new File([blob], `${uuidv4()}.gif`, { type: 'image/gif' })));
         }
         else {
-            setPending(true);
             generateCroppedImageFile(image, croppedArea, sendChangeProfileImage);
         }
     }, [image, croppedArea, extension, file, sendChangeProfileImage]);
@@ -112,28 +106,28 @@ export const ChangeAvatarDialog = (props: DialogProps) => {
 
     const onGifSelected = useCallback(
         (gif: IGif) => {
-            setPending(true);
-            dispatch(changeAnimatedAvatar(`https://media.giphy.com/media/${gif.id}/giphy.gif`));
-        },
-        [pending]
-    );
+            changeAnimatedAvatarMutate({
+                animated_avatar: `https://media.giphy.com/media/${gif.id}/giphy.gif`,
+                use_animated_avatar: true
+            });
+        }, []);
 
     const renderError = useMemo(() => {
-        if (isFailure(changeAvatarState)) {
-            if (changeAvatarState.info.errors.responseError.detail?.avatar) {
-                return <div className={'error'}>{changeAvatarState.info.errors.responseError.detail?.avatar[0]}</div>;
-            }
+        if (changeAvatarError?.data?.avatar) {
+            return <div className={'error'}>{changeAvatarError?.data?.avatar[0]}</div>;
         }
-    }, [changeAvatarState]);
+    }, []);
 
     const renderGIFSearchOrCropContainer = useMemo(() => {
         if (mode === 'upload') {
             return <Crop className={'mt-[20px]'} image={image} onCroppedAreaChange={setCroppedArea}/>;
         }
         else if (mode === 'gif') {
-            return <GIFSelect giphyFetch={giphyFetch} onGifSelected={onGifSelected} pending={pending}/>;
+            return <GIFSelect giphyFetch={giphyFetch}
+                              onGifSelected={onGifSelected}
+                              pending={changeAnimatedAvatarIsPending}/>;
         }
-    }, [mode, image, onGifSelected, changeAnimatedAvatarState, pending]);
+    }, [mode, image, onGifSelected, changeAnimatedAvatarIsPending]);
 
     const onAnimatedAvatarSelect = useCallback(() => {
         setMode('gif');
@@ -187,19 +181,18 @@ export const ChangeAvatarDialog = (props: DialogProps) => {
         }
     }, [mode, image, croppedArea, onCancelClick, onConfirmClick]);
 
-    return (
-        <div>
-            {mode === null ? (
-                <ChangeAvatarModeSelector
-                    translation={t}
-                    onFileSelected={onFileSelected}
-                    onAnimatedAvatarSelected={onAnimatedAvatarSelect}
-                />
-            ) : null}
+    return <Box>
+        {mode === null ? (
+            <ChangeAvatarModeSelector
+                translation={t}
+                onFileSelected={onFileSelected}
+                onAnimatedAvatarSelected={onAnimatedAvatarSelect}
+            />
+        ) : null}
 
-            {renderGIFSearchOrCropContainer}
-            {renderButtons}
-            {renderError}
-        </div>
-    );
+        {renderGIFSearchOrCropContainer}
+        {renderButtons}
+        {renderError}
+        <DelayedTransition pending={changeAvatarIsPending || changeAnimatedAvatarIsPending}/>
+    </Box>;
 };

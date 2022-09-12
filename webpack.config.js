@@ -4,8 +4,8 @@ const path = require('path');
 
 const CompressionPlugin = require('compression-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
-const HtmlWebPackPlugin = require("html-webpack-plugin");
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const HtmlWebPackPlugin = require('html-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const MomentLocalesPlugin = require('moment-locales-webpack-plugin');
 const webpack = require('webpack');
 
@@ -20,19 +20,19 @@ const optimization = {
         cacheGroups: {
             reactVendor: {
                 test: /[\\/]node_modules[\\/](react|react-dom)[\\/]/,
-                name: "react-vendor"
+                name: 'react-vendor'
             },
             utilityVendor: {
                 test: /[\\/]node_modules[\\/](lodash|moment|moment-timezone)[\\/]/,
-                name: "utility-vendor"
+                name: 'utility-vendor'
             },
             bootstrapVendor: {
                 test: /[\\/]node_modules[\\/](react-bootstrap)[\\/]/,
-                name: "bootstrap-vendor"
+                name: 'bootstrap-vendor'
             },
             vendor: {
                 test: /[\\/]node_modules[\\/](!react-bootstrap)(!lodash)(!moment)(!moment-timezone)[\\/]/,
-                name: "vendor"
+                name: 'vendor'
             },
         },
     }
@@ -45,13 +45,13 @@ module.exports = {
     },
     output: {
         filename: 'chunk-[name]-[contenthash].js',
-        sourceMapFilename: "chunk-[name]-[contenthash].js.map",
+        sourceMapFilename: 'chunk-[name]-[contenthash].js.map',
         globalObject: "(typeof self!='undefined'?self:this)",
         pathinfo: false
     },
-    devtool: "source-map",
+    devtool: 'source-map',
     resolve: {
-        extensions: [".js", ".jsx", ".ts", ".tsx"],
+        extensions: ['.js', '.jsx', '.ts', '.tsx'],
         modules: ['node_modules', resolvePath('src')],
         alias: {
             images: resolvePath('assets/images/'),
@@ -66,11 +66,12 @@ module.exports = {
     optimization: optimization,
     devServer: {
         port: 3002,
-        host: "0.0.0.0",
+        host: '0.0.0.0',
+        allowedHosts: 'all',
         historyApiFallback: true
     },
     plugins: [
-        new HtmlWebPackPlugin({template: resolvePath("src/index.html")}),
+        new HtmlWebPackPlugin({template: resolvePath('src/index.html')}),
         new MomentLocalesPlugin({localesToKeep: ['es-us', 'pl']}),
         new CompressionPlugin({algorithm: 'gzip', test: /\.js$/}),
         new webpack.ProvidePlugin({process: 'process/browser'}),
@@ -91,7 +92,7 @@ module.exports = {
                 use: [{loader: 'babel-loader'}]
             },
             { // Files
-                test: /\.(png|jpg|gif|ico|svg|ttf|woff|otf)$/,
+                test: /\.(png|jpg|gif|ico|svg|ttf|woff|otf|mp3)$/,
                 use: [
                     {
                         loader: 'file-loader',
@@ -106,17 +107,17 @@ module.exports = {
             { // SCSS
                 test: /\.(scss)$/,
                 use: [
-                    {loader: "style-loader"},
-                    {loader: "css-loader"},
-                    {loader: "sass-loader"}
+                    {loader: 'style-loader'},
+                    {loader: 'css-loader'},
+                    {loader: 'sass-loader'}
                 ]
             },
             {
                 test: /\.css$/,
                 use: [
                     MiniCssExtractPlugin.loader,
-                    "css-loader",
-                    "postcss-loader",
+                    'css-loader',
+                    'postcss-loader',
                 ],
             },
             {

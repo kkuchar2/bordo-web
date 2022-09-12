@@ -9,6 +9,7 @@ import {
     NewPasswordSchema,
     RequiredCurrentPasswordSchema,
     RequiredStringSchema,
+    UsernameOrEmailSchema,
     UsernameSchema
 } from '../schema/field_schema';
 
@@ -17,7 +18,6 @@ import {
     ChangeEmailFormArgs,
     ChangePasswordFormArgs,
     ChangeUsernameFormArgs,
-    CreateNewPasswordFormArgs,
     DeleteAccountFormArgs,
     ForgotPasswordFormArgs,
     LoginFormArgs,
@@ -38,7 +38,6 @@ export interface FormConfigs {
     login: FormConfig<LoginFormArgs>,
     registration: FormConfig<SignupFormArgs>,
     forgotPassword: FormConfig<ForgotPasswordFormArgs>,
-    createNewPassword: FormConfig<CreateNewPasswordFormArgs>,
     changeEmail: FormConfig<ChangeEmailFormArgs>,
     changeUsername: FormConfig<ChangeUsernameFormArgs>,
     resetPassword: FormConfig<ResetPasswordFormArgs>,
@@ -51,11 +50,11 @@ export const FORM_CONFIG = (t: any): FormConfigs => {
     return {
         login: {
             fields: [
-                { name: 'email' },
+                { name: 'username_or_email' },
                 { name: 'password' },
             ],
             validationSchema: object({
-                email: EmailSchema(t),
+                username_or_email: UsernameOrEmailSchema(t),
                 password: RequiredStringSchema(t),
             })
         },
@@ -75,16 +74,6 @@ export const FORM_CONFIG = (t: any): FormConfigs => {
             ],
             validationSchema: object({
                 email: EmailSchema(t),
-            })
-        },
-        createNewPassword: {
-            fields: [
-                { name: 'new_password' },
-                { name: 'new_password_confirm' },
-            ],
-            validationSchema: object({
-                new_password: NewPasswordSchema(t),
-                new_password_confirm: ConfirmPasswordSchema('new_password'),
             })
         },
         changeEmail: {
@@ -109,12 +98,10 @@ export const FORM_CONFIG = (t: any): FormConfigs => {
         },
         resetPassword: {
             fields: [
-                { name: 'current_password' },
                 { name: 'new_password' },
                 { name: 'new_password_confirm' },
             ],
             validationSchema: object({
-                current_password: RequiredCurrentPasswordSchema(t),
                 new_password: NewPasswordSchema(t),
                 new_password_confirm: ConfirmPasswordSchema('new_password'),
             })

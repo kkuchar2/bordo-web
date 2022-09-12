@@ -6,7 +6,7 @@ export const fieldTypes = {
         label: t('EMAIL'),
         placeholder: t('ENTER_EMAIL_INPUT_PLACEHOLDER'),
         required: true,
-        autoComplete: 'on',
+        autoComplete: 'email',
     }),
     new_email: (t: any) => ({
         id: 'new_email',
@@ -15,7 +15,7 @@ export const fieldTypes = {
         label: t('NEW_EMAIL_ADDRESS'),
         placeholder: t('NEW_EMAIL_ADDRESS_ENTER'),
         required: true,
-        autoComplete: 'on',
+        autoComplete: 'off',
     }),
     new_username: (t: any) => ({
         id: 'new_username',
@@ -24,7 +24,7 @@ export const fieldTypes = {
         label: t('NEW_USERNAME'),
         placeholder: t('ENTER_NEW_USERNAME_INPUT_PLACEHOLDER'),
         required: true,
-        autoComplete: 'on',
+        autoComplete: 'off',
     }),
     username: (t: any) => ({
         id: 'username',
@@ -42,7 +42,7 @@ export const fieldTypes = {
         label: t('PASSWORD'),
         placeholder: t('ENTER_PASSWORD'),
         required: true,
-        autoComplete: 'on',
+        autoComplete: 'current-password',
     }),
     current_password: (t: any) => ({
         id: 'current_password',
@@ -51,7 +51,7 @@ export const fieldTypes = {
         label: t('CURRENT_PASSWORD'),
         placeholder: t('CURRENT_PASSWORD_ENTER'),
         required: true,
-        autoComplete: 'on',
+        autoComplete: 'current-password',
     }),
     new_password: (t: any) => ({
         id: 'new_password',
@@ -60,7 +60,7 @@ export const fieldTypes = {
         label: t('NEW_PASSWORD'),
         placeholder: t('NEW_PASSWORD_ENTER'),
         required: true,
-        autoComplete: 'on',
+        autoComplete: 'off',
     }),
     new_password_confirm: (t: any) => ({
         id: 'new_password_confirm',
@@ -68,6 +68,15 @@ export const fieldTypes = {
         type: 'password',
         label: t('NEW_PASSWORD_CONFIRM'),
         placeholder: t('INPUT_PASSWORD_CONFIRM_PLACEHOLDER'),
+        required: true,
+        autoComplete: 'off',
+    }),
+    username_or_email: (t: any) => ({
+        id: 'username_or_email',
+        name: 'username_or_email',
+        type: 'text',
+        label: t('USERNAME_OR_EMAIL'),
+        placeholder: t('ENTER_USERNAME_OR_EMAIL_INPUT_PLACEHOLDER'),
         required: true,
         autoComplete: 'on',
     }),

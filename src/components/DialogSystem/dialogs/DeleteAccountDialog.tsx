@@ -1,16 +1,15 @@
 import React, {useCallback, useEffect} from 'react';
 
 import {Box, Text, VStack} from '@chakra-ui/react';
+import {DelayedTransition} from 'components/chakra/DelayedTransition/DelayedTransition';
 import Form from 'components/Forms/Form/Form';
 import {useTranslation} from 'react-i18next';
-import {useSelector} from 'react-redux';
+import {useNavigate} from 'react-router-dom';
 import {closeDialog} from 'state/reducers/dialog/dialogSlice';
-import {deleteAccount, resetAccountSliceRequestState} from 'state/services/accountService';
-import {RootState, useAppDispatch} from 'state/store';
-import {RequestStatus} from 'tools/client/client.types';
+import {useAppDispatch} from 'state/store';
 
-import {isSuccess, useRequestState} from '../../../api/api_util';
 import {useFormConfig} from '../../../api/formConfig';
+import {deleteAccount} from '../../../queries/account';
 
 export const DeleteAccountDialog = () => {
 
@@ -18,43 +17,37 @@ export const DeleteAccountDialog = () => {
 
     const dispatch = useAppDispatch();
 
-    const userState = useSelector((state: RootState) => state.account.user);
-    const requestState = useSelector((state: RootState) => state.account.requests.deleteAccount);
-    const pending = useRequestState(requestState, RequestStatus.Waiting);
-    const errors = requestState.info.errors;
+    const navigate = useNavigate();
+
+    const { isLoading, error, data, isSuccess, mutate } = deleteAccount();
 
     const formConfig = useFormConfig('deleteAccount', t);
 
-    useEffect(() => {
-        return () => {
-            dispatch(resetAccountSliceRequestState('deleteAccount'));
-        };
+    const onSubmit = useCallback((formData: any) => {
+        mutate({ ...formData });
     }, []);
 
-    const onSubmit = useCallback((formData: any) => {
-        dispatch(deleteAccount(userState.email.email, { ...formData }));
-    }, [userState]);
-
-    const onCancelRequest = useCallback((e) => {
+    const onCancelRequest = useCallback(() => {
         dispatch(closeDialog());
     }, []);
 
     useEffect(() => {
-        if (isSuccess(requestState)) {
+        if (isSuccess) {
             dispatch(closeDialog());
+            navigate('/');
         }
-    }, [requestState]);
+    }, [isSuccess]);
 
     return <VStack align={'stretch'} spacing={5} p={3}>
-        <Box p={4} bg={'red.600'} borderRadius={4}>
+        <Box p={4} bg={'rgba(230,52,52,0.18)'} border={`1px solid ${'rgba(230,52,52,0.47)'}`}>
             <Text fontWeight={'semibold'} fontSize={'sm'}>{t('DELETE_ACCOUNT_WARNING')}</Text>
         </Box>
 
-        <Form
-            config={formConfig}
-            errors={errors}
-            disabled={pending}
-            onCancel={onCancelRequest}
-            onSubmit={onSubmit}/>
+        <Form config={formConfig}
+              error={error?.data}
+              disabled={isLoading}
+              onCancel={onCancelRequest}
+              onSubmit={onSubmit}/>
+        <DelayedTransition pending={isLoading}/>
     </VStack>;
 };

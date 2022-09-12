@@ -16,7 +16,8 @@ export interface EditablePropertyProps {
     canEdit?: boolean;
     hideTitle?: boolean;
     passwordRequired: boolean;
-    showDialogFunc: (args: ReadyDialogArgs) => void
+    uppercaseTitle?: boolean;
+    showDialogFunc?: (args: ReadyDialogArgs) => void
 }
 
 const EditableProperty = (props: EditablePropertyProps) => {
@@ -34,14 +35,14 @@ const EditableProperty = (props: EditablePropertyProps) => {
         }
 
         if (!value) {
-            return <Button onClick={onEditButtonClick}>
+            return <Button onClick={onEditButtonClick} borderRadius={0}>
                 {icon ? <icon.component className={`mr-3 block h-6 w-6  ${icon.color}`}/> : null}
                 <Text fontSize={'13px'}>{t(editText)}</Text>
             </Button>;
         }
 
         return <Flex justifySelf={'flex-end'} justify={'flex-end'}>
-            <Button onClick={onEditButtonClick} minWidth={'100px'}>
+            <Button onClick={onEditButtonClick} minWidth={'100px'} borderRadius={0}>
                 <Text fontSize={'12px'}>{t(editText)}</Text>
             </Button>
         </Flex>;
@@ -51,21 +52,27 @@ const EditableProperty = (props: EditablePropertyProps) => {
         return renderEdit;
     }
 
-    return <Flex width={'100%'} p={2} borderRadius={4}>
-        <Flex flexGrow={1} gap={2} direction={'column'} align={'flex-start'} justify={'center'}>
-            <Text fontSize={'13px'} fontWeight={'semibold'}
-                  color={'rgba(255,255,255,0.7)'}>{`${name.toUpperCase()}:`}</Text>
-            <Text fontSize={'14px'} fontWeight={'normal'}>{value}</Text>
-        </Flex>
-        <Flex align={'center'} justify={'center'}>
-            {renderEdit}
+    return <Flex direction={'column'} width={'100%'} p={2}>
+        <Flex width={'100%'}>
+            <Flex flexGrow={1} gap={2} direction={'column'} align={'flex-start'} justify={'center'}>
+                <Text fontSize={'13px'}
+                      fontWeight={'semibold'}
+                      color={'rgba(255,255,255,0.7)'}
+                      textTransform={props.uppercaseTitle ? 'uppercase' : 'none'}>
+                    {`${name}:`}
+                </Text>
+                <Text fontSize={'14px'} fontWeight={'normal'}>{value}</Text>
+            </Flex>
+            <Flex align={'center'} justify={'center'}>
+                {renderEdit}
+            </Flex>
         </Flex>
     </Flex>;
 };
 
 EditableProperty.defaultProps = {
     editText: 'EDIT',
-
+    uppercaseTitle: true
 };
 
 export default EditableProperty;

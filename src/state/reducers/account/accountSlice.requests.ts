@@ -1,10 +1,7 @@
-import {ResponseArgs} from "tools/client/client.types";
-
-import {User} from "./accountSlice.types";
+import {ResponseArgs} from 'tools/client/client.types';
 
 export interface AccountSliceState {
     requests: {
         [name: string]: ResponseArgs;
     }
-    user: User
 }

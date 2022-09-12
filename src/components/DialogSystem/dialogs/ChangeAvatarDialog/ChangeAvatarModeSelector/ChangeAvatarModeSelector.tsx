@@ -1,7 +1,7 @@
 import React, {useCallback, useRef} from 'react';
 
 import {Button, Input, Text} from '@chakra-ui/react';
-import {UploadIcon} from '@heroicons/react/outline';
+import {CloudArrowUpIcon} from '@heroicons/react/24/solid';
 import {CenterFlex} from 'components/chakra/CenterFlex/CenterFlex';
 
 import {ChangeAvatarModeSelectorProps} from './ChangeAvatarModeSelector.types';
@@ -29,7 +29,7 @@ export const ChangeAvatarModeSelector = (props: ChangeAvatarModeSelectorProps) =
                     flexDirection={'column'}
                     gap={'20px'}>
 
-                <UploadIcon width={40} color={'#a5a5a5'}/>
+                <CloudArrowUpIcon width={40} color={'#a5a5a5'}/>
             </Button>
             <Input type={'file'} accept={'image/*'} ref={inputRef} onChange={onFileSelected}
                    style={{ display: 'none' }}/>

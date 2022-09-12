@@ -1,30 +1,30 @@
 import React, {ReactNode} from 'react';
 
-import {Box, Divider, Text} from '@chakra-ui/react';
+import {Box, Divider, Flex, Text} from '@chakra-ui/react';
 
 interface SettingsSectionProps {
     title: string;
-    description?: string;
     children: ReactNode;
     show?: boolean;
 }
 
 export const SettingsSection = (props: SettingsSectionProps) => {
 
-    const { title, description, children, show } = props;
+    const { title, children, show = true } = props;
 
     if (!show) {
         return null;
     }
 
     return <Box>
-        <Text fontSize={'12px'} fontWeight={'semibold'}>{title.toUpperCase()}</Text>
-        <Divider mt={2} mb={2}/>
-        <Text>{description}</Text>
-        <Box w={'100%'} pt={10} pb={10}>{children}</Box>
+        <Divider mt={2} mb={4}/>
+        <Flex gap={'20px'} pt={'10px'} pb={'30px'}>
+            <Flex w={'40%'}>
+                <Text fontSize={'sm'} fontWeight={'medium'}>{title}</Text>
+            </Flex>
+            <Flex flexGrow={1} justify={'flex-end'}>
+                {children}
+            </Flex>
+        </Flex>
     </Box>;
-};
-
-SettingsSection.defaultProps = {
-    show: true
 };

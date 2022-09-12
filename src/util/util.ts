@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import {User, UserProfile} from 'state/reducers/account/accountSlice.types';
 
 export const humanize = (str: string) => {
     let i, frags = str.split('_');
@@ -14,12 +15,30 @@ export const mapFrom = <T>(arr: string[], defaultValue: T) => {
     return map;
 };
 
-export const mapOfSelectors = (arr: string[], selectorProvider: (key: string) => any) => {
-    const map = {};
-    _.each(arr, val => map[val] = selectorProvider(val));
-    return map;
-};
-
 export interface FormData {
     [key: string]: any;
 }
+
+export const getAvatar = (user: User) => {
+    const profile = user?.profile;
+
+    if (!profile) {
+        return null;
+    }
+
+    if (profile.use_animated_avatar) {
+        return profile.animated_avatar;
+    }
+    return profile.avatar;
+};
+
+export const getAvatarFromProfile = (profile: UserProfile) => {
+
+    if (!profile) {
+        return null;
+    }
+    if (profile.use_animated_avatar) {
+        return profile.animated_avatar;
+    }
+    return profile.avatar;
+};

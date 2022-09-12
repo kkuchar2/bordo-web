@@ -1,6 +1,6 @@
-import {array, boolean, object, SchemaOf, string} from "yup";
+import {array, boolean, object, SchemaOf, string} from 'yup';
 
-import {EmailAddress, SocialInfo, UserInfo, UserProfile} from "./accountSlice.types";
+import {EmailAddress, SocialInfo, UserInfo, UserProfile} from './accountSlice.types';
 
 export const UserEmailSchema: SchemaOf<EmailAddress> = object({
     email: string().required(),

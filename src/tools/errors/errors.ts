@@ -1,4 +1,6 @@
-import {Errors} from "tools/client/client.types";
+import {Errors} from 'tools/client/client.types';
+
+import {QueryResponseError} from '../../queries/base';
 
 export const getResponseError = (errors: any, key?: string) => {
     if (!errors) {
@@ -21,34 +23,51 @@ export const getResponseError = (errors: any, key?: string) => {
     return [];
 };
 
-export const isEmailNotVerifiedError = (errors: any) => {
-    let responseError = errors.responseError;
+export const isEmailNotVerifiedError = (error: QueryResponseError) => {
 
-    if (responseError && responseError.detail) {
-        const formErrors = responseError.detail.form;
+    console.log('A', error);
 
-        if (!formErrors) {
-            return false;
-        }
-
-        let nonFieldFormErrors = getResponseError(formErrors, 'non_field_errors');
-
-        if (nonFieldFormErrors.length !== 1) {
-            return false;
-        }
-
-        const error = nonFieldFormErrors[0];
-
-        const message = error.message;
-
-        if (!message) {
-            return false;
-        }
-
-        return message === "E-mail is not verified.";
+    if (!error) {
+        return false;
     }
 
-    return false;
+    const data = error.data;
+
+    if (!data) {
+        return false;
+    }
+
+    const detail = data.detail;
+
+    if (!detail) {
+        return false;
+    }
+
+    const formErrors = detail.form;
+
+    if (!formErrors) {
+        return false;
+    }
+
+    let nonFieldFormErrors = getResponseError(formErrors, 'non_field_errors');
+
+    if (nonFieldFormErrors.length !== 1) {
+        return false;
+    }
+
+    const nonField = nonFieldFormErrors[0];
+
+    if (!nonField) {
+        return false;
+    }
+
+    const message = nonField.message;
+
+    if (!message) {
+        return false;
+    }
+
+    return message === 'E-mail is not verified.';
 };
 
 export const getFieldError = (error: Errors, fieldId: string | undefined) => {

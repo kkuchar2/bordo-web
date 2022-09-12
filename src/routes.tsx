@@ -1,109 +1,83 @@
-import React from "react";
+import lazy from 'react-lazy-with-preload';
 
-import lazy from "react-lazy-with-preload";
-
-const RegistrationPage = lazy(() => import(/* webpackChunkName: "auth-chunk" */ "pages/RegistrationPage/RegistrationPage"));
-const ConfirmPage = lazy(() => import (/* webpackChunkName: "auth-chunk" */ "pages/ConfirmPage/ConfirmPage"));
-const LoginPage = lazy(() => import (/* webpackChunkName: "auth-chunk" */ "pages/LoginPage/LoginPage"));
-const ForgotPasswordPage = lazy(() => import (/* webpackChunkName: "auth-chunk" */ "pages/ForgotPasswordPage/ForgotPasswordPage"));
-const CreateNewPasswordPage = lazy(() => import (/* webpackChunkName: "auth-chunk" */ "pages/CreateNewPasswordPage/CreateNewPasswordPage"));
-const HomePage = lazy(() => import (/* webpackChunkName: "home" */ "pages/HomePage/HomePage"));
-const UserAgreement = lazy(() => import (/* webpackChunkName: "user-agreement" */ "pages/UserAgreementPage/UserAgreementPage"));
-const NotFound = lazy(() => import (/* webpackChunkName: "not-found" */ "pages/NotFoundPage/NotFoundPage"));
-
-LoginPage.preload();
-RegistrationPage.preload();
-ForgotPasswordPage.preload();
+const Register = lazy(() => import(/* webpackChunkName: "auth-chunk" */ 'pages/Register'));
+const ConfirmAccount = lazy(() => import (/* webpackChunkName: "auth-chunk" */ 'pages/ConfirmAccount'));
+const Index = lazy(() => import (/* webpackChunkName: "auth-chunk" */ 'pages/Index'));
+const ForgotPassword = lazy(() => import (/* webpackChunkName: "auth-chunk" */ 'pages/ForgotPassword'));
+const ResetPassword = lazy(() => import (/* webpackChunkName: "auth-chunk" */ 'pages/ResetPassword'));
+const Home = lazy(() => import (/* webpackChunkName: "home" */ 'pages/Home'));
+const UserView = lazy(() => import (/* webpackChunkName: "home" */ 'pages/UserView'));
+const UserAgreements = lazy(() => import (/* webpackChunkName: "user-agreements" */ 'pages/UserAgreements'));
+const Account = lazy(() => import (/* webpackChunkName: "account" */ 'pages/Account'));
+const Friends = lazy(() => import (/* webpackChunkName: "friends" */ 'pages/Friends/Friends'));
+const Chats = lazy(() => import (/* webpackChunkName: "chat" */ 'pages/Chats/Chats'));
+const Language = lazy(() => import (/* webpackChunkName: "language" */ 'pages/Language'));
+const NotFound = lazy(() => import (/* webpackChunkName: "not-found" */ 'pages/NotFound'));
 
 export const routes = [
     {
-        path: "*",
-        element: <NotFound/>,
-        name: "NotFound",
-        enabled: true
+        path: '*',
+        element: NotFound,
+        name: 'NotFound',
     },
     {
-        path: "/",
-        element: <LoginPage/>,
-        name: "LoginPage",
-        icon: '',
-        title: "",
-        enabled: true,
-        exact: true,
-        authRequired: false,
-        hiddenForAuthenticated: false
+        path: '/',
+        element: Index,
+        name: 'Index',
     },
     {
-        path: "/register",
-        element: <RegistrationPage/>,
-        name: "RegistrationPage",
-        customClass: 'registerButton',
-        enabled: true,
-        exact: true,
-        authRequired: false,
-        hiddenForAuthenticated: true
+        path: '/register',
+        element: Register,
+        name: 'Registration',
     },
     {
-        path: "/verify-email/:token",
-        element: <ConfirmPage/>,
-        name: "ConfirmPage",
-        exact: false,
-        enabled: true,
-        authRequired: false,
-        hiddenForAuthenticated: true
+        path: '/verify-email/:token',
+        element: ConfirmAccount,
+        name: 'ConfirmAccount',
     },
     {
-        path: "/home",
-        element: <HomePage/>,
-        name: "HomePage",
-        exact: false,
-        enabled: true,
-        authRequired: true,
-        hiddenForAuthenticated: false
+        path: '/home',
+        element: Home,
+        name: 'Home',
     },
     {
-        path: "/forgotPassword",
-        element: <ForgotPasswordPage/>,
-        name: "ForgotPasswordPage",
-        title: "Forgot password",
-        enabled: true,
-        exact: true,
-        authRequired: false,
-        hiddenForAuthenticated: true
+        path: '/account',
+        element: Account,
+        name: 'Account',
     },
     {
-        path: "/createNewPassword/:token",
-        element: <CreateNewPasswordPage/>,
-        name: "ResetPasswordPage",
-        title: "Change password",
-        enabled: true,
-        exact: true,
-        authRequired: false,
-        hiddenForAuthenticated: false
+        path: '/friends',
+        element: Friends,
+        name: 'Friends',
     },
     {
-        path: "/userAgreement",
-        element: <UserAgreement/>,
-        name: "UserAgreementPage",
-        title: "User agreement",
-        enabled: true,
-        authRequired: false,
-        hiddenForAuthenticated: false
+        path: '/language',
+        element: Language,
+        name: 'Language',
     },
-];
-
-const getCurrentRoute = () => routes.filter(v => v.path === window.location.pathname)[0];
-
-export const isOnAuthenticatedPage = () => {
-    const route = getCurrentRoute();
-
-    if (route) {
-        return route.authRequired;
+    {
+        path: '/chats',
+        element: Chats,
+        name: 'Chats',
+    },
+    {
+        path: '/forgotPassword',
+        element: ForgotPassword,
+        name: 'ForgotPasswordPage',
+    },
+    {
+        path: '/resetPassword/:token',
+        element: ResetPassword,
+        name: 'ResetPassword',
+    },
+    {
+        path: '/userAgreement',
+        element: UserAgreements,
+        name: 'UserAgreements',
+    },
+    {
+        path: '/user/:username',
+        element: UserView,
+        name: 'UserView',
     }
-    return false;
-};
-
-export const urlMatchesComponent = (componentName: any) => {
-    const route = getCurrentRoute();
-    return componentName === route.name;
-};
+];

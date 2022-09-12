@@ -1,24 +1,16 @@
 import React, {useCallback, useEffect} from 'react';
 
-import {Box, Progress} from '@chakra-ui/react';
-import {useCloseWithRequestSuccess} from 'components/DialogSystem/hooks';
+import {Box} from '@chakra-ui/react';
+import {DelayedTransition} from 'components/chakra/DelayedTransition/DelayedTransition';
 import Form from 'components/Forms/Form/Form';
-import {showSuccess} from 'components/Toast/readyToastNotifications';
-import {useSelector} from 'react-redux';
 import {closeDialog} from 'state/reducers/dialog/dialogSlice';
 import {BaseDialogProps, DialogProps} from 'state/reducers/dialog/dialogSlice.types';
-import {resetAccountSliceRequestState} from 'state/services/accountService';
-import {RootState} from 'state/store';
-import {RequestStatus} from 'tools/client/client.types';
 
-import {isSuccess, useRequestState} from '../../../api/api_util';
 import {useFormConfig} from '../../../api/formConfig';
 
 export interface ChangePropertyDialogProps {
-    requestStateSelectorName: string;
-    dispatchFunc: any;
+    queryFunc: any;
     formConfigKey: string;
-    requestStateName: string;
     propertyName: string;
     initialArgs: any;
 }
@@ -29,26 +21,26 @@ export const ChangePropertyDialog = (props: DialogProps<ChangePropertyDialogProp
 
     const { onCancel } = dialog;
 
-    const { formConfigKey, requestStateSelectorName, dispatchFunc, requestStateName, initialArgs, propertyName } = data;
+    const { formConfigKey, queryFunc, initialArgs, propertyName } = data;
 
-    const requestState = useSelector((state: RootState) => state.account.requests[requestStateSelectorName]);
-    const errors = requestState.info.errors;
-    const pending = useRequestState(requestState, RequestStatus.Waiting);
+    console.log('QUERY FUNC: ', queryFunc);
+
+    const {
+        isIdle,
+        isLoading,
+        isError,
+        error,
+        isSuccess,
+        mutate
+    } = queryFunc();
+
     const formConfig = useFormConfig(formConfigKey, t);
 
     useEffect(() => {
-        if (isSuccess(requestState)) {
-            showSuccess(`${t('SUCCESS')} 🎉`);
+        if (isSuccess) {
+            dispatch(closeDialog());
         }
-    }, [requestState, propertyName]);
-
-    useEffect(() => {
-        return () => {
-            dispatch(resetAccountSliceRequestState(requestStateName));
-        };
-    }, []);
-
-    useCloseWithRequestSuccess(dispatch, requestState);
+    }, [isSuccess, propertyName]);
 
     const onCancelRequest = useCallback(() => {
         if (onCancel) {
@@ -60,18 +52,24 @@ export const ChangePropertyDialog = (props: DialogProps<ChangePropertyDialogProp
     }, [onCancel]);
 
     const onSubmit = useCallback((formData: FormData) => {
-        dispatch(dispatchFunc(formData));
+        console.log('FORM DATA: ', formData);
+        mutate(formData);
     }, []);
 
     return <Box p={3}>
         <Form
             config={formConfig}
             submitButtonText={t('CONFIRM')}
-            errors={errors}
+            error={error?.data}
             initialValues={initialArgs}
-            disabled={pending}
+            disabled={isLoading}
             onCancel={onCancelRequest}
-            onSubmit={onSubmit}/>
-        {pending ? <Progress size={'xs'} mt={2} isIndeterminate/> : null}
+            onSubmit={onSubmit}
+            fieldsSpacing={'20px'}
+            contentSpacing={'10px'}
+            buttonsStackProps={{
+                pt: { base: 2, sm: 2, md: 1, lg: 1 },
+            }}/>
+        <DelayedTransition pending={isLoading}/>
     </Box>;
 };

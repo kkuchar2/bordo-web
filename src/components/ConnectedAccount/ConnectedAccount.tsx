@@ -1,13 +1,12 @@
 import React, {useCallback, useMemo} from 'react';
 
-import {Button, HStack, Text, VStack} from '@chakra-ui/react';
+import {Box, Button, Flex, Text} from '@chakra-ui/react';
 import {showPasswordCreationRequiredDialog} from 'components/DialogSystem/readyDialogs';
 import GoogleButton from 'components/GoogleButton/GoogleButton';
 import {GoogleIcon} from 'components/Icons/GoogleIcon';
-import {useSelector} from 'react-redux';
-import {RootState} from 'state/store';
 
 import {GOOGLE_CLIENT_ID} from '../../config';
+import {getUser, googleConnect, googleDisconnect} from '../../queries/account';
 
 interface ConnectedAccountProps {
     supportedProvider: string;
@@ -20,13 +19,31 @@ export const ConnectedAccount = (props: ConnectedAccountProps) => {
 
     const { supportedProvider, connections } = props;
 
-    const userState = useSelector((state: RootState) => state.account.user);
+    const { data: user } = getUser();
 
     const connected = connections.includes(supportedProvider);
 
-    const isOnlySocial = userState.social.only_social;
+    const isOnlySocial = user?.social.only_social;
 
-    const onClick = useCallback(() => {
+    const {
+        isIdle: googleDisconnectIdle,
+        isLoading: googleDisconnectLoading,
+        error: googleDisconnectError,
+        isError: googleDisconnectIsError,
+        isSuccess: googleDisconnectIsSuccess,
+        mutate: googleDisconnectMutate
+    } = googleDisconnect();
+
+    const {
+        isIdle: googleConnectIdle,
+        isLoading: googleConnectLoading,
+        error: googleConnectError,
+        isSuccess: googleConnectIsSuccess,
+        mutate: googleConnectMutate,
+        reset: googleConnectReset
+    } = googleConnect();
+
+    const onDisconnectClick = useCallback(() => {
 
         if (isOnlySocial) {
             const title = connected ? 'DISCONNECT_ACCOUNT' : 'CONNECT_ACCOUNT';
@@ -34,31 +51,40 @@ export const ConnectedAccount = (props: ConnectedAccountProps) => {
             showPasswordCreationRequiredDialog(title, message);
         }
         else {
-            // TODO
+            googleDisconnectMutate({});
         }
-    }, [userState, isOnlySocial, connected]);
+    }, [isOnlySocial, connected]);
+
+    const onConnectWithGoogleAccount = useCallback((credentialResponse: any) => {
+        googleConnectMutate(credentialResponse);
+    }, []);
 
     const renderButton = useMemo(() => {
         if (!connected) {
-            return <GoogleButton
-                clientId={GOOGLE_CLIENT_ID}
-                context={'signin'}
-                text={'signin_with'}
-                onSuccess={() => {
-                }}/>;
+            return <Box w={'300px'}>
+                <GoogleButton
+                    clientId={GOOGLE_CLIENT_ID}
+                    context={'signin'}
+                    text={'signin_with'}
+                    onSuccess={onConnectWithGoogleAccount}/>
+            </Box>;
         }
 
-        return <Button onClick={onClick}>
-            <Text fontSize={'13px'}>{'Disconnect'}</Text>
+        return <Button borderRadius={0} onClick={onDisconnectClick}>
+            <Text mt={'1px'} fontSize={'13px'}>{'Disconnect'}</Text>
         </Button>;
     }, [connected]);
 
-    return <HStack spacing={'20px'} w={'100%'}>
-        <GoogleIcon/>
-        <VStack flexGrow={1} spacing={0} align={'stretch'}>
-            <Text fontSize={'lg'}>{capitalizeFirstLetter(supportedProvider)}</Text>
-            {connected ? <Text fontSize={'xs'}>{userState.email.email}</Text> : null}
-        </VStack>
+    return <Flex gap={'20px'}>
+        <Flex direction={'column'} gap={'10px'}>
+            <Flex align={'center'} gap={'10px'}>
+                {connected && <GoogleIcon/>}
+                {connected && <Text fontSize={'15px'} fontWeight={'semibold'}>
+                    {capitalizeFirstLetter(supportedProvider)}
+                </Text>}
+            </Flex>
+            {connected ? <Text fontSize={'sm'}>{user.email.email}</Text> : null}
+        </Flex>
         {renderButton}
-    </HStack>;
+    </Flex>;
 };

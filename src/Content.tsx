@@ -1,14 +1,18 @@
-import React, {Suspense, useMemo} from "react";
+import React, {Suspense, useMemo} from 'react';
 
-import {Route, Routes, useLocation} from "react-router-dom";
+import {Route, Routes, useLocation} from 'react-router-dom';
 
-import {routes} from "./routes";
+import {routes} from './routes';
 
 const Content = () => {
     const location = useLocation();
 
-    const mapRoutesToContent = useMemo(() => routes.filter((v: any) => v.enabled)
-        .map((p, k) => <Route key={k} path={p.path} element={p.element}/>), []);
+    const mapRoutesToContent = useMemo(() => routes.map((p, k) => {
+        const Component = p.element;
+        return <Route key={k}
+                      path={p.path}
+                      element={<Component/>}/>;
+    }), []);
 
     return <Suspense fallback={null}>
         <Routes location={location} key={location.pathname}>{mapRoutesToContent}</Routes>
