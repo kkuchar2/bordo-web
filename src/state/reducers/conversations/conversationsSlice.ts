@@ -3,15 +3,10 @@ import {DefaultResponseArgs, ResponseArgs} from 'tools/client/client.types';
 import {mapFrom} from 'util/util';
 
 import {isSuccess} from '../../../api/api_util';
-import {RequestAction} from '../tools';
 
 import {requestList} from './constants';
 import {ConversationsSliceState} from './conversationsSlice.requests';
 import {Message} from './conversationsSlice.types';
-
-export const requestReducer = (requestName: string) => (state: ConversationsSliceState, action: RequestAction) => {
-    state.requests[requestName] = action.payload;
-};
 
 export const conversationsSlice = createSlice({
     name: 'conversations',

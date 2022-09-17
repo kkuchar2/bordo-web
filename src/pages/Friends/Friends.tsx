@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {Badge, Center, Flex, Tab, TabList, TabPanel, TabPanels, Tabs, Text} from '@chakra-ui/react';
+import {Badge, Box, Center, Tab, TabList, TabPanel, TabPanels, Tabs, Text} from '@chakra-ui/react';
 import {MagnifyingGlassIcon} from '@heroicons/react/24/outline';
 
 import WithAuth from '../../hoc/WithAuth';
@@ -27,8 +27,15 @@ const Friends = () => {
         return <Center h={'100%'}><Text>{'Loading...'}</Text></Center>;
     }
 
-    return <Flex justify={'center'} w={'100%'} h={'100%'}>
-        <Tabs w={'100%'} h={'100vh'} variant={'unstyled'} defaultIndex={2} isLazy={true}>
+    return <Box w={'100%'} h={'100%'}>
+        <Tabs w={'100%'}
+              h={'100%'}
+              variant={'unstyled'}
+              display={'flex'}
+              flexDirection={'column'}
+              defaultIndex={2}
+              isLazy={true}>
+
             <TabList p={3} gap={'15px'} bg={'rgba(255,255,255,0.03)'}>
                 <CustomTab>
                     <Text>{'Friends'}</Text>
@@ -50,16 +57,16 @@ const Friends = () => {
                 </CustomTab>
             </TabList>
 
-            <TabPanels>
-                <TabPanel p={0} h={'100vh'}>
+            <TabPanels flexGrow={1}>
+                <TabPanel p={0} h={'100%'}>
                     <FriendsList/>
                 </TabPanel>
-                <TabPanel p={0} h={'100vh'}>
-                    <Center w={'100%'} h={'100vh'} p={3}>
+                <TabPanel p={0} h={'100%'}>
+                    <Center w={'100%'} h={'100%'} p={3}>
                         <FindFriends/>
                     </Center>
                 </TabPanel>
-                <TabPanel p={0} h={'100vh'}>
+                <TabPanel p={0} h={'100%'} overflow={'auto'}>
                     <FriendshipRequestsLists
                         receivedRequestsTitleFunc={(count: number) => `Received friend requests - ${count}`}
                         sentRequestsTitleFunc={(count: number) => `Sent friend requests - ${count}`}
@@ -68,7 +75,7 @@ const Friends = () => {
                 </TabPanel>
             </TabPanels>
         </Tabs>
-    </Flex>;
+    </Box>;
 };
 
 export default WithAuth(Friends, {

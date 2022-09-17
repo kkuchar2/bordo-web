@@ -10,12 +10,12 @@ export const fieldTypes = {
     }),
     new_email: (t: any) => ({
         id: 'new_email',
-        name: 'email',
+        name: 'new_email',
         type: 'email',
         label: t('NEW_EMAIL_ADDRESS'),
         placeholder: t('NEW_EMAIL_ADDRESS_ENTER'),
         required: true,
-        autoComplete: 'off',
+        autoComplete: 'on',
     }),
     new_username: (t: any) => ({
         id: 'new_username',

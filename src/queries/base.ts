@@ -6,6 +6,8 @@ import {showErrorToast} from 'components/Toast/readyToastNotifications';
 
 import ApiClient from '../client';
 
+import {checkPasswordRequired} from './util';
+
 export interface QueryResponseErrorData {
 
 }
@@ -140,6 +142,9 @@ export const authPost = <ResponseDataType = any, RequestDataType = any>(queryKey
                 else if (error.status === 500) {
                     showErrorToast('Server error');
                 }
+
+                checkPasswordRequired(error);
+
                 options?.onError?.(error, variables, recover);
             }
         });

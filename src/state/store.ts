@@ -2,7 +2,6 @@ import {configureStore} from '@reduxjs/toolkit';
 import {TypedUseSelectorHook, useDispatch, useSelector} from 'react-redux';
 
 import {middlewares} from './middleware';
-import accountReducer from './reducers/account/accountSlice';
 import appReducer from './reducers/application/appSlice';
 import conversationsReducer from './reducers/conversations/conversationsSlice';
 import dialogReducer from './reducers/dialog/dialogSlice';
@@ -15,7 +14,6 @@ const defaultMiddlewareOptions = {
 
 export const store = configureStore({
     reducer: {
-        account: accountReducer,
         conversations: conversationsReducer,
         app: appReducer,
         dialog: dialogReducer,

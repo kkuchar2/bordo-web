@@ -1,6 +1,6 @@
-import {createSlice, Dispatch} from "@reduxjs/toolkit";
+import {createSlice, Dispatch, PayloadAction} from '@reduxjs/toolkit';
 
-import {DialogSliceState, ShowDialogArgs} from "./dialogSlice.types";
+import {DialogSliceState, IDialogComponentProps, ShowDialogArgs} from './dialogSlice.types';
 
 const defaultDialogState: DialogSliceState = {
     opened: false,
@@ -16,7 +16,7 @@ const defaultDialogState: DialogSliceState = {
 };
 
 const dialogSlice = createSlice({
-    name: "dialogs",
+    name: 'dialogs',
     initialState: defaultDialogState,
     reducers: {
         onOpenDialog: (state, action) => {
@@ -27,12 +27,13 @@ const dialogSlice = createSlice({
             state.componentProps.data = { ...state.componentProps.data, ...action.payload.props.data };
         },
         onCloseDialog: () => defaultDialogState,
-        onDialogTitleChange: (state, action) => {
+        onDialogPropsChange: (state, action: PayloadAction<IDialogComponentProps>) => {
+            console.log('onDialogPropsChange', action.payload);
             state.componentProps = {
                 ...state.componentProps,
                 dialog: {
                     ...state.componentProps.dialog,
-                    title: action.payload
+                    ...action.payload
                 }
             };
         },
@@ -58,7 +59,22 @@ export const closeDialog = () => {
 
 export const changeDialogTitle = (newTitle: string) => {
     return async (dispatch: Dispatch) => {
-        dispatch(onDialogTitleChange(newTitle));
+        dispatch(onDialogPropsChange({
+            title: newTitle
+        }));
+    };
+};
+
+export const changeDialog = (newTitle: string, newWidth: number, arrowBack?: boolean, onBack?: () => void) => {
+    return async (dispatch: Dispatch) => {
+        dispatch(onDialogPropsChange({
+            title: newTitle,
+            arrowBack: arrowBack,
+            onBack: onBack,
+            flexProps: {
+                width: newWidth
+            },
+        }));
     };
 };
 
@@ -68,5 +84,5 @@ export const setCloseable = (closeable: boolean) => {
     };
 };
 
-export const { onOpenDialog, onCloseDialog, onDialogTitleChange, onDialogCloseableChange } = dialogSlice.actions;
+export const { onOpenDialog, onCloseDialog, onDialogPropsChange, onDialogCloseableChange } = dialogSlice.actions;
 export default dialogSlice.reducer;

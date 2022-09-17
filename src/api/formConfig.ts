@@ -61,10 +61,12 @@ export const FORM_CONFIG = (t: any): FormConfigs => {
         registration: {
             fields: [
                 { name: 'email' },
+                { name: 'username' },
                 { name: 'password' },
             ],
             validationSchema: object({
                 email: EmailSchema(t),
+                username: UsernameSchema(t),
                 password: NewPasswordSchema(t),
             })
         },

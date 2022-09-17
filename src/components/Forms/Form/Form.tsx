@@ -1,6 +1,6 @@
 import React, {useCallback, useMemo} from 'react';
 
-import {Button, Flex, HStack, Text, VStack} from '@chakra-ui/react';
+import {Button, Flex, Text, VStack} from '@chakra-ui/react';
 import {FormikInput} from 'components/FormikInput/FormikInput';
 import {getFormFieldErrors, renderNonFieldErrors} from 'components/Forms/util';
 import {Field, Form as FormikForm, Formik} from 'formik';
@@ -24,7 +24,8 @@ const Form = (props: FormProps) => {
         submitButtonText,
         useCancelButton,
         buttonsStackProps,
-        fieldBg
+        fieldBg,
+        buttonProps
     } = props;
 
     const { t } = useTranslation();
@@ -59,11 +60,10 @@ const Form = (props: FormProps) => {
 
         return <Button type={'button'}
                        minWidth={'100px'}
-                       borderRadius={0}
                        className={'cancelButton'}
                        onClick={onCancel}
                        isDisabled={disabled}>
-            <Text fontSize={'12px'}>{t('CANCEL')}</Text>
+            <Text fontSize={'sm'}>{t('CANCEL')}</Text>
         </Button>;
     }, [useCancelButton, disabled]);
 
@@ -91,8 +91,10 @@ const Form = (props: FormProps) => {
     }, [initialValues, config]);
 
     const nonFieldErrors = useMemo(() => {
-        return renderNonFieldErrors(error, excludeErrors, t);
+        return renderNonFieldErrors(error, t, excludeErrors);
     }, [error, t]);
+
+    console.log(config.validationSchema);
 
     return <Formik
         initialValues={computedInitialValues}
@@ -110,17 +112,17 @@ const Form = (props: FormProps) => {
                         {renderFields}
                     </VStack>
                     {nonFieldErrors}
-                    <HStack {...buttonsStackProps}>
+                    <Flex {...buttonsStackProps}>
                         {renderCancelButton}
-                        <Button bg={'#5568FE'}
-                                borderRadius={0}
-                                _hover={{ bg: '#5f70fb' }}
+                        <Button bg={'#006C52'}
+                                _hover={{ bg: '#00785a' }}
                                 type={'submit'}
                                 width={'100%'}
-                                isDisabled={disabled}>
-                            <Text fontSize={'12px'}>{submitButtonText}</Text>
+                                isDisabled={disabled}
+                                {...buttonProps}>
+                            <Text fontWeight={'bold'}>{submitButtonText}</Text>
                         </Button>
-                    </HStack>
+                    </Flex>
                 </Flex>
             </FormikForm>
         )}

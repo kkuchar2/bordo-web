@@ -1,8 +1,9 @@
 import React from 'react';
 
 import {Avatar as ChakraAvatar, AvatarProps} from '@chakra-ui/react';
-import {UserProfile} from 'state/reducers/account/accountSlice.types';
 import {getAvatarFromProfile} from 'util/util';
+
+import {UserProfile} from '../../../queries/account/types';
 
 export const Avatar = (props: AvatarProps) => {
     return <ChakraAvatar {...props} {...props.src ? { bg: 'none' } : null}/>;

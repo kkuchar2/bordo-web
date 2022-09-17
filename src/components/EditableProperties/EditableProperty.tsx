@@ -1,7 +1,6 @@
 import React, {useCallback, useMemo} from 'react';
 
 import {Button, Flex, Text} from '@chakra-ui/react';
-import {ReadyDialogArgs} from 'components/DialogSystem/readyDialogs.types';
 import {useTranslation} from 'react-i18next';
 
 import {IconProps} from '../../icon/icon.types';
@@ -17,17 +16,20 @@ export interface EditablePropertyProps {
     hideTitle?: boolean;
     passwordRequired: boolean;
     uppercaseTitle?: boolean;
-    showDialogFunc?: (args: ReadyDialogArgs) => void
+    showDialogFunc?: (args: OpenReadyDialogArgs) => void
 }
 
 const EditableProperty = (props: EditablePropertyProps) => {
-    const { name, value, showDialogFunc, canEdit, editText, hideTitle, icon } = props;
+    const { name, value, showDialogFunc, canEdit, editText, hideTitle, icon, passwordRequired } = props;
 
     const { t } = useTranslation();
 
     const onEditButtonClick = useCallback(() => {
-        showDialogFunc({});
-    }, []);
+        showDialogFunc({
+            passwordRequired: passwordRequired,
+            initialData: {},
+        });
+    }, [passwordRequired]);
 
     const renderEdit = useMemo(() => {
         if (!canEdit) {
@@ -35,14 +37,14 @@ const EditableProperty = (props: EditablePropertyProps) => {
         }
 
         if (!value) {
-            return <Button onClick={onEditButtonClick} borderRadius={0}>
+            return <Button onClick={onEditButtonClick}>
                 {icon ? <icon.component className={`mr-3 block h-6 w-6  ${icon.color}`}/> : null}
                 <Text fontSize={'13px'}>{t(editText)}</Text>
             </Button>;
         }
 
         return <Flex justifySelf={'flex-end'} justify={'flex-end'}>
-            <Button onClick={onEditButtonClick} minWidth={'100px'} borderRadius={0}>
+            <Button onClick={onEditButtonClick} minWidth={'100px'}>
                 <Text fontSize={'12px'}>{t(editText)}</Text>
             </Button>
         </Flex>;

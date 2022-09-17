@@ -5,6 +5,7 @@ export interface LoginFormArgs {
 
 export interface SignupFormArgs {
     email: string;
+    username: string;
     password: string;
 }
 

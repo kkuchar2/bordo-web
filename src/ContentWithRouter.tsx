@@ -47,15 +47,7 @@ const ContentWithRouter = () => {
     }, []);
 
     const mainMenu = useMemo(() => {
-        if (isLoading) {
-            return null;
-        }
-
-        if (!user) {
-            return null;
-        }
-
-        if (location.pathname.startsWith('/resetPassword')) {
+        if (isLoading || !user || location.pathname.startsWith('/resetPassword') || location.pathname.startsWith('/verify-email')) {
             return null;
         }
         return <MainMenu items={mainMenuItems} onViewChange={onViewChangeMenu} currentViewId={currentViewId}/>;
@@ -72,9 +64,9 @@ const ContentWithRouter = () => {
 
     return <ChakraProvider theme={theme} resetCSS={true}>
         <Toaster/>
-        <Flex w={'100%'} minH={'100vh'} flexGrow={1}>
+        <Flex w={'100%'} h={'100%'}>
             {mainMenu}
-            <Box flexGrow={1}>
+            <Box flexGrow={1} h={'100%'} data-testid={'content'} overflow={'auto'}>
                 {routedContent}
             </Box>
         </Flex>

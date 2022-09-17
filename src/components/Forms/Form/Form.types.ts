@@ -1,4 +1,4 @@
-import {StackProps} from '@chakra-ui/react';
+import {ButtonProps, StackProps} from '@chakra-ui/react';
 import {QueryResponseErrorData} from 'queries/base';
 
 import {FormConfig} from '../../../api/formConfig';
@@ -20,4 +20,5 @@ export interface FormProps {
     useCancelButton?: boolean;
     buttonsStackProps?: StackProps;
     fieldBg?: string;
+    buttonProps?: ButtonProps
 }

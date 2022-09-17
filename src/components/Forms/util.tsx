@@ -72,11 +72,16 @@ export const getNonFieldErrors = (errors: any) => {
     return (formErrors['non_field_errors'] ?? []).map(mapError);
 };
 
-export const renderNonFieldErrors = (error: QueryResponseErrorData, excludeList?: string[], t: TFunction<'translation'>) => {
+export const renderNonFieldErrors = (error: QueryResponseErrorData, t: TFunction<'translation'>, excludeList?: string[]) => {
     return <VStack spacing={'5px'} align={'stretch'}>
         {
             getNonFieldErrors(error)
-                .filter((err) => !excludeList.includes(err))
+                .filter((err) => {
+                    if (!excludeList) {
+                        return true;
+                    }
+                    return !excludeList.includes(err);
+                })
                 .map((error, idx) => <ErrorText key={idx}>{t(error)}</ErrorText>)
         }
     </VStack>;

@@ -1,6 +1,6 @@
 import {array, boolean, object, SchemaOf, string} from 'yup';
 
-import {EmailAddress, SocialInfo, UserInfo, UserProfile} from './accountSlice.types';
+import {EmailAddress, GoogleAccountInfo, UserInfo, UserProfile} from './accountSlice.types';
 
 export const UserEmailSchema: SchemaOf<EmailAddress> = object({
     email: string().required(),
@@ -8,15 +8,19 @@ export const UserEmailSchema: SchemaOf<EmailAddress> = object({
 });
 
 export const UserProfileSchema: SchemaOf<UserProfile> = object({
+    about: string().nullable(),
     avatar: string().nullable(),
     animated_avatar: string().nullable(),
     use_animated_avatar: boolean().required(),
+    friends: array().of(object({
+        id: string().required(),
+        username: string().required(),
+    })),
 });
 
-export const SocialSchema: SchemaOf<SocialInfo> = object({
-    only_social: boolean().required(),
-    connections: array().of(string()).required(),
-    supported_providers: array().of(string()).required()
+export const GoogleAccountInfoSchema: SchemaOf<GoogleAccountInfo> = object({
+    connected: boolean().required(),
+    email: string().nullable(),
 });
 
 export const UserInfoSchema: SchemaOf<UserInfo> = object({
@@ -24,6 +28,6 @@ export const UserInfoSchema: SchemaOf<UserInfo> = object({
     username: string().required(),
     profile: UserProfileSchema.required(),
     role: string().nullable(),
-    social: SocialSchema.required(),
-    lastAutologinFailed: boolean().nullable(),
+    google_account: GoogleAccountInfoSchema.required(),
+    has_usable_password: boolean().nullable(),
 });

@@ -1,16 +1,21 @@
-import {showVerifyAccountDialog} from 'components/DialogSystem/readyDialogs';
+import {
+    showEmailChangeConfirmationSentDialog,
+    showRegistrationCompleteDialog,
+    showVerifyAccountDialog
+} from 'components/DialogSystem/readyDialogs';
 import {getNonFieldErrors} from 'components/Forms/util';
 import {showSuccessToast} from 'components/Toast/readyToastNotifications';
-import {User} from 'state/reducers/account/accountSlice.types';
+import {closeDialog} from 'state/reducers/dialog/dialogSlice';
 import {pusherConnect} from 'state/services/pusherService';
 import {store} from 'state/store';
 
-import {queryClient} from '../App';
+import {queryClient} from '../../App';
+import {authGet, authPost, authPut, AxiosConfigs, QueryResponseError} from '../base';
 
-import {authGet, authPost, authPut, AxiosConfigs, QueryResponseError} from './base';
+import {User} from './types';
 
 export const changeAbout = () => {
-    return authPut<any>(['setAbout'], 'account/change-description')({
+    return authPut(['setAbout'], 'account/change-description')({
         onMutate: async (data: any) => {
 
             console.log('Change about onMutate', data);
@@ -40,55 +45,56 @@ export const changeAbout = () => {
 };
 
 export const changeEmail = () => {
-    return authPost<any>(['changeEmail'], 'account/change-email')({
+    return authPost(['changeEmail'], 'account/change-email')({
         onSuccess: () => {
-            // TODO: Invalidate current user query
-            queryClient.invalidateQueries(['getProfile']);
+            showEmailChangeConfirmationSentDialog();
         }
     });
 };
 
 export const changeUsername = () => {
-    return authPost<any>(['changeUsername'], 'account/change-username')({
+    return authPost(['changeUsername'], 'account/change-username')({
         onSuccess: () => {
-            // TODO: Invalidate current user query
             queryClient.invalidateQueries(['user']);
+            showSuccessToast('Username has been changed');
         }
     });
 };
 
 export const changePassword = () => {
-    return authPost<any>(['changePassword'], 'account/change-password')({
+    return authPost(['changePassword'], 'account/change-password')({
         onSuccess: () => {
-            // TODO: Should I invalidate something?
+            showSuccessToast('Password has been changed');
         }
     });
 };
 
 export const changeAvatar = () => {
-    return authPut<any>(['changeAvatar'], 'account/change-avatar')({
+    return authPut(['changeAvatar'], 'account/change-avatar')({
         onSuccess: () => {
             // TODO: Add progress handler in mutation
             queryClient.invalidateQueries(['user']);
+            store.dispatch(closeDialog());
         }
     });
 };
 
 export const forgotPassword = () => {
-    return authPost<any>(['forgotPassword'], 'account/forgot-password')({});
+    return authPost(['forgotPassword'], 'account/forgot-password')({});
 };
 
 export const changeAnimatedAvatar = () => {
-    return authPut<any>(['changeAnimatedAvatar'], 'account/change-animated-avatar')({
+    return authPut(['changeAnimatedAvatar'], 'account/change-animated-avatar')({
         onSuccess: () => {
             queryClient.invalidateQueries(['user']);
+            store.dispatch(closeDialog());
         }
     });
 };
 
 export const login = () => {
-    return authPost<any>(['login'], 'account/login')({
-        onSuccess: (response) => {
+    return authPost(['login'], 'account/login')({
+        onSuccess: () => {
             queryClient.invalidateQueries(['user']);
         },
         onError: (error: QueryResponseError, data: any) => {
@@ -105,13 +111,17 @@ export const login = () => {
 };
 
 export const register = () => {
-    return authPost<any>(['register'], 'account/register')({});
+    return authPost(['register'], 'account/register')({
+        onSuccess: () => {
+            showRegistrationCompleteDialog();
+        }
+    });
 };
 
 export const logout = () => {
     queryClient.removeQueries(['user']);
 
-    return authPost<any>(['logout'], 'account/logout')({
+    return authPost(['logout'], 'account/logout')({
         onSuccess: () => {
             queryClient.invalidateQueries(['user']);
         }
@@ -119,16 +129,16 @@ export const logout = () => {
 };
 
 export const googleLogin = () => {
-    return authPost<any>(['googleLogin'], 'account/google-login')({
-        onSuccess: (response) => {
+    return authPost(['googleLogin'], 'account/google-login')({
+        onSuccess: () => {
             queryClient.invalidateQueries(['user']);
         }
     });
 };
 
 export const googleConnect = () => {
-    return authPost<any>(['googleConnect'], 'account/google-connect')({
-        onSuccess: (response) => {
+    return authPost(['googleConnect'], 'account/google-connect')({
+        onSuccess: () => {
             queryClient.invalidateQueries(['user']);
         }
     });
@@ -136,49 +146,52 @@ export const googleConnect = () => {
 
 export const deleteAccount = () => {
     return authPost<any>(['deleteAccount'], 'account/delete-account')({
-        onSuccess: (response) => {
+        onSuccess: () => {
+            showSuccessToast('Account deleted');
             queryClient.removeQueries(['user']);
-        }
+        },
     });
 };
 
 export const disableAccount = () => {
-    return authPost<any>(['disableAccount'], 'account/disable-account')({
-        onSuccess: (response) => {
+    return authPost(['disableAccount'], 'account/disable-account')({
+        onSuccess: () => {
             queryClient.removeQueries(['user']);
         }
     });
 };
 
 export const createNewPassword = () => {
-    return authPost<any>(['createNewPassword'], 'account/create-new-password')({});
+    return authPost(['createNewPassword'], 'account/create-new-password')({});
 };
 
 export const verifyResetPasswordToken = () => {
-    return authPost<any>(['verifyResetPasswordToken'], 'account/verify-reset-password-token')({});
+    return authPost(['verifyResetPasswordToken'], 'account/verify-reset-password-token')({});
 };
 
 export const confirmAccount = () => {
-    return authPost<any>(['confirmAccount'],
+    return authPost(['confirmAccount'],
         'account/verify-email',
         { ...AxiosConfigs.NO_CREDENTIALS })({
-        onSuccess: (response) => {
-            showSuccessToast('Your email has been verified');
+        onSuccess: () => {
+            showSuccessToast('An email has been verified');
+            queryClient.invalidateQueries(['user']);
         }
     });
 };
 
 export const resendRegistrationEmail = () => {
-    return authPost<any>(['resendRegistrationEmail'], 'account/resend-email')({});
+    return authPost(['resendRegistrationEmail'], 'account/resend-email')({});
 };
 
 export const resetPassword = () => {
-    return authPost<any>(['resetPassword'], 'account/reset-password')({});
+    return authPost(['resetPassword'], 'account/reset-password')({});
 };
 
 export const googleDisconnect = () => {
-    return authPost<any>(['googleDisconnect'], 'account/google-disconnect')({
+    return authPost(['googleDisconnect'], 'account/google-disconnect')({
         onSuccess: () => {
+            store.dispatch(closeDialog());
             queryClient.invalidateQueries(['user']);
         }
     });
@@ -186,7 +199,7 @@ export const googleDisconnect = () => {
 
 export const getUser = () => {
     return authGet<User>(['user'], 'account/get-user')({
-        onSuccess: (response) => {
+        onSuccess: () => {
             store.dispatch(pusherConnect());
         }
     });

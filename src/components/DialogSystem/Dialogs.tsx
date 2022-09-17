@@ -1,7 +1,8 @@
 import React, {useCallback, useEffect, useMemo} from 'react';
 
-import {chakra, Circle, Flex, HStack, Text, VStack} from '@chakra-ui/react';
+import {Box, chakra, Circle, Flex, HStack, Stack, Text} from '@chakra-ui/react';
 import {XMarkIcon} from '@heroicons/react/24/outline';
+import {ArrowLeftIcon} from '@heroicons/react/24/solid';
 import {ButtonWithIcon} from 'components/chakra/ButtonWithIcon/ButtonWithIcon';
 import {dialogAnimation, dialogBgAnimation} from 'components/Forms/animation';
 import {isValidMotionProp, motion} from 'framer-motion';
@@ -20,18 +21,17 @@ interface IDialogComponentMap {
 }
 
 const componentMap: IDialogComponentMap = {
-    RegistrationCompleteDialog: dialogs.RegistrationCompleteDialog,
+    SentEmailDialog: dialogs.SentEmailDialog,
     DeleteAccountDialog: dialogs.DeleteAccountDialog,
-    VerificationEmailSentDialog: dialogs.VerificationEmailSentDialog,
+    DisconnectGoogleDialog: dialogs.DisconnectGoogleDialog,
     VerifyAccountDialog: dialogs.VerifyAccountDialog,
     ChangeAvatarDialog: dialogs.ChangeAvatarDialog,
-    SentPasswordResetMailDialog: dialogs.SentPasswordResetMailDialog,
     ChangePropertyDialog: dialogs.ChangePropertyDialog,
     ServiceUnavailableDialog: dialogs.ServiceUnavailableDialog,
     PasswordCreationRequiredDialog: dialogs.PasswordCreationRequiredDialog
 };
 
-const ChakraBox = chakra(motion.div, {
+const ChakraBox = chakra(motion(Box), {
     shouldForwardProp: (prop) => {
         return isValidMotionProp(prop)
             || prop === 'children' || prop === 'onMouseDown' || prop === 'onKeyDown';
@@ -65,6 +65,12 @@ const Dialogs = () => {
         }
     }, [componentProps]);
 
+    const handleBack = useCallback(() => {
+        if (componentProps.dialog.onBack) {
+            componentProps.dialog.onBack();
+        }
+    }, [componentProps]);
+
     useEffect(() => {
         document.addEventListener('keydown', handleKeyDown, false);
 
@@ -89,25 +95,46 @@ const Dialogs = () => {
         }
     }, [componentProps, isOpened]);
 
+    const renderArrowBack = useMemo(() => {
+        const arrowBack = componentProps?.dialog?.arrowBack;
+
+        if (arrowBack) {
+            return <ButtonWithIcon title={'Back'}
+                                   width={'40px'}
+                                   height={'40px'}
+                                   bg={'rgba(255,255,255,0.09)'}
+                                   _hover={{ bg: 'rgba(255,255,255,0.2)' }}
+                                   _active={{ bg: 'rgba(255,255,255,0.2)' }}
+                                   _focus={{ bg: 'rgba(255,255,255,0.2)' }}
+                                   padding={0}
+                                   iconSize={25}
+                                   iconColor={'rgba(255,255,255,0.48)'}
+                                   iconColorHover={'white'}
+                                   IconComponent={ArrowLeftIcon}
+                                   onClick={handleBack}/>;
+        }
+
+    }, [componentProps]);
+
     const renderTitle = useMemo(() => {
         const title = componentProps?.dialog?.title;
         const icon = componentProps?.dialog?.icon;
 
-        return <HStack spacing={'10px'} justifyContent={'flex-start'} align={'center'}>
-            {icon ?
+        return <HStack spacing={'20px'} justifyContent={'flex-start'} align={'center'} flexGrow={1}>
+            {icon &&
                 <Circle bg={icon.backgroundColor} size={'40px'}>
-                    <icon.component width={20} height={20} color={icon.color}/>
-                </Circle> : null}
+                    <icon.component width={17} height={17} color={icon.color}/>
+                </Circle>}
             <Text flexGrow={1} fontSize={'md'} fontWeight={'bold'}>{t(title)}</Text>
             <ButtonWithIcon title={'Close'}
                             width={'40px'}
                             height={'40px'}
-                            bg={'none'}
-                            _hover={{ bg: 'none' }}
-                            _active={{ bg: 'none' }}
-                            _focus={{ bg: 'none' }}
+                            bg={'rgba(255,255,255,0.09)'}
+                            _hover={{ bg: 'rgba(255,255,255,0.2)' }}
+                            _active={{ bg: 'rgba(255,255,255,0.2)' }}
+                            _focus={{ bg: 'rgba(255,255,255,0.2)' }}
                             padding={0}
-                            iconSize={30}
+                            iconSize={25}
                             iconColor={'rgba(255,255,255,0.48)'}
                             iconColorHover={'white'}
                             IconComponent={XMarkIcon}
@@ -125,14 +152,22 @@ const Dialogs = () => {
         return <MotionFlex direction={'column'}
                            key={componentName}
                            bg={'#2f2f2f'}
+                           gap={'20px'}
                            borderRadius={'md'}
                            {...componentProps.dialog.flexProps}
                            {...dialogAnimation}>
-            <VStack p={3} align={'stretch'} spacing={5}>
-                {renderTitle}
-                {renderDescription}
-            </VStack>
-            <Component dispatch={dispatch} t={t} {...componentProps} />
+            <Flex direction={'column'} gap={'20px'} w={'100%'} p={'20px'} pb={0}>
+                <Flex w={'100%'} gap={'20px'}>
+                    {renderArrowBack}
+                    {renderTitle}
+                </Flex>
+                {componentProps?.dialog?.description && <Flex>
+                    {renderDescription}
+                </Flex>}
+            </Flex>
+            <Stack p={'20px'} pt={0}>
+                <Component dispatch={dispatch} t={t} {...componentProps} />
+            </Stack>
         </MotionFlex>;
     }, [componentProps, t]);
 
@@ -154,6 +189,7 @@ const Dialogs = () => {
         alignItems={'center'}
         justifyContent={'center'}
         zIndex={1}
+        backdropFilter={'blur(5px)'}
         bg={'rgba(30,30,30,0.8)'}
         position={'absolute'}
         top={0}

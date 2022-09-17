@@ -35,8 +35,7 @@ export const VerifyAccountDialog = (props: DialogProps<VerifyAccountDialogProps>
     }, [usernameOrEmail]);
 
     return <Flex w={'100%'} p={'10px'} align={'center'} justify={'flex-end'} gap={'20px'}>
-        <Button borderRadius={0}
-                fontSize={'sm'}
+        <Button fontSize={'sm'}
                 disabled={isLoading}
                 onClick={onResendEmailClick}
                 color={'#cacaca'}>

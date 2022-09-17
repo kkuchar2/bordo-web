@@ -1,8 +1,6 @@
 import React, {ReactNode, useCallback, useMemo} from 'react';
 
 import {Avatar, AvatarBadge, Button, Center, Divider, Flex, HStack, Text, VStack} from '@chakra-ui/react';
-import {Cog6ToothIcon} from '@heroicons/react/24/solid';
-import {ButtonWithIcon} from 'components/chakra/ButtonWithIcon/ButtonWithIcon';
 import {Group, Item, ItemsMap, MenuItems} from 'components/MainMenu/mainMenuItems';
 import {useTranslation} from 'react-i18next';
 import {getAvatar} from 'util/util';
@@ -30,7 +28,7 @@ const MainMenu = (props: MainMenuProps) => {
             return groupItems.map((item: Item) => {
                 return <Button display={'flex'}
                                key={item.id}
-                               borderRadius={5}
+                               borderRadius={3}
                                paddingLeft={3}
                                paddingRight={2}
                                paddingTop={0}
@@ -49,7 +47,6 @@ const MainMenu = (props: MainMenuProps) => {
                                h={'35px'}
                                gap={2}
                                bg={currentViewId === item.id ? 'rgba(255,255,255,0.1)' : 'transparent'}>
-                    {item.icon ? <item.icon.component width={20}/> : null}
                     <Text fontSize={'14px'}
                           lineHeight={'35px'}
                           fontWeight={'medium'}
@@ -57,6 +54,9 @@ const MainMenu = (props: MainMenuProps) => {
                           textOverflow={'ellipsis'}
                           whiteSpace={'nowrap'}
                           overflow={'hidden'}>{t(item.displayName)}</Text>
+                    <Flex flexGrow={1} justify={'flex-end'}>
+                        {item.icon ? <item.icon.component width={20}/> : null}
+                    </Flex>
                 </Button>;
             });
         }
@@ -95,51 +95,38 @@ const MainMenu = (props: MainMenuProps) => {
     return <Flex direction={'column'}
                  align={'flex-start'}
                  position={'relative'}
+                 h={'100%'}
+                 w={'300px'}
                  minW={'300px'}
-                 bg={'#272522'}
-                 paddingTop={'20px'}>
-        <VStack spacing={'15px'} padding={3}>
-            {groups}
-        </VStack>
+                 bg={'rgba(0,0,0,0.15)'}
+                 paddingTop={'20px'}
+                 data-testid={'main-menu'}>
+        <Flex padding={3} w={'100%'} justify={'flex-end'}>
+            <Flex direction={'column'} gap={'15px'}>
+                {groups}
+            </Flex>
+        </Flex>
         <Flex direction={'column'} justify={'flex-end'} flexGrow={1} width={'100%'}>
             <Center w={'100%'} p={3}>
-                <HStack bg={'rgba(255,255,255,0.03)'} borderRadius={6} w={'100%'} p={2}>
-                    <HStack spacing={3}
-                            _hover={{ bg: 'rgba(255,255,255,0.07)', cursor: 'pointer' }}
-                            p={1}
-                            borderRadius={4}>
-                        <Avatar src={avatar}
-                                name={user.username}
-                                borderRadius={'100%'}
-                                width={'30px'}
-                                height={'30px'}
-                                objectFit={'cover'}
-                                {...avatar ? { bg: 'none' } : null}>
-                            <AvatarBadge boxSize={'0.55em'}
-                                         bg={'green.300'}
-                                         border={'none'}/>
-                        </Avatar>
-                        <VStack spacing={1} align={'stretch'}>
-                            <Text color={'white'} fontWeight={'semibold'} fontSize={'12px'}>{`#${user.username}`}</Text>
-                            <Text color={'alphaWhite.500'} fontWeight={'medium'}
-                                  fontSize={'12px'}>{`${user.email.email}`}</Text>
-                        </VStack>
-                    </HStack>
-                    <HStack flexGrow={1} justify={'flex-end'}>
-                        <ButtonWithIcon title={t('ACCOUNT_SETTINGS')}
-                                        iconSize={20}
-                                        padding={0}
-                                        width={'40px'}
-                                        height={'40px'}
-                                        bg={'none'}
-                                        _hover={{ bg: 'none' }}
-                                        _active={{ bg: 'none' }}
-                                        _focus={{ bg: 'none' }}
-                                        iconColor={'rgba(255,255,255,0.5)'}
-                                        iconColorHover={'rgba(255,255,255,1)'}
-                                        IconComponent={Cog6ToothIcon}
-                                        onClick={() => onViewChange('/account', 'Account')}/>
-                    </HStack>
+                <HStack bg={'rgba(255,255,255,0.03)'}
+                        _hover={{ bg: 'rgba(255,255,255,0.07)', cursor: 'pointer' }}
+                        borderRadius={6} w={'100%'} p={3}>
+                    <Avatar src={avatar}
+                            name={user.username}
+                            borderRadius={'100%'}
+                            width={'30px'}
+                            height={'30px'}
+                            objectFit={'cover'}
+                            {...avatar ? { bg: 'none' } : null}>
+                        <AvatarBadge boxSize={'0.55em'}
+                                     bg={'green.300'}
+                                     border={'none'}/>
+                    </Avatar>
+                    <VStack spacing={1} align={'stretch'}>
+                        <Text color={'white'} fontWeight={'semibold'} fontSize={'12px'}>{`#${user.username}`}</Text>
+                        <Text color={'alphaWhite.500'} fontWeight={'medium'}
+                              fontSize={'12px'}>{`${user.email.email}`}</Text>
+                    </VStack>
                 </HStack>
             </Center>
         </Flex>

@@ -21,10 +21,9 @@ export interface UserProfile {
     friends: Friend[];
 }
 
-export interface SocialInfo {
-    only_social: boolean
-    supported_providers: string[]
-    connections: string[]
+export interface GoogleAccountInfo {
+    connected: boolean;
+    email: string | null;
 }
 
 export interface UserInfo {
@@ -32,8 +31,8 @@ export interface UserInfo {
     username: string,
     profile: UserProfile,
     role?: string;
-    social?: SocialInfo
-    lastAutologinFailed?: boolean
+    google_account?: GoogleAccountInfo;
+    has_usable_password?: boolean;
 }
 
 export type User = UserAuth & UserInfo;

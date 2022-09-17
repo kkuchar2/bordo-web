@@ -1,11 +1,4 @@
-import {
-    ArrowLeftIcon,
-    ChatBubbleLeftRightIcon,
-    GlobeEuropeAfricaIcon,
-    HomeIcon,
-    UserGroupIcon,
-    UserIcon
-} from '@heroicons/react/24/outline';
+import {ArrowRightOnRectangleIcon} from '@heroicons/react/20/solid';
 import {AxiosConfigs} from 'queries/base';
 
 import {queryClient} from '../../App';
@@ -44,40 +37,25 @@ export const mainMenuItems: MenuItems = {
                 url: '/home',
                 displayName: 'HOME_PAGE',
                 description: '',
-                icon: {
-                    component: HomeIcon,
-                    color: 'text-white'
-                }
             },
             Friends: {
                 id: 'Friends',
                 url: '/friends',
                 displayName: 'FRIENDS',
                 description: '',
-                icon: {
-                    component: UserGroupIcon,
-                    color: 'text-white'
-                }
             },
             Chats: {
                 id: 'Chats',
                 url: '/chats',
                 displayName: 'CHATS',
                 description: '',
-                icon: {
-                    component: ChatBubbleLeftRightIcon,
-                    color: 'text-white'
-                }
             },
             Account: {
                 id: 'Account',
                 url: '/account',
                 displayName: 'ACCOUNT_SETTINGS',
                 description: '',
-                icon: {
-                    component: UserIcon,
-                    color: 'text-white'
-                }
+
             }
         }
     },
@@ -89,10 +67,6 @@ export const mainMenuItems: MenuItems = {
                 url: '/language',
                 displayName: 'LANGUAGE',
                 description: '',
-                icon: {
-                    component: GlobeEuropeAfricaIcon,
-                    color: 'text-white'
-                },
             }
         }
     },
@@ -112,7 +86,7 @@ export const mainMenuItems: MenuItems = {
                     }
                 },
                 icon: {
-                    component: ArrowLeftIcon,
+                    component: ArrowRightOnRectangleIcon,
                     color: 'text-white'
                 },
             }

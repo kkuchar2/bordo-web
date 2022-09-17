@@ -48,7 +48,7 @@ export const opacityShowUpAnimation = {
 export const dialogBgAnimation = {
     initial: { opacity: 0 },
     animate: { opacity: 1 },
-    exit: { opacity: 0 },
+    exit: { opacity: 0 }
 };
 
 export const shakeAnimation = {

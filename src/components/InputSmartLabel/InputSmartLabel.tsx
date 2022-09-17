@@ -87,6 +87,7 @@ export const InputSmartLabel = (props: InputSmartLabelProps) => {
                  align={'center'}
                  pl={'12px'}
                  pr={'12px'}
+                 borderRadius={'6px'}
                  justify={'center'}
                  onClick={onDummyInputClick}
                  height={'56px'}

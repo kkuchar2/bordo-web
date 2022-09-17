@@ -23,8 +23,6 @@ export const ChangePropertyDialog = (props: DialogProps<ChangePropertyDialogProp
 
     const { formConfigKey, queryFunc, initialArgs, propertyName } = data;
 
-    console.log('QUERY FUNC: ', queryFunc);
-
     const {
         isIdle,
         isLoading,
@@ -56,7 +54,7 @@ export const ChangePropertyDialog = (props: DialogProps<ChangePropertyDialogProp
         mutate(formData);
     }, []);
 
-    return <Box p={3}>
+    return <Box>
         <Form
             config={formConfig}
             submitButtonText={t('CONFIRM')}
@@ -69,7 +67,13 @@ export const ChangePropertyDialog = (props: DialogProps<ChangePropertyDialogProp
             contentSpacing={'10px'}
             buttonsStackProps={{
                 pt: { base: 2, sm: 2, md: 1, lg: 1 },
+                gap: { base: 2, sm: 3, md: 3, lg: 3 },
             }}/>
-        <DelayedTransition pending={isLoading}/>
+        {isLoading && <DelayedTransition
+            pending={true}
+            position={'absolute'}
+            bottom={0}
+            left={0}
+            p={0} w={'100%'}/>}
     </Box>;
 };

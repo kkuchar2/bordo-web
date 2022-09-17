@@ -1,6 +1,6 @@
 import React, {SyntheticEvent, useCallback, useState} from 'react';
 
-import {Flex} from '@chakra-ui/react';
+import {Box, Flex} from '@chakra-ui/react';
 import {IGif} from '@giphy/js-types';
 import {InputSmartLabel} from 'components/InputSmartLabel/InputSmartLabel';
 import {useTranslation} from 'react-i18next';
@@ -26,7 +26,7 @@ export const GIFSelect = (props: GIFSelectProps) => {
         onGifSelected?.(gif, e);
     }, [onGifSelected, pending]);
 
-    return <Flex direction={'column'} p={3} ref={ref}>
+    return <Flex direction={'column'} w={'100%'}>
         <InputSmartLabel
             id={'gif_search'}
             name={'gifSearch'}
@@ -35,10 +35,12 @@ export const GIFSelect = (props: GIFSelectProps) => {
                 setGifSearchText(e.target.value);
             }}
             label={t('GIPHY_SEARCH_PLACEHOLDER')}/>
-        <GIFPresentation
-            width={bounds.width}
-            onGifClick={onGifClick}
-            searchText={gifSearchText}
-            giphyFetch={giphyFetch}/>
+        <Box mr={'20px'} ref={ref}>
+            <GIFPresentation
+                width={bounds.width}
+                onGifClick={onGifClick}
+                searchText={gifSearchText}
+                giphyFetch={giphyFetch}/>
+        </Box>
     </Flex>;
 };

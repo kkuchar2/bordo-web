@@ -1,21 +1,70 @@
 import {ExclamationCircleIcon} from '@heroicons/react/24/outline';
 import {EnvelopeIcon, KeyIcon, TrashIcon} from '@heroicons/react/24/solid';
+import {queryClient} from 'App';
 import {VerifyAccountDialogProps} from 'components/DialogSystem/dialogs';
-import {User} from 'state/reducers/account/accountSlice.types';
+import {GoogleIcon} from 'components/Icons/GoogleIcon';
 import {openDialog} from 'state/reducers/dialog/dialogSlice';
 import {store} from 'state/store';
 
-import {queryClient} from '../../App';
 import {changeEmail, changePassword, changeUsername} from '../../queries/account';
+import {User} from '../../queries/accountSlice.types';
 
 import {SentEmailDialogArgs} from './readyDialogs.types';
 
+export interface OpenReadyDialogArgs {
+    passwordRequired?: boolean;
+    initialData?: any;
+}
+
+const checkShowPasswordRequired = (passwordRequired: boolean) => {
+    if (passwordRequired) {
+        const hasUsablePassword = queryClient.getQueryData<User>(['user'])?.has_usable_password;
+
+        if (!hasUsablePassword) {
+            showPasswordCreationRequiredDialog();
+            return true;
+        }
+        return false;
+    }
+    return false;
+};
+
 export const showRegistrationCompleteDialog = () => {
     return showSentEmailDialog({
-        component: 'RegistrationCompleteDialog',
+        component: 'SentEmailDialog',
         title: 'REGISTRATION_COMPLETE_TITLE',
         description: 'REGISTRATION_COMPLETE_DESCRIPTION',
         closeable: true
+    });
+};
+
+export const showEmailChangeConfirmationSentDialog = () => {
+    return showSentEmailDialog({
+        component: 'SentEmailDialog',
+        title: 'EMAIL_CHANGE_CONFIRMATION_SENT_TITLE',
+        description: 'EMAIL_CHANGE_CONFIRMATION_SENT_DESCRIPTION',
+        closeable: true
+    });
+};
+
+export const showDialogAfterPasswordResetRequest = () => {
+    return showSentEmailDialog({
+        component: 'SentEmailDialog',
+        title: 'PASSWORD_RESET_MAIL_SENT_TITLE',
+        description: 'PASSWORD_RESET_MAIL_SENT_DESCRIPTION',
+        closeable: true
+    });
+};
+
+export const showDialogAfterFirstPasswordSetupRequest = () => {
+    return showSentEmailDialog({
+        component: 'SentEmailDialog',
+        title: 'PASSWORD_CREATE_MAIL_SENT_TITLE',
+        description: 'PASSWORD_CREATE_MAIL_SENT_DESCRIPTION',
+        closeable: true,
+        data: {
+            showSignInButton: false
+        }
     });
 };
 
@@ -63,24 +112,6 @@ export const showVerifyAccountDialog = (data: VerifyAccountDialogProps) => {
     );
 };
 
-export const showDialogAfterPasswordResetRequest = () => {
-    return showSentEmailDialog({
-        component: 'SentPasswordResetMailDialog',
-        title: 'PASSWORD_RESET_MAIL_SENT_TITLE',
-        description: 'PASSWORD_RESET_MAIL_SENT_DESCRIPTION',
-        closeable: true
-    });
-};
-
-export const showDialogAfterFirstPasswordSetupRequest = () => {
-    return showSentEmailDialog({
-        component: 'SentPasswordResetMailDialog',
-        title: 'PASSWORD_CREATE_MAIL_SENT_TITLE',
-        description: 'PASSWORD_CREATE_MAIL_SENT_DESCRIPTION',
-        closeable: true
-    });
-};
-
 export const showChangeAvatarDialog = () => {
     store.dispatch(
         openDialog({
@@ -114,75 +145,76 @@ export const showConfirmEmailDialog = <T>(data: T) => {
     );
 };
 
-export const showChangeUsernameDialog = (initialArgs: any) => {
-    const { data } = initialArgs;
+export const showChangeUsernameDialog = (args: OpenReadyDialogArgs) => {
+    const { passwordRequired, initialData } = args;
 
-    const onlySocial = queryClient.getQueryData<User>(['user'])?.social.only_social;
-
-    if (onlySocial) {
-        showPasswordCreationRequiredDialog('CHANGE_USERNAME', 'CHANGE_USERNAME_PASSWORD_SETUP');
+    if (checkShowPasswordRequired(passwordRequired)) {
+        return;
     }
-    else {
-        store.dispatch(
-            openDialog({
-                component: 'ChangePropertyDialog',
-                props: {
-                    dialog: {
-                        title: 'CHANGE_USERNAME',
-                        description: 'CHANGE_USERNAME_DESCRIPTION',
-                        flexProps: {
-                            minWidth: 200,
-                            maxWidth: 400
-                        },
+
+    store.dispatch(
+        openDialog({
+            component: 'ChangePropertyDialog',
+            props: {
+                dialog: {
+                    title: 'CHANGE_USERNAME',
+                    description: 'CHANGE_USERNAME_DESCRIPTION',
+                    flexProps: {
+                        minWidth: 200,
+                        maxWidth: 400
                     },
-                    data: {
-                        formConfigKey: 'changeUsername',
-                        propertyName: 'username',
-                        queryFunc: changeUsername,
-                        initialArgs: data
-                    }
+                },
+                data: {
+                    formConfigKey: 'changeUsername',
+                    propertyName: 'username',
+                    queryFunc: changeUsername,
+                    initialArgs: initialData
                 }
-            })
-        );
-    }
+            }
+        })
+    );
 };
 
-export const showChangeEmailDialog = (initialArgs: any) => {
+export const showChangeEmailDialog = (args: OpenReadyDialogArgs) => {
+    const { passwordRequired, initialData } = args;
 
-    const onlySocial = queryClient.getQueryData<User>(['user'])?.social.only_social;
-
-    if (onlySocial) {
-        showPasswordCreationRequiredDialog('CHANGE_EMAIL', 'CHANGE_EMAIL_PASSWORD_SETUP');
+    if (checkShowPasswordRequired(passwordRequired)) {
+        return;
     }
-    else {
-        store.dispatch(
-            openDialog({
-                component: 'ChangePropertyDialog',
-                props: {
-                    dialog: {
-                        title: 'CHANGE_EMAIL',
-                        description: 'CHANGE_EMAIL_DESCRIPTION',
-                        icon: {
-                            component: EnvelopeIcon,
-                            color: '#8ed3ed',
-                            backgroundColor: '#265e80'
-                        },
-                        flexProps: {
-                            minWidth: 400
-                        },
+
+    store.dispatch(
+        openDialog({
+            component: 'ChangePropertyDialog',
+            props: {
+                dialog: {
+                    title: 'CHANGE_EMAIL',
+                    description: 'CHANGE_EMAIL_DESCRIPTION',
+                    icon: {
+                        component: EnvelopeIcon,
+                        color: '#8ed3ed',
+                        backgroundColor: '#265e80'
                     },
-                    data: {
-                        formConfigKey: 'changeEmail',
-                        propertyName: 'email',
-                        queryFunc: changeEmail,
-                    }
+                    flexProps: {
+                        minWidth: 400
+                    },
+                },
+                data: {
+                    formConfigKey: 'changeEmail',
+                    propertyName: 'email',
+                    queryFunc: changeEmail,
                 }
-            })
-        );
-    }
+            }
+        })
+    );
 };
 
-export const showChangePasswordDialog = () => {
+export const showChangePasswordDialog = (args: OpenReadyDialogArgs) => {
+    const { passwordRequired, initialData } = args;
+
+    if (checkShowPasswordRequired(passwordRequired)) {
+        return;
+    }
+
     store.dispatch(
         openDialog({
             component: 'ChangePropertyDialog',
@@ -229,14 +261,14 @@ export const showServiceUnavailableDialog = () => {
     );
 };
 
-export const showPasswordCreationRequiredDialog = (title_key: string, description_key: string) => {
+export const showPasswordCreationRequiredDialog = () => {
     store.dispatch(
         openDialog({
             component: 'PasswordCreationRequiredDialog',
             props: {
                 dialog: {
                     title: 'PASSWORD_CREATION_REQUIRED_TITLE',
-                    description: description_key,
+                    description: 'PASSWORD_REQUIRED_DESCRIPTION',
                     flexProps: {
                         minW: 400,
                         maxW: 500
@@ -252,16 +284,11 @@ export const showPasswordCreationRequiredDialog = (title_key: string, descriptio
     );
 };
 
-export const showDeleteAccount = (isOnlySocial: boolean) => {
-    if (isOnlySocial) {
-        showPasswordCreationRequiredDialog('DELETE_ACCOUNT', 'DELETE_ACCOUNT_PASSWORD_SETUP');
-    }
-    else {
-        showDeleteAccountDialog();
-    }
-};
-
 export const showDeleteAccountDialog = () => {
+    if (checkShowPasswordRequired(true)) {
+        return;
+    }
+
     store.dispatch(
         openDialog({
             component: 'DeleteAccountDialog',
@@ -277,6 +304,33 @@ export const showDeleteAccountDialog = () => {
                         component: TrashIcon,
                         color: 'red.900',
                         backgroundColor: '#1c3545'
+                    },
+                },
+                data: {}
+            }
+        })
+    );
+};
+
+export const showDisconnectGoogleDialog = () => {
+    if (checkShowPasswordRequired(true)) {
+        return;
+    }
+
+    store.dispatch(
+        openDialog({
+            component: 'DisconnectGoogleDialog',
+            props: {
+                dialog: {
+                    title: 'DISCONNECT_GOOGLE_ACCOUNT',
+                    flexProps: {
+                        minWidth: 400,
+                        maxWidth: 400
+                    },
+                    icon: {
+                        component: GoogleIcon,
+                        color: '#ca1717',
+                        backgroundColor: 'none'
                     },
                 },
                 data: {}

@@ -32,12 +32,12 @@ export const FriendshipRequestsLists = (props: PendingFriendRequestListProps) =>
     }, []);
 
     if ((!sentRequests || sentRequests.length === 0) && (!receivedRequests || receivedRequests.length === 0)) {
-        return <Center h={'100vh'}>
+        return <Center w={'100%'} h={'100%'}>
             <Text>{'You have no requests'}</Text>
         </Center>;
     }
 
-    return <Flex direction={'column'} w={'100%'} gap={'30px'} p={'20px'}>
+    return <Flex direction={'column'} w={'100%'} h={'100%'} gap={'30px'} p={'20px'}>
         <SentFriendshipRequestList requests={sentRequests} titleFunc={sentRequestsTitleFunc}/>
         <ReceivedFriendshipRequestList requests={receivedRequests} titleFunc={receivedRequestsTitleFunc}/>
     </Flex>;

@@ -303,7 +303,7 @@ export const TextAreaWithEmoji = (props: TextAreaWithEmojiProps & HTMLChakraProp
 
                     <Flex flexGrow={1} justify={'flex-end'} align={'center'}>
                         {props.value !== currentValue &&
-                            <Button h={'30px'} fontSize={'12px'} borderRadius={0} disabled={isSaving}
+                            <Button h={'30px'} fontSize={'12px'} disabled={isSaving}
                                     onClick={onSaveButtonClick}>
                                 {t('SAVE')}
                             </Button>}

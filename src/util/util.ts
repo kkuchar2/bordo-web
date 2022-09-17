@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import {User, UserProfile} from 'state/reducers/account/accountSlice.types';
+import {User, UserProfile} from 'queries/account/types';
 
 export const humanize = (str: string) => {
     let i, frags = str.split('_');

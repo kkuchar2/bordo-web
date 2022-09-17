@@ -1,8 +1,7 @@
-import {UserProfile} from 'state/reducers/account/accountSlice.types';
-
 import {queryClient} from '../App';
 import {FriendshipRequest} from '../types/friendship';
 
+import {UserProfile} from './account/accountSlice.types';
 import {authGet, authPost} from './base';
 
 interface FriendRequestIdRequestData {

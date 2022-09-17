@@ -1,14 +1,14 @@
-import React, {useCallback, useMemo} from 'react';
+import React, {useCallback} from 'react';
 
 import {Box, Button, Center, Flex, VStack} from '@chakra-ui/react';
 import {KeyIcon} from '@heroicons/react/24/outline';
 import {TextAreaWithEmoji} from 'components/chakra/TextAreaWithEmoji/TextAreaWithEmoji';
-import {ConnectedAccount} from 'components/ConnectedAccount/ConnectedAccount';
+import {GoogleAccountConnection} from 'components/ConnectedAccount/GoogleAccountConnection';
 import {
     showChangeEmailDialog,
     showChangePasswordDialog,
     showChangeUsernameDialog,
-    showDeleteAccount
+    showDeleteAccountDialog
 } from 'components/DialogSystem/readyDialogs';
 import EditableProfilePictureProperty
     from 'components/EditableProperties/EditableProfilePictureProperty/EditableProfilePictureProperty';
@@ -16,8 +16,10 @@ import EditableProperty from 'components/EditableProperties/EditableProperty';
 import {SettingsSection} from 'components/Settings/SettingsSection';
 import {useTranslation} from 'react-i18next';
 
+import {queryClient} from '../App';
 import WithAuth from '../hoc/WithAuth';
-import {changeAbout, getUser} from '../queries/account';
+import {changeAbout, deleteAccount, getUser} from '../queries/account';
+import {User} from '../queries/account/types';
 
 const Account = () => {
 
@@ -25,38 +27,28 @@ const Account = () => {
 
     const { isIdle, isLoading: isAboutSaving, isSuccess: isAboutSavingSuccess, mutate } = changeAbout();
 
+    const hasUsablePassword = queryClient.getQueryData<User>(['user'])?.has_usable_password;
+
+    const {
+        isLoading: deleteAccountLoading,
+        error: deleteAccountError,
+        data: deleteAccountData,
+        isSuccess: deleteAccountSuccess,
+        mutate: deleteAccountMutate
+    } = deleteAccount();
+
     const { data: user } = getUser();
 
-    const isOnlySocial = user?.social.only_social;
-
     const onDeleteAccountAction = useCallback(() => {
-        showDeleteAccount(isOnlySocial);
-    }, [user, isOnlySocial]);
-
-    const renderSocialAccountConnections = useMemo(() => {
-        const connections = user.social.connections;
-        const supportedProviders = user.social.supported_providers;
-
-        if (supportedProviders.length === 0) {
-            return null;
-        }
-
-        return <SettingsSection title={t('CONNECTED_TO_GOOGLE')}>
-            <Flex align={'center'} justify={'flex-start'} w={'100%'}>
-                {supportedProviders.map((provider, idx) => {
-                    return <ConnectedAccount key={idx} supportedProvider={provider}
-                                             connections={connections}/>;
-                })}
-            </Flex>
-        </SettingsSection>;
-    }, [user, t]);
+        showDeleteAccountDialog();
+    }, [user]);
 
     const onAboutSave = useCallback((value: string) => {
         mutate({ about: value });
     }, []);
 
-    return <VStack spacing={'30px'} w={'600px'} justify={'flex-start'} p={5} align={'stretch'}>
-        <Box bg={'rgba(0,0,0,0.1)'} p={'15px'}>
+    return <VStack spacing={'30px'} w={'600px'} h={'100%'} justify={'flex-start'} p={5} align={'stretch'}>
+        <Box bg={'#2a2a2a'} borderRadius={'10px'} p={'15px'}>
             <Center>
                 <EditableProfilePictureProperty
                     username={user.username}
@@ -85,8 +77,8 @@ const Account = () => {
                     value={user.profile.about}
                     w={'100%'}
                     h={'150px'}
-                    borderRadius={0}
-                    bg={'rgba(255, 255, 255, 0.02)'}
+                    borderRadius={'10px'}
+                    bg={'#232323'}
                     maxLength={300}
                     toolbarEnabled={true}
                     toolbarHeight={50}
@@ -94,7 +86,7 @@ const Account = () => {
                     emojiPickerEnabled={true}
                     emojiPickerButtonTextSize={20}
                     enableMaxCharacterCounter={true}
-                    fontSize={'sm'}
+                    fontSize={'md'}
                     resize={'none'}
                     isSaving={isAboutSaving}
                     onSave={onAboutSave}
@@ -119,7 +111,7 @@ const Account = () => {
         </Box>
 
         <VStack spacing={'20px'} align={'stretch'}>
-            <SettingsSection title={t('PASSWORD AND AUTHENTICATION')} show={!isOnlySocial}>
+            <SettingsSection title={t('PASSWORD AND AUTHENTICATION')} show={hasUsablePassword}>
                 <EditableProperty
                     id={'password'}
                     name={t('CHANGE_PASSWORD')}
@@ -136,10 +128,14 @@ const Account = () => {
                 />
             </SettingsSection>
 
-            {renderSocialAccountConnections}
+            <SettingsSection title={t('SOCIAL_ACCOUNTS')}>
+                <Flex align={'center'} justify={'flex-start'} w={'100%'}>
+                    <GoogleAccountConnection connection={user?.google_account}/>
+                </Flex>
+            </SettingsSection>
 
             <SettingsSection title={t('ACCOUNT_REMOVAL_SECTION_TITLE')}>
-                <Button bg={'red.600'} borderRadius={0} _hover={{
+                <Button bg={'red.600'} _hover={{
                     bg: 'red.500',
                 }} fontSize={'13px'} onClick={onDeleteAccountAction}>
                     {t('DELETE')}

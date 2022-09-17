@@ -17,7 +17,7 @@ export const ChangeAvatarModeSelector = (props: ChangeAvatarModeSelectorProps) =
         inputRef.current?.click();
     }, [inputRef]);
 
-    return <CenterFlex gap={'20px'} paddingTop={10} paddingBottom={10}>
+    return <CenterFlex gap={'20px'}>
         <CenterFlex direction={'column'} gap={'20px'}>
             <Button onClick={openFileSelectionWindow}
                     borderRadius={'full'}

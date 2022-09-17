@@ -1,6 +1,6 @@
 import React, {useCallback, useEffect} from 'react';
 
-import {Center, Heading, VStack} from '@chakra-ui/react';
+import {Center, Flex, Text} from '@chakra-ui/react';
 import {DelayedTransition} from 'components/chakra/DelayedTransition/DelayedTransition';
 import {FullSizeDelayedSpinner} from 'components/chakra/DelayedTransition/FullSizeDelayedSpinner';
 import {NavLink} from 'components/chakra/NavLink/NavLink';
@@ -75,26 +75,44 @@ const ResetPassword = () => {
     }
 
     return <Center w={'100%'} h={'100%'}>
-        <VStack align={'stretch'} spacing={5} bg={'rgb(39,39,39)'} w={'600px'} p={10} borderRadius={4}>
-            <Heading fontSize={'2xl'}>{'Set up new password'}</Heading>
+        <Flex borderRadius={{ base: 0, sm: 8 }}
+              direction={'column'}
+              bg={'#2a2a2a'}
+              width={{ base: '100%', sm: '400px' }}
+              p={'40px'}
+              gap={'30px'}>
+
+            <Text textAlign={'center'} fontWeight={'bold'} fontSize={'2xl'}>{'Set up new password'}</Text>
 
             <Form
                 config={formConfig}
                 submitButtonText={t('SET_NEW_PASSWORD')}
                 error={resetPasswordError?.data}
-                fieldBg={'rgb(47,47,47)'}
+                fieldBg={'#212121'}
                 disabled={resetPasswordLoading}
                 useCancelButton={false}
+                buttonsStackProps={{
+                    m: 0,
+                    justifyContent: 'center',
+                }}
+                buttonProps={{
+                    bg: '#434343',
+                    w: '250px',
+                    h: '50px',
+                    justifySelf: 'flex-end',
+                    borderRadius: '100px',
+                    fontSize: 'md'
+                }}
                 onSubmit={onSubmit}/>
 
-            {!user && <NavLink color={'#36b29b'}
-                               alignSelf={'flex-end'}
+            {!user && <NavLink color={'#77a4df'}
+                               alignSelf={'center'}
                                fontWeight={'semibold'}
                                to={'/'}>{'Back to login'}
             </NavLink>}
 
             <DelayedTransition pending={resetPasswordLoading}/>
-        </VStack>
+        </Flex>
     </Center>;
 };
 

@@ -42,7 +42,7 @@ const ForgotPassword = () => {
               direction={'column'}
               bg={'#2a2a2a'}
               width={{ base: '100%', sm: '400px' }}
-              padding={'20px'}
+              p={'40px'}
               gap={'40px'}>
             <VStack align={'stretch'} spacing={'20px'}>
                 <Form
@@ -51,13 +51,27 @@ const ForgotPassword = () => {
                     submitButtonText={t('RESET_PASSWORD')}
                     error={forgotPasswordError?.data}
                     disabled={forgotPasswordPending}
+                    fieldBg={'#232323'}
                     config={formConfig}
                     useCancelButton={false}
-                    onSubmit={requestPasswordReset}/>
+                    onSubmit={requestPasswordReset}
+                    buttonProps={{
+                        bg: '#434343',
+                        w: '250px',
+                        h: '50px',
+                        justifySelf: 'flex-end',
+                        borderRadius: '100px',
+                        fontSize: 'md'
+                    }}
+                    buttonsStackProps={{
+                        m: 0,
+                        mb: '20px',
+                        justifyContent: 'center',
+                    }}/>
 
                 <CenterFlex gap={'20px'}>
                     <NavLink color={'#77a4df'}
-                             fontSize={'sm'}
+                             fontSize={'md'}
                              fontWeight={'semibold'}
                              to={'/'}>{t('GO_BACK')}
                     </NavLink>

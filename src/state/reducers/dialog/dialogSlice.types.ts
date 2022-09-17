@@ -8,9 +8,11 @@ export interface IDialogComponentProps {
     description?: string;
     icon?: IconProps;
     onCancel?: () => void;
+    onBack?: () => void;
     onConfirm?: () => void;
     flexProps?: FlexProps;
     closeable?: boolean;
+    arrowBack?: boolean;
 }
 
 export interface BaseDialogProps {

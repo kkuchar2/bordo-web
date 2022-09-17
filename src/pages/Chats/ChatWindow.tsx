@@ -4,10 +4,11 @@ import {Box, Flex, Text} from '@chakra-ui/react';
 import {InputWithEmoji} from 'components/chakra/InputWithEmoji/InputWithEmoji';
 import {MultiUserSelect} from 'components/Select/MultiUserSelect/MultiUserSelect';
 import {getSocketId} from 'state/middleware/channels';
-import {UserProfile} from 'state/reducers/account/accountSlice.types';
 import {Conversation} from 'state/reducers/conversations/conversationsSlice.types';
 import {sendMessageCreateConversation, sendMessageToExistingConversation} from 'state/services/conversationsService';
 import {useAppDispatch} from 'state/store';
+
+import {UserProfile} from '../../queries/account/types';
 
 interface ChatFullWindowProps {
     conversation?: Conversation | null;

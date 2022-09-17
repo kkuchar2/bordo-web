@@ -14,10 +14,8 @@ export const FriendsList = () => {
         return <Center w={'100%'} h={'100%'}>{'Loading...'}</Center>;
     }
 
-    console.log('Friends: ', friends);
-
     if (!friends || friends.length === 0) {
-        return <Center h={'100vh'}>
+        return <Center h={'100%'} w={'100%'}>
             <Box>{'You have no connections'}</Box>
         </Center>;
     }

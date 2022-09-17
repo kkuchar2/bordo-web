@@ -47,7 +47,7 @@ const Chats = () => {
     }, []);
 
     if (!currentConversation && !isNewConversation) {
-        return <Flex direction={'column'} height={'100vh'} p={3}>
+        return <Flex direction={'column'} height={'100%'} p={3}>
             <Flex align={'center'} p={4}>
                 <Text fontSize={'26px'} fontWeight={'bold'}>{t('CHATS')}</Text>
             </Flex>

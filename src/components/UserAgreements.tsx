@@ -8,7 +8,7 @@ const UserAgreements = () => {
     const { t } = useTranslation();
 
     return <Flex flexGrow={1} direction={'column'} justify={'flex-end'}>
-        <Text textAlign={'center'} fontSize={'12px'} as={'span'}>
+        <Text textAlign={'center'} fontSize={'sm'} as={'span'}>
             {t('USER_AGREEMENTS')}
             <NavLink color={'#ffffff'}
                      padding={2}

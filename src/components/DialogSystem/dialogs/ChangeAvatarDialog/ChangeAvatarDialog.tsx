@@ -1,12 +1,12 @@
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
 
-import {Box} from '@chakra-ui/react';
+import {Box, Button, Flex} from '@chakra-ui/react';
 import {IGif} from '@giphy/js-types';
 import {DelayedTransition} from 'components/chakra/DelayedTransition/DelayedTransition';
 import {Crop} from 'components/Image/Crop/Crop';
 import {GIFSelect} from 'components/Image/GIFSelect/GIFSelect';
 import {useTranslation} from 'react-i18next';
-import {changeDialogTitle, closeDialog} from 'state/reducers/dialog/dialogSlice';
+import {changeDialog} from 'state/reducers/dialog/dialogSlice';
 import {DialogProps} from 'state/reducers/dialog/dialogSlice.types';
 import {useAppDispatch} from 'state/store';
 
@@ -50,18 +50,6 @@ export const ChangeAvatarDialog = (props: DialogProps) => {
         mutate: changeAnimatedAvatarMutate
     } = changeAnimatedAvatar();
 
-    useEffect(() => {
-        if (changeAvatarSuccess) {
-            dispatch(closeDialog());
-        }
-    }, [changeAvatarSuccess]);
-
-    useEffect(() => {
-        if (changeAnimatedAvatarSuccess) {
-            dispatch(closeDialog());
-        }
-    }, [changeAnimatedAvatarSuccess]);
-
     const validateBlobSize = useCallback((blob: Blob) => {
         return blob.size <= FILE_SIZE_LIMIT_BYTES;
     }, []);
@@ -98,11 +86,16 @@ export const ChangeAvatarDialog = (props: DialogProps) => {
         }
     }, [image, croppedArea, extension, file, sendChangeProfileImage]);
 
+    const onBack = useCallback(() => {
+        setMode(null);
+        dispatch(changeDialog('CHANGE_AVATAR', 400, false, null));
+    }, []);
+
     useEffect(() => {
         if (image) {
-            dispatch(changeDialogTitle('Edit image'));
+            dispatch(changeDialog('EDIT_IMAGE', 500, true, onBack));
         }
-    }, [image]);
+    }, [image, onBack]);
 
     const onGifSelected = useCallback(
         (gif: IGif) => {
@@ -112,27 +105,20 @@ export const ChangeAvatarDialog = (props: DialogProps) => {
             });
         }, []);
 
-    const renderError = useMemo(() => {
-        if (changeAvatarError?.data?.avatar) {
-            return <div className={'error'}>{changeAvatarError?.data?.avatar[0]}</div>;
-        }
-    }, []);
-
-    const renderGIFSearchOrCropContainer = useMemo(() => {
+    const gifSearchOrCropContainer = useMemo(() => {
         if (mode === 'upload') {
-            return <Crop className={'mt-[20px]'} image={image} onCroppedAreaChange={setCroppedArea}/>;
+            return <Crop image={image} onCroppedAreaChange={setCroppedArea}/>;
         }
         else if (mode === 'gif') {
-            return <GIFSelect giphyFetch={giphyFetch}
-                              onGifSelected={onGifSelected}
+            return <GIFSelect giphyFetch={giphyFetch} onGifSelected={onGifSelected}
                               pending={changeAnimatedAvatarIsPending}/>;
         }
     }, [mode, image, onGifSelected, changeAnimatedAvatarIsPending]);
 
     const onAnimatedAvatarSelect = useCallback(() => {
         setMode('gif');
-        dispatch(changeDialogTitle('GIF_SELECT_TITLE'));
-    }, []);
+        dispatch(changeDialog('GIF_SELECT_TITLE', 500, true, onBack));
+    }, [onBack]);
 
     const onFileSelected = useCallback((e) => {
         const files = e.target.files;
@@ -168,31 +154,21 @@ export const ChangeAvatarDialog = (props: DialogProps) => {
 
     const renderButtons = useMemo(() => {
         if (mode === 'upload') {
-            return (
-                <div className={'flex w-full justify-end p-[20px]'}>
-                    <button type={'button'} className={'cancelButton'} onClick={onCancelClick} disabled={false}>
-                        {t('CANCEL')}
-                    </button>
-                    <button type={'button'} className={'confirmButton'} onClick={onChangeAvatar} disabled={false}>
-                        {t('CONFIRM')}
-                    </button>
-                </div>
-            );
+            return <Flex w={'100%'} justify={'flex-end'} gap={'20px'}>
+                <Button onClick={onCancelClick} disabled={false}>{t('CANCEL')}</Button>
+                <Button onClick={onChangeAvatar} disabled={false}>{t('CONFIRM')}</Button>
+            </Flex>;
         }
     }, [mode, image, croppedArea, onCancelClick, onConfirmClick]);
 
     return <Box>
-        {mode === null ? (
-            <ChangeAvatarModeSelector
-                translation={t}
-                onFileSelected={onFileSelected}
-                onAnimatedAvatarSelected={onAnimatedAvatarSelect}
-            />
-        ) : null}
+        {!mode && <ChangeAvatarModeSelector
+            translation={t}
+            onFileSelected={onFileSelected}
+            onAnimatedAvatarSelected={onAnimatedAvatarSelect}/>}
 
-        {renderGIFSearchOrCropContainer}
+        {gifSearchOrCropContainer}
         {renderButtons}
-        {renderError}
         <DelayedTransition pending={changeAvatarIsPending || changeAnimatedAvatarIsPending}/>
     </Box>;
 };
