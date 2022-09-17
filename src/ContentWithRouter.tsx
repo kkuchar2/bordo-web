@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useMemo} from 'react';
+import React, {useEffect, useMemo} from 'react';
 
 import {Box, ChakraProvider, Flex} from '@chakra-ui/react';
 import Dialogs from 'components/DialogSystem/Dialogs';
@@ -8,8 +8,8 @@ import {showFriendRequestReceived} from 'components/Toast/readyToastNotification
 import {getUser} from 'queries/account';
 import {Toaster} from 'react-hot-toast';
 import {useSelector} from 'react-redux';
-import {useLocation, useNavigate} from 'react-router-dom';
-import {openView} from 'state/reducers/application/appSlice';
+import {useLocation} from 'react-router-dom';
+import {currentView, loadLastView} from 'state/reducers/application/appSlice';
 import {RootState, useAppDispatch} from 'state/store';
 
 import {queryClient} from './App';
@@ -19,13 +19,11 @@ import theme from './theme';
 
 const ContentWithRouter = () => {
 
-    const currentViewId = useSelector((state: RootState) => state.app.currentView ?? 'Home');
-
-    const navigate = useNavigate();
-
-    const location = useLocation();
+    const currentViewId = useSelector(currentView);
 
     const dispatch = useAppDispatch();
+
+    const location = useLocation();
 
     const socketId = useSelector((state: RootState) => state.pusher.socketId);
 
@@ -37,10 +35,9 @@ const ContentWithRouter = () => {
         }
     });
 
-    const onViewChangeMenu = useCallback((path, id) => {
-        navigate(path);
-        dispatch(openView(id));
-    }, [currentViewId]);
+    useEffect(() => {
+        dispatch(loadLastView());
+    }, []);
 
     const routedContent = useMemo(() => {
         return <Content/>;
@@ -50,7 +47,7 @@ const ContentWithRouter = () => {
         if (isLoading || !user || location.pathname.startsWith('/resetPassword') || location.pathname.startsWith('/verify-email')) {
             return null;
         }
-        return <MainMenu items={mainMenuItems} onViewChange={onViewChangeMenu} currentViewId={currentViewId}/>;
+        return <MainMenu items={mainMenuItems} currentViewId={currentViewId}/>;
     }, [user, location]);
 
     useEffect(() => {

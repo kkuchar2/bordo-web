@@ -1,7 +1,8 @@
 import React, {ReactNode, useCallback, useMemo} from 'react';
 
-import {Avatar, AvatarBadge, Button, Center, Divider, Flex, HStack, Text, VStack} from '@chakra-ui/react';
-import {Group, Item, ItemsMap, MenuItems} from 'components/MainMenu/mainMenuItems';
+import {Avatar, AvatarBadge, Center, Divider, Flex, HStack, Text, VStack} from '@chakra-ui/react';
+import {MainMenuItemComponent} from 'components/MainMenu/MainMenuItemComponent';
+import {Group, MainMenuItem, MainMenuItemsMap, MenuItems} from 'components/MainMenu/mainMenuItems';
 import {useTranslation} from 'react-i18next';
 import {getAvatar} from 'util/util';
 
@@ -10,12 +11,11 @@ import {getUser} from '../../queries/account';
 interface MainMenuProps {
     items: MenuItems,
     currentViewId: string,
-    onViewChange: (path: string, id: string) => void,
 }
 
 const MainMenu = (props: MainMenuProps) => {
 
-    const { items, currentViewId, onViewChange } = props;
+    const { items, currentViewId } = props;
 
     const { data: user } = getUser();
 
@@ -23,41 +23,10 @@ const MainMenu = (props: MainMenuProps) => {
 
     const avatar = getAvatar(user);
 
-    const renderGroupItems = useCallback((groupItems: ItemsMap | Item[]): ReactNode => {
+    const renderGroupItems = useCallback((groupItems: MainMenuItemsMap | MainMenuItem[]): ReactNode => {
         if (Array.isArray(groupItems)) {
-            return groupItems.map((item: Item) => {
-                return <Button display={'flex'}
-                               key={item.id}
-                               borderRadius={3}
-                               paddingLeft={3}
-                               paddingRight={2}
-                               paddingTop={0}
-                               justifyContent={'flex-start'}
-                               alignItems={'center'}
-                               width={'200px'}
-                               paddingBottom={0}
-                               onClick={() => {
-                                   if (!item.isAction) {
-                                       onViewChange(item.url, item.id);
-                                   }
-                                   else {
-                                       item.onClick();
-                                   }
-                               }}
-                               h={'35px'}
-                               gap={2}
-                               bg={currentViewId === item.id ? 'rgba(255,255,255,0.1)' : 'transparent'}>
-                    <Text fontSize={'14px'}
-                          lineHeight={'35px'}
-                          fontWeight={'medium'}
-                          color={'#bcbcbc'}
-                          textOverflow={'ellipsis'}
-                          whiteSpace={'nowrap'}
-                          overflow={'hidden'}>{t(item.displayName)}</Text>
-                    <Flex flexGrow={1} justify={'flex-end'}>
-                        {item.icon ? <item.icon.component width={20}/> : null}
-                    </Flex>
-                </Button>;
+            return groupItems.map((item: MainMenuItem) => {
+                return <MainMenuItemComponent key={item.id} item={item} active={currentViewId === item.id}/>;
             });
         }
         else {

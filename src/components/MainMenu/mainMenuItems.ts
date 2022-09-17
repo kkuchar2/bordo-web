@@ -1,73 +1,85 @@
 import {ArrowRightOnRectangleIcon} from '@heroicons/react/20/solid';
 import {AxiosConfigs} from 'queries/base';
+import {NavigateFunction} from 'react-router-dom';
+import {clearCurrentView, storeCurrentView} from 'state/reducers/application/appSlice';
+import {store} from 'state/store';
 
 import {queryClient} from '../../App';
 import ApiClient from '../../client';
 import {IconProps} from '../../icon/icon.types';
 
-export interface Item {
+export interface MainMenuItem {
     id: string;
     url: string;
     displayName: string;
     description: string;
     isAction?: boolean;
-    onClick?: () => void;
+    onClick?: (navigate: NavigateFunction) => void;
     icon?: IconProps;
 }
 
-export interface ItemsMap {
-    [key: string]: Item;
+export interface MainMenuItemsMap {
+    [key: string]: MainMenuItem;
 }
 
 export interface Group {
     groupName?: string;
-    groupItems: ItemsMap | Item[];
+    groupItems: MainMenuItemsMap | MainMenuItem[];
 }
 
 export interface MenuItems {
     [groupKey: string]: Group
 }
 
+const viewSwitchItem = (item: MainMenuItem) => {
+    return {
+        ...item,
+        onClick: (navigate: NavigateFunction) => {
+            store.dispatch(storeCurrentView(item.id));
+            navigate(item.url);
+        }
+    };
+};
+
 export const mainMenuItems: MenuItems = {
     pages: {
         groupName: 'PAGES',
         groupItems: {
-            Home: {
+            Home: viewSwitchItem({
                 id: 'Home',
                 url: '/home',
                 displayName: 'HOME_PAGE',
-                description: '',
-            },
-            Friends: {
+                description: ''
+            }),
+            Friends: viewSwitchItem({
                 id: 'Friends',
                 url: '/friends',
                 displayName: 'FRIENDS',
                 description: '',
-            },
-            Chats: {
+            }),
+            Chats: viewSwitchItem({
                 id: 'Chats',
                 url: '/chats',
                 displayName: 'CHATS',
                 description: '',
-            },
-            Account: {
+            }),
+            Account: viewSwitchItem({
                 id: 'Account',
                 url: '/account',
                 displayName: 'ACCOUNT_SETTINGS',
                 description: '',
-
-            }
+            })
         }
     },
     personalisation: {
         groupName: 'PERSONALISATION',
         groupItems: {
-            Language: {
+            Language: viewSwitchItem({
                 id: 'Language',
                 url: '/language',
                 displayName: 'LANGUAGE',
                 description: '',
-            }
+            })
         }
     },
     actions: {
@@ -78,11 +90,12 @@ export const mainMenuItems: MenuItems = {
                 displayName: 'LOGOUT',
                 description: '',
                 isAction: true,
-                onClick: async () => {
+                onClick: async (navigate: NavigateFunction) => {
                     const response = await ApiClient.post('account/logout', {}, { ...AxiosConfigs.WITH_CREDENTIALS_AND_CSRF });
                     if (response.status === 200) {
                         queryClient.removeQueries(['user']);
-                        window.location.href = '/';
+                        store.dispatch(clearCurrentView());
+                        navigate('/');
                     }
                 },
                 icon: {
@@ -92,23 +105,4 @@ export const mainMenuItems: MenuItems = {
             }
         ]
     }
-};
-
-export const findView = (id: string): Item | undefined => {
-    for (const key in mainMenuItems) {
-        const group = mainMenuItems[key];
-
-        const items = group.groupItems;
-
-        if (typeof items === 'object') {
-            for (const groupItemKey in items) {
-                const groupItem = items[groupItemKey];
-                if (groupItem.id === id) {
-                    return groupItem;
-                }
-            }
-        }
-    }
-
-    return null;
 };

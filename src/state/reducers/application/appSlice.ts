@@ -1,4 +1,5 @@
 import {createSlice, Dispatch} from '@reduxjs/toolkit';
+import {RootState} from 'state/store';
 
 import {AppSliceState} from './appSlice.types';
 
@@ -30,11 +31,19 @@ const appSlice = createSlice({
         },
         onLoadLastView: state => {
             const persistedView = localStorage.getItem('currentView');
-            state.currentView = persistedView !== 'undefined' ? persistedView : 'home';
+            if (persistedView) {
+                state.currentView = persistedView ? persistedView : 'Home';
+            }
         },
-        onChangeView: (state, action) => {
+        onStoreCurrentView: (state, action) => {
             state.currentView = action.payload;
-            localStorage.setItem('currentView', action.payload);
+            const viewId = action.payload;
+            if (viewId) {
+                localStorage.setItem('currentView', action.payload);
+            }
+            else {
+                localStorage.removeItem('currentView');
+            }
         }
     }
 });
@@ -45,14 +54,16 @@ export const changeCurrentViewedModel = (model: string, modelPackage: string) =>
 
 export const changeTheme = (theme: string) => (dispatch: Dispatch) => dispatch(onChangeTheme(theme));
 
-export const openView = (viewId: string) => async (dispatch: Dispatch) => dispatch(onChangeView(viewId));
+export const storeCurrentView = (viewId: string) => async (dispatch: Dispatch) => dispatch(onStoreCurrentView(viewId));
+
+export const clearCurrentView = () => async (dispatch: Dispatch) => dispatch(onStoreCurrentView(null));
 
 export const loadLastView = () => async (dispatch: Dispatch) => dispatch(onLoadLastView());
 
-export const selectorView = (state: any) => state.app.currentView;
+export const currentView = (state: RootState) => state.app.currentView;
 
 export const selectorTheme = (state: any) => state.app.theme;
 
-export const { onChangeView, onLoadLastView, onChangeTheme, onChangeCurrentModel } = appSlice.actions;
+export const { onStoreCurrentView, onLoadLastView, onChangeTheme, onChangeCurrentModel } = appSlice.actions;
 
 export default appSlice.reducer;
