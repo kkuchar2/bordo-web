@@ -7,7 +7,7 @@ import {openDialog} from 'state/reducers/dialog/dialogSlice';
 import {store} from 'state/store';
 
 import {changeEmail, changePassword, changeUsername} from '../../queries/account';
-import {User} from '../../queries/accountSlice.types';
+import {User} from '../../queries/account/types';
 
 import {SentEmailDialogArgs} from './readyDialogs.types';
 
@@ -80,7 +80,9 @@ export const showSentEmailDialog = <T = any>(args: SentEmailDialogArgs<T>) => {
                     icon: {
                         component: EnvelopeIcon,
                         color: '#24a0ed',
-                        backgroundColor: '#1c3545'
+                        flexProps: {
+                            justify: 'flex-start'
+                        }
                     },
                     description: description,
                     closeable: closeable
@@ -101,7 +103,9 @@ export const showVerifyAccountDialog = (data: VerifyAccountDialogProps) => {
                     icon: {
                         component: EnvelopeIcon,
                         color: '#24a0ed',
-                        backgroundColor: '#1c3545'
+                        flexProps: {
+                            justify: 'flex-start'
+                        }
                     },
                     description: 'VERIFY_ACCOUNT_DESCRIPTION',
                     closeable: true
@@ -192,7 +196,9 @@ export const showChangeEmailDialog = (args: OpenReadyDialogArgs) => {
                     icon: {
                         component: EnvelopeIcon,
                         color: '#8ed3ed',
-                        backgroundColor: '#265e80'
+                        flexProps: {
+                            justify: 'flex-start'
+                        }
                     },
                     flexProps: {
                         minWidth: 400
@@ -228,7 +234,9 @@ export const showChangePasswordDialog = (args: OpenReadyDialogArgs) => {
                     icon: {
                         component: KeyIcon,
                         color: '#ffb700',
-                        backgroundColor: 'rgba(255,255,255,0.11)'
+                        flexProps: {
+                            justify: 'flex-start'
+                        }
                     },
                 },
                 data: {
@@ -251,7 +259,9 @@ export const showServiceUnavailableDialog = () => {
                     icon: {
                         component: ExclamationCircleIcon,
                         color: '#ca1717',
-                        backgroundColor: '#451c1c'
+                        flexProps: {
+                            justify: 'flex-start'
+                        }
                     },
                     closeable: true
                 },
@@ -276,7 +286,9 @@ export const showPasswordCreationRequiredDialog = () => {
                     icon: {
                         component: EnvelopeIcon,
                         color: '#24a0ed',
-                        backgroundColor: '#1c3545'
+                        flexProps: {
+                            justify: 'flex-start'
+                        }
                     },
                 }
             }
@@ -303,7 +315,9 @@ export const showDeleteAccountDialog = () => {
                     icon: {
                         component: TrashIcon,
                         color: 'red.900',
-                        backgroundColor: '#1c3545'
+                        flexProps: {
+                            justify: 'flex-start',
+                        }
                     },
                 },
                 data: {}
@@ -329,8 +343,9 @@ export const showDisconnectGoogleDialog = () => {
                     },
                     icon: {
                         component: GoogleIcon,
-                        color: '#ca1717',
-                        backgroundColor: 'none'
+                        flexProps: {
+                            justify: 'flex-start'
+                        }
                     },
                 },
                 data: {}

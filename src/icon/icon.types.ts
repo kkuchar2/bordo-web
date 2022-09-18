@@ -1,5 +1,8 @@
+import {FlexProps} from '@chakra-ui/react';
+
 export interface IconProps {
     component?: (props: any) => JSX.Element;
-    backgroundColor?: string;
     color?: string;
+    size?: number;
+    flexProps?: FlexProps;
 }

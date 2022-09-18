@@ -1,6 +1,6 @@
 import React, {useCallback, useEffect, useMemo} from 'react';
 
-import {Box, chakra, Circle, Flex, HStack, Stack, Text} from '@chakra-ui/react';
+import {Box, chakra, Flex, HStack, Stack, Text} from '@chakra-ui/react';
 import {XMarkIcon} from '@heroicons/react/24/outline';
 import {ArrowLeftIcon} from '@heroicons/react/24/solid';
 import {ButtonWithIcon} from 'components/chakra/ButtonWithIcon/ButtonWithIcon';
@@ -120,11 +120,11 @@ const Dialogs = () => {
         const title = componentProps?.dialog?.title;
         const icon = componentProps?.dialog?.icon;
 
-        return <HStack spacing={'20px'} justifyContent={'flex-start'} align={'center'} flexGrow={1}>
+        return <HStack spacing={'10px'} justifyContent={'flex-start'} align={'center'} flexGrow={1}>
             {icon &&
-                <Circle bg={icon.backgroundColor} size={'40px'}>
-                    <icon.component width={17} height={17} color={icon.color}/>
-                </Circle>}
+                <Flex align={'center'} justify={'center'}{...icon.flexProps}>
+                    <icon.component width={icon.size || 20} height={icon.size || 20} color={icon.color}/>
+                </Flex>}
             <Text flexGrow={1} fontSize={'md'} fontWeight={'bold'}>{t(title)}</Text>
             <ButtonWithIcon title={'Close'}
                             width={'40px'}
