@@ -10,8 +10,7 @@ import {
     showChangeUsernameDialog,
     showDeleteAccountDialog
 } from 'components/DialogSystem/readyDialogs';
-import EditableProfilePictureProperty
-    from 'components/EditableProperties/EditableProfilePictureProperty/EditableProfilePictureProperty';
+import EditableProfilePictureProperty from 'components/EditableProperties/EditableProfilePictureProperty';
 import EditableProperty from 'components/EditableProperties/EditableProperty';
 import {SettingsSection} from 'components/Settings/SettingsSection';
 import {useTranslation} from 'react-i18next';
@@ -50,11 +49,7 @@ const Account = () => {
     return <VStack spacing={'30px'} w={'600px'} h={'100%'} justify={'flex-start'} p={5} align={'stretch'}>
         <Box bg={'#2a2a2a'} borderRadius={'10px'} p={'15px'}>
             <Center>
-                <EditableProfilePictureProperty
-                    username={user.username}
-                    useImageUpload={true}
-                    useActiveIndicator={false}
-                    pictureSize={150}/>
+                <EditableProfilePictureProperty username={user.username}/>
             </Center>
             <VStack spacing={'30px'} padding={3} width={'100%'} align={'stretch'}>
                 <EditableProperty
