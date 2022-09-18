@@ -5,7 +5,6 @@ const path = require('path');
 const CompressionPlugin = require('compression-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 const HtmlWebPackPlugin = require('html-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const MomentLocalesPlugin = require('moment-locales-webpack-plugin');
 const webpack = require('webpack');
 
@@ -81,7 +80,6 @@ module.exports = {
                 {from: resolvePath('assets/translation'), to: resolvePath('dist/assets/translation')},
             ],
         }),
-        new MiniCssExtractPlugin(),
     ],
     module: {
         rules: [
@@ -103,22 +101,6 @@ module.exports = {
                         }
                     }
                 ]
-            },
-            { // SCSS
-                test: /\.(scss)$/,
-                use: [
-                    {loader: 'style-loader'},
-                    {loader: 'css-loader'},
-                    {loader: 'sass-loader'}
-                ]
-            },
-            {
-                test: /\.css$/,
-                use: [
-                    MiniCssExtractPlugin.loader,
-                    'css-loader',
-                    'postcss-loader',
-                ],
             },
             {
                 test: /\.m?js/,

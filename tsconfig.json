@@ -17,14 +17,8 @@
       "components/*": [
         "components/*"
       ],
-      "styles": [
-        "scss/"
-      ],
       "util/*": [
         "util/*"
-      ],
-      "componentStyles": [
-        "scss/components/"
       ]
     },
     "rootDir": "src",
