@@ -198,7 +198,7 @@ export const googleDisconnect = () => {
 };
 
 export const getUser = () => {
-    return authGet<User>(['user'], 'account/get-user')({
+    return authGet<User>(['user'], 'account/user')({
         onSuccess: () => {
             store.dispatch(pusherConnect());
         }
