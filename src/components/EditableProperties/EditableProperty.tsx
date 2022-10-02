@@ -1,6 +1,7 @@
 import React, {useCallback, useMemo} from 'react';
 
 import {Button, Flex, Text} from '@chakra-ui/react';
+import {OpenReadyDialogArgs} from 'components/DialogSystem/readyDialogs';
 import {useTranslation} from 'react-i18next';
 
 import {IconProps} from '../../icon/icon.types';
