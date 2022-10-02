@@ -70,7 +70,7 @@ export const changePassword = () => {
 };
 
 export const changeAvatar = () => {
-    return authPut(['changeAvatar'], 'account/change-avatar')({
+    return authPost(['changeAvatar'], 'account/change-avatar')({
         onSuccess: () => {
             // TODO: Add progress handler in mutation
             queryClient.invalidateQueries(['user']);
@@ -203,4 +203,8 @@ export const getUser = () => {
             store.dispatch(pusherConnect());
         }
     });
+};
+
+export const prepareAvatarUploadInfo = () => {
+    return authPost(['avatarUploadInfo'], 'account/avatar-upload-info')({});
 };

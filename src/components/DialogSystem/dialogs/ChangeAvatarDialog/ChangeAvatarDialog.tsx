@@ -6,12 +6,12 @@ import {DelayedTransition} from 'components/chakra/DelayedTransition/DelayedTran
 import {Crop} from 'components/Image/Crop/Crop';
 import {GIFSelect} from 'components/Image/GIFSelect/GIFSelect';
 import {useTranslation} from 'react-i18next';
-import {changeDialog} from 'state/reducers/dialog/dialogSlice';
+import {changeDialog, closeDialog} from 'state/reducers/dialog/dialogSlice';
 import {DialogProps} from 'state/reducers/dialog/dialogSlice.types';
 import {useAppDispatch} from 'state/store';
 
 import {giphyFetch} from '../../../../api/config';
-import {changeAnimatedAvatar, changeAvatar} from '../../../../queries/account';
+import {changeAvatar, prepareAvatarUploadInfo} from '../../../../queries/account';
 
 import {ChangeAvatarModeSelector} from './ChangeAvatarModeSelector/ChangeAvatarModeSelector';
 import {generateCroppedImageFile} from './cropImage';
@@ -19,8 +19,6 @@ import {generateCroppedImageFile} from './cropImage';
 const FILE_SIZE_LIMIT_BYTES = 5 * 1024 * 1024;
 
 export const ChangeAvatarDialog = (props: DialogProps) => {
-    const { onConfirm, onCancel } = props.dialog;
-
     const { t } = useTranslation();
 
     const [file, setFile] = useState(null);
@@ -32,59 +30,38 @@ export const ChangeAvatarDialog = (props: DialogProps) => {
 
     const dispatch = useAppDispatch();
 
-    const {
-        isIdle: changeAvatarIdle,
-        isLoading: changeAvatarIsPending,
-        isError: changeAvatarIsError,
-        error: changeAvatarError,
-        isSuccess: changeAvatarSuccess,
-        mutate: changeAvatarMutate
-    } = changeAvatar();
+    const { isLoading: changeAvatarIsPending, mutate: changeAvatarMutate } = changeAvatar();
 
-    const {
-        isIdle: changeAnimatedAvatarIdle,
-        isLoading: changeAnimatedAvatarIsPending,
-        isError: changeAnimatedAvatarIsError,
-        error: changeAnimatedAvatarError,
-        isSuccess: changeAnimatedAvatarSuccess,
-        mutate: changeAnimatedAvatarMutate
-    } = changeAnimatedAvatar();
+    const { data: avatarUploadInfo, mutate: avatarUploadInfoMutate } = prepareAvatarUploadInfo();
 
     const validateBlobSize = useCallback((blob: Blob) => {
         return blob.size <= FILE_SIZE_LIMIT_BYTES;
     }, []);
 
-    const sendChangeProfileImage = useCallback(
-        (blob: Blob) => {
-            const isCorrectSize = validateBlobSize(blob);
+    const sendChangeProfileImage = useCallback(async (blob: Blob) => {
+        const isCorrectSize = validateBlobSize(blob);
 
-            if (!isCorrectSize) {
-                console.error('File is too big');
-                // TODO: show error
-                return;
-            }
-            //changeAvatarMutate(new File([blob], ` ${uuidv4()}${extension}`)));
-        },
-        [extension]
-    );
-
-    const onChangeAvatar = useCallback(() => {
-        if (extension === '.gif') {
-            const blob = file.slice(0, file.size, 'image/gif');
-
-            const isCorrectSize = validateBlobSize(blob);
-
-            if (!isCorrectSize) {
-                console.error('File is too big');
-                // TODO: show error
-                return;
-            }
-            //changeAvatarMutate(new File([blob], `${uuidv4()}.gif`, { type: 'image/gif' })));
+        if (!isCorrectSize) {
+            console.error('File is too big');
+            // TODO: show error
+            return;
         }
-        else {
-            generateCroppedImageFile(image, croppedArea, sendChangeProfileImage);
-        }
-    }, [image, croppedArea, extension, file, sendChangeProfileImage]);
+        console.log('Uploading file using signed URL: ', avatarUploadInfo.signed_url);
+
+        await fetch(avatarUploadInfo.signed_url, {
+            method: 'PUT',
+            body: blob,
+            headers: {
+                'Content-Type': 'application/octet-stream',
+            },
+        }).then((response) => {
+            console.log('File uploaded successfully: ', response);
+            console.log('Sending to server that file is uploaded: ', avatarUploadInfo.url);
+            changeAvatarMutate({
+                avatar: 'https://storage.cloud.google.com/bordo-bucket-private-dev/' + avatarUploadInfo.url,
+            });
+        });
+    }, [extension, avatarUploadInfo]);
 
     const onBack = useCallback(() => {
         setMode(null);
@@ -99,9 +76,8 @@ export const ChangeAvatarDialog = (props: DialogProps) => {
 
     const onGifSelected = useCallback(
         (gif: IGif) => {
-            changeAnimatedAvatarMutate({
-                animated_avatar: `https://media.giphy.com/media/${gif.id}/giphy.gif`,
-                use_animated_avatar: true
+            changeAvatarMutate({
+                avatar: `https://media.giphy.com/media/${gif.id}/giphy.gif`,
             });
         }, []);
 
@@ -110,10 +86,9 @@ export const ChangeAvatarDialog = (props: DialogProps) => {
             return <Crop image={image} onCroppedAreaChange={setCroppedArea}/>;
         }
         else if (mode === 'gif') {
-            return <GIFSelect giphyFetch={giphyFetch} onGifSelected={onGifSelected}
-                              pending={changeAnimatedAvatarIsPending}/>;
+            return <GIFSelect giphyFetch={giphyFetch} onGifSelected={onGifSelected} pending={changeAvatarIsPending}/>;
         }
-    }, [mode, image, onGifSelected, changeAnimatedAvatarIsPending]);
+    }, [mode, image, onGifSelected, changeAvatarIsPending]);
 
     const onAnimatedAvatarSelect = useCallback(() => {
         setMode('gif');
@@ -141,22 +116,36 @@ export const ChangeAvatarDialog = (props: DialogProps) => {
     }, []);
 
     const onCancelClick = useCallback(() => {
-        if (onCancel) {
-            onCancel();
-        }
-    }, [onCancel]);
+        dispatch(closeDialog());
+    }, []);
 
     const onConfirmClick = useCallback(() => {
-        if (onConfirm) {
-            onConfirm();
+        if (extension === '.gif') {
+            const blob = file.slice(0, file.size, 'image/gif');
+
+            const isCorrectSize = validateBlobSize(blob);
+
+            if (!isCorrectSize) {
+                console.error('File is too big');
+                // TODO: show error
+                return;
+            }
         }
-    }, [onConfirm]);
+        console.log('Requesting signed url');
+        avatarUploadInfoMutate({ file_extension: extension.slice(1) });
+    }, [image, croppedArea, extension, file, sendChangeProfileImage]);
+
+    useEffect(() => {
+        if (mode === 'upload' && avatarUploadInfo && avatarUploadInfo.signed_url) {
+            generateCroppedImageFile(image, croppedArea, sendChangeProfileImage);
+        }
+    }, [avatarUploadInfo]);
 
     const renderButtons = useMemo(() => {
         if (mode === 'upload') {
             return <Flex w={'100%'} justify={'flex-end'} gap={'20px'}>
                 <Button onClick={onCancelClick} disabled={false}>{t('CANCEL')}</Button>
-                <Button onClick={onChangeAvatar} disabled={false}>{t('CONFIRM')}</Button>
+                <Button onClick={onConfirmClick} disabled={false}>{t('CONFIRM')}</Button>
             </Flex>;
         }
     }, [mode, image, croppedArea, onCancelClick, onConfirmClick]);
@@ -169,6 +158,6 @@ export const ChangeAvatarDialog = (props: DialogProps) => {
 
         {gifSearchOrCropContainer}
         {renderButtons}
-        <DelayedTransition pending={changeAvatarIsPending || changeAnimatedAvatarIsPending}/>
+        <DelayedTransition pending={changeAvatarIsPending}/>
     </Box>;
 };

@@ -8,8 +8,6 @@ export type ConversationParticipant = {
     username: string;
     profile: {
         avatar: string;
-        use_animated_avatar: boolean;
-        animated_avatar: string;
     }
 }
 

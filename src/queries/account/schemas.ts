@@ -10,8 +10,6 @@ export const UserEmailSchema: SchemaOf<EmailAddress> = object({
 export const UserProfileSchema: SchemaOf<UserProfile> = object({
     about: string().nullable(),
     avatar: string().nullable(),
-    animated_avatar: string().nullable(),
-    use_animated_avatar: boolean().required(),
     friends: array().of(object({
         id: string().required(),
         username: string().required(),

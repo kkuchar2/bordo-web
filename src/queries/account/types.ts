@@ -16,8 +16,6 @@ export interface Friend {
 export interface UserProfile {
     about: string | null;
     avatar: string | null;
-    animated_avatar: string | null;
-    use_animated_avatar: boolean;
     friends: Friend[];
 }
 

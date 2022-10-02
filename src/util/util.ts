@@ -25,20 +25,12 @@ export const getAvatar = (user: User) => {
     if (!profile) {
         return null;
     }
-
-    if (profile.use_animated_avatar) {
-        return profile.animated_avatar;
-    }
     return profile.avatar;
 };
 
 export const getAvatarFromProfile = (profile: UserProfile) => {
-
     if (!profile) {
         return null;
-    }
-    if (profile.use_animated_avatar) {
-        return profile.animated_avatar;
     }
     return profile.avatar;
 };
