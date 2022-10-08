@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "site": "bordo.app",
+    "site": "bordo-bcfe3",
     "public": "dist",
     "ignore": [
       "firebase.json",

@@ -9,7 +9,7 @@ if (hostName === 'localhost') {
     API_URL = 'http://localhost:8000';
 }
 else {
-    API_URL = 'https://api.bordo.com';
+    API_URL = 'https://api.bordo.app';
 }
 
 const ApiClient = axios.create({
