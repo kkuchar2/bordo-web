@@ -8,11 +8,8 @@ let API_URL = '';
 if (hostName === 'localhost') {
     API_URL = 'http://localhost:8000';
 }
-else if (hostName === 'static.kkucharski.com') {
-    API_URL = 'http://static.kkucharski.com:8000';
-}
 else {
-    API_URL = 'https://api.kkucharski.com';
+    API_URL = 'https://api.bordo.com';
 }
 
 const ApiClient = axios.create({

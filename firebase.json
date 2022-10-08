@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "site": "admin-kkucharski-com",
+    "site": "bordo.app",
     "public": "dist",
     "ignore": [
       "firebase.json",
@@ -15,4 +15,3 @@
     ]
   }
 }
-

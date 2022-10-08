@@ -22,7 +22,7 @@ export const ChangeAvatarDialog = (props: DialogProps) => {
     const { t } = useTranslation();
 
     const [file, setFile] = useState(null);
-    const [mode, setMode] = useState(null);
+    const [mode, setMode] = useState('gif');
     const [image, setImage] = useState(null);
     const [extension, setExtension] = useState('.png');
 
@@ -150,7 +150,7 @@ export const ChangeAvatarDialog = (props: DialogProps) => {
         }
     }, [mode, image, croppedArea, onCancelClick, onConfirmClick]);
 
-    return <Box>
+    return <Box maxW={400}>
         {!mode && <ChangeAvatarModeSelector
             translation={t}
             onFileSelected={onFileSelected}

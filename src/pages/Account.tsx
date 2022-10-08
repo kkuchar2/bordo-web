@@ -24,17 +24,9 @@ const Account = () => {
 
     const { t } = useTranslation();
 
-    const { isIdle, isLoading: isAboutSaving, isSuccess: isAboutSavingSuccess, mutate } = changeAbout();
+    const { isLoading: isAboutSaving, mutate } = changeAbout();
 
     const hasUsablePassword = queryClient.getQueryData<User>(['user'])?.has_usable_password;
-
-    const {
-        isLoading: deleteAccountLoading,
-        error: deleteAccountError,
-        data: deleteAccountData,
-        isSuccess: deleteAccountSuccess,
-        mutate: deleteAccountMutate
-    } = deleteAccount();
 
     const { data: user } = getUser();
 
@@ -69,7 +61,7 @@ const Account = () => {
                 <TextAreaWithEmoji
                     id={'about'}
                     name={t('ABOUT_ME')}
-                    value={user.profile.about}
+                    value={user?.profile?.about}
                     w={'100%'}
                     h={'150px'}
                     borderRadius={'10px'}
