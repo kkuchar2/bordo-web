@@ -15,7 +15,7 @@ export interface TextAreaFormProps {
     fieldsSpacing?: StackProps['spacing'];
     contentSpacing?: StackProps['spacing'];
     onChange?: (formData: any) => void;
-    submitButtonText?: string;
+    submitButtonTextKey?: string;
     useCancelButton?: boolean;
     buttonsStackProps?: StackProps
 }

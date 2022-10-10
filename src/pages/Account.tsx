@@ -1,7 +1,7 @@
 import React, {useCallback} from 'react';
 
 import {Box, Button, Center, Flex, VStack} from '@chakra-ui/react';
-import {KeyIcon} from '@heroicons/react/24/outline';
+import { KeyIcon} from '@heroicons/react/24/solid';
 import {TextAreaWithEmoji} from 'components/chakra/TextAreaWithEmoji/TextAreaWithEmoji';
 import {GoogleAccountConnection} from 'components/ConnectedAccount/GoogleAccountConnection';
 import {
@@ -17,7 +17,7 @@ import {useTranslation} from 'react-i18next';
 
 import {queryClient} from '../App';
 import WithAuth from '../hoc/WithAuth';
-import {changeAbout, deleteAccount, getUser} from '../queries/account';
+import {changeAbout, getUser} from '../queries/account';
 import {User} from '../queries/account/types';
 
 const Account = () => {
@@ -98,7 +98,7 @@ const Account = () => {
         </Box>
 
         <VStack spacing={'20px'} align={'stretch'}>
-            <SettingsSection title={t('PASSWORD AND AUTHENTICATION')} show={hasUsablePassword}>
+            <SettingsSection title={t('PASSWORD_AND_AUTHENTICATION')} show={hasUsablePassword}>
                 <EditableProperty
                     id={'password'}
                     name={t('CHANGE_PASSWORD')}
@@ -109,23 +109,23 @@ const Account = () => {
                     passwordRequired={true}
                     icon={{
                         component: KeyIcon,
-                        color: 'text-pink-500',
+                        color: '#ffb700',
                     }}
                     showDialogFunc={showChangePasswordDialog}
                 />
             </SettingsSection>
 
             <SettingsSection title={t('SOCIAL_ACCOUNTS')}>
-                <Flex align={'center'} justify={'flex-start'} w={'100%'}>
+                <Flex align={'center'} justify={'flex-end'} w={'100%'}>
                     <GoogleAccountConnection connection={user?.google_account}/>
                 </Flex>
             </SettingsSection>
 
-            <SettingsSection title={t('ACCOUNT_REMOVAL_SECTION_TITLE')}>
+            <SettingsSection title={t('ACCOUNT')}>
                 <Button bg={'red.600'} _hover={{
                     bg: 'red.500',
                 }} fontSize={'13px'} onClick={onDeleteAccountAction}>
-                    {t('DELETE')}
+                    {t('DELETE_ACCOUNT')}
                 </Button>
             </SettingsSection>
         </VStack>

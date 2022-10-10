@@ -4,6 +4,7 @@ import {Box, Button, Flex, Text} from '@chakra-ui/react';
 import {showDisconnectGoogleDialog} from 'components/DialogSystem/readyDialogs';
 import GoogleButton from 'components/GoogleButton/GoogleButton';
 import {GoogleIcon} from 'components/Icons/GoogleIcon';
+import { useTranslation } from 'react-i18next';
 
 import {GOOGLE_CLIENT_ID} from '../../config';
 import {googleConnect} from '../../queries/account';
@@ -18,6 +19,8 @@ export const GoogleAccountConnection = (props: GoogleAccountConnectionProps) => 
     const { connection } = props;
 
     const { isLoading, error, isSuccess, mutate, reset } = googleConnect();
+
+    const {t} = useTranslation();
 
     if (!connection) {
         return null;
@@ -38,13 +41,13 @@ export const GoogleAccountConnection = (props: GoogleAccountConnectionProps) => 
             <GoogleButton
                 clientId={GOOGLE_CLIENT_ID}
                 context={'signin'}
-                customText={'Connect Google Account'}
+                customText={t('CONNECT_GOOGLE_ACCOUNT')}
                 text={'signin_with'}
                 onSuccess={onConnectWithGoogleAccount}/>
         </Box>;
     }
 
-    return <Flex gap={'20px'}>
+    return <Flex gap={'20px'} flexGrow={1}>
         <Flex direction={'column'} gap={'10px'}>
             <Flex align={'center'} gap={'10px'}>
                 <GoogleIcon/>
@@ -52,8 +55,8 @@ export const GoogleAccountConnection = (props: GoogleAccountConnectionProps) => 
             </Flex>
             {connected ? <Text fontSize={'sm'}>{email}</Text> : null}
         </Flex>
-        <Button onClick={onDisconnectClick}>
-            <Text mt={'1px'} fontSize={'13px'}>{'Disconnect'}</Text>
+        <Button flexGrow={1} onClick={onDisconnectClick}>
+            <Text mt={'1px'} fontSize={'13px'}>{t('DISCONNECT_SOCIAL_ACCOUNT')}</Text>
         </Button>
     </Flex>;
 };

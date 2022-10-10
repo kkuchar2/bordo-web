@@ -46,7 +46,7 @@ export const PasswordCreationRequiredDialog = (props: DialogProps<ChangeProperty
     return <Flex direction={'column'} gap={'gap.small'}>
         <Form
             config={formConfig}
-            submitButtonText={t('SET_NEW_PASSWORD')}
+            submitButtonTextKey={'SET_NEW_PASSWORD'}
             useCancelButton={false}
             disabled={isLoading}
             onCancel={onCancelRequest}

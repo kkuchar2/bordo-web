@@ -21,7 +21,7 @@ const Form = (props: FormProps) => {
         description,
         fieldsSpacing = '20px',
         contentSpacing = '20px',
-        submitButtonText,
+        submitButtonTextKey,
         useCancelButton,
         buttonsStackProps,
         fieldBg,
@@ -120,7 +120,7 @@ const Form = (props: FormProps) => {
                                 width={'100%'}
                                 isDisabled={disabled}
                                 {...buttonProps}>
-                            <Text fontWeight={'bold'}>{submitButtonText}</Text>
+                            <Text fontSize={'sm'}>{t(submitButtonTextKey)}</Text>
                         </Button>
                     </Flex>
                 </Flex>
@@ -131,7 +131,7 @@ const Form = (props: FormProps) => {
 
 Form.defaultProps = {
     useCancelButton: true,
-    submitButtonText: 'Confirm',
+    submitButtonTextKey: 'CONFIRM',
     initialValues: {},
 };
 

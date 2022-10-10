@@ -20,7 +20,7 @@ const TextAreaForm = (props: TextAreaFormProps) => {
         description,
         fieldsSpacing = '20px',
         contentSpacing = '20px',
-        submitButtonText,
+        submitButtonTextKey,
         useCancelButton,
         buttonsStackProps
     } = props;
@@ -115,7 +115,7 @@ const TextAreaForm = (props: TextAreaFormProps) => {
                                 type={'submit'}
                                 width={'100%'}
                                 isDisabled={disabled}>
-                            <Text fontSize={'12px'}>{submitButtonText}</Text>
+                            <Text fontSize={'12px'}>{submitButtonTextKey}</Text>
                         </Button>
                     </HStack>
                 </Flex>
@@ -126,7 +126,7 @@ const TextAreaForm = (props: TextAreaFormProps) => {
 
 TextAreaForm.defaultProps = {
     useCancelButton: true,
-    submitButtonText: 'Confirm',
+    submitButtonTextKey: 'CONFIRM',
     initialValues: {},
 };
 

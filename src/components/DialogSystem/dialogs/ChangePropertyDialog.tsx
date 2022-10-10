@@ -57,7 +57,7 @@ export const ChangePropertyDialog = (props: DialogProps<ChangePropertyDialogProp
     return <Box>
         <Form
             config={formConfig}
-            submitButtonText={t('CONFIRM')}
+            submitButtonTextKey={'CONFIRM'}
             error={error?.data}
             initialValues={initialArgs}
             disabled={isLoading}

@@ -10,6 +10,8 @@ import FindFriends from './FindFriends';
 import {FriendshipRequestsLists} from './FriendshipRequestsLists';
 import {FriendsList} from './FriendsList';
 
+import { useTranslation } from 'react-i18next';
+
 const CustomTab = ({ children, ...props }) => (
     <Tab {...props} display={'flex'} gap={'10px'} color={'whiteAlpha.500'} fontSize={'14px'}
          _selected={{ fontWeight: 'semibold', color: 'white', bg: 'whiteAlpha.200' }}>
@@ -23,8 +25,10 @@ const Friends = () => {
     const { data: sentFriendRequests } = getSentFriendRequests();
     const { data: friendsResponse } = getFriends();
 
+    const {t} = useTranslation();
+
     if (!receivedFriendRequests || !sentFriendRequests || !friendsResponse) {
-        return <Center h={'100%'}><Text>{'Loading...'}</Text></Center>;
+        return null;
     }
 
     return <Box w={'100%'} h={'100%'}>
@@ -38,17 +42,17 @@ const Friends = () => {
 
             <TabList p={3} gap={'15px'} bg={'rgba(255,255,255,0.03)'}>
                 <CustomTab>
-                    <Text>{'Friends'}</Text>
+                    <Text>{t('FRIENDS')}</Text>
                     <Badge bg={'rgba(255,255,255,0.13)'} h={'18px'} color={'white'} fontSize={'12px'} pl={2}
                            pr={2}
                            lineHeight={'18px'}>{friendsResponse?.length}</Badge>
                 </CustomTab>
                 <CustomTab>
                     <MagnifyingGlassIcon width={'15px'} height={'15px'}/>
-                    <Text>{'Search'}</Text>
+                    <Text>{t('SEARCH')}</Text>
                 </CustomTab>
                 <CustomTab>
-                    <Text>{'Requests'}</Text>
+                    <Text>{t('FRIENDSHIP_REQUESTS')}</Text>
                     {receivedFriendRequests?.length > 0 && <Badge bg={'red'} h={'18px'} color={'white'}
                                                                   fontSize={'12px'} pl={2}
                                                                   pr={2}

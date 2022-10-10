@@ -23,6 +23,8 @@ import {
 
 import {ReceivedFriendRequest} from './Friends/ReceivedFriendRequest';
 
+import { useTranslation } from 'react-i18next';
+
 const UserView = () => {
 
     const params = useParams();
@@ -32,6 +34,8 @@ const UserView = () => {
     const socketId = useSelector((state: RootState) => state.pusher.socketId);
 
     const listRef = useRef<HTMLUListElement>(null);
+
+    const {t} = useTranslation();
 
     const { data: user } = getUser();
     const { data: profile } = getProfile(params.username)({ staleTime: 1 });
@@ -116,7 +120,7 @@ const UserView = () => {
 
                 {isFriend && !friendRequest && <Menu isLazy={true}>
                     <MenuButton as={Button} leftIcon={<UserIcon width={'20px'} height={'20px'}/>}>
-                        <Text fontSize={'sm'}>{'Friends'}</Text>
+                        <Text fontSize={'sm'}>{t('FRIENDS')}</Text>
                     </MenuButton>
                     <MenuList>
                         <MenuItem onClick={onUnfriendSelected}>

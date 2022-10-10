@@ -6,6 +6,7 @@ import {FriendshipRequest} from '../../types/friendship';
 
 import {ReceivedFriendshipRequestList} from './ReceivedFriendshipRequestList';
 import {SentFriendshipRequestList} from './SentFriendshipRequestList';
+import { useTranslation } from 'react-i18next';
 
 interface PendingFriendRequestListProps {
     sentRequests: FriendshipRequest[];
@@ -23,6 +24,8 @@ export const FriendshipRequestsLists = (props: PendingFriendRequestListProps) =>
         receivedRequestsTitleFunc,
     } = props;
 
+    const {t} = useTranslation();
+
     const onAccept = useCallback((request: FriendshipRequest) => {
         console.log('Accepted: ', request);
     }, []);
@@ -33,7 +36,7 @@ export const FriendshipRequestsLists = (props: PendingFriendRequestListProps) =>
 
     if ((!sentRequests || sentRequests.length === 0) && (!receivedRequests || receivedRequests.length === 0)) {
         return <Center w={'100%'} h={'100%'}>
-            <Text>{'You have no requests'}</Text>
+            <Text>{t('NO_PENDING_REQUESTS')}</Text>
         </Center>;
     }
 

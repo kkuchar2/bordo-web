@@ -77,21 +77,19 @@ const MainMenu = (props: MainMenuProps) => {
         </Flex>
         <Flex direction={'column'} justify={'flex-end'} flexGrow={1} width={'100%'}>
             <Center w={'100%'} p={3}>
-                <HStack bg={'rgba(255,255,255,0.03)'}
-                        _hover={{ bg: 'rgba(255,255,255,0.07)', cursor: 'pointer' }}
-                        borderRadius={6} w={'100%'} p={3}>
+                <HStack bg={'rgba(255,255,255,0.03)'} borderRadius={6} w={'100%'} p={3} spacing={4}>
                     <Avatar src={avatar}
                             name={user.username}
                             borderRadius={'100%'}
-                            width={'30px'}
-                            height={'30px'}
+                            width={'40px'}
+                            height={'40px'}
                             objectFit={'cover'}
                             {...avatar ? { bg: 'none' } : null}>
                         <AvatarBadge boxSize={'0.55em'}
-                                     bg={'green.300'}
+                                     bg={'green.500'}
                                      border={'none'}/>
                     </Avatar>
-                    <VStack spacing={1} align={'stretch'}>
+                    <VStack spacing={1} align={'stretch'} noOfLines={2}>
                         <Text color={'white'} fontWeight={'semibold'} fontSize={'12px'}>{`#${user.username}`}</Text>
                         <Text color={'alphaWhite.500'} fontWeight={'medium'}
                               fontSize={'12px'}>{`${user.email.email}`}</Text>

@@ -48,7 +48,7 @@ const ForgotPassword = () => {
                 <Form
                     title={t('RESET_PASSWORD')}
                     description={t('RESET_PASSWORD_DESCRIPTION')}
-                    submitButtonText={t('RESET_PASSWORD')}
+                    submitButtonTextKey={'RESET_PASSWORD'}
                     error={forgotPasswordError?.data}
                     disabled={forgotPasswordPending}
                     fieldBg={'#232323'}

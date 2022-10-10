@@ -2,7 +2,6 @@ import React, {useCallback, useEffect} from 'react';
 
 import {Center, Flex, Text} from '@chakra-ui/react';
 import {DelayedTransition} from 'components/chakra/DelayedTransition/DelayedTransition';
-import {FullSizeDelayedSpinner} from 'components/chakra/DelayedTransition/FullSizeDelayedSpinner';
 import {NavLink} from 'components/chakra/NavLink/NavLink';
 import Form from 'components/Forms/Form/Form';
 import {useTranslation} from 'react-i18next';
@@ -22,6 +21,7 @@ const ResetPassword = () => {
     const { data: user } = getUser();
 
     const {
+        isIdle: resetPasswordIdle,
         isLoading: resetPasswordLoading,
         error: resetPasswordError,
         data: resetPasswordData,
@@ -30,6 +30,7 @@ const ResetPassword = () => {
     } = resetPassword();
 
     const {
+        isIdle: verifyResetPasswordTokenIdle,
         isLoading: verifyTokenLoading,
         error: verifyTokenError,
         data: verifyTokenData,
@@ -62,58 +63,69 @@ const ResetPassword = () => {
         verifyTokenMutate({ uid: uid, token: tk });
     }, []);
 
-    if (verifyTokenLoading) {
-        return <FullSizeDelayedSpinner pending={true}/>;
+    if (verifyTokenLoading || verifyResetPasswordTokenIdle) {
+        return <DelayedTransition pending={true}
+                                   position={'absolute'}
+                                   bottom={0}
+                                   left={0}
+                                   p={0} w={'100%'}/>;
     }
 
     if (verifyTokenError) {
         return <Navigate to={'/'}/>;
     }
 
-    if (resetPasswordSuccess) {
-        return <Navigate to={'/'}/>;
-    }
+    if (verifyTokenSuccess) {
 
-    return <Center w={'100%'} h={'100%'}>
-        <Flex borderRadius={{ base: 0, sm: 8 }}
-              direction={'column'}
-              bg={'#2a2a2a'}
-              width={{ base: '100%', sm: '400px' }}
-              p={'40px'}
-              gap={'30px'}>
+        if (resetPasswordSuccess) {
+            return <Navigate to={'/'}/>;
+        }
 
-            <Text textAlign={'center'} fontWeight={'bold'} fontSize={'2xl'}>{'Set up new password'}</Text>
+        return <Center w={'100%'} h={'100%'}>
+            <Flex borderRadius={{ base: 0, sm: 8 }}
+                  direction={'column'}
+                  bg={'#2a2a2a'}
+                  width={{ base: '100%', sm: '400px' }}
+                  p={'40px'}
+                  gap={'30px'}>
 
-            <Form
-                config={formConfig}
-                submitButtonText={t('SET_NEW_PASSWORD')}
-                error={resetPasswordError?.data}
-                fieldBg={'#212121'}
-                disabled={resetPasswordLoading}
-                useCancelButton={false}
-                buttonsStackProps={{
-                    m: 0,
-                    justifyContent: 'center',
-                }}
-                buttonProps={{
-                    bg: '#434343',
-                    w: '250px',
-                    h: '50px',
-                    justifySelf: 'flex-end',
-                    borderRadius: '100px',
-                    fontSize: 'md'
-                }}
-                onSubmit={onSubmit}/>
+                <Text textAlign={'center'} fontWeight={'bold'} fontSize={'2xl'}>{'Set up new password'}</Text>
 
-            {!user && <NavLink color={'#77a4df'}
-                               alignSelf={'center'}
-                               fontWeight={'semibold'}
-                               to={'/'}>{'Back to login'}
-            </NavLink>}
+                <Form
+                    config={formConfig}
+                    submitButtonTextKey={'SET_NEW_PASSWORD'}
+                    error={resetPasswordError?.data}
+                    fieldBg={'#212121'}
+                    disabled={resetPasswordLoading}
+                    useCancelButton={false}
+                    buttonsStackProps={{
+                        m: 0,
+                        justifyContent: 'center',
+                    }}
+                    buttonProps={{
+                        bg: '#434343',
+                        w: '250px',
+                        h: '50px',
+                        justifySelf: 'flex-end',
+                        borderRadius: '100px',
+                        fontSize: 'md'
+                    }}
+                    onSubmit={onSubmit}/>
 
-            <DelayedTransition pending={resetPasswordLoading}/>
-        </Flex>
-    </Center>;
+                {!user && <NavLink color={'#77a4df'}
+                                   alignSelf={'center'}
+                                   fontWeight={'semibold'}
+                                   to={'/'}>{'Back to login'}
+                </NavLink>}
+
+                <DelayedTransition pending={resetPasswordLoading}
+                                   position={'absolute'}
+                                   bottom={0}
+                                   left={0}
+                                   p={0} w={'100%'}/>
+            </Flex>
+        </Center>;
+    };
 };
 
 export default ResetPassword;

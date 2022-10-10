@@ -62,7 +62,7 @@ const Index = () => {
             <Text textAlign={'center'} fontWeight={'bold'} fontSize={'2xl'}>{t('SIGN_IN_TO_YOUR_ACCOUNT')}</Text>
 
             <Form
-                submitButtonText={t('SIGN_IN')}
+                submitButtonTextKey={'SIGN_IN'}
                 error={loginError?.data}
                 config={formConfig}
                 fieldBg={'#232323'}
@@ -95,6 +95,7 @@ const Index = () => {
             <GoogleButton
                 clientId={GOOGLE_CLIENT_ID}
                 context={'signin'}
+                customText={t('CONTINUE_WITH_GOOGLE')}
                 text={'signin'}
                 useOneTap={true}
                 onSuccess={onSignInWithGoogle}/>

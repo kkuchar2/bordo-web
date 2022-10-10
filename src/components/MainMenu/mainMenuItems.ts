@@ -57,12 +57,12 @@ export const mainMenuItems: MenuItems = {
                 displayName: 'FRIENDS',
                 description: '',
             }),
-            Chats: viewSwitchItem({
-                id: 'Chats',
-                url: '/chats',
-                displayName: 'CHATS',
-                description: '',
-            }),
+            // Chats: viewSwitchItem({
+            //     id: 'Chats',
+            //     url: '/chats',
+            //     displayName: 'CHATS',
+            //     description: '',
+            // }),
             Account: viewSwitchItem({
                 id: 'Account',
                 url: '/account',

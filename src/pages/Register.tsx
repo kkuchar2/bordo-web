@@ -45,7 +45,7 @@ const Register = () => {
             <Heading fontSize={'2xl'}>{t('REGISTRATION')}</Heading>
 
             <Form
-                submitButtonText={t('SIGN_UP')}
+                submitButtonTextKey={'SIGN_UP'}
                 error={registerError?.data}
                 disabled={registrationPending}
                 fieldBg={'#232323'}

@@ -16,7 +16,7 @@ export interface FormProps {
     fieldsSpacing?: StackProps['spacing'];
     contentSpacing?: StackProps['spacing'];
     onChange?: (formData: any) => void;
-    submitButtonText?: string;
+    submitButtonTextKey?: string;
     useCancelButton?: boolean;
     buttonsStackProps?: StackProps;
     fieldBg?: string;

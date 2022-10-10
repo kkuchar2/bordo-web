@@ -21,6 +21,7 @@ export interface EditablePropertyProps {
 }
 
 const EditableProperty = (props: EditablePropertyProps) => {
+
     const { name, value, showDialogFunc, canEdit, editText, hideTitle, icon, passwordRequired } = props;
 
     const { t } = useTranslation();
@@ -39,7 +40,12 @@ const EditableProperty = (props: EditablePropertyProps) => {
 
         if (!value) {
             return <Button onClick={onEditButtonClick}>
-                {icon ? <icon.component className={`mr-3 block h-6 w-6  ${icon.color}`}/> : null}
+                <icon.component style={{
+                    width: '20px',
+                    height: '20px',
+                    marginRight: '10px',
+                    color: `${icon.color}`,
+                }}/>
                 <Text fontSize={'13px'}>{t(editText)}</Text>
             </Button>;
         }

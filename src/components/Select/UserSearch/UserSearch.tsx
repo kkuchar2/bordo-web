@@ -9,6 +9,7 @@ import {queryClient} from '../../../App';
 import {UserSearchOption} from '../../../pages/Chats/ChatWindow';
 import {QueryResponseError} from '../../../queries/base';
 import {searchPeople} from '../../../queries/people';
+import {useTranslation} from "react-i18next";
 
 const MultiValueRemove = (props: MultiValueRemoveProps<UserSearchOption>) => {
     return <components.MultiValueRemove {...props}>
@@ -69,6 +70,8 @@ export const UserSearch = (props: UserSearchProps) => {
 
     const [searchResult, setSearchResult] = useState<UserSearchOption[]>([]);
 
+    const {t} = useTranslation();
+
     const searchPeopleMutation = searchPeople()({
         onSuccess: (data: any) => {
             setSearchResult(data.map((user) => {
@@ -99,10 +102,10 @@ export const UserSearch = (props: UserSearchProps) => {
         closeMenuOnSelect={true}
         defaultValue={searchResult[0]}
         isMulti={false}
-        noOptionsMessage={() => 'No users found'}
+        noOptionsMessage={() => t('NO_SEARCH_RESULTS')}
         onInputChange={onSelectInputChange}
         onChange={onSelect}
-        placeholder={'Search...'}
+        placeholder={`${t('SEARCH_PEOPLE')}...`}
         options={searchResult}
         components={{
             DropdownIndicator: () => null,
