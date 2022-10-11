@@ -1,6 +1,6 @@
 import React, {SyntheticEvent, useCallback, useState} from 'react';
 
-import {Box, Flex} from '@chakra-ui/react';
+import {Box, Flex, Image} from '@chakra-ui/react';
 import {IGif} from '@giphy/js-types';
 import {InputSmartLabel} from 'components/InputSmartLabel/InputSmartLabel';
 import {useTranslation} from 'react-i18next';
@@ -42,5 +42,8 @@ export const GIFSelect = (props: GIFSelectProps) => {
                 searchText={gifSearchText}
                 giphyFetch={giphyFetch}/>
         </Box>
+        <Flex w={'100%'} mt={3}>
+            <Image src={'assets/images/powered_by_giphy.png'} w={150} alt={'gif'}/>
+        </Flex>
     </Flex>;
 };
