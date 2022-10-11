@@ -94,8 +94,6 @@ const Form = (props: FormProps) => {
         return renderNonFieldErrors(error, t, excludeErrors);
     }, [error, t]);
 
-    console.log(config.validationSchema);
-
     return <Formik
         initialValues={computedInitialValues}
         validationSchema={config.validationSchema ? config.validationSchema : null}

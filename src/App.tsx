@@ -6,6 +6,7 @@ import {BrowserRouter} from 'react-router-dom';
 import {store} from 'state/store';
 
 import './i18n';
+import { missingEnvVars} from './api/config';
 import ContentWithRouter from './ContentWithRouter';
 import i18n from './i18n';
 
@@ -28,8 +29,13 @@ export const queryClient = new QueryClient({
 
 export const App = () => {
     const [translationsLoaded, setTranslationsLoaded] = useState(false);
+    const [environmentLoaded, setEnvironmentLoaded] = useState(false);
 
     useEffect(() => {
+        if (missingEnvVars.length === 0) {
+            setEnvironmentLoaded(true);
+        }
+
         const lang = localStorage.getItem('i18nextLng');
         i18n
             .init({
@@ -48,6 +54,7 @@ export const App = () => {
                 debug: false,
                 ns: ['assets/translation'],
                 defaultNS: 'assets/translation',
+                fallbackLng: 'en',
                 keySeparator: false,
                 interpolation: {
                     escapeValue: false,
@@ -60,7 +67,7 @@ export const App = () => {
 
     }, []);
 
-    if (!translationsLoaded) {
+    if (!translationsLoaded || !environmentLoaded) {
         return null;
     }
 

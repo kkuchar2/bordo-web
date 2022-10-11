@@ -50,6 +50,7 @@
     "compression-webpack-plugin": "^10.0.0",
     "core-js-pure": "^3.25.1",
     "country-flag-icons": "^1.5.5",
+    "dotenv-webpack": "^8.0.1",
     "emoji-picker-react": "^3.6.2",
     "eslint": "8.23.1",
     "eslint-plugin-babel": "^5.3.1",

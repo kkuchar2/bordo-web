@@ -1,19 +1,10 @@
 import axios from 'axios';
 import Cookies from 'universal-cookie';
 
-const hostName = window.location.hostname;
-
-let API_URL = '';
-
-if (hostName === 'localhost') {
-    API_URL = 'http://localhost:8000';
-}
-else {
-    API_URL = 'https://api.bordo.app';
-}
+import { getEnvVar} from './api/config';
 
 const ApiClient = axios.create({
-    baseURL: `${API_URL}/api/`,
+    baseURL: `${getEnvVar('BORDO_API_URL')}/`,
     //timeout: 10000,   // 10 seconds for user focus
 });
 

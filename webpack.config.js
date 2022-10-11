@@ -4,6 +4,7 @@ const path = require('path');
 
 const CompressionPlugin = require('compression-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
+const Dotenv = require('dotenv-webpack');
 const HtmlWebPackPlugin = require('html-webpack-plugin');
 const MomentLocalesPlugin = require('moment-locales-webpack-plugin');
 const webpack = require('webpack');
@@ -74,6 +75,15 @@ module.exports = {
         new MomentLocalesPlugin({localesToKeep: ['es-us', 'pl']}),
         new CompressionPlugin({algorithm: 'gzip', test: /\.js$/}),
         new webpack.ProvidePlugin({process: 'process/browser'}),
+        new Dotenv({
+            path: './.env',
+            safe: true,
+            allowEmptyValues: true,
+            systemvars: true,
+            silent: true,
+            defaults: false,
+            prefix: 'process.env.'
+        }),
         new CopyPlugin({
             patterns: [
                 {from: resolvePath('assets/images'), to: resolvePath('dist/assets/images')},
@@ -109,6 +119,11 @@ module.exports = {
                 }
             },
         ]
+    },
+    performance: {
+        hints: false,
+        maxEntrypointSize: 512000,
+        maxAssetSize: 512000
     }
     //stats: "verbose"
 };

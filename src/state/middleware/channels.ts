@@ -4,6 +4,8 @@ import {onConnectionEstablished} from 'state/services/pusherService';
 import {AppDispatch} from 'state/store';
 import Cookies from 'universal-cookie';
 
+import {getEnvVar, isPusherEnvSet} from '../../api/config';
+
 const Pusher = require('pusher-js');
 
 const styleOf = (bgColor: string) => `background: ${bgColor}; color: #ffffff; padding: 5px; margin: 5px; font-weight: bold`;
@@ -14,7 +16,7 @@ const COLOR2 = styleOf('transparent');
 let client = null;
 
 Pusher.Runtime.createXHR = function () {
-    var xhr = new XMLHttpRequest();
+    const xhr = new XMLHttpRequest();
     xhr.withCredentials = true;
     return xhr;
 };
@@ -25,16 +27,21 @@ export const channelMiddleware: Middleware = ({
                                               }: { dispatch: AppDispatch, getState: () => any }) => (next: Dispatch) => (action) => {
     if (action.type === 'pusher/connect') {
 
+        if (!isPusherEnvSet) {
+            console.log('Pusher configuration is missing');
+            return next(action);
+        }
+
         if (client === null) {
             console.log('%c channelMiddleware %c Starting channel connection to 127.0.0.1:6001', COLOR1, COLOR2);
 
-            client = new Pusher('6235567323452347258248', {
-                wsHost: '127.0.0.1',
-                wsPort: 6001,
+            client = new Pusher(getEnvVar('PUSHER_API_KEY'), {
+                wsHost: getEnvVar('PUSHER_WS_HOST'),
+                wsPort: getEnvVar('PUSHER_WS_PORT'),
                 forceTLS: false,
                 channelAuthorization: {
                     withCredentials: true,
-                    endpoint: 'http://localhost:8000/api/channels/authChannel',
+                    endpoint: `${getEnvVar('BORDO_API_URL')}.channels/authChannel`,
                     headers: {
                         'X-CSRFTOKEN': new Cookies().get('csrftoken')
                     },
@@ -59,13 +66,28 @@ export const channelMiddleware: Middleware = ({
         }
     }
     else if (action.type === 'pusher/disconnect') {
+        if (!isPusherEnvSet) {
+            console.log('Pusher configuration is missing');
+            return next(action);
+        }
+
         client.disconnect();
     }
     else if (action.type === 'pusher/send') {
+        if (!isPusherEnvSet) {
+            console.log('Pusher configuration is missing');
+            return next(action);
+        }
+
         const { channel, event, data } = action.payload;
         client.trigger(channel, event, data);
     }
     else if (action.type === 'pusher/subscribe') {
+        if (!isPusherEnvSet) {
+            console.log('Pusher configuration is missing');
+            return next(action);
+        }
+
         const { channel_name, auth, subscription } = action.payload;
 
         console.log('%c channelMiddleware %c Subscribing to channel:', COLOR1, COLOR2, channel_name);
@@ -83,6 +105,11 @@ export const channelMiddleware: Middleware = ({
         }
     }
     else if (action.type === 'pusher/unsubscribe') {
+        if (!isPusherEnvSet) {
+            console.log('Pusher configuration is missing');
+            return next(action);
+        }
+
         const { channel } = action.payload;
         client.unsubscribe(channel);
     }
@@ -90,9 +117,4 @@ export const channelMiddleware: Middleware = ({
     return next(action);
 };
 
-export const getSocketId = () => {
-    if (client === null) {
-        return null;
-    }
-    return client.connection.socket_id;
-};
+export const getSocketId = () => client ? client.connection.socket_id : null;

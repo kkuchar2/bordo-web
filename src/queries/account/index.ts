@@ -9,6 +9,7 @@ import {closeDialog} from 'state/reducers/dialog/dialogSlice';
 import {pusherConnect} from 'state/services/pusherService';
 import {store} from 'state/store';
 
+import {isPusherEnvSet} from '../../api/config';
 import {queryClient} from '../../App';
 import {authGet, authPost, authPut, AxiosConfigs, QueryResponseError} from '../base';
 
@@ -200,7 +201,9 @@ export const googleDisconnect = () => {
 export const getUser = () => {
     return authGet<User>(['user'], 'account/user')({
         onSuccess: () => {
-            store.dispatch(pusherConnect());
+            if (isPusherEnvSet) {
+                store.dispatch(pusherConnect());
+            }
         }
     });
 };

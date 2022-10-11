@@ -70,10 +70,7 @@ const GoogleButton = (props: GoogleButtonProps) => {
             top={0}
             left={0}
             zIndex={1}/> : null}
-        <GoogleOAuthProvider clientId={clientId}
-                             onScriptLoadSuccess={() => {
-                                 console.log('Google script loaded');
-                             }}>
+        <GoogleOAuthProvider clientId={clientId}>
             <Flex position={'relative'}
                   boxSizing={'border-box'}
                   onMouseEnter={onMouseEnter}
