@@ -1,6 +1,9 @@
 import React, {useEffect, useState} from 'react';
 
 import {QueryClient, QueryClientProvider,} from '@tanstack/react-query';
+import {ReactQueryDevtools} from '@tanstack/react-query-devtools';
+import {logEvent} from 'firebase/analytics';
+import {initAnalytics, initFirebase} from 'firebase_util';
 import {Provider} from 'react-redux';
 import {BrowserRouter} from 'react-router-dom';
 import {store} from 'state/store';
@@ -9,8 +12,6 @@ import './i18n';
 import { missingEnvVars} from './api/config';
 import ContentWithRouter from './ContentWithRouter';
 import i18n from './i18n';
-
-import {ReactQueryDevtools} from '@tanstack/react-query-devtools';
 
 export const SUPPORTED_LANGUAGES = ['en', 'pl'];
 
@@ -32,6 +33,12 @@ export const App = () => {
     const [environmentLoaded, setEnvironmentLoaded] = useState(false);
 
     useEffect(() => {
+        const app = initFirebase();
+        const analytics = initAnalytics(app);
+        if (analytics) {
+            logEvent(analytics, 'hello_there');
+        }
+
         if (missingEnvVars.length === 0) {
             setEnvironmentLoaded(true);
         }
