@@ -3,7 +3,7 @@ import React, {useEffect, useState} from 'react';
 import {QueryClient, QueryClientProvider,} from '@tanstack/react-query';
 import {ReactQueryDevtools} from '@tanstack/react-query-devtools';
 import {logEvent} from 'firebase/analytics';
-import {initAnalytics, initFirebase} from 'firebase_util';
+import {analytics} from 'firebase_util';
 import {Provider} from 'react-redux';
 import {BrowserRouter} from 'react-router-dom';
 import {store} from 'state/store';
@@ -33,8 +33,6 @@ export const App = () => {
     const [environmentLoaded, setEnvironmentLoaded] = useState(false);
 
     useEffect(() => {
-        const app = initFirebase();
-        const analytics = initAnalytics(app);
         if (analytics) {
             logEvent(analytics, 'hello_there');
         }
@@ -81,7 +79,7 @@ export const App = () => {
     return <Provider store={store}>
         <BrowserRouter>
             <QueryClientProvider client={queryClient}>
-                <ReactQueryDevtools initialIsOpen={false} position={'top-right'}/>
+                {process.env.NODE_ENV === 'development' && <ReactQueryDevtools initialIsOpen={false} position={'top-right'}/>}
                 <ContentWithRouter/>
             </QueryClientProvider>
         </BrowserRouter>

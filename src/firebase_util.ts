@@ -1,5 +1,6 @@
 import { getAnalytics } from 'firebase/analytics';
 import {FirebaseApp, initializeApp} from 'firebase/app';
+import { getAuth } from 'firebase/auth';
 
 import {getEnvVar} from './api/config';
 
@@ -27,4 +28,21 @@ export const initAnalytics = (app: FirebaseApp) => {
         return getAnalytics(app);
     }
     return null;
+};
+
+export const initAuth = (app: FirebaseApp) => {
+    if (app && app.name && typeof window !== 'undefined') {
+        return getAuth(app);
+    }
+    return null;
+};
+
+const app = initFirebase();
+const analytics = initAnalytics(app);
+const auth = initAuth(app);
+
+export {
+    app,
+    analytics,
+    auth,
 };

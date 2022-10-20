@@ -27,8 +27,9 @@ const ContentWithRouter = () => {
 
     const socketId = useSelector((state: RootState) => state.pusher.socketId);
 
-    const { isLoading, isSuccess, data: user } = getUser();
-    const { data: notificationChannelData, mutate: assignNotificationMutate } = assignNotificationChannel({
+    const { isLoading, data: user } = getUser();
+
+    const { mutate: assignNotificationMutate } = assignNotificationChannel({
         friendshipRequest: (friendRequest: any) => {
             queryClient.invalidateQueries(['getFriendRequests']);
             showFriendRequestReceived(friendRequest);
