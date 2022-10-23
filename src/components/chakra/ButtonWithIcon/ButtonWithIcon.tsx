@@ -28,6 +28,7 @@ export const ButtonWithIcon = (props: ButtonWithIconProps & ButtonProps) => {
     return <Button {...rest} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
         {rest.children}
         {IconComponent ?
-            <IconComponent width={iconSizePx} height={iconSizePx} color={hovered ? iconColorHover : iconColor}/> : null}
+            <IconComponent width={iconSizePx}
+                           height={iconSizePx} color={hovered ? iconColorHover : iconColor}/> : null}
     </Button>;
 };

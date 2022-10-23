@@ -28,7 +28,8 @@ const componentMap: IDialogComponentMap = {
     ChangeAvatarDialog: dialogs.ChangeAvatarDialog,
     ChangePropertyDialog: dialogs.ChangePropertyDialog,
     ServiceUnavailableDialog: dialogs.ServiceUnavailableDialog,
-    PasswordCreationRequiredDialog: dialogs.PasswordCreationRequiredDialog
+    PasswordCreationRequiredDialog: dialogs.PasswordCreationRequiredDialog,
+    CreateGroupDialog: dialogs.CreateGroupDialog,
 };
 
 const ChakraBox = chakra(motion(Box), {

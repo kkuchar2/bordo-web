@@ -1,7 +1,6 @@
 import React, {useCallback, useMemo} from 'react';
 
 import {Button, Flex, Text, VStack} from '@chakra-ui/react';
-import {FormikInput} from 'components/FormikInput/FormikInput';
 import {getFormFieldErrors, renderNonFieldErrors} from 'components/Forms/util';
 import {Field, Form as FormikForm, Formik} from 'formik';
 import {useTranslation} from 'react-i18next';
@@ -47,7 +46,7 @@ const Form = (props: FormProps) => {
                 id={fieldId}
                 disabled={disabled}
                 errors={getFormFieldErrors(error, fieldCfg.id)}
-                component={FormikInput}
+                component={fieldCfg.component}
                 bg={fieldBg}
                 {...fieldCfg}/>;
         });

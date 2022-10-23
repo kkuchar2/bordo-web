@@ -46,15 +46,21 @@ export const mainMenuItems: MenuItems = {
         groupName: 'PAGES',
         groupItems: {
             Home: viewSwitchItem({
-                id: 'Home',
+                id: 'home',
                 url: '/home',
                 displayName: 'HOME_PAGE',
                 description: ''
             }),
             Friends: viewSwitchItem({
-                id: 'Friends',
+                id: 'friends',
                 url: '/friends',
                 displayName: 'FRIENDS',
+                description: '',
+            }),
+            Groups: viewSwitchItem({
+                id: 'groups',
+                url: '/groups',
+                displayName: 'GROUPS',
                 description: '',
             }),
             // Chats: viewSwitchItem({
@@ -64,7 +70,7 @@ export const mainMenuItems: MenuItems = {
             //     description: '',
             // }),
             Account: viewSwitchItem({
-                id: 'Account',
+                id: 'account',
                 url: '/account',
                 displayName: 'ACCOUNT_SETTINGS',
                 description: '',
@@ -75,7 +81,7 @@ export const mainMenuItems: MenuItems = {
         groupName: 'PERSONALISATION',
         groupItems: {
             Language: viewSwitchItem({
-                id: 'Language',
+                id: 'language',
                 url: '/language',
                 displayName: 'LANGUAGE',
                 description: '',
@@ -85,7 +91,7 @@ export const mainMenuItems: MenuItems = {
     actions: {
         groupItems: [
             {
-                id: 'Logout',
+                id: 'logout',
                 url: '/logout',
                 displayName: 'LOGOUT',
                 description: '',

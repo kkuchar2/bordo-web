@@ -1,7 +1,7 @@
 import {queryClient} from '../App';
 import {FriendshipRequest} from '../types/friendship';
 
-import {UserProfile} from './account/accountSlice.types';
+import {UserProfile} from './account/types';
 import {authGet, authPost} from './base';
 
 interface FriendRequestIdRequestData {
@@ -9,7 +9,7 @@ interface FriendRequestIdRequestData {
 }
 
 export const getProfile = (username: string) => {
-    return authGet<UserProfile>(['getProfile'], `people/profile/${username}`);
+    return authGet<UserProfile>(['profile', username], `people/profile/${username}`);
 };
 
 export const searchPeople = () => {

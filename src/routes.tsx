@@ -1,5 +1,7 @@
 import lazy from 'react-lazy-with-preload';
 
+import {GroupPreview} from './pages/Groups/GroupPreview';
+
 const Register = lazy(() => import(/* webpackChunkName: "auth-chunk" */ 'pages/Register'));
 const ConfirmAccount = lazy(() => import (/* webpackChunkName: "auth-chunk" */ 'pages/ConfirmAccount'));
 const Index = lazy(() => import (/* webpackChunkName: "auth-chunk" */ 'pages/Index'));
@@ -10,6 +12,7 @@ const UserView = lazy(() => import (/* webpackChunkName: "home" */ 'pages/UserVi
 const UserAgreements = lazy(() => import (/* webpackChunkName: "user-agreements" */ 'pages/UserAgreements'));
 const Account = lazy(() => import (/* webpackChunkName: "account" */ 'pages/Account'));
 const Friends = lazy(() => import (/* webpackChunkName: "friends" */ 'pages/Friends/Friends'));
+const Groups = lazy(() => import (/* webpackChunkName: "groups" */ 'pages/Groups/Groups'));
 const Chats = lazy(() => import (/* webpackChunkName: "chat" */ 'pages/Chats/Chats'));
 const Language = lazy(() => import (/* webpackChunkName: "language" */ 'pages/Language'));
 const NotFound = lazy(() => import (/* webpackChunkName: "not-found" */ 'pages/NotFound'));
@@ -49,6 +52,11 @@ export const routes = [
         path: '/friends',
         element: Friends,
         name: 'Friends',
+    },
+    {
+        path: '/groups/:uuid',
+        element: GroupPreview,
+        name: 'GroupPreview',
     },
     {
         path: '/language',

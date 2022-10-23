@@ -12,6 +12,10 @@ export const ConfirmPasswordSchema = (reference: string) => string()
 export const RequiredStringSchema = (t: any) => string()
     .required(t('FIELD_REQUIRED'));
 
+export const RequiredArraySchema = (t: any) => string()
+    .required(t('FIELD_REQUIRED'))
+    .min(1, t('FIELD_REQUIRED'));
+
 export const RequiredCurrentPasswordSchema = (t: any) => string()
     .required(t('CURRENT_PASSWORD_REQUIRED'));
 

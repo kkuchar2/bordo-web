@@ -113,6 +113,17 @@ module.exports = {
                 ]
             },
             {
+                test: /\.(sass|css|scss)$/,
+                use: [
+                    'style-loader',
+                    'css-loader',
+                    {
+                        loader: 'postcss-loader',
+                    },
+                    'sass-loader',
+                ]
+            },
+            {
                 test: /\.m?js/,
                 resolve: {
                     fullySpecified: false

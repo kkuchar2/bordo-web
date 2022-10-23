@@ -9,7 +9,7 @@ import {getUser} from 'queries/account';
 import {Toaster} from 'react-hot-toast';
 import {useSelector} from 'react-redux';
 import {useLocation} from 'react-router-dom';
-import {currentView, loadLastView} from 'state/reducers/application/appSlice';
+import {currentView} from 'state/reducers/application/appSlice';
 import {RootState, useAppDispatch} from 'state/store';
 
 import {queryClient} from './App';
@@ -36,10 +36,6 @@ const ContentWithRouter = () => {
         }
     });
 
-    useEffect(() => {
-        dispatch(loadLastView());
-    }, []);
-
     const routedContent = useMemo(() => {
         return <Content/>;
     }, []);
@@ -49,7 +45,7 @@ const ContentWithRouter = () => {
             return null;
         }
         return <MainMenu items={mainMenuItems} currentViewId={currentViewId}/>;
-    }, [user, location]);
+    }, [user, location, currentViewId]);
 
     useEffect(() => {
         if (!user || !socketId) {

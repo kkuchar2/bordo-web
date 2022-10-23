@@ -39,6 +39,7 @@ const mapError = (fieldError: Error) => {
 };
 
 export const getFormFieldErrors = (error: any, fieldName: string) => {
+    console.log('Getting field errors for', fieldName);
     if (!error) {
         return null;
     }
@@ -49,6 +50,8 @@ export const getFormFieldErrors = (error: any, fieldName: string) => {
         return null;
     }
     const fieldErrors = formErrors[fieldName];
+
+    console.log('Field errors', fieldErrors);
 
     if (!fieldErrors) {
         return null;

@@ -1,3 +1,6 @@
+import {FormikInput} from 'components/FormikInput/FormikInput';
+import {FormikMultiValueInput} from 'components/FormikInput/FormikMultiValueInput';
+
 export const fieldTypes = {
     email: (t: any) => ({
         id: 'email',
@@ -7,6 +10,7 @@ export const fieldTypes = {
         placeholder: t('ENTER_EMAIL_INPUT_PLACEHOLDER'),
         required: true,
         autoComplete: 'email',
+        component: FormikInput
     }),
     new_email: (t: any) => ({
         id: 'new_email',
@@ -16,6 +20,7 @@ export const fieldTypes = {
         placeholder: t('NEW_EMAIL_ADDRESS_ENTER'),
         required: true,
         autoComplete: 'on',
+        component: FormikInput
     }),
     new_username: (t: any) => ({
         id: 'new_username',
@@ -25,6 +30,7 @@ export const fieldTypes = {
         placeholder: t('ENTER_NEW_USERNAME_INPUT_PLACEHOLDER'),
         required: true,
         autoComplete: 'off',
+        component: FormikInput
     }),
     username: (t: any) => ({
         id: 'username',
@@ -34,6 +40,7 @@ export const fieldTypes = {
         placeholder: t('ENTER_USERNAME_INPUT_PLACEHOLDER'),
         required: true,
         autoComplete: 'on',
+        component: FormikInput
     }),
     password: (t: any) => ({
         id: 'password',
@@ -43,6 +50,7 @@ export const fieldTypes = {
         placeholder: t('ENTER_PASSWORD'),
         required: true,
         autoComplete: 'current-password',
+        component: FormikInput
     }),
     current_password: (t: any) => ({
         id: 'current_password',
@@ -61,6 +69,7 @@ export const fieldTypes = {
         placeholder: t('NEW_PASSWORD_ENTER'),
         required: true,
         autoComplete: 'off',
+        component: FormikInput
     }),
     new_password_confirm: (t: any) => ({
         id: 'new_password_confirm',
@@ -70,6 +79,7 @@ export const fieldTypes = {
         placeholder: t('INPUT_PASSWORD_CONFIRM_PLACEHOLDER'),
         required: true,
         autoComplete: 'off',
+        component: FormikInput
     }),
     username_or_email: (t: any) => ({
         id: 'username_or_email',
@@ -79,5 +89,26 @@ export const fieldTypes = {
         placeholder: t('ENTER_USERNAME_OR_EMAIL_INPUT_PLACEHOLDER'),
         required: true,
         autoComplete: 'on',
+        component: FormikInput
+    }),
+    group_name: (t: any) => ({
+        id: 'group_name',
+        name: 'group_name',
+        type: 'text',
+        label: t('GROUP_NAME'),
+        placeholder: t('ENTER_GROUP_NAME_INPUT_PLACEHOLDER'),
+        required: true,
+        autoComplete: 'off',
+        component: FormikInput
+    }),
+    group_members: (t: any) => ({
+        id: 'group_members',
+        name: 'group_members',
+        type: 'text',
+        label: t('GROUP_MEMBERS'),
+        placeholder: t('ENTER_GROUP_MEMBERS_INPUT_PLACEHOLDER'),
+        required: true,
+        autoComplete: 'off',
+        component: FormikMultiValueInput
     }),
 };

@@ -6,6 +6,7 @@ import {Group, MainMenuItem, MainMenuItemsMap, MenuItems} from 'components/MainM
 import {useTranslation} from 'react-i18next';
 import {getAvatar} from 'util/util';
 
+import Groups from '../../pages/Groups/Groups';
 import {getUser} from '../../queries/account';
 
 interface MainMenuProps {
@@ -75,6 +76,7 @@ const MainMenu = (props: MainMenuProps) => {
                 {groups}
             </Flex>
         </Flex>
+        <Groups />
         <Flex direction={'column'} justify={'flex-end'} flexGrow={1} width={'100%'}>
             <Center w={'100%'} p={3}>
                 <HStack bg={'rgba(255,255,255,0.03)'} borderRadius={6} w={'100%'} p={3} spacing={4}>

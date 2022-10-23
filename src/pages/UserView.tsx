@@ -4,6 +4,7 @@ import {Button, Flex, Menu, MenuButton, MenuItem, MenuList, Text} from '@chakra-
 import {ChatBubbleLeftIcon, UserIcon, UserPlusIcon} from '@heroicons/react/24/solid';
 import {ProfileAvatar} from 'components/chakra/Avatar/Avatar';
 import {ButtonWithIcon} from 'components/chakra/ButtonWithIcon/ButtonWithIcon';
+import { useTranslation } from 'react-i18next';
 import {useSelector} from 'react-redux';
 import {useParams} from 'react-router-dom';
 import {sendMessageToExistingConversation} from 'state/services/conversationsService';
@@ -22,8 +23,6 @@ import {
 } from '../queries/people';
 
 import {ReceivedFriendRequest} from './Friends/ReceivedFriendRequest';
-
-import { useTranslation } from 'react-i18next';
 
 const UserView = () => {
 

@@ -1,5 +1,5 @@
 import {ExclamationCircleIcon} from '@heroicons/react/24/outline';
-import {EnvelopeIcon, KeyIcon, TrashIcon} from '@heroicons/react/24/solid';
+import {EnvelopeIcon, KeyIcon, TrashIcon, UsersIcon} from '@heroicons/react/24/solid';
 import {queryClient} from 'App';
 import {VerifyAccountDialogProps} from 'components/DialogSystem/dialogs';
 import {GoogleIcon} from 'components/Icons/GoogleIcon';
@@ -318,6 +318,32 @@ export const showDeleteAccountDialog = () => {
                         flexProps: {
                             justify: 'flex-start',
                         }
+                    },
+                },
+                data: {}
+            }
+        })
+    );
+};
+
+export const showCreateGroupDialog = () => {
+    store.dispatch(
+        openDialog({
+            component: 'CreateGroupDialog',
+            props: {
+                dialog: {
+                    title: 'CREATE_GROUP',
+                    description: 'CREATE_GROUP_DESCRIPTION',
+                    icon: {
+                        component: UsersIcon,
+                        color: '#24a0ed',
+                        flexProps: {
+                            justify: 'flex-start'
+                        }
+                    },
+                    flexProps: {
+                        minWidth: 400,
+                        maxWidth: 500
                     },
                 },
                 data: {}

@@ -42,3 +42,8 @@ export interface ChangePasswordFormArgs {
 export interface DeleteAccountFormArgs {
     current_password: string;
 }
+
+export interface CreateGroupFormArgs {
+    group_name: string;
+    group_members: string;
+}
