@@ -3,8 +3,6 @@ import {Middleware} from 'redux';
 import {pusherConnect} from 'state/services/pusherService';
 import {AppDispatch} from 'state/store';
 
-import {isSuccess} from '../../api/api_util';
-
 const styleOf = (bgColor: string) => `background: ${bgColor}; color: #ffffff; padding: 5px; margin: 5px; font-weight: bold`;
 
 const COLOR1 = styleOf('rgb(11,114,151)');
@@ -15,12 +13,12 @@ export const afterLoginMiddleware: Middleware = ({
                                                      getState
                                                  }: { dispatch: AppDispatch, getState: () => any }) => (next: Dispatch) => (action) => {
     if (action.type === 'account/login' || action.type === 'account/autoLogin') {
-
-        if (isSuccess(action.payload)) {
-            console.log(`%c afterLoginMiddleware (logged in) %c ${action.type}`, COLOR1, COLOR2);
-
-            dispatch(pusherConnect());
-        }
+        //
+        // if (isSuccess(action.payload)) {
+        //     console.log(`%c afterLoginMiddleware (logged in) %c ${action.type}`, COLOR1, COLOR2);
+        //
+        //     dispatch(pusherConnect());
+        // }
     }
 
     return next(action);

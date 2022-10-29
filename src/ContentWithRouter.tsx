@@ -17,7 +17,7 @@ import Content from './Content';
 import {assignNotificationChannel} from './queries/notifications';
 import theme from './theme';
 import Groups from "./pages/Groups/Groups";
-import {UserStatusBadge} from "components/UserStatusBadge/UserStatusBadge";
+import {UserBadge} from "components/UserStatusBadge/UserBadge";
 
 const ContentWithRouter = () => {
 
@@ -41,7 +41,7 @@ const ContentWithRouter = () => {
             return null;
         }
         return <div className={'w-[330px] flex flex-col gap-[50px] p-[20px] bg-black/10'}>
-            <UserStatusBadge user={user}/>
+            <UserBadge user={user}/>
             <MainMenu items={mainMenuItems} currentViewId={currentViewId}/>
             <Groups />
         </div>

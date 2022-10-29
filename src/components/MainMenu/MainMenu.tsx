@@ -1,12 +1,10 @@
 import React, {ReactNode, useCallback, useMemo} from 'react';
 
-import {Avatar, AvatarBadge, Center, Divider, Flex, HStack, Text, VStack} from '@chakra-ui/react';
+import {Divider, Flex, Text} from '@chakra-ui/react';
 import {MainMenuItemComponent} from 'components/MainMenu/MainMenuItemComponent';
 import {Group, MainMenuItem, MainMenuItemsMap, MenuItems} from 'components/MainMenu/mainMenuItems';
 import {useTranslation} from 'react-i18next';
-import {getAvatar} from 'util/util';
 
-import Groups from '../../pages/Groups/Groups';
 import {getUser} from '../../queries/account';
 
 interface MainMenuProps {
@@ -21,8 +19,6 @@ const MainMenu = (props: MainMenuProps) => {
     const { data: user } = getUser();
 
     const { t } = useTranslation();
-
-    const avatar = getAvatar(user);
 
     const renderGroupItems = useCallback((groupItems: MainMenuItemsMap | MainMenuItem[]): ReactNode => {
         if (Array.isArray(groupItems)) {

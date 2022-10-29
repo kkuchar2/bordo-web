@@ -14,6 +14,7 @@ import {queryClient} from '../../App';
 import {authGet, authPost, authPut, AxiosConfigs, QueryResponseError} from '../base';
 
 import {User} from './types';
+import {clearCurrentView} from "state/reducers/application/appSlice";
 
 export const changeAbout = () => {
     return authPut(['setAbout'], 'account/change-description')({
@@ -120,10 +121,9 @@ export const register = () => {
 };
 
 export const logout = () => {
-    queryClient.removeQueries(['user']);
-
     return authPost(['logout'], 'account/logout')({
         onSuccess: () => {
+            store.dispatch(clearCurrentView());
             queryClient.invalidateQueries(['user']);
         }
     });
@@ -204,6 +204,9 @@ export const getUser = () => {
             if (isPusherEnvSet) {
                 store.dispatch(pusherConnect());
             }
+        },
+        onError: () => {
+            queryClient.setQueryData(['user'], null);
         }
     });
 };

@@ -60,7 +60,7 @@ export const App = () => {
                 react: {
                     useSuspense: false
                 },
-                debug: true,
+                debug: false,
                 fallbackLng: 'en',
                 keySeparator: false,
                 interpolation: {

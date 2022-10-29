@@ -28,16 +28,13 @@ const WithAuth = (WrappedComponent: ComponentType, withAuthProps: WithAuthProps)
             redirectToLoginPageOnUnauthenticated
         } = withAuthProps;
 
-        if (redirectToHomeOnAutologin && (user || isSuccess)) {
+        if (redirectToHomeOnAutologin && user && isSuccess) {
             return <Navigate to={'/home'}/>;
         }
-        else if (redirectToLoginPageOnUnauthenticated && !(user || isSuccess)) {
+        else if (redirectToLoginPageOnUnauthenticated && !user) {
             return <Navigate to={'/'}/>;
         }
-        else if (redirectToLoginPageOnUnauthenticated && !user && isError) {
-            return <Navigate to={'/'}/>;
-        }
-        else if (!redirectToHomeOnAutologin && (user || isSuccess)) {
+        else if (!redirectToHomeOnAutologin && user) {
             return <WrappedComponent {...props} />;
         }
 

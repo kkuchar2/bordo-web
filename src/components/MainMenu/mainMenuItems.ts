@@ -77,26 +77,6 @@ export const mainMenuItems: MenuItems = {
         }
     },
     actions: {
-        groupItems: [
-            {
-                id: 'logout',
-                url: '/logout',
-                displayName: 'LOGOUT',
-                description: '',
-                isAction: true,
-                onClick: async (navigate: NavigateFunction) => {
-                    const response = await ApiClient.post('account/logout', {}, { ...AxiosConfigs.WITH_CREDENTIALS_AND_CSRF });
-                    if (response.status === 200) {
-                        queryClient.removeQueries(['user']);
-                        store.dispatch(clearCurrentView());
-                        navigate('/');
-                    }
-                },
-                icon: {
-                    component: ArrowRightOnRectangleIcon,
-                    color: 'text-white'
-                },
-            }
-        ]
+        groupItems: []
     }
 };
