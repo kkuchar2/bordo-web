@@ -1,6 +1,5 @@
 import {useMemo} from 'react';
 
-import {TFunction} from 'react-i18next';
 import {object, SchemaOf} from 'yup';
 
 import {
@@ -26,6 +25,7 @@ import {
     ResetPasswordFormArgs,
     SignupFormArgs
 } from './formConfig.types';
+import {TFunction} from "i18next";
 
 export interface FieldConfig {
     name: string;

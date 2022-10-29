@@ -73,10 +73,6 @@ export const InputSmartLabel = (props: InputSmartLabelProps) => {
         return <ButtonWithIcon title={reveal ? 'Hide password' : 'Show password'}
                                tabIndex={-1}
                                iconSize={20}
-                               bg={'none'}
-                               _hover={{ bg: 'none' }}
-                               _active={{ bg: 'none' }}
-                               _focus={{ bg: 'none' }}
                                iconColor={'rgba(255,255,255,0.48)'}
                                iconColorHover={'white'}
                                IconComponent={reveal ? EyeSlashIcon : EyeIcon}

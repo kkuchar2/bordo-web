@@ -101,13 +101,7 @@ const Dialogs = () => {
 
         if (arrowBack) {
             return <ButtonWithIcon title={'Back'}
-                                   width={'40px'}
-                                   height={'40px'}
-                                   bg={'rgba(255,255,255,0.09)'}
-                                   _hover={{ bg: 'rgba(255,255,255,0.2)' }}
-                                   _active={{ bg: 'rgba(255,255,255,0.2)' }}
-                                   _focus={{ bg: 'rgba(255,255,255,0.2)' }}
-                                   padding={0}
+                                   className={'w-[40px] h-[40px] bg-opacity-10 hover:bg-opacity-20 active:bg-opacity-20 focus:bg-opacity-20'}
                                    iconSize={25}
                                    iconColor={'rgba(255,255,255,0.48)'}
                                    iconColorHover={'white'}
@@ -128,13 +122,7 @@ const Dialogs = () => {
                 </Flex>}
             <Text flexGrow={1} fontSize={'md'} fontWeight={'bold'}>{t(title)}</Text>
             <ButtonWithIcon title={'Close'}
-                            width={'40px'}
-                            height={'40px'}
-                            bg={'rgba(255,255,255,0.09)'}
-                            _hover={{ bg: 'rgba(255,255,255,0.2)' }}
-                            _active={{ bg: 'rgba(255,255,255,0.2)' }}
-                            _focus={{ bg: 'rgba(255,255,255,0.2)' }}
-                            padding={0}
+                            className={'w-[40px] h-[40px] bg-opacity-10 hover:bg-opacity-20 active:bg-opacity-20 focus:bg-opacity-20'}
                             iconSize={25}
                             iconColor={'rgba(255,255,255,0.48)'}
                             iconColorHover={'white'}

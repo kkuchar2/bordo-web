@@ -69,7 +69,6 @@ export const fieldTypes = {
         label: t('NEW_PASSWORD'),
         placeholder: t('NEW_PASSWORD_ENTER'),
         required: true,
-        required: true,
         autoComplete: 'off',
         component: FormikInput
     }),

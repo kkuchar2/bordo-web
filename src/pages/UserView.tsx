@@ -99,16 +99,10 @@ const UserView = () => {
                     request={friendRequest}/>}
 
                 {!isFriend && !friendRequest && !isCurrentUser && <ButtonWithIcon
-                    color={'white'}
-                    bg={requestSent ? '#a53c3c' : '#7a62c0'}
-                    _hover={{ bg: requestSent ? '#c04444' : '#7a62c0' }}
-                    _focus={{ bg: requestSent ? '#c04444' : '#7a62c0' }}
-                    _active={{ bg: requestSent ? '#c04444' : '#7a62c0' }}
-                    _disabled={{ bg: 'rgba(123,123,123,0.13)' }}
-                    display={'flex'}
-                    gap={'10px'}
+                    title={'add-send-friend-request'}
+                    className={`flex gap-[10px] text-[14px] text-white ${requestSent ? 'bg-red-500' : 'bg-purple-500'} 
+                    hover:bg-purple-600 focus:bg-purple-600 active:bg-purple-600 disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed`}
                     onClick={onSendCancelFriendRequest}
-                    fontSize={'14px'}
                     IconComponent={requestSent ? null : UserPlusIcon}>
                     {requestSent ? 'Cancel friend request' : 'Send friend request'}</ButtonWithIcon>}
 
@@ -124,26 +118,9 @@ const UserView = () => {
                 </Menu>}
 
                 {isFriend && <ButtonWithIcon
-                    color={'white'}
-                    bg={'rgb(60,130,236)'}
-                    _hover={{ bg: 'rgb(46,114,216)' }}
-                    _focus={{ bg: 'rgb(46,114,216)' }}
-                    _active={{ bg: 'rgb(46,114,216)' }}
-                    _disabled={{
-                        bg: 'rgba(46,114,216,0.44)',
-                        color: 'rgba(255,255,255,0.44)',
-                        cursor: 'not-allowed',
-                        _hover: {
-                            bg: 'rgba(46,114,216,0.44)'
-                        }
-                    }}
-                    display={'flex'}
+                    title={'start-conversation'}
+                    className={`flex flex-row-reverse gap-[10px] text-[14px] text-white bg-purple-500 hover:bg-purple-600 focus:bg-purple-600 active:bg-purple-600 disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed`}
                     disabled={false}
-                    flexDirection={'row-reverse'}
-                    gap={'10px'}
-                    padding={'20px'}
-                    fontSize={'14px'}
-                    borderRadius={'4px'}
                     IconComponent={ChatBubbleLeftIcon}>
                     <Text fontSize={'sm'}>{'Message'}</Text>
                 </ButtonWithIcon>}

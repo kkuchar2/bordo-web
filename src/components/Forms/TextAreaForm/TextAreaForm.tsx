@@ -6,11 +6,11 @@ import {TextAreaFormProps} from 'components/Forms/TextAreaForm/TextAreaForm.type
 import {getFormFieldErrors, getNonFieldErrors} from 'components/Forms/util';
 import {InputWithError} from 'components/InputWithError/InputWithError';
 import {Field, Form as FormikForm, Formik} from 'formik';
-import {useTranslation} from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
-const TextAreaForm = (props: TextAreaFormProps) => {
+export const TextAreaForm = (props: TextAreaFormProps) => {
     const {
-        initialValues,
+        initialValues = {},
         onSubmit,
         onCancel,
         config,
@@ -20,8 +20,8 @@ const TextAreaForm = (props: TextAreaFormProps) => {
         description,
         fieldsSpacing = '20px',
         contentSpacing = '20px',
-        submitButtonTextKey,
-        useCancelButton,
+        submitButtonTextKey = 'CONFIRM',
+        useCancelButton = true,
         buttonsStackProps
     } = props;
 
@@ -123,11 +123,3 @@ const TextAreaForm = (props: TextAreaFormProps) => {
         )}
     </Formik>;
 };
-
-TextAreaForm.defaultProps = {
-    useCancelButton: true,
-    submitButtonTextKey: 'CONFIRM',
-    initialValues: {},
-};
-
-export default TextAreaForm;

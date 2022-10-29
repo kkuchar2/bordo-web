@@ -1,7 +1,7 @@
 import {FlexProps} from '@chakra-ui/layout';
 import {IconProps} from 'icon/icon.types';
-import {TFunction} from 'react-i18next';
 import {AppDispatch} from 'state/store';
+import {TFunction} from "i18next";
 
 export interface IDialogComponentProps {
     title?: string;

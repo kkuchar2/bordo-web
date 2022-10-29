@@ -11,6 +11,7 @@ import {FriendshipRequest} from '../../types/friendship';
 
 interface SentFriendRequestsProps {
     request: FriendshipRequest;
+    onRemove: (request: FriendshipRequest) => void;
 }
 
 export const SentFriendRequest = (props: SentFriendRequestsProps) => {

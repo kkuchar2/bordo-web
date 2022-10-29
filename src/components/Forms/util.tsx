@@ -2,9 +2,9 @@ import React from 'react';
 
 import {VStack} from '@chakra-ui/react';
 import {ErrorText} from 'components/chakra/ErrorText/ErrorText';
-import {TFunction} from 'react-i18next';
 
 import {QueryResponseErrorData} from '../../queries/base';
+import {TFunction} from "i18next";
 
 interface Error {
     code: string;

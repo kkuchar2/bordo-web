@@ -33,11 +33,8 @@ export const showFriendRequestReceived = (friendRequest: any) => {
                 <Flex gap={'20px'} color={'white'} mt={'10px'}>
                     <ButtonWithIcon title={'Accept'}
                                     iconSize={20}
-                                    borderRadius={0}
-                                    gap={'20px'}
-                                    onClick={() => {
-                                        toast.dismiss(t.id);
-                                    }}
+                                    className={'flex gap-[20px]'}
+                                    onClick={() => toast.dismiss(t.id)}
                                     iconColor={'rgba(255,255,255,0.48)'}
                                     iconColorHover={'white'}
                                     IconComponent={CheckIcon}>
@@ -49,8 +46,7 @@ export const showFriendRequestReceived = (friendRequest: any) => {
                     <ButtonWithIcon
                         title={'Decline'}
                         iconSize={20}
-                        borderRadius={0}
-                        gap={'20px'}
+                        className={'flex gap-4'}
                         onClick={() => {
                             toast.dismiss(t.id);
                         }}

@@ -41,12 +41,16 @@ export const App = () => {
             setEnvironmentLoaded(true);
         }
 
+
         const lang = localStorage.getItem('i18nextLng');
+
+        console.log('Loading translations, lang:', lang);
+
         i18n
             .init({
                 lng: lang,
                 backend: {
-                    loadPath: '{{ns}}/{{lng}}.json'
+                    loadPath: '/locales/{{lng}}.json'
                 },
                 saveMissing: false,
                 parseMissingKeyHandler: (key: string) => {
@@ -56,9 +60,7 @@ export const App = () => {
                 react: {
                     useSuspense: false
                 },
-                debug: false,
-                ns: ['src/assets/translation'],
-                defaultNS: 'src/assets/translation',
+                debug: true,
                 fallbackLng: 'en',
                 keySeparator: false,
                 interpolation: {

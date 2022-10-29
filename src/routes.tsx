@@ -63,11 +63,6 @@ export const routes = [
         element: Language,
         name: 'Language',
     },
-    // {
-    //     path: '/chats',
-    //     element: Chats,
-    //     name: 'Chats',
-    // },
     {
         path: '/forgotPassword',
         element: ForgotPassword,

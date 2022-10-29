@@ -10,7 +10,7 @@ import {Toaster} from 'react-hot-toast';
 import {useSelector} from 'react-redux';
 import {useLocation} from 'react-router-dom';
 import {currentView} from 'state/reducers/application/appSlice';
-import {RootState, useAppDispatch} from 'state/store';
+import {RootState} from 'state/store';
 
 import {queryClient} from './App';
 import Content from './Content';
@@ -22,8 +22,6 @@ import {UserStatusBadge} from "components/UserStatusBadge/UserStatusBadge";
 const ContentWithRouter = () => {
 
     const currentViewId = useSelector(currentView);
-
-    const dispatch = useAppDispatch();
 
     const location = useLocation();
 

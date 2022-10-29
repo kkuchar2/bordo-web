@@ -4,7 +4,7 @@ import {Box, Center, Flex, IconButton, Text} from '@chakra-ui/react';
 import {MenuAlt3Icon} from '@heroicons/react/solid';
 
 interface Props {
-    onShowSidebar: Function
+    onShowSidebar: () => void,
     showSidebarButton?: boolean
 }
 
@@ -18,7 +18,7 @@ const Header = ({ showSidebarButton = true, onShowSidebar }: Props) => {
                         colorScheme={'blackAlpha'}
                         variant={'outline'}
                         onClick={onShowSidebar}
-                    />
+                        aria-label={'Show sidebar'} />
                 )}
             </Box>
             <Center flex={'1'} h={'40px'}>
