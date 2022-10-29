@@ -41,7 +41,6 @@
     "react-easy-crop": "^4.6.1",
     "react-hot-toast": "^2.4.0",
     "react-i18next": "^12.0.0",
-    "react-lazy-with-preload": "^2.2.1",
     "react-redux": "^8.0.4",
     "react-router-dom": "^6.4.2",
     "react-select": "^5.5.7",
