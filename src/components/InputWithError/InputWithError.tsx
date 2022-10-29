@@ -54,10 +54,6 @@ export const InputWithError = ({ field, id, label, type, autoComplete, placehold
         return <InputRightElement width={'4.5rem'} height={'100%'}>
             <ButtonWithIcon title={show ? 'Hide password' : 'Show password'}
                             iconSize={20}
-                            bg={'none'}
-                            _hover={{ bg: 'none' }}
-                            _active={{ bg: 'none' }}
-                            _focus={{ bg: 'none' }}
                             iconColor={'rgba(255,255,255,0.48)'}
                             iconColorHover={'white'}
                             IconComponent={show ? EyeSlashIcon : EyeIcon}

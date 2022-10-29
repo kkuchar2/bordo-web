@@ -16,6 +16,8 @@ import {queryClient} from './App';
 import Content from './Content';
 import {assignNotificationChannel} from './queries/notifications';
 import theme from './theme';
+import Groups from "./pages/Groups/Groups";
+import {UserStatusBadge} from "components/UserStatusBadge/UserStatusBadge";
 
 const ContentWithRouter = () => {
 
@@ -36,15 +38,15 @@ const ContentWithRouter = () => {
         }
     });
 
-    const routedContent = useMemo(() => {
-        return <Content/>;
-    }, []);
-
-    const mainMenu = useMemo(() => {
+    const sideBar = useMemo(() => {
         if (isLoading || !user || location.pathname.startsWith('/resetPassword') || location.pathname.startsWith('/verify-email')) {
             return null;
         }
-        return <MainMenu items={mainMenuItems} currentViewId={currentViewId}/>;
+        return <div className={'w-[330px] flex flex-col gap-[50px] p-[20px] bg-black/10'}>
+            <UserStatusBadge user={user}/>
+            <MainMenu items={mainMenuItems} currentViewId={currentViewId}/>
+            <Groups />
+        </div>
     }, [user, location, currentViewId]);
 
     useEffect(() => {
@@ -59,9 +61,9 @@ const ContentWithRouter = () => {
     return <ChakraProvider theme={theme} resetCSS={true}>
         <Toaster/>
         <Flex w={'100%'} h={'100%'}>
-            {mainMenu}
+            {sideBar}
             <Box flexGrow={1} h={'100%'} data-testid={'content'} overflow={'auto'}>
-                {routedContent}
+                <Content/>
             </Box>
         </Flex>
         <Dialogs/>

@@ -7,7 +7,6 @@ import {ButtonWithIcon} from 'components/chakra/ButtonWithIcon/ButtonWithIcon';
 import { useTranslation } from 'react-i18next';
 import {useSelector} from 'react-redux';
 import {useParams} from 'react-router-dom';
-import {sendMessageToExistingConversation} from 'state/services/conversationsService';
 import {RootState, useAppDispatch} from 'state/store';
 
 import WithAuth from '../hoc/WithAuth';
@@ -54,10 +53,6 @@ const UserView = () => {
             listRef.current.scrollTop = listRef.current.scrollHeight;
         }
     }, [messages]);
-
-    const onInputEnterPress = useCallback((currentValue: string) => {
-        dispatch(sendMessageToExistingConversation(params.username, currentValue, socketId));
-    }, [socketId]);
 
     const onSendCancelFriendRequest = useCallback(() => {
         if (!requestSent) {

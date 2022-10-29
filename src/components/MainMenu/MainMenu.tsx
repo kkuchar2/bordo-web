@@ -62,44 +62,9 @@ const MainMenu = (props: MainMenuProps) => {
         return null;
     }
 
-    return <Flex direction={'column'}
-                 align={'flex-start'}
-                 position={'relative'}
-                 h={'100%'}
-                 w={'300px'}
-                 minW={'300px'}
-                 bg={'rgba(0,0,0,0.15)'}
-                 paddingTop={'20px'}
-                 data-testid={'main-menu'}>
-        <Flex padding={3} w={'100%'} justify={'flex-end'}>
-            <Flex direction={'column'} gap={'15px'}>
-                {groups}
-            </Flex>
-        </Flex>
-        <Groups />
-        <Flex direction={'column'} justify={'flex-end'} flexGrow={1} width={'100%'}>
-            <Center w={'100%'} p={3}>
-                <HStack bg={'rgba(255,255,255,0.03)'} borderRadius={6} w={'100%'} p={3} spacing={4}>
-                    <Avatar src={avatar}
-                            name={user.username}
-                            borderRadius={'100%'}
-                            width={'40px'}
-                            height={'40px'}
-                            objectFit={'cover'}
-                            {...avatar ? { bg: 'none' } : null}>
-                        <AvatarBadge boxSize={'0.55em'}
-                                     bg={'green.500'}
-                                     border={'none'}/>
-                    </Avatar>
-                    <VStack spacing={1} align={'stretch'} noOfLines={2}>
-                        <Text color={'white'} fontWeight={'semibold'} fontSize={'12px'}>{`#${user.username}`}</Text>
-                        <Text color={'alphaWhite.500'} fontWeight={'medium'}
-                              fontSize={'12px'}>{`${user.email.email}`}</Text>
-                    </VStack>
-                </HStack>
-            </Center>
-        </Flex>
-    </Flex>;
+    return <div className={'flex flex-col align-start relative w-full'}>
+            <div className={'flex flex-col gap-[15px]'}>{groups}</div>
+    </div>;
 };
 
 export default MainMenu;

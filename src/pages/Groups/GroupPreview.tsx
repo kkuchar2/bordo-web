@@ -9,6 +9,7 @@ import {getGroup} from '../../queries/groups';
 
 import {GroupMember} from './GroupMember';
 
+
 export const GroupPreview = () => {
 
     const params = useParams();
@@ -44,21 +45,6 @@ export const GroupPreview = () => {
                 <Badge colorScheme={'blue'}>{group.leader}</Badge>
             </Flex>
         </Flex>
-
-        <CollapseSection title={'Locations'}>
-            <Flex direction={'column'} gap={4} h={'100%'} p={'20px'}>
-                <Text fontSize={'18px'} fontWeight={'semibold'}>
-                    {'Locations'}
-                </Text>
-                <Flex direction={'column'} gap={4} h={'100%'} w={'100%'}>
-                    {group.members.map((username) => <Flex key={username} direction={'row'} gap={4} align={'center'}
-                                                           justify={'space-between'} bg={'rgba(255,255,255,0.02)'}
-                                                           w={'100%'}>
-                        <GroupMember username={username} isOwner={username === group.leader}/>
-                    </Flex>)}
-                </Flex>
-            </Flex>
-        </CollapseSection>
 
         <Flex direction={'column'} gap={4} h={'100%'} p={'20px'}>
             <Text fontSize={'18px'} fontWeight={'semibold'}>

@@ -4,7 +4,7 @@ import Cookies from 'universal-cookie';
 import { getEnvVar} from './api/config';
 
 const ApiClient = axios.create({
-    baseURL: `${getEnvVar('BORDO_API_URL')}/`,
+    baseURL: `${getEnvVar('VITE_BORDO_API_URL')}/`,
     //timeout: 10000,   // 10 seconds for user focus
 });
 

@@ -93,7 +93,7 @@ const config = {
 
 // define fonts
 const fonts = {
-    body: '\'Inter\', sans-serif',
+    body: 'Inter, system-ui, sans-serif',
 };
 
 // define font weights

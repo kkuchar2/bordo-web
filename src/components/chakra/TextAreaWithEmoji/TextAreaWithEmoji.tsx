@@ -9,7 +9,7 @@ import {useTranslation} from 'react-i18next';
 import {emojiMap} from 'tools/smileToEmoji';
 import {useStateWithCallbackLazy} from 'use-state-with-callback';
 
-const runes = require('runes');
+import runes from 'runes';
 
 interface TextAreaWithEmojiProps {
     name?: string;

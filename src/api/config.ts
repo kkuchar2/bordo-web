@@ -1,39 +1,39 @@
 import {GiphyFetch} from '@giphy/js-fetch-api';
 
 export const environment = {
-    'BORDO_API_URL': process.env.BORDO_API_URL,
-    'GIPHY_API_KEY': process.env.GIPHY_API_KEY,
-    'PUSHER_API_KEY': process.env.PUSHER_API_KEY,
-    'PUSHER_WS_HOST': process.env.PUSHER_WS_HOST,
-    'PUSHER_WS_PORT': process.env.PUSHER_WS_PORT,
-    'FIREBASE_PUBLIC_API_KEY': process.env.FIREBASE_PUBLIC_API_KEY,
-    'FIREBASE_PUBLIC_AUTH_DOMAIN': process.env.FIREBASE_PUBLIC_AUTH_DOMAIN,
-    'FIREBASE_PUBLIC_PROJECT_ID': process.env.FIREBASE_PUBLIC_PROJECT_ID,
-    'FIREBASE_PUBLIC_APP_ID': process.env.FIREBASE_PUBLIC_APP_ID,
-    'FIREBASE_PUBLIC_STORAGE_BUCKET': process.env.FIREBASE_PUBLIC_STORAGE_BUCKET,
-    'FIREBASE_PUBLIC_MESSAGING_SENDER_ID': process.env.FIREBASE_PUBLIC_MESSAGING_SENDER_ID,
-    'FIREBASE_PUBLIC_MEASUREMENT_ID': process.env.FIREBASE_PUBLIC_MEASUREMENT_ID,
+    'VITE_BORDO_API_URL': import.meta.env.VITE_BORDO_API_URL,
+    'VITE_GIPHY_API_KEY': import.meta.env.VITE_GIPHY_API_KEY,
+    'VITE_PUSHER_API_KEY': import.meta.env.VITE_PUSHER_API_KEY,
+    'VITE_PUSHER_WS_HOST': import.meta.env.VITE_PUSHER_WS_HOST,
+    'VITE_PUSHER_WS_PORT': import.meta.env.VITE_PUSHER_WS_PORT,
+    'VITE_FIREBASE_PUBLIC_API_KEY': import.meta.env.VITE_FIREBASE_PUBLIC_API_KEY,
+    'VITE_FIREBASE_PUBLIC_AUTH_DOMAIN': import.meta.env.VITE_FIREBASE_PUBLIC_AUTH_DOMAIN,
+    'VITE_FIREBASE_PUBLIC_PROJECT_ID': import.meta.env.VITE_FIREBASE_PUBLIC_PROJECT_ID,
+    'VITE_FIREBASE_PUBLIC_APP_ID': import.meta.env.VITE_FIREBASE_PUBLIC_APP_ID,
+    'VITE_FIREBASE_PUBLIC_STORAGE_BUCKET': import.meta.env.VITE_FIREBASE_PUBLIC_STORAGE_BUCKET,
+    'VITE_FIREBASE_PUBLIC_MESSAGING_SENDER_ID': import.meta.env.VITE_FIREBASE_PUBLIC_MESSAGING_SENDER_ID,
+    'VITE_FIREBASE_PUBLIC_MEASUREMENT_ID': import.meta.env.VITE_FIREBASE_PUBLIC_MEASUREMENT_ID,
 };
 
 const requiredBaseEnvVars = [
-    'BORDO_API_URL',
-    'GIPHY_API_KEY',
-    'FIREBASE_PUBLIC_API_KEY',
-    'FIREBASE_PUBLIC_AUTH_DOMAIN',
-    'FIREBASE_PUBLIC_PROJECT_ID',
-    'FIREBASE_PUBLIC_APP_ID',
-    'FIREBASE_PUBLIC_STORAGE_BUCKET',
-    'FIREBASE_PUBLIC_MESSAGING_SENDER_ID',
-    'FIREBASE_PUBLIC_MEASUREMENT_ID'
+    'VITE_BORDO_API_URL',
+    'VITE_GIPHY_API_KEY',
+    'VITE_FIREBASE_PUBLIC_API_KEY',
+    'VITE_FIREBASE_PUBLIC_AUTH_DOMAIN',
+    'VITE_FIREBASE_PUBLIC_PROJECT_ID',
+    'VITE_FIREBASE_PUBLIC_APP_ID',
+    'VITE_FIREBASE_PUBLIC_STORAGE_BUCKET',
+    'VITE_FIREBASE_PUBLIC_MESSAGING_SENDER_ID',
+    'VITE_FIREBASE_PUBLIC_MEASUREMENT_ID'
 ];
 
 const requiredPusherEnvVars = [
-    'PUSHER_API_KEY',
-    'PUSHER_WS_HOST',
-    'PUSHER_WS_PORT'
+    'VITE_PUSHER_API_KEY',
+    'VITE_PUSHER_WS_HOST',
+    'VITE_PUSHER_WS_PORT'
 ];
 
-export const getEnvVar = (key: string): string => {
+export const getEnvVar = (key: string): any => {
     if (key in environment) {
         return environment[key];
     }
@@ -58,5 +58,5 @@ else if (missingEnvVars.length > 0) {
 
 export const isPusherEnvSet  = requiredPusherEnvVars.every((key) => getEnvVar(key));
 
-const giphyKey = getEnvVar('GIPHY_API_KEY');
+const giphyKey = getEnvVar('VITE_GIPHY_API_KEY');
 export const giphyFetch = giphyKey ? new GiphyFetch(giphyKey) : null;

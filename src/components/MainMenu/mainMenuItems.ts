@@ -57,18 +57,6 @@ export const mainMenuItems: MenuItems = {
                 displayName: 'FRIENDS',
                 description: '',
             }),
-            Groups: viewSwitchItem({
-                id: 'groups',
-                url: '/groups',
-                displayName: 'GROUPS',
-                description: '',
-            }),
-            // Chats: viewSwitchItem({
-            //     id: 'Chats',
-            //     url: '/chats',
-            //     displayName: 'CHATS',
-            //     description: '',
-            // }),
             Account: viewSwitchItem({
                 id: 'account',
                 url: '/account',

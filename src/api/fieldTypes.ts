@@ -60,6 +60,7 @@ export const fieldTypes = {
         placeholder: t('CURRENT_PASSWORD_ENTER'),
         required: true,
         autoComplete: 'current-password',
+        component: FormikInput
     }),
     new_password: (t: any) => ({
         id: 'new_password',
@@ -67,6 +68,7 @@ export const fieldTypes = {
         type: 'password',
         label: t('NEW_PASSWORD'),
         placeholder: t('NEW_PASSWORD_ENTER'),
+        required: true,
         required: true,
         autoComplete: 'off',
         component: FormikInput

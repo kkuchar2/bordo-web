@@ -5,7 +5,15 @@ import {queryClient} from '../App';
 import {authGet, authPost} from './base';
 
 export const getGroups = () => {
-    return authGet<Group[]>(['groups'], 'groups/')({});
+    // call groups api and put each group of the result in the
+    // ache under the key ['group', group.id]
+    return authGet<Group[]>(['dummy'], 'groups/')({
+        onSuccess: (data) => {
+            data.forEach((group) => {
+                queryClient.setQueryData(['group', group.uuid], group);
+            });
+        }
+    });
 };
 
 export const getGroup = (uuid: string) => {

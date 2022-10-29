@@ -1,6 +1,5 @@
 import {ExclamationCircleIcon} from '@heroicons/react/24/outline';
 import {EnvelopeIcon, KeyIcon, TrashIcon, UsersIcon} from '@heroicons/react/24/solid';
-import {queryClient} from 'App';
 import {VerifyAccountDialogProps} from 'components/DialogSystem/dialogs';
 import {GoogleIcon} from 'components/Icons/GoogleIcon';
 import {openDialog} from 'state/reducers/dialog/dialogSlice';
@@ -10,6 +9,7 @@ import {changeEmail, changePassword, changeUsername} from '../../queries/account
 import {User} from '../../queries/account/types';
 
 import {SentEmailDialogArgs} from './readyDialogs.types';
+import {queryClient} from "../../App";
 
 export interface OpenReadyDialogArgs {
     passwordRequired?: boolean;

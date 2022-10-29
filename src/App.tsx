@@ -1,10 +1,17 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 
-import {QueryClient,} from '@tanstack/react-query';
+import {QueryClient, QueryClientProvider,} from '@tanstack/react-query';
+import {ReactQueryDevtools} from '@tanstack/react-query-devtools';
+import {logEvent} from 'firebase/analytics';
+import {Provider} from 'react-redux';
+import {BrowserRouter} from 'react-router-dom';
+import {store} from 'state/store';
 
 import './i18n';
-
-import './index.css';
+import { missingEnvVars} from './api/config';
+import ContentWithRouter from './ContentWithRouter';
+import i18n from './i18n';
+import {analytics} from "./firebase_util";
 
 export const SUPPORTED_LANGUAGES = ['en', 'pl'];
 
@@ -22,60 +29,59 @@ export const queryClient = new QueryClient({
 });
 
 export const App = () => {
-    // const [translationsLoaded, setTranslationsLoaded] = useState(false);
-    // const [environmentLoaded, setEnvironmentLoaded] = useState(false);
-    //
-    // useEffect(() => {
-    //     if (analytics) {
-    //         logEvent(analytics, 'hello_there');
-    //     }
-    //
-    //     if (missingEnvVars.length === 0) {
-    //         setEnvironmentLoaded(true);
-    //     }
-    //
-    //     const lang = localStorage.getItem('i18nextLng');
-    //     i18n
-    //         .init({
-    //             lng: lang,
-    //             backend: {
-    //                 loadPath: '{{ns}}/{{lng}}.json'
-    //             },
-    //             saveMissing: false,
-    //             parseMissingKeyHandler: (key: string) => {
-    //                 return `NO_TRANSLATION__${key}`;
-    //             },
-    //             preload: SUPPORTED_LANGUAGES,
-    //             react: {
-    //                 useSuspense: false
-    //             },
-    //             debug: false,
-    //             ns: ['assets/translation'],
-    //             defaultNS: 'assets/translation',
-    //             fallbackLng: 'en',
-    //             keySeparator: false,
-    //             interpolation: {
-    //                 escapeValue: false,
-    //                 formatSeparator: ','
-    //             }
-    //         })
-    //         .then(() => {
-    //             setTranslationsLoaded(true);
-    //         });
-    //
-    // }, []);
-    //
-    // if (!translationsLoaded || !environmentLoaded) {
-    //     return null;
-    // }
+    const [translationsLoaded, setTranslationsLoaded] = useState(false);
+    const [environmentLoaded, setEnvironmentLoaded] = useState(false);
 
-    return <div>
-        <div className={'w-[50px] h-[50px] bg-red-500'} />
-        {/*<BrowserRouter>*/}
-        {/*    <QueryClientProvider client={queryClient}>*/}
-        {/*        {process.env.NODE_ENV === 'development' && <ReactQueryDevtools initialIsOpen={false} position={'top-right'}/>}*/}
-        {/*        <ContentWithRouter/>*/}
-        {/*    </QueryClientProvider>*/}
-        {/*</BrowserRouter>*/}
-    </div>;
+    useEffect(() => {
+        if (analytics) {
+            logEvent(analytics, 'hello_there');
+        }
+
+        if (missingEnvVars.length === 0) {
+            setEnvironmentLoaded(true);
+        }
+
+        const lang = localStorage.getItem('i18nextLng');
+        i18n
+            .init({
+                lng: lang,
+                backend: {
+                    loadPath: '{{ns}}/{{lng}}.json'
+                },
+                saveMissing: false,
+                parseMissingKeyHandler: (key: string) => {
+                    return `NO_TRANSLATION__${key}`;
+                },
+                preload: SUPPORTED_LANGUAGES,
+                react: {
+                    useSuspense: false
+                },
+                debug: false,
+                ns: ['src/assets/translation'],
+                defaultNS: 'src/assets/translation',
+                fallbackLng: 'en',
+                keySeparator: false,
+                interpolation: {
+                    escapeValue: false,
+                    formatSeparator: ','
+                }
+            })
+            .then(() => {
+                setTranslationsLoaded(true);
+            });
+
+    }, []);
+
+    if (!translationsLoaded || !environmentLoaded) {
+        return null;
+    }
+
+    return <Provider store={store}>
+        <BrowserRouter>
+            <QueryClientProvider client={queryClient}>
+                {process.env.NODE_ENV === 'development' && <ReactQueryDevtools initialIsOpen={false} position={'top-right'}/>}
+                <ContentWithRouter/>
+            </QueryClientProvider>
+        </BrowserRouter>
+    </Provider>;
 };

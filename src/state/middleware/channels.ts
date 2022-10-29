@@ -6,7 +6,7 @@ import Cookies from 'universal-cookie';
 
 import {getEnvVar, isPusherEnvSet} from '../../api/config';
 
-const Pusher = require('pusher-js');
+import Pusher from 'pusher-js'
 
 const styleOf = (bgColor: string) => `background: ${bgColor}; color: #ffffff; padding: 5px; margin: 5px; font-weight: bold`;
 
@@ -40,13 +40,16 @@ export const channelMiddleware: Middleware = ({
                 wsPort: getEnvVar('PUSHER_WS_PORT'),
                 forceTLS: false,
                 channelAuthorization: {
-                    withCredentials: true,
+                    transport: 'ajax',
                     endpoint: `${getEnvVar('BORDO_API_URL')}.channels/authChannel`,
+                    params: {
+                        withCredentials: true
+                    },
                     headers: {
                         'X-CSRFTOKEN': new Cookies().get('csrftoken')
                     },
+
                 },
-                encrypted: true,
                 disableStats: false,
                 enabledTransports: ['ws', 'wss'],
             });
