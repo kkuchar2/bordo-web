@@ -5,13 +5,13 @@ import { getAuth } from 'firebase/auth';
 import {getEnvVar} from './api/config';
 
 const firebaseConfig = {
-    apiKey: getEnvVar('FIREBASE_PUBLIC_API_KEY'),
-    authDomain: getEnvVar('FIREBASE_PUBLIC_AUTH_DOMAIN'),
-    projectId: getEnvVar('FIREBASE_PUBLIC_PROJECT_ID'),
-    appId: getEnvVar('FIREBASE_PUBLIC_APP_ID'),
-    storageBucket: getEnvVar('FIREBASE_PUBLIC_STORAGE_BUCKET'),
-    messagingSenderId: getEnvVar('FIREBASE_PUBLIC_MESSAGING_SENDER_ID'),
-    measurementId: getEnvVar('FIREBASE_PUBLIC_MEASUREMENT_ID'),
+    apiKey: getEnvVar('VITE_FIREBASE_PUBLIC_API_KEY'),
+    authDomain: getEnvVar('VITE_FIREBASE_PUBLIC_AUTH_DOMAIN'),
+    projectId: getEnvVar('VITE_FIREBASE_PUBLIC_PROJECT_ID'),
+    appId: getEnvVar('VITE_FIREBASE_PUBLIC_APP_ID'),
+    storageBucket: getEnvVar('VITE_FIREBASE_PUBLIC_STORAGE_BUCKET'),
+    messagingSenderId: getEnvVar('VITE_FIREBASE_PUBLIC_MESSAGING_SENDER_ID'),
+    measurementId: getEnvVar('VITE_FIREBASE_PUBLIC_MEASUREMENT_ID'),
 };
 
 export const initFirebase = () => {

@@ -36,12 +36,12 @@ export const channelMiddleware: Middleware = ({
             console.log('%c channelMiddleware %c Starting channel connection to 127.0.0.1:6001', COLOR1, COLOR2);
 
             client = new Pusher(getEnvVar('PUSHER_API_KEY'), {
-                wsHost: getEnvVar('PUSHER_WS_HOST'),
-                wsPort: getEnvVar('PUSHER_WS_PORT'),
+                wsHost: getEnvVar('VITE_PUSHER_WS_HOST'),
+                wsPort: getEnvVar('VITE_PUSHER_WS_PORT'),
                 forceTLS: false,
                 channelAuthorization: {
                     transport: 'ajax',
-                    endpoint: `${getEnvVar('BORDO_API_URL')}.channels/authChannel`,
+                    endpoint: `${getEnvVar('VITE_BORDO_API_URL')}.channels/authChannel`,
                     params: {
                         withCredentials: true
                     },
