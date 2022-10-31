@@ -20,7 +20,10 @@
       ],
       "util/*": [
         "util/*"
-      ]
+      ],
+      "hooks/*": [
+        "hooks/*"
+      ],
     },
     "useDefineForClassFields": true,
     "lib": ["DOM", "DOM.Iterable", "ESNext"],

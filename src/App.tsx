@@ -1,17 +1,14 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 
 import {QueryClient, QueryClientProvider,} from '@tanstack/react-query';
 import {ReactQueryDevtools} from '@tanstack/react-query-devtools';
-import {logEvent} from 'firebase/analytics';
 import {Provider} from 'react-redux';
 import {BrowserRouter} from 'react-router-dom';
 import {store} from 'state/store';
 
-import './i18n';
-import { missingEnvVars} from './api/config';
 import ContentWithRouter from './ContentWithRouter';
-import i18n from './i18n';
-import {analytics} from "./firebase_util";
+import { useI18n } from 'hooks/useI18n';
+import { useEnvironment } from 'hooks/useEnvironment';
 
 export const SUPPORTED_LANGUAGES = ['en', 'pl'];
 
@@ -29,50 +26,8 @@ export const queryClient = new QueryClient({
 });
 
 export const App = () => {
-    const [translationsLoaded, setTranslationsLoaded] = useState(false);
-    const [environmentLoaded, setEnvironmentLoaded] = useState(false);
-
-    useEffect(() => {
-        if (analytics) {
-            logEvent(analytics, 'hello_there');
-        }
-
-        if (missingEnvVars.length === 0) {
-            setEnvironmentLoaded(true);
-        }
-
-
-        const lang = localStorage.getItem('i18nextLng');
-
-        console.log('Loading translations, lang:', lang);
-
-        i18n
-            .init({
-                lng: lang,
-                backend: {
-                    loadPath: '/locales/{{lng}}.json'
-                },
-                saveMissing: false,
-                parseMissingKeyHandler: (key: string) => {
-                    return `NO_TRANSLATION__${key}`;
-                },
-                preload: SUPPORTED_LANGUAGES,
-                react: {
-                    useSuspense: false
-                },
-                debug: false,
-                fallbackLng: 'en',
-                keySeparator: false,
-                interpolation: {
-                    escapeValue: false,
-                    formatSeparator: ','
-                }
-            })
-            .then(() => {
-                setTranslationsLoaded(true);
-            });
-
-    }, []);
+    const translationsLoaded = useI18n();
+    const environmentLoaded = useEnvironment();
 
     if (!translationsLoaded || !environmentLoaded) {
         return null;
@@ -81,7 +36,8 @@ export const App = () => {
     return <Provider store={store}>
         <BrowserRouter>
             <QueryClientProvider client={queryClient}>
-                {process.env.NODE_ENV === 'development' && <ReactQueryDevtools initialIsOpen={false} position={'top-right'}/>}
+                {process.env.NODE_ENV === 'development' &&
+                    <ReactQueryDevtools initialIsOpen={false} position={'top-right'}/>}
                 <ContentWithRouter/>
             </QueryClientProvider>
         </BrowserRouter>

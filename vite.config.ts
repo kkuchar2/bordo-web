@@ -12,6 +12,7 @@ export default defineConfig({
             'tools': '/src/tools',
             'queries': '/src/queries',
             'pages': '/src/pages',
+            'hooks': '/src/hooks',
         },
     },
     server: {
