@@ -28,7 +28,6 @@ const dialogSlice = createSlice({
         },
         onCloseDialog: () => defaultDialogState,
         onDialogPropsChange: (state, action: PayloadAction<IDialogComponentProps>) => {
-            console.log('onDialogPropsChange', action.payload);
             state.componentProps = {
                 ...state.componentProps,
                 dialog: {

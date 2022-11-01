@@ -53,7 +53,6 @@ export const ReceivedFriendRequest = (props: ReceivedFriendRequestsProps) => {
 
             <ButtonWithIcon title={'Accept'}
                             iconSize={20}
-                            gap={'20px'}
                             onClick={onAcceptClick}
                             iconColor={'rgba(255,255,255,0.48)'}
                             iconColorHover={'white'}
@@ -64,7 +63,6 @@ export const ReceivedFriendRequest = (props: ReceivedFriendRequestsProps) => {
             <ButtonWithIcon
                 title={'Decline'}
                 iconSize={20}
-                gap={'20px'}
                 iconColor={'rgba(255,255,255,0.48)'}
                 onClick={onRejectClick}
                 iconColorHover={'white'}
