@@ -201,7 +201,7 @@ export const googleDisconnect = () => {
 export const getUser = () => {
     return authGet<User>(['user'], 'account/user')({
         onSuccess: () => {
-            if (isPusherEnvSet) {
+            if (isPusherEnvSet){
                 store.dispatch(pusherConnect());
             }
         },

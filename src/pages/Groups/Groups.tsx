@@ -36,10 +36,7 @@ const HiddenScrollFlex = styled.div`
 `;
 
 const Groups = () => {
-    const {
-        data: groups,
-        isLoading
-    } = getGroups();
+    const { data: groups, isLoading } = getGroups();
 
     const [selectedGroup, setSelectedGroup] = React.useState(null);
 
@@ -77,7 +74,8 @@ const Groups = () => {
     }
 
     return <CollapseSection className={'flex flex-col grow'}
-                            title={'Groups'}
+                            title={'Your groups'}
+                            showIcon={groups && groups.length > 3}
                             actionButtonRenderer={() => {
                                 return <ButtonWithIcon
                                     title={'Create group'}
