@@ -3,38 +3,27 @@ import React, {useCallback, useState} from 'react';
 import {Avatar, Flex} from '@chakra-ui/react';
 import {XMarkIcon} from '@heroicons/react/24/outline';
 import Select, {components, IndicatorsContainerProps, MultiValueRemoveProps, OptionProps} from 'react-select';
-import {getAvatarFromProfile} from 'util/util';
-
 import {queryClient} from '../../../App';
-import {UserSearchOption} from '../../../pages/Chats/ChatWindow';
 import {QueryResponseError} from '../../../queries/base';
-import {searchPeople} from '../../../queries/people';
+import {searchGroup} from '../../../queries/people';
 import {useTranslation} from "react-i18next";
 
-const MultiValueRemove = (props: MultiValueRemoveProps<UserSearchOption>) => {
+const MultiValueRemove = (props: MultiValueRemoveProps<GroupSearchOption>) => {
     return <components.MultiValueRemove {...props}>
         <XMarkIcon width={'20px'} height={'20px'}/>
     </components.MultiValueRemove>;
 };
 
 const MultiValueLabel = (props: any) => {
-
     const data = props.data;
-    const avatar = getAvatarFromProfile(props.data.value.profile);
     return <components.MultiValueLabel {...props}>
         <Flex gap={'10px'} justify={'center'} align={'center'} h={'100%'}>
-            <Avatar src={avatar}
-                    name={data.label}
-                    borderRadius={'100%'}
-                    width={'30px'}
-                    height={'30px'}
-                    objectFit={'cover'}/>
             {data.label}
         </Flex>
     </components.MultiValueLabel>;
 };
 
-const IndicatorsContainer = (props: IndicatorsContainerProps<UserSearchOption, true>) => {
+const IndicatorsContainer = (props: IndicatorsContainerProps<GroupSearchOption, true>) => {
     return (
         <div style={{ background: '#202020' }}>
             <components.IndicatorsContainer {...props} />
@@ -42,42 +31,47 @@ const IndicatorsContainer = (props: IndicatorsContainerProps<UserSearchOption, t
     );
 };
 
-const Option = (props: OptionProps<UserSearchOption>) => {
-
-    const data = props.data;
-    const avatar = getAvatarFromProfile(props.data.value.profile);
+const Option = (props: OptionProps<GroupSearchOption>) => {
 
     return <components.Option {...props}>
         <Flex gap={'10px'} justify={'flex-start'} align={'center'} h={'100%'}>
-            <Avatar src={avatar}
-                    name={props.data.label}
-                    borderRadius={'100%'}
-                    width={'30px'}
-                    height={'30px'}
-                    objectFit={'cover'}/>
             {props.data.label}
         </Flex>
     </components.Option>;
 };
 
-interface MultiUserSelectProps {
-
+export interface GroupSearchOption {
+    readonly value: {
+        groupName: string;
+        groupID: string;
+    },
+    readonly label: string;
 }
 
-export const MultiUserSelect = (props: MultiUserSelectProps) => {
-    const [searchResult, setSearchResult] = useState<UserSearchOption[]>([]);
+
+interface GroupsSearchProps {
+    onSelect: (option: GroupSearchOption) => void;
+}
+
+export const GroupsSearch = (props: GroupsSearchProps) => {
+
+    const { onSelect } = props;
+
+    const [searchResult, setSearchResult] = useState<GroupSearchOption[]>([]);
 
     const {t} = useTranslation();
 
-    const searchPeopleMutation = searchPeople()({
+    const searchGroupMutation = searchGroup()({
         onSuccess: (data: any) => {
-            setSearchResult(data.map((user) => {
+            console.log(data);
+            setSearchResult(data.map((group) => {
+                console.log(group);
                 return {
                     value: {
-                        username: user.username,
-                        profile: user.profile,
+                        groupName: group.name,
+                        groupID: group.uuid,
                     },
-                    label: user.username,
+                    label: group.name
                 };
             }));
         },
@@ -88,8 +82,8 @@ export const MultiUserSelect = (props: MultiUserSelectProps) => {
 
     const onSelectInputChange = useCallback((value: string) => {
         if (value.length > 0) {
-            queryClient.cancelQueries(['searchPeople']);
-            searchPeopleMutation.mutate({
+            queryClient.cancelQueries(['searchGroup']);
+            searchGroupMutation.mutate({
                 query: value
             });
         }
@@ -98,10 +92,11 @@ export const MultiUserSelect = (props: MultiUserSelectProps) => {
     return <Select
         closeMenuOnSelect={true}
         defaultValue={searchResult[0]}
-        isMulti
+        isMulti={false}
         noOptionsMessage={() => t('NO_SEARCH_RESULTS')}
         onInputChange={onSelectInputChange}
-        placeholder={'Select users'}
+        onChange={onSelect}
+        placeholder={t('SEARCH_GROUP')}
         options={searchResult}
         components={{
             DropdownIndicator: () => null,
@@ -155,51 +150,14 @@ export const MultiUserSelect = (props: MultiUserSelectProps) => {
             }),
             valueContainer: (base) => ({
                 ...base,
-                background: 'rgba(39,39,39,0.68)',
+                background: 'rgba(23,23,23,0.68)',
                 borderRadius: '6px',
-            }),
-            multiValue: (base) => ({
-                ...base,
-                background: 'rgba(0,168,255,0.14)',
-                borderRadius: '4px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '5px',
-                padding: '2px',
-                paddingLeft: '4px',
-                paddingRight: '4px',
-                marginRight: '5px'
-            }),
-            multiValueRemove: (base) => ({
-                ...base,
-                border: 'none',
-                background: 'none',
-                height: '30px',
-                width: '30px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                borderRadius: '150px',
-                '&:hover': {
-                    backgroundColor: 'rgba(255,255,255,0.15)',
-                    color: '#fff'
-                }
             }),
             indicatorsContainer: (base) => ({
                 ...base,
                 background: 'blue',
                 borderRadius: '0',
                 height: '100%'
-            }),
-            multiValueLabel: (base) => ({
-                ...base,
-                backgroundColor: 'none',
-                borderRadius: 0,
-                border: 'none',
-                boxShadow: 'none',
-                color: 'white',
-                fontWeight: 'bold',
             }),
         }}
     />;

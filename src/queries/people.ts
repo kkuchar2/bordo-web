@@ -16,6 +16,10 @@ export const searchPeople = () => {
     return authPost<any>(['searchPeople'], 'people/search');
 };
 
+export const searchGroup = () => {
+    return authPost<any>(['searchGroup'], 'groups/search');
+};
+
 export const getFriends = () => {
     return authGet<any>(['getFriends'], 'people/connections/')({
         onSuccess: () => {

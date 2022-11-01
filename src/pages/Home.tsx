@@ -1,12 +1,21 @@
-import React from 'react';
-
-import {Center} from '@chakra-ui/react';
+import React, {useCallback} from 'react';
 
 import WithAuth from '../hoc/WithAuth';
+import {GroupSearchOption, GroupsSearch} from "components/Select/GroupsSearch/GroupsSearch";
+import {useNavigate} from "react-router-dom";
 
 const Home = () => {
-    return <Center h={'100%'} w={'100%'}>
-    </Center>;
+
+    const navigate = useNavigate();
+
+    const onGroupSelected = useCallback((option: GroupSearchOption) => {
+        console.log('Selected group: ', option);
+        navigate(`/groups/${option.value.groupID}`);
+    }, []);
+
+        return <div className={'w-full h-full p-2'}>
+        <GroupsSearch onSelect={onGroupSelected}/>
+    </div>;
 };
 
 Home.displayName = 'HomePage';

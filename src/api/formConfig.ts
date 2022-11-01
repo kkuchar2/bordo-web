@@ -6,7 +6,6 @@ import {
     ConfirmPasswordSchema,
     EmailSchema,
     NewPasswordSchema,
-    RequiredArraySchema,
     RequiredCurrentPasswordSchema,
     RequiredStringSchema,
     UsernameOrEmailSchema,
@@ -133,12 +132,10 @@ export const FORM_CONFIG = (t: any): FormConfigs => {
         },
         createGroup: {
             fields: [
-                { name: 'group_name' },
-                { name: 'group_members' },
+                { name: 'group_name' }
             ],
             validationSchema: object({
-                group_name: RequiredStringSchema(t),
-                group_members: RequiredArraySchema(t),
+                group_name: RequiredStringSchema(t)
             })
         },
         emptyForm: {

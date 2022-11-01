@@ -45,5 +45,4 @@ export interface DeleteAccountFormArgs {
 
 export interface CreateGroupFormArgs {
     group_name: string;
-    group_members: string;
 }
