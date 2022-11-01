@@ -53,7 +53,7 @@ if (missingEnvVars.length > 0 && process.env.NODE_ENV === 'development') {
     console.error(`Missing environment variables: ${missingEnvVars.join(', ')}`);
 }
 else if (missingEnvVars.length > 0) {
-    console.error('Configuration of app is missing. Please contact the administrator.');
+    console.error('Configuration of app is missing. ', missingEnvVars, 'Please contact the administrator.');
 }
 
 export const isPusherEnvSet  = requiredPusherEnvVars.every((key) => getEnvVar(key));
