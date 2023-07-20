@@ -12,6 +12,7 @@
   "CHANGE_EMAIL": "Change E-mail address",
   "CHANGE_EMAIL_DESCRIPTION": "Enter new E-mail address and your current password",
   "CHANGE_PASSWORD": "Change Password",
+  "USER_ALREADY_EXISTS": "User already exists",
   "CHANGE_PASSWORD_DESCRIPTION": "Enter your current password and new password",
   "CREATE_GROUP_DESCRIPTION": "Create a group",
   "CHANGE_USERNAME": "Change Username",

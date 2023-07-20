@@ -12,6 +12,7 @@
   "CHANGE_EMAIL_DESCRIPTION": "Wprowadź nowy adres email oraz aktualne hasło",
   "CHANGE_PASSWORD": "Zmień hasło",
   "CHANGE_PASSWORD_DESCRIPTION": "Wprowadź aktualne i nowe hasło",
+  "USER_ALREADY_EXISTS": "Użytkownik już istnieje",
   "CHANGE_USERNAME": "Zmień nazwę użytkownika",
   "CHANGE_USERNAME_DESCRIPTION": "Aby zmienić nazwę użytkownika, musisz potwierdzić swoje aktualne hasło.",
   "CHATS": "Konwersacje",
