@@ -32,12 +32,6 @@ export const mainMenuItems: MenuItems = {
                 displayName: 'HOME_PAGE',
                 description: '',
             },
-            Friends: {
-                id: 'friends',
-                url: '/friends',
-                displayName: 'FRIENDS',
-                description: '',
-            },
             Account: {
                 id: 'account',
                 url: '/account',

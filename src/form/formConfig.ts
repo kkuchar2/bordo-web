@@ -8,7 +8,6 @@ import {
     ChangeEmailFormArgs,
     ChangePasswordFormArgs,
     ChangeUsernameFormArgs,
-    CreateGroupFormArgs,
     DeleteAccountFormArgs,
     ForgotPasswordFormArgs,
     LoginFormArgs,
@@ -44,7 +43,6 @@ export interface FormConfigs {
     resetPassword: FormConfig<ResetPasswordFormArgs>,
     changePassword: FormConfig<ChangePasswordFormArgs>,
     deleteAccount: FormConfig<DeleteAccountFormArgs>,
-    createGroup: FormConfig<CreateGroupFormArgs>,
     emptyForm: FormConfig<null>,
 }
 
@@ -128,14 +126,6 @@ export const FORM_CONFIG = (t: any): FormConfigs => {
             ],
             validationSchema: object({
                 current_password: RequiredCurrentPasswordSchema(t)
-            })
-        },
-        createGroup: {
-            fields: [
-                { name: 'group_name' }
-            ],
-            validationSchema: object({
-                group_name: RequiredStringSchema(t)
             })
         },
         emptyForm: {

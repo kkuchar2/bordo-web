@@ -1,4 +1,4 @@
-import { array, boolean, object, ObjectSchema, string } from 'yup';
+import { boolean, object, ObjectSchema, string } from 'yup';
 
 import { EmailAddress, Friend, GoogleAccountInfo, UserInfo, UserProfile } from './types';
 
@@ -14,8 +14,7 @@ export const FriendSchema: ObjectSchema<Friend> = object({
 
 export const UserProfileSchema: ObjectSchema<UserProfile> = object({
     about: string().required(),
-    avatar: string().required(),
-    friends: array(FriendSchema).required()
+    avatar: string().required()
 });
 
 export const GoogleAccountInfoSchema: ObjectSchema<GoogleAccountInfo> = object({

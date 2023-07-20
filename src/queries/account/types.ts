@@ -16,7 +16,6 @@ export interface Friend {
 export interface UserProfile {
     about: string;
     avatar: string;
-    friends: Friend[];
 }
 
 export interface GoogleAccountInfo {

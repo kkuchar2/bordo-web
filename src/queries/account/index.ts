@@ -1,6 +1,6 @@
 import { authGet, authPost, authPut, AxiosConfigs, QueryResponseError } from '../base';
 
-import { User } from './types';
+import { User, UserProfile } from './types';
 
 import {
     showEmailChangeConfirmationSentDialog,
@@ -9,10 +9,9 @@ import {
 } from '@/components/DialogSystem/readyDialogs';
 import { getNonFieldErrors } from '@/components/Forms/util';
 import { showSuccessToast } from '@/components/Toast/readyToastNotifications';
-import { isPusherEnvSet, queryClient } from '@/config';
+import { queryClient } from '@/config';
 import { clearCurrentView } from '@/state/reducers/application/appSlice';
 import { closeDialog } from '@/state/reducers/dialog/dialogSlice';
-import { pusherConnect } from '@/state/services/pusherService';
 import { store } from '@/state/store';
 
 export const changeAbout = () => {
@@ -199,11 +198,6 @@ export const googleDisconnect = () => {
 
 export const getUser = () => {
     return authGet<User>(['user'], 'account/user')({
-        onSuccess: () => {
-            if (isPusherEnvSet) {
-                store.dispatch(pusherConnect());
-            }
-        },
         onError: () => {
             queryClient.setQueryData(['user'], null);
         }
@@ -212,4 +206,8 @@ export const getUser = () => {
 
 export const prepareAvatarUploadInfo = () => {
     return authPost(['avatarUploadInfo'], 'account/avatar-upload-info')({});
+};
+
+export const getProfile = (username: string) => {
+    return authGet<UserProfile>(['profile', username], `people/profile/${username}`);
 };

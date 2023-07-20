@@ -15,14 +15,5 @@ export const afterLoginMiddleware: Middleware = ({
     dispatch: AppDispatch,
     getState: () => any
 }) => (next: Dispatch) => (action) => {
-    if (action.type === 'account/login' || action.type === 'account/autoLogin') {
-        //
-        // if (isSuccess(action.payload)) {
-        //     console.log(`%c afterLoginMiddleware (logged in) %c ${action.type}`, COLOR1, COLOR2);
-        //
-        //     dispatch(pusherConnect());
-        // }
-    }
-
     return next(action);
 };

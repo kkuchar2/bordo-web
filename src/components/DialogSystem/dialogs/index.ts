@@ -6,4 +6,3 @@ export * from './PasswordCreationRequiredDialog';
 export * from './ServiceUnavailableDialog';
 export * from './VerifyAccountDialog';
 export * from './DisconnectGoogleDialog';
-export * from './CreateGroupDialog';

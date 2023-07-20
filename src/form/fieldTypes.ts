@@ -1,5 +1,4 @@
 import { FormikInput } from '@/components/FormikInput/FormikInput';
-import { FormikMultiValueInput } from '@/components/FormikInput/FormikMultiValueInput';
 import { FieldConfig } from '@/form/formConfig';
 
 type FieldTypesMap = {
@@ -96,25 +95,5 @@ export const fieldTypes: FieldTypesMap = {
         required: true,
         autoComplete: 'on',
         component: FormikInput
-    }),
-    group_name: (t: any) => ({
-        id: 'group_name',
-        name: 'group_name',
-        type: 'text',
-        label: t('GROUP_NAME'),
-        placeholder: t('ENTER_GROUP_NAME_INPUT_PLACEHOLDER'),
-        required: true,
-        autoComplete: 'off',
-        component: FormikInput
-    }),
-    group_members: (t: any) => ({
-        id: 'group_members',
-        name: 'group_members',
-        type: 'text',
-        label: t('GROUP_MEMBERS'),
-        placeholder: t('ENTER_GROUP_MEMBERS_INPUT_PLACEHOLDER'),
-        required: true,
-        autoComplete: 'off',
-        component: FormikMultiValueInput
-    }),
+    })
 };
