@@ -11,6 +11,7 @@ import * as dialogs from './dialogs';
 
 import { ButtonWithIcon } from '@/components/chakra/ButtonWithIcon/ButtonWithIcon';
 import { dialogAnimation, dialogBgAnimation } from '@/components/Forms/animation';
+import { Icon } from '@/components/Icons/Icon';
 import { closeDialog } from '@/state/reducers/dialog/dialogSlice';
 import { DialogSliceState } from '@/state/reducers/dialog/dialogSlice.types';
 import { RootState, useAppDispatch } from '@/state/store';
@@ -103,10 +104,12 @@ const Dialogs = () => {
         if (arrowBack) {
             return <ButtonWithIcon title={'Back'}
                 className={'h-[40px] w-[40px] bg-opacity-10 hover:bg-opacity-20 focus:bg-opacity-20 active:bg-opacity-20'}
-                iconSize={25}
                 iconColor={'rgba(255,255,255,0.48)'}
                 iconColorHover={'white'}
-                IconComponent={ArrowLeftIcon}
+                icon={{
+                    component: ArrowLeftIcon,
+                    size: 25
+                }}
                 onClick={handleBack}/>;
         }
 
@@ -118,16 +121,20 @@ const Dialogs = () => {
 
         return <HStack spacing={'10px'} justifyContent={'flex-start'} align={'center'} flexGrow={1}>
             {icon &&
-                <Flex align={'center'} justify={'center'}{...icon.flexProps}>
-                    <icon.component width={icon.size || 20} height={icon.size || 20} color={icon.color}/>
+                <Flex align={'center'} justify={'center'}>
+                    <Icon {...icon}/>
                 </Flex>}
-            <Text flexGrow={1} fontSize={'md'} fontWeight={'bold'}>{t(title)}</Text>
+            {title && <Text flexGrow={1} fontSize={'md'} fontWeight={'bold'}>
+                {t(title)}
+            </Text>}
             <ButtonWithIcon title={'Close'}
                 className={'h-[40px] w-[40px] bg-opacity-10 hover:bg-opacity-20 focus:bg-opacity-20 active:bg-opacity-20'}
-                iconSize={25}
                 iconColor={'rgba(255,255,255,0.48)'}
                 iconColorHover={'white'}
-                IconComponent={XMarkIcon}
+                icon={{
+                    component: XMarkIcon,
+                    size: 25
+                }}
                 onClick={handleCancel}/>
         </HStack>;
     }, [componentProps, t]);

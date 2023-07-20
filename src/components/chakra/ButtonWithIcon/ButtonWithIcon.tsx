@@ -1,13 +1,14 @@
 import { ReactNode, useCallback, useState } from 'react';
 
+import { Icon, IconProps } from '@/components/Icons/Icon';
+
 interface ButtonWithIconProps {
     buttonType?: 'button' | 'submit' | 'reset';
-    IconComponent: () => ReactNode,
-    iconColor?: string,
+    icon: IconProps,
     title: string,
     disabled?: boolean,
+    iconColor?: string,
     iconColorHover?: string,
-    iconSize?: number,
     children?: ReactNode,
     tabIndex?: number,
     className?: string
@@ -17,13 +18,11 @@ interface ButtonWithIconProps {
 export const ButtonWithIcon = (props: ButtonWithIconProps) => {
 
     const {
-        IconComponent, buttonType = 'button', tabIndex, iconSize = 20, iconColor, iconColorHover,
+        icon, buttonType = 'button', tabIndex, iconColor, iconColorHover,
         title, onClick, className, children
     } = props;
 
     const [hovered, setHovered] = useState(false);
-
-    const iconSizePx = `${iconSize}px`;
 
     const onMouseEnter = useCallback(() => {
         setHovered(true);
@@ -42,8 +41,6 @@ export const ButtonWithIcon = (props: ButtonWithIconProps) => {
         onMouseLeave={onMouseLeave}
         onClick={onClick}>
         {children}
-        {IconComponent ?
-            <IconComponent width={iconSizePx}
-                height={iconSizePx} color={hovered ? iconColorHover : iconColor}/> : null}
+        {icon ? <Icon {...icon} color={hovered ? iconColorHover : iconColor}/> : null}
     </button>;
 };
