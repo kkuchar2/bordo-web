@@ -23,7 +23,7 @@ export interface EditablePropertyProps {
 
 const EditableProperty = (props: EditablePropertyProps) => {
 
-    const { name, value, showDialogFunc, canEdit, editText, hideTitle, icon, passwordRequired } = props;
+    const { name, value, showDialogFunc, canEdit, editText = 'EDIT', hideTitle, icon, passwordRequired } = props;
 
     const { t } = useTranslation();
 
