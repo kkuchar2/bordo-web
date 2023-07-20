@@ -1,11 +1,11 @@
-import React from 'react';
+'use client';
 
 import { Center, Heading, Text, VStack } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 
 import { NavLink } from '@/components/chakra/NavLink/NavLink';
 
-const UserAgreements = () => {
+const UserAgreementsPage = () => {
     const { t } = useTranslation();
 
     return <Center w={'100%'} h={'100%'}>
@@ -29,4 +29,4 @@ const UserAgreements = () => {
     </Center>;
 };
 
-export default UserAgreements;
+export default UserAgreementsPage;
