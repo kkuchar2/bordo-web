@@ -1,11 +1,9 @@
 import React, { useCallback, useMemo } from 'react';
 
-import { Button, Flex, Text } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 
-import { IconProps } from '../../icon/icon.types';
-
 import { OpenReadyDialogArgs } from '@/components/DialogSystem/readyDialogs';
+import { Icon, IconProps } from '@/components/Icons/Icon';
 
 export interface EditablePropertyProps {
     id: string;
@@ -23,11 +21,14 @@ export interface EditablePropertyProps {
 
 const EditableProperty = (props: EditablePropertyProps) => {
 
-    const { name, value, showDialogFunc, canEdit, editText = 'EDIT', hideTitle, icon, passwordRequired } = props;
+    const { name, value, showDialogFunc, canEdit, icon, editText = 'EDIT', hideTitle, passwordRequired } = props;
 
     const { t } = useTranslation();
 
     const onEditButtonClick = useCallback(() => {
+        if (!showDialogFunc) {
+            return;
+        }
         showDialogFunc({
             passwordRequired: passwordRequired,
             initialData: {},
@@ -39,25 +40,15 @@ const EditableProperty = (props: EditablePropertyProps) => {
             return null;
         }
 
-        if (!value) {
-            return <Button onClick={onEditButtonClick}>
-                <icon.component style={{
-                    width: '20px',
-                    height: '20px',
-                    marginRight: '10px',
-                    color: `${icon.color}`,
-                }}/>
-
-                <Text fontSize={'13px'}>{t(editText)}</Text>
-            </Button>;
-        }
-
-        return <Flex justifySelf={'flex-end'} justify={'flex-end'}>
-            <Button onClick={onEditButtonClick} minWidth={'100px'}>
-                <Text fontSize={'12px'}>{t(editText)}</Text>
-            </Button>
-        </Flex>;
-    }, [canEdit, onEditButtonClick, value, editText, icon]);
+        return <div className={'flex justify-end self-end'}>
+            <button
+                className={'flex min-w-[100px] items-center justify-center gap-3 rounded-md bg-neutral-700 p-2 text-sm font-semibold hover:bg-neutral-600'}
+                onClick={onEditButtonClick}>
+                {icon && <Icon {...icon}/>}
+                {t(editText)}
+            </button>
+        </div>;
+    }, [canEdit, onEditButtonClick, editText]);
 
     if (!value) {
         return null;
@@ -67,22 +58,19 @@ const EditableProperty = (props: EditablePropertyProps) => {
         return renderEdit;
     }
 
-    return <Flex direction={'column'} width={'100%'} p={2}>
-        <Flex width={'100%'}>
-            <Flex flexGrow={1} gap={2} direction={'column'} align={'flex-start'} justify={'center'}>
-                <Text fontSize={'13px'}
-                    fontWeight={'semibold'}
-                    color={'rgba(255,255,255,0.7)'}
-                    textTransform={props.uppercaseTitle ? 'uppercase' : 'none'}>
+    return <div className={'flex w-full flex-col p-2'}>
+        <div className={'flex w-full'}>
+            <div className={'flex grow flex-col items-start justify-center gap-2'}>
+                <div className={'font-semibold text-sm text-white/70 ' + (props.uppercaseTitle ? 'uppercase' : 'none')}>
                     {`${name}:`}
-                </Text>
-                <Text fontSize={'14px'} fontWeight={'normal'}>{value}</Text>
-            </Flex>
-            <Flex align={'center'} justify={'center'}>
+                </div>
+                <div>{value}</div>
+            </div>
+            <div className={'grid place-items-center'}>
                 {renderEdit}
-            </Flex>
-        </Flex>
-    </Flex>;
+            </div>
+        </div>
+    </div>;
 };
 
 export default EditableProperty;

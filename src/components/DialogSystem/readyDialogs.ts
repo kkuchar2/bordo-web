@@ -79,10 +79,7 @@ export const showSentEmailDialog = <T = any>(args: SentEmailDialogArgs<T>) => {
                     title: title,
                     icon: {
                         component: EnvelopeIcon,
-                        color: '#24a0ed',
-                        flexProps: {
-                            justify: 'flex-start'
-                        }
+                        color: '#24a0ed'
                     },
                     description: description,
                     closeable: closeable
@@ -103,9 +100,6 @@ export const showVerifyAccountDialog = (data: VerifyAccountDialogProps) => {
                     icon: {
                         component: EnvelopeIcon,
                         color: '#24a0ed',
-                        flexProps: {
-                            justify: 'flex-start'
-                        }
                     },
                     description: 'VERIFY_ACCOUNT_DESCRIPTION',
                     closeable: true
@@ -195,10 +189,7 @@ export const showChangeEmailDialog = (args: OpenReadyDialogArgs) => {
                     description: 'CHANGE_EMAIL_DESCRIPTION',
                     icon: {
                         component: EnvelopeIcon,
-                        color: '#8ed3ed',
-                        flexProps: {
-                            justify: 'flex-start'
-                        }
+                        color: '#8ed3ed'
                     },
                     flexProps: {
                         minWidth: 400
@@ -233,10 +224,7 @@ export const showChangePasswordDialog = (args: OpenReadyDialogArgs) => {
                     },
                     icon: {
                         component: KeyIcon,
-                        color: '#ffb700',
-                        flexProps: {
-                            justify: 'flex-start'
-                        }
+                        color: '#ffb700'
                     },
                 },
                 data: {
@@ -258,10 +246,7 @@ export const showServiceUnavailableDialog = () => {
                     description: 'SERVICE_UNAVAILABLE_DESCRIPTION',
                     icon: {
                         component: ExclamationCircleIcon,
-                        color: '#ca1717',
-                        flexProps: {
-                            justify: 'flex-start'
-                        }
+                        color: '#ca1717'
                     },
                     closeable: true
                 },
@@ -285,10 +270,7 @@ export const showPasswordCreationRequiredDialog = () => {
                     },
                     icon: {
                         component: EnvelopeIcon,
-                        color: '#24a0ed',
-                        flexProps: {
-                            justify: 'flex-start'
-                        }
+                        color: '#24a0ed'
                     },
                 }
             }
@@ -314,10 +296,7 @@ export const showDeleteAccountDialog = () => {
                     description: '',
                     icon: {
                         component: TrashIcon,
-                        color: 'red.900',
-                        flexProps: {
-                            justify: 'flex-start',
-                        }
+                        color: '#801010'
                     },
                 },
                 data: {}
@@ -336,10 +315,7 @@ export const showCreateGroupDialog = () => {
                     description: 'CREATE_GROUP_DESCRIPTION',
                     icon: {
                         component: UsersIcon,
-                        color: '#24a0ed',
-                        flexProps: {
-                            justify: 'flex-start'
-                        }
+                        color: '#24a0ed'
                     },
                     flexProps: {
                         minWidth: 400,
@@ -368,10 +344,7 @@ export const showDisconnectGoogleDialog = () => {
                         maxWidth: 400
                     },
                     icon: {
-                        component: GoogleIcon,
-                        flexProps: {
-                            justify: 'flex-start'
-                        }
+                        component: GoogleIcon
                     },
                 },
                 data: {}

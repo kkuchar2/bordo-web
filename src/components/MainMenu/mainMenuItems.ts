@@ -1,4 +1,4 @@
-import { IconProps } from '@/icon/icon.types';
+import { IconProps } from '@/components/Icons/Icon';
 
 export interface MainMenuItem {
     id: string;
