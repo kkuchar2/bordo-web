@@ -1,14 +1,14 @@
-import React, {ComponentProps, useCallback, useState} from 'react';
+import { ReactNode, useCallback, useState } from 'react';
 
 interface ButtonWithIconProps {
     buttonType?: 'button' | 'submit' | 'reset';
-    IconComponent: React.FC<ComponentProps<'svg'>>
+    IconComponent: () => ReactNode,
     iconColor?: string,
     title: string,
     disabled?: boolean,
     iconColorHover?: string,
     iconSize?: number,
-    children?: React.ReactNode,
+    children?: ReactNode,
     tabIndex?: number,
     className?: string
     onClick?: () => void,
@@ -44,6 +44,6 @@ export const ButtonWithIcon = (props: ButtonWithIconProps) => {
         {children}
         {IconComponent ?
             <IconComponent width={iconSizePx}
-                           height={iconSizePx} color={hovered ? iconColorHover : iconColor}/> : null}
+                height={iconSizePx} color={hovered ? iconColorHover : iconColor}/> : null}
     </button>;
 };

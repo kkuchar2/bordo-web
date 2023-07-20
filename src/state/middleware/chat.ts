@@ -1,6 +1,7 @@
-import {Dispatch} from '@reduxjs/toolkit';
-import {Middleware} from 'redux';
-import {AppDispatch} from 'state/store';
+import { Dispatch } from '@reduxjs/toolkit';
+import { Middleware } from 'redux';
+
+import { AppDispatch } from '@/state/store';
 
 const styleOf = (bgColor: string) => `background: ${bgColor}; color: #ffffff; padding: 5px; margin: 5px; font-weight: bold`;
 
@@ -10,9 +11,9 @@ const COLOR2 = styleOf('transparent');
 let client = null;
 
 export const chatMiddleware: Middleware = ({
-                                               dispatch,
-                                               getState
-                                           }: { dispatch: AppDispatch, getState: () => any }) => (next: Dispatch) => (action) => {
+    dispatch,
+    getState
+}: { dispatch: AppDispatch, getState: () => any }) => (next: Dispatch) => (action) => {
     if (action.type === 'chat/requestSendMessage') {
         //
         // if (isSuccess(action.payload)) {

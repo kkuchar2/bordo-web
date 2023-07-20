@@ -1,5 +1,6 @@
+import { ChangeEventHandler } from 'react';
+
 import { TFunction } from 'i18next';
-import {ChangeEventHandler} from 'react';
 
 export interface StyledSelectGIFCircleProps {
     url: string;

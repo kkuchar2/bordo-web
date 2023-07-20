@@ -1,13 +1,14 @@
-import React, {useCallback} from 'react';
+import React, { useCallback } from 'react';
 
-import {Flex, Text} from '@chakra-ui/react';
-import {CheckIcon, XMarkIcon} from '@heroicons/react/24/solid';
-import {ProfileAvatar} from 'components/chakra/Avatar/Avatar';
-import {ButtonWithIcon} from 'components/chakra/ButtonWithIcon/ButtonWithIcon';
-import {NavLink} from 'components/chakra/NavLink/NavLink';
+import { Flex, Text } from '@chakra-ui/react';
+import { CheckIcon, XMarkIcon } from '@heroicons/react/24/solid';
 
-import {acceptFriendRequest, getProfile, rejectFriendRequest} from '../../queries/people';
-import {FriendshipRequest} from '../../types/friendship';
+import { acceptFriendRequest, getProfile, rejectFriendRequest } from '../../queries/people';
+import { FriendshipRequest } from '../../types/friendship';
+
+import { ProfileAvatar } from '@/components/chakra/Avatar/Avatar';
+import { ButtonWithIcon } from '@/components/chakra/ButtonWithIcon/ButtonWithIcon';
+import { NavLink } from '@/components/chakra/NavLink/NavLink';
 
 interface ReceivedFriendRequestsProps {
     showUsername?: boolean;
@@ -45,18 +46,18 @@ export const ReceivedFriendRequest = (props: ReceivedFriendRequestsProps) => {
         {showAvatar && <ProfileAvatar profile={profile} width={'50px'} height={'50px'}/>}
         <Flex direction={'column'} justify={'center'} gap={1}>
             {showUsername && <NavLink color={'#ffffff'} fontWeight={'semibold'}
-                                      to={`/user/${request.from_user}`}>{request.from_user}</NavLink>}
+                href={`/user/${request.from_user}`}>{request.from_user}</NavLink>}
             <Text fontSize={'12px'} fontWeight={'medium'}
-                  color={'rgba(255,255,255,0.52)'}>{message}</Text>
+                color={'rgba(255,255,255,0.52)'}>{message}</Text>
         </Flex>
         <Flex flexGrow={1} gap={'20px'} justify={'flex-end'}>
 
             <ButtonWithIcon title={'Accept'}
-                            iconSize={20}
-                            onClick={onAcceptClick}
-                            iconColor={'rgba(255,255,255,0.48)'}
-                            iconColorHover={'white'}
-                            IconComponent={CheckIcon}>
+                iconSize={20}
+                onClick={onAcceptClick}
+                iconColor={'rgba(255,255,255,0.48)'}
+                iconColorHover={'white'}
+                IconComponent={CheckIcon}>
                 {'Accept'}
             </ButtonWithIcon>
 

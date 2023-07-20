@@ -1,7 +1,7 @@
-import {pusherSubscribe} from 'state/services/pusherService';
-import {store} from 'state/store';
+import { authPost } from './base';
 
-import {authPost} from './base';
+import { pusherSubscribe } from '@/state/services/pusherService';
+import { store } from '@/state/store';
 
 export interface NotificationChannelInfo {
     channel_name: string;

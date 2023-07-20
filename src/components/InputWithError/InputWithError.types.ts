@@ -1,4 +1,4 @@
-import {HTMLProps} from 'react';
+import { HTMLProps } from 'react';
 
 type ErrorProps = {
     errors: any[];

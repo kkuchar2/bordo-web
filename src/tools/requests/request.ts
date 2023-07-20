@@ -1,8 +1,8 @@
-import {AxiosResponse} from 'axios';
-import {StatusCodes} from 'http-status-codes';
-import {Dispatch} from 'redux';
+import { AxiosResponse } from 'axios';
+import { StatusCodes } from 'http-status-codes';
+import { Dispatch } from 'redux';
 
-import {RequestArgs, RequestType} from '../client/client.types';
+import { RequestArgs, RequestType } from '../client/client.types';
 import {
     composeUrl,
     createFormDataFromFile,

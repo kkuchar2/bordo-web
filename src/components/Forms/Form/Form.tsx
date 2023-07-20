@@ -1,11 +1,12 @@
-import React, {useCallback, useMemo} from 'react';
+import React, { useCallback, useMemo } from 'react';
 
-import {Button, Flex, Text, VStack} from '@chakra-ui/react';
-import {getFormFieldErrors, renderNonFieldErrors} from 'components/Forms/util';
-import {Field, Form as FormikForm, Formik} from 'formik';
-import {useTranslation} from 'react-i18next';
+import { Button, Flex, Text, VStack } from '@chakra-ui/react';
+import { Field, Form as FormikForm, Formik } from 'formik';
+import { useTranslation } from 'react-i18next';
 
-import {FormProps} from './Form.types';
+import { FormProps } from './Form.types';
+
+import { getFormFieldErrors, renderNonFieldErrors } from '@/components/Forms/util';
 
 const Form = (props: FormProps) => {
     const {
@@ -58,10 +59,10 @@ const Form = (props: FormProps) => {
         }
 
         return <Button type={'button'}
-                       minWidth={'100px'}
-                       className={'cancelButton'}
-                       onClick={onCancel}
-                       isDisabled={disabled}>
+            minWidth={'100px'}
+            className={'cancelButton'}
+            onClick={onCancel}
+            isDisabled={disabled}>
             <Text fontSize={'sm'}>{t('CANCEL')}</Text>
         </Button>;
     }, [useCancelButton, disabled]);
@@ -112,11 +113,11 @@ const Form = (props: FormProps) => {
                     <Flex {...buttonsStackProps}>
                         {renderCancelButton}
                         <Button bg={'#006C52'}
-                                _hover={{ bg: '#00785a' }}
-                                type={'submit'}
-                                width={'100%'}
-                                isDisabled={disabled}
-                                {...buttonProps}>
+                            _hover={{ bg: '#00785a' }}
+                            type={'submit'}
+                            width={'100%'}
+                            isDisabled={disabled}
+                            {...buttonProps}>
                             <Text fontSize={'sm'}>{t(submitButtonTextKey)}</Text>
                         </Button>
                     </Flex>
@@ -124,12 +125,6 @@ const Form = (props: FormProps) => {
             </FormikForm>
         )}
     </Formik>;
-};
-
-Form.defaultProps = {
-    useCancelButton: true,
-    submitButtonTextKey: 'CONFIRM',
-    initialValues: {},
 };
 
 export default Form;

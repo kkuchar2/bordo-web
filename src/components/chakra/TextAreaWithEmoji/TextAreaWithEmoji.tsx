@@ -1,15 +1,15 @@
-import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-import {Box, Button, Flex, HTMLChakraProps, Text, Textarea} from '@chakra-ui/react';
-import {DelayedSpinner} from 'components/chakra/DelayedTransition/DelayedSpinner';
-import {EmojiButton} from 'components/chakra/EmojiButton/EmojiButton';
-import {EmojiSuggestionPanel} from 'components/chakra/EmojiSuggestionPanel/EmojiSuggestionPanel';
-import {EmojiPicker, SelectedEmoji} from 'components/EmojiPicker/EmojiPicker';
-import {useTranslation} from 'react-i18next';
-import {emojiMap} from 'tools/smileToEmoji';
-import {useStateWithCallbackLazy} from 'use-state-with-callback';
-
+import { Box, Button, Flex, HTMLChakraProps, Text, Textarea } from '@chakra-ui/react';
+import { useTranslation } from 'react-i18next';
 import runes from 'runes';
+import { useStateWithCallbackLazy } from 'use-state-with-callback';
+
+import { DelayedSpinner } from '@/components/chakra/DelayedTransition/DelayedSpinner';
+import { EmojiButton } from '@/components/chakra/EmojiButton/EmojiButton';
+import { EmojiSuggestionPanel } from '@/components/chakra/EmojiSuggestionPanel/EmojiSuggestionPanel';
+import { EmojiPicker, SelectedEmoji } from '@/components/EmojiPicker/EmojiPicker';
+import { emojiMap } from '@/tools/smileToEmoji';
 
 interface TextAreaWithEmojiProps {
     name?: string;
@@ -225,17 +225,17 @@ export const TextAreaWithEmoji = (props: TextAreaWithEmojiProps & HTMLChakraProp
 
     return <Flex direction={'column'} p={outerPadding} gap={'10px'}>
         {name ? <Text fontSize={'13px'}
-                      fontWeight={'semibold'}
-                      color={'rgba(255,255,255,0.73)'}
-                      textTransform={uppercaseTitle ? 'uppercase' : 'none'}>
+            fontWeight={'semibold'}
+            color={'rgba(255,255,255,0.73)'}
+            textTransform={uppercaseTitle ? 'uppercase' : 'none'}>
             {`${name}:`}
         </Text> : null}
 
         <Box position={'relative'}
-             w={rest.w}
-             borderRadius={rest.borderRadius}
-             pb={'50px'}
-             bg={rest.bg ?? 'none'}>
+            w={rest.w}
+            borderRadius={rest.borderRadius}
+            pb={'50px'}
+            bg={rest.bg ?? 'none'}>
             {/* Main TextArea */}
             <Textarea
                 {...rest}
@@ -283,28 +283,28 @@ export const TextAreaWithEmoji = (props: TextAreaWithEmojiProps & HTMLChakraProp
             {/* Toolbar */}
             {toolbarEnabled ?
                 <Flex position={'absolute'}
-                      width={'100%'}
-                      display={'flex'}
-                      align={'center'}
-                      borderBottomRadius={rest.borderRadius}
-                      bg={toolbarBg}
-                      height={`${toolbarHeight}px`}
-                      zIndex={1}
-                      right={0}
-                      bottom={0}>
+                    width={'100%'}
+                    display={'flex'}
+                    align={'center'}
+                    borderBottomRadius={rest.borderRadius}
+                    bg={toolbarBg}
+                    height={`${toolbarHeight}px`}
+                    zIndex={1}
+                    right={0}
+                    bottom={0}>
                     {/* Button to toggle manual emoji picker */}
                     {enableMaxCharacterCounter ?
                         <Text position={'absolute'}
-                              bottom={'15px'}
-                              fontSize={'14px'}
-                              fontWeight={'semibold'}
-                              color={'rgba(255,255,255,0.5)'}
-                              left={'15px'}>{`${remaining}`}</Text> : null}
+                            bottom={'15px'}
+                            fontSize={'14px'}
+                            fontWeight={'semibold'}
+                            color={'rgba(255,255,255,0.5)'}
+                            left={'15px'}>{`${remaining}`}</Text> : null}
 
                     <Flex flexGrow={1} justify={'flex-end'} align={'center'}>
                         {props.value !== currentValue &&
                             <Button h={'30px'} fontSize={'12px'} disabled={isSaving}
-                                    onClick={onSaveButtonClick}>
+                                onClick={onSaveButtonClick}>
                                 {t('SAVE')}
                             </Button>}
 

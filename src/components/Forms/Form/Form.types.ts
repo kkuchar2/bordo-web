@@ -1,7 +1,7 @@
-import {ButtonProps, StackProps} from '@chakra-ui/react';
-import {QueryResponseErrorData} from 'queries/base';
+import { ButtonProps, StackProps } from '@chakra-ui/react';
+import { QueryResponseErrorData } from 'queries/base';
 
-import {FormConfig} from '../../../api/formConfig';
+import { FormConfig } from '../../../api/formConfig';
 
 export interface FormProps {
     config: FormConfig;

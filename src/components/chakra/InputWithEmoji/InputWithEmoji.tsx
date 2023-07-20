@@ -1,12 +1,13 @@
-import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-import {Box, Button, Flex, Input, InputProps, Text} from '@chakra-ui/react';
-import {EmojiButton} from 'components/chakra/EmojiButton/EmojiButton';
-import {EmojiSuggestionPanel} from 'components/chakra/EmojiSuggestionPanel/EmojiSuggestionPanel';
-import {EmojiPicker} from 'components/EmojiPicker/EmojiPicker';
-import {useTranslation} from 'react-i18next';
-import {emojiMap} from 'tools/smileToEmoji';
-import {useStateWithCallbackLazy} from 'use-state-with-callback';
+import { Box, Button, Flex, Input, InputProps, Text } from '@chakra-ui/react';
+import { useTranslation } from 'react-i18next';
+import { useStateWithCallbackLazy } from 'use-state-with-callback';
+
+import { EmojiButton } from '@/components/chakra/EmojiButton/EmojiButton';
+import { EmojiSuggestionPanel } from '@/components/chakra/EmojiSuggestionPanel/EmojiSuggestionPanel';
+import { EmojiPicker } from '@/components/EmojiPicker/EmojiPicker';
+import { emojiMap } from '@/tools/smileToEmoji';
 
 interface InputWithEmojiProps {
     name?: string;
@@ -48,7 +49,7 @@ export const InputWithEmoji = (props: InputWithEmojiProps & InputProps) => {
     const [suggestionPanelOpen, setSuggestionPanelOpen] = useState(false);
     const [query, setQuery] = useState('');
     const tracking = useRef({ pending: false, caretPosition: -1 });
-    const inputRef = useRef(null);
+    const inputRef = useRef<HTMLInputElement>(null);
 
     const { t } = useTranslation();
 
@@ -61,7 +62,7 @@ export const InputWithEmoji = (props: InputWithEmojiProps & InputProps) => {
     }, []);
 
     useEffect(() => {
-        if (focusOnMount) {
+        if (focusOnMount && inputRef.current) {
             inputRef.current.focus();
         }
     }, []);
@@ -145,7 +146,11 @@ export const InputWithEmoji = (props: InputWithEmojiProps & InputProps) => {
                 stopTracking();
             }
 
-            const caretStart = inputRef.current.selectionStart;
+            if (!inputRef.current) {
+                return;
+            }
+
+            const caretStart = inputRef.current.selectionStart || 0;
             const lastSpace = v.lastIndexOf(' ');
             const lastEnter = v.lastIndexOf('\n');
             const startingIndex = lastSpace === caretStart ? -1 : Math.max(lastSpace, lastEnter);
@@ -174,13 +179,13 @@ export const InputWithEmoji = (props: InputWithEmojiProps & InputProps) => {
             return;
         }
 
-        const currentCaretPosition = inputRef.current.selectionStart;
+        const currentCaretPosition = inputRef.current.selectionStart || 0;
         const trackStartPosition = tracking.current.caretPosition;
 
         setQuery(v.slice(trackStartPosition, currentCaretPosition));
     }, [tracking.current, inputRef.current, currentValue]);
 
-    const onEmojiSelect = useCallback((emoji) => {
+    const onEmojiSelect = useCallback((emoji: any) => {
         const v = currentValue as string;
 
         if (!v || v.length === 0) {
@@ -189,12 +194,21 @@ export const InputWithEmoji = (props: InputWithEmojiProps & InputProps) => {
             return;
         }
 
-        const currentCaretPosition = inputRef.current.selectionStart;
+        if (!inputRef.current) {
+            return;
+        }
+
+        const curInput = inputRef.current;
+
+        const currentCaretPosition = curInput.selectionStart || 0;
         const left = v.slice(0, currentCaretPosition);
         const right = v.slice(currentCaretPosition, v.length);
         const result = left + emoji.native + right;
 
         setCurrentValue(result, () => {
+            if (!inputRef.current) {
+                return;
+            }
             inputRef.current.selectionStart = currentCaretPosition + 2;
             inputRef.current.selectionEnd = currentCaretPosition + 2;
         });
@@ -222,18 +236,18 @@ export const InputWithEmoji = (props: InputWithEmojiProps & InputProps) => {
 
     return <Flex direction={'column'} p={outerPadding} gap={'10px'}>
         {name ? <Text fontSize={'13px'}
-                      fontWeight={'semibold'}
-                      color={'rgba(255,255,255,0.73)'}
-                      textTransform={uppercaseTitle ? 'uppercase' : 'none'}>
+            fontWeight={'semibold'}
+            color={'rgba(255,255,255,0.73)'}
+            textTransform={uppercaseTitle ? 'uppercase' : 'none'}>
             {`${name}:`}
         </Text> : null}
 
         <Box position={'relative'}
-             w={rest.w}
-             h={rest.h}
-             borderRadius={rest.borderRadius}
-             pb={'50px'}
-             bg={rest.bg ?? 'none'}>
+            w={rest.w}
+            h={rest.h}
+            borderRadius={rest.borderRadius}
+            pb={'50px'}
+            bg={rest.bg ?? 'none'}>
             {/* Main Input */}
             <Input
                 {...rest}
@@ -264,31 +278,31 @@ export const InputWithEmoji = (props: InputWithEmojiProps & InputProps) => {
             {/* Toolbar */}
             {toolbarEnabled ?
                 <Flex position={'absolute'}
-                      display={'flex'}
-                      align={'center'}
-                      borderBottomRadius={rest.borderRadius}
-                      bg={toolbarBg}
-                      height={'100%'}
-                      zIndex={1}
-                      right={0}
-                      bottom={0}>
+                    display={'flex'}
+                    align={'center'}
+                    borderBottomRadius={rest.borderRadius}
+                    bg={toolbarBg}
+                    height={'100%'}
+                    zIndex={1}
+                    right={0}
+                    bottom={0}>
 
                     {/* Button to toggle manual emoji picker */}
                     {enableMaxCharacterCounter ?
                         <Text position={'absolute'}
-                              bottom={'15px'}
-                              fontSize={'14px'}
-                              fontWeight={'semibold'}
-                              color={'rgba(255,255,255,0.5)'}
-                              left={'15px'}>{`${remaining}`}</Text> : null}
+                            bottom={'15px'}
+                            fontSize={'14px'}
+                            fontWeight={'semibold'}
+                            color={'rgba(255,255,255,0.5)'}
+                            left={'15px'}>{`${remaining}`}</Text> : null}
 
                     <Flex flexGrow={1} justify={'flex-end'} align={'center'}>
                         <Button h={'35px'}
-                                pl={'20px'}
-                                pr={'20px'}
-                                fontSize={'12px'}
-                                borderRadius={0}
-                                onClick={onSaveButtonClick}>
+                            pl={'20px'}
+                            pr={'20px'}
+                            fontSize={'12px'}
+                            borderRadius={0}
+                            onClick={onSaveButtonClick}>
                             {actionButtonText}
                         </Button>
 

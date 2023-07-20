@@ -1,22 +1,34 @@
-import React, {Suspense, useMemo} from 'react';
+'use client';
 
-import {Route, Routes, useLocation} from 'react-router-dom';
+import { ReactNode } from 'react';
 
-import {routes} from './routes';
+import { QueryClientProvider } from '@tanstack/react-query';
+import { Provider } from 'react-redux';
 
-const Content = () => {
-    const location = useLocation();
+import { queryClient } from '@/config';
+import { ContentWithChakra } from '@/ContentWithChakra';
+import { useEnvironment } from '@/hooks/useEnvironment';
+import { useI18n } from '@/hooks/useI18n';
+import { store } from '@/state/store';
 
-    const mapRoutesToContent = useMemo(() => routes.map((p, k) => {
-        const Component = p.element;
-        return <Route key={k}
-                      path={p.path}
-                      element={<Component/>}/>;
-    }), []);
+type ContentProps = {
+    children: ReactNode;
+}
 
-    return <Suspense fallback={null}>
-        <Routes location={location} key={location.pathname}>{mapRoutesToContent}</Routes>
-    </Suspense>;
+export const Content = (props: ContentProps) => {
+
+    const translationsLoaded = useI18n();
+    const environmentLoaded = useEnvironment();
+
+    if (!translationsLoaded || !environmentLoaded) {
+        return null;
+    }
+
+    return <Provider store={store}>
+        <QueryClientProvider client={queryClient}>
+            <ContentWithChakra>
+                {props.children}
+            </ContentWithChakra>
+        </QueryClientProvider>
+    </Provider>;
 };
-
-export default Content;

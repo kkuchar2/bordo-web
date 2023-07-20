@@ -1,18 +1,19 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
-import {Button, Center, Divider, Flex, Text} from '@chakra-ui/react';
-import {useTranslation} from 'react-i18next';
-import {useSelector} from 'react-redux';
-import {getSocketId} from 'state/middleware/channels';
-import {Conversation} from 'state/reducers/conversations/conversationsSlice.types';
-import {getConversations} from 'state/services/conversationsService';
-import {RootState, useAppDispatch} from 'state/store';
+import { Button, Center, Divider, Flex, Text } from '@chakra-ui/react';
+import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
 
 import WithAuth from '../../hoc/WithAuth';
-import {getUser} from '../../queries/account';
+import { getUser } from '../../queries/account';
 
-import {ChatWindow} from './ChatWindow';
-import {ConversationList} from './ConversationList';
+import { ChatWindow } from './ChatWindow';
+import { ConversationList } from './ConversationList';
+
+import { getSocketId } from '@/state/middleware/channels';
+import { Conversation } from '@/state/reducers/conversations/conversationsSlice.types';
+import { getConversations } from '@/state/services/conversationsService';
+import { RootState, useAppDispatch } from '@/state/store';
 
 const Chats = () => {
 
@@ -79,13 +80,13 @@ const Chats = () => {
         <Divider/>
         <Flex h={'100%'}>
             <ConversationList conversations={conversations}
-                              currentUsername={username}
-                              onItemClick={onItemClick}
-                              activeConversation={currentConversation}/>
+                currentUsername={username}
+                onItemClick={onItemClick}
+                activeConversation={currentConversation}/>
             <Divider orientation={'vertical'}/>
             <ChatWindow currentUsername={username}
-                        conversation={currentConversation}
-                        newConversation={false}/>
+                conversation={currentConversation}
+                newConversation={false}/>
         </Flex>
     </Flex>;
 };

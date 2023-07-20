@@ -1,14 +1,14 @@
-import React, {useCallback, useEffect} from 'react';
+import React, { useCallback, useEffect } from 'react';
 
-import {Center, Flex, Progress, VStack} from '@chakra-ui/react';
-import {CenterFlex} from 'components/chakra/CenterFlex/CenterFlex';
-import {NavLink} from 'components/chakra/NavLink/NavLink';
-import {showDialogAfterPasswordResetRequest} from 'components/DialogSystem/readyDialogs';
-import Form from 'components/Forms/Form/Form';
-import {useTranslation} from 'react-i18next';
+import { Center, Flex, Progress, VStack } from '@chakra-ui/react';
+import { useTranslation } from 'react-i18next';
 
-import {useFormConfig} from '../api/formConfig';
-import {forgotPassword} from '../queries/account';
+import { CenterFlex } from '@/components/chakra/CenterFlex/CenterFlex';
+import { NavLink } from '@/components/chakra/NavLink/NavLink';
+import { showDialogAfterPasswordResetRequest } from '@/components/DialogSystem/readyDialogs';
+import Form from '@/components/Forms/Form/Form';
+import { useFormConfig } from '@/form/formConfig';
+import { forgotPassword } from '@/queries/account';
 
 const ForgotPassword = () => {
 
@@ -39,11 +39,11 @@ const ForgotPassword = () => {
 
     return <Center w={'100%'} h={'100%'}>
         <Flex borderRadius={{ base: 0, sm: 8 }}
-              direction={'column'}
-              bg={'#2a2a2a'}
-              width={{ base: '100%', sm: '400px' }}
-              p={'40px'}
-              gap={'40px'}>
+            direction={'column'}
+            bg={'#2a2a2a'}
+            width={{ base: '100%', sm: '400px' }}
+            p={'40px'}
+            gap={'40px'}>
             <VStack align={'stretch'} spacing={'20px'}>
                 <Form
                     title={t('RESET_PASSWORD')}
@@ -71,9 +71,10 @@ const ForgotPassword = () => {
 
                 <CenterFlex gap={'20px'}>
                     <NavLink color={'#77a4df'}
-                             fontSize={'md'}
-                             fontWeight={'semibold'}
-                             to={'/'}>{t('GO_BACK')}
+                        fontSize={'md'}
+                        fontWeight={'semibold'}
+                        href={'/'}>
+                        {t('GO_BACK')}
                     </NavLink>
                 </CenterFlex>
 

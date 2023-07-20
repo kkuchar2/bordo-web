@@ -1,6 +1,6 @@
-import React, {ReactNode} from 'react';
+import React, { ReactNode } from 'react';
 
-import {Box, Divider, Flex, Text} from '@chakra-ui/react';
+import { Box, Divider, Flex, Text } from '@chakra-ui/react';
 
 interface SettingsSectionProps {
     title: string;

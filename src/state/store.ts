@@ -1,7 +1,7 @@
-import {configureStore} from '@reduxjs/toolkit';
-import {TypedUseSelectorHook, useDispatch, useSelector} from 'react-redux';
+import { configureStore } from '@reduxjs/toolkit';
+import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 
-import {middlewares} from './middleware';
+import { middlewares } from './middleware';
 import appReducer from './reducers/application/appSlice';
 import conversationsReducer from './reducers/conversations/conversationsSlice';
 import dialogReducer from './reducers/dialog/dialogSlice';

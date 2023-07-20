@@ -1,9 +1,9 @@
-import {AnyAction} from '@reduxjs/toolkit';
-import {AxiosResponse} from 'axios';
-import {StatusCodes} from 'http-status-codes';
-import {Dispatch} from 'redux';
+import { AnyAction } from '@reduxjs/toolkit';
+import { AxiosResponse } from 'axios';
+import { StatusCodes } from 'http-status-codes';
+import { Dispatch } from 'redux';
 
-import {RequestArgs, RequestStatus, ResponseArgs} from './client.types';
+import { RequestArgs, RequestStatus, ResponseArgs } from './client.types';
 
 export const statusCodeOf = (code: number) => {
     let keys = Object.keys(StatusCodes).filter(x => StatusCodes[x] == code);

@@ -1,7 +1,7 @@
-import {StackProps} from '@chakra-ui/react';
-import {Errors} from 'tools/client/client.types';
+import { StackProps } from '@chakra-ui/react';
 
-import {FormConfig} from '../../../api/formConfig';
+import { FormConfig } from '@/form/formConfig';
+import { Errors } from '@/tools/client/client.types';
 
 export interface TextAreaFormProps {
     config: FormConfig;

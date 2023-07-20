@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {Box, Flex, useColorMode, useRadio, useRadioGroup} from '@chakra-ui/react';
+import { Box, Flex, useColorMode, useRadio, useRadioGroup } from '@chakra-ui/react';
 
 const RadioCard = (props) => {
     const { getInputProps, getCheckboxProps } = useRadio(props);

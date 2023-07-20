@@ -1,15 +1,14 @@
-import React, {useCallback, useState} from 'react';
+import React, { useCallback, useState } from 'react';
 
-import {Avatar, Flex} from '@chakra-ui/react';
-import {XMarkIcon} from '@heroicons/react/24/outline';
-import Select, {components, IndicatorsContainerProps, MultiValueRemoveProps, OptionProps} from 'react-select';
-import {getAvatarFromProfile} from 'util/util';
+import { Avatar, Flex } from '@chakra-ui/react';
+import { XMarkIcon } from '@heroicons/react/24/outline';
+import { useTranslation } from 'react-i18next';
+import Select, { components, IndicatorsContainerProps, MultiValueRemoveProps, OptionProps } from 'react-select';
 
-import {queryClient} from '../../../App';
-import {UserSearchOption} from '../../../pages/Chats/ChatWindow';
-import {QueryResponseError} from '../../../queries/base';
-import {searchPeople} from '../../../queries/people';
-import {useTranslation} from "react-i18next";
+import { queryClient } from '@/config';
+import { UserSearchOption } from '@/pages/Chats/ChatWindow';
+import { QueryResponseError } from '@/queries/base';
+import { searchPeople } from '@/queries/people';
 
 const MultiValueRemove = (props: MultiValueRemoveProps<UserSearchOption>) => {
     return <components.MultiValueRemove {...props}>
@@ -20,15 +19,16 @@ const MultiValueRemove = (props: MultiValueRemoveProps<UserSearchOption>) => {
 const MultiValueLabel = (props: any) => {
 
     const data = props.data;
-    const avatar = getAvatarFromProfile(props.data.value.profile);
+    const avatar = (props.data.value.profile.avatar);
+
     return <components.MultiValueLabel {...props}>
         <Flex gap={'10px'} justify={'center'} align={'center'} h={'100%'}>
             <Avatar src={avatar}
-                    name={data.label}
-                    borderRadius={'100%'}
-                    width={'30px'}
-                    height={'30px'}
-                    objectFit={'cover'}/>
+                name={data.label}
+                borderRadius={'100%'}
+                width={'30px'}
+                height={'30px'}
+                objectFit={'cover'}/>
             {data.label}
         </Flex>
     </components.MultiValueLabel>;
@@ -45,16 +45,16 @@ const IndicatorsContainer = (props: IndicatorsContainerProps<UserSearchOption, t
 const Option = (props: OptionProps<UserSearchOption>) => {
 
     const data = props.data;
-    const avatar = getAvatarFromProfile(props.data.value.profile);
+    const avatar = props.data.value.profile.avatar;
 
     return <components.Option {...props}>
         <Flex gap={'10px'} justify={'flex-start'} align={'center'} h={'100%'}>
             <Avatar src={avatar}
-                    name={props.data.label}
-                    borderRadius={'100%'}
-                    width={'30px'}
-                    height={'30px'}
-                    objectFit={'cover'}/>
+                name={props.data.label}
+                borderRadius={'100%'}
+                width={'30px'}
+                height={'30px'}
+                objectFit={'cover'}/>
             {props.data.label}
         </Flex>
     </components.Option>;
@@ -67,7 +67,7 @@ interface MultiUserSelectProps {
 export const MultiUserSelect = (props: MultiUserSelectProps) => {
     const [searchResult, setSearchResult] = useState<UserSearchOption[]>([]);
 
-    const {t} = useTranslation();
+    const { t } = useTranslation();
 
     const searchPeopleMutation = searchPeople()({
         onSuccess: (data: any) => {

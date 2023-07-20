@@ -1,6 +1,6 @@
-import {AnyAction} from '@reduxjs/toolkit';
-import {AxiosInstance, AxiosRequestConfig} from 'axios';
-import {SchemaOf} from 'yup';
+import { AnyAction } from '@reduxjs/toolkit';
+import { AxiosInstance, AxiosRequestConfig } from 'axios';
+import { Schema } from 'yup';
 
 export enum RequestStatus {
     Unknown = 'UNKNOWN',
@@ -63,5 +63,5 @@ export interface RequestArgs<T = any, D = any, ResponseSchemaType = any> {
     file?: File,
     filePropertyName?: string;
     action: (params: ResponseArgs<T>) => AnyAction;
-    responseSchema?: SchemaOf<ResponseSchemaType>
+    responseSchema?: Schema<ResponseSchemaType>
 }

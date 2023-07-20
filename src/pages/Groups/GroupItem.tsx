@@ -1,9 +1,9 @@
-import React, {useCallback} from 'react';
+import React, { useCallback } from 'react';
 
-import {Badge, Flex, Text} from '@chakra-ui/react';
-import {useNavigate} from 'react-router-dom';
+import { Flex } from '@chakra-ui/react';
+import { useRouter } from 'next/navigation';
 
-import {Group} from './Groups';
+import { Group } from './Groups';
 
 interface GroupItemProps {
     group: Group,
@@ -14,23 +14,23 @@ export const GroupItem = (props: GroupItemProps) => {
 
     const { group, onClick } = props;
 
-    const navigate = useNavigate();
+    const router = useRouter();
 
     const onGroupClick = useCallback(() => {
         onClick && onClick(group);
-        navigate(`/groups/${group.uuid}`);
+        router.push(`/groups/${group.uuid}`);
     }, [onClick, group]);
 
     return <Flex padding={3}
-                 align={'center'}
-                 justify={'space-between'}
-                 w={'100%'}
-                 borderRadius={'6px'}
-                 onClick={onGroupClick}
-                 _hover={{
-                     fontWeight: 'bold',
-                     cursor: 'pointer',
-                    }}>
+        align={'center'}
+        justify={'space-between'}
+        w={'100%'}
+        borderRadius={'6px'}
+        onClick={onGroupClick}
+        _hover={{
+            fontWeight: 'bold',
+            cursor: 'pointer',
+        }}>
         <div className={'text-sm'}>{`#${group.name}`}</div>
     </Flex>;
 };

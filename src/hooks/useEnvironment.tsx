@@ -1,5 +1,6 @@
-import {useEffect, useState} from "react";
-import {missingEnvVars} from "../api/config";
+import { useEffect, useState } from 'react';
+
+import { missingEnvVars } from '@/config';
 
 export const useEnvironment = () => {
     const [loaded, setLoaded] = useState(false);
@@ -9,4 +10,4 @@ export const useEnvironment = () => {
     }, []);
 
     return loaded;
-}
+};

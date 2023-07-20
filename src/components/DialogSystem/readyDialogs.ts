@@ -1,18 +1,18 @@
-import {ExclamationCircleIcon} from '@heroicons/react/24/outline';
-import {EnvelopeIcon, KeyIcon, TrashIcon, UsersIcon} from '@heroicons/react/24/solid';
-import {VerifyAccountDialogProps} from 'components/DialogSystem/dialogs';
-import {GoogleIcon} from 'components/Icons/GoogleIcon';
-import {openDialog} from 'state/reducers/dialog/dialogSlice';
-import {store} from 'state/store';
+import { ExclamationCircleIcon } from '@heroicons/react/24/outline';
+import { EnvelopeIcon, KeyIcon, TrashIcon, UsersIcon } from '@heroicons/react/24/solid';
 
-import {changeEmail, changePassword, changeUsername} from '../../queries/account';
-import {User} from '../../queries/account/types';
+import { SentEmailDialogArgs } from './readyDialogs.types';
 
-import {SentEmailDialogArgs} from './readyDialogs.types';
-import {queryClient} from "../../App";
+import { VerifyAccountDialogProps } from '@/components/DialogSystem/dialogs';
+import { GoogleIcon } from '@/components/Icons/GoogleIcon';
+import { queryClient } from '@/config';
+import { changeEmail, changePassword, changeUsername } from '@/queries/account';
+import { User } from '@/queries/account/types';
+import { openDialog } from '@/state/reducers/dialog/dialogSlice';
+import { store } from '@/state/store';
 
 export interface OpenReadyDialogArgs {
-    passwordRequired?: boolean;
+    passwordRequired: boolean;
     initialData?: any;
 }
 
@@ -180,7 +180,7 @@ export const showChangeUsernameDialog = (args: OpenReadyDialogArgs) => {
 };
 
 export const showChangeEmailDialog = (args: OpenReadyDialogArgs) => {
-    const { passwordRequired, initialData } = args;
+    const { passwordRequired } = args;
 
     if (checkShowPasswordRequired(passwordRequired)) {
         return;

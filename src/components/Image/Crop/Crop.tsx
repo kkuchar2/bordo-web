@@ -1,12 +1,13 @@
-import React, {useCallback, useState} from 'react';
+import React, { useCallback, useState } from 'react';
 
-import {Flex, Slider, SliderFilledTrack, SliderThumb, SliderTrack} from '@chakra-ui/react';
-import {PhotoIcon} from '@heroicons/react/24/solid';
-import {CropContainer} from 'components/DialogSystem/dialogs/ChangeAvatarDialog/style';
+import { Flex, Slider, SliderFilledTrack, SliderThumb, SliderTrack } from '@chakra-ui/react';
+import { PhotoIcon } from '@heroicons/react/24/solid';
 import Cropper from 'react-easy-crop';
-import {Area} from 'react-easy-crop/types';
+import { Area } from 'react-easy-crop/types';
 
-import {CropProps} from './Crop.types';
+import { CropProps } from './Crop.types';
+
+import { CropContainer } from '@/components/DialogSystem/dialogs/ChangeAvatarDialog/style';
 
 export const Crop = (props: CropProps) => {
 
@@ -55,11 +56,11 @@ export const Crop = (props: CropProps) => {
         <Flex gap={'20px'} w={'100%'} align={'center'} justify={'center'} p={'40px'}>
             <PhotoIcon width={30} height={30}/>
             <Slider aria-label={'slider-ex-4'}
-                    defaultValue={10}
-                    value={zoom * 10}
-                    onChange={onZoomSliderChange}
-                    min={10}
-                    max={100}>
+                defaultValue={10}
+                value={zoom * 10}
+                onChange={onZoomSliderChange}
+                min={10}
+                max={100}>
                 <SliderTrack bg={'red.100'}>
                     <SliderFilledTrack bg={'tomato'}/>
                 </SliderTrack>

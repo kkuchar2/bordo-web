@@ -1,10 +1,10 @@
 import React from 'react';
 
-import {Flex} from '@chakra-ui/react';
-import {ProfileAvatar} from 'components/chakra/Avatar/Avatar';
-import {NavLink} from 'components/chakra/NavLink/NavLink';
+import { Flex } from '@chakra-ui/react';
 
-import {getProfile} from '../../queries/people';
+import { ProfileAvatar } from '@/components/chakra/Avatar/Avatar';
+import { NavLink } from '@/components/chakra/NavLink/NavLink';
+import { getProfile } from '@/queries/people';
 
 interface FriendItemProps {
     username: string;
@@ -27,8 +27,10 @@ export const FriendItem = (props: FriendItemProps) => {
         <ProfileAvatar profile={profile} width={'120px'} height={'120px'}/>
         <Flex direction={'column'} justify={'center'} gap={1}>
             <NavLink color={'#ffffff'}
-                     fontWeight={'semibold'}
-                     to={`/user/${username}`}>{username}</NavLink>
+                fontWeight={'semibold'}
+                href={`/user/${username}`}>
+                {username}
+            </NavLink>
         </Flex>
     </Flex>;
 };

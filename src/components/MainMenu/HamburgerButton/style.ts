@@ -14,11 +14,11 @@ export const StyledHamburgerButton = styled.div<StyledHamburgerButtonProps>`
   @media (max-width: 768px) {
     position: ${props => props.navbarOpened ? 'fixed' : 'absolute'};
     top: ${props => {
-      if (!props.topNavbarVisible && props.navbarOpened) {
-        return '90px';
-      }
+        if (!props.topNavbarVisible && props.navbarOpened) {
+            return '90px';
+        }
 
-      return '10px';
+        return '10px';
     }};
   }
 

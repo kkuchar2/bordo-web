@@ -1,5 +1,6 @@
-import {createSlice, Dispatch} from '@reduxjs/toolkit';
-import {RootState} from 'state/store';
+import { createSlice, Dispatch } from '@reduxjs/toolkit';
+
+import { RootState } from '@/state/store';
 
 export interface AppSliceState {
     currentView: string;

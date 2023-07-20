@@ -1,10 +1,11 @@
-import React, {useMemo} from 'react';
+import React, { useMemo } from 'react';
 
-import {VStack} from '@chakra-ui/react';
-import {ErrorText} from 'components/chakra/ErrorText/ErrorText';
-import {InputSmartLabel} from 'components/InputSmartLabel/InputSmartLabel';
-import {FormikFormProps} from 'formik';
-import {useTranslation} from 'react-i18next';
+import { VStack } from '@chakra-ui/react';
+import { FormikFormProps } from 'formik';
+import { useTranslation } from 'react-i18next';
+
+import { ErrorText } from '@/components/chakra/ErrorText/ErrorText';
+import { InputSmartLabel } from '@/components/InputSmartLabel/InputSmartLabel';
 
 interface FormikInputProps {
     field: any,

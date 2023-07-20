@@ -1,9 +1,9 @@
-import React, {useMemo} from 'react';
+import React, { useMemo } from 'react';
 
-import {Grid} from '@giphy/react-components';
+import { Grid } from '@giphy/react-components';
 import styled from 'styled-components';
 
-import {GIFPresentationProps} from './GIFPresentation.types';
+import { GIFPresentationProps } from './GIFPresentation.types';
 
 interface StyledGIFPresentationProps {
     width: number;
@@ -43,12 +43,12 @@ export const GIFPresentation = (props: GIFPresentationProps) => {
 
     return <StyledGIFPresentation width={width}>
         <Grid onGifClick={onGifClick}
-              fetchGifs={getFetchFunc}
-              borderRadius={10}
-              width={width}
-              columns={2}
-              key={searchText}
-              gutter={10}
-              noLink={true}/>
+            fetchGifs={getFetchFunc}
+            borderRadius={10}
+            width={width}
+            columns={2}
+            key={searchText}
+            gutter={10}
+            noLink={true}/>
     </StyledGIFPresentation>;
 };

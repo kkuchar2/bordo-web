@@ -1,12 +1,13 @@
-import {QueryKey} from '@tanstack/query-core';
-import {useMutation, UseMutationOptions, useQuery} from '@tanstack/react-query';
-import {UseQueryOptions} from '@tanstack/react-query/src/types';
-import {AxiosError, AxiosInstance, AxiosRequestConfig} from 'axios';
-import {showErrorToast} from 'components/Toast/readyToastNotifications';
+import { QueryKey } from '@tanstack/query-core';
+import { useMutation, UseMutationOptions, useQuery } from '@tanstack/react-query';
+import { UseQueryOptions } from '@tanstack/react-query/src/types';
+import { AxiosError, AxiosInstance, AxiosRequestConfig } from 'axios';
 
 import ApiClient from '../client';
 
-import {checkPasswordRequired} from './util';
+import { checkPasswordRequired } from './util';
+
+import { showErrorToast } from '@/components/Toast/readyToastNotifications';
 
 export interface QueryResponseErrorData {
 
@@ -43,10 +44,10 @@ export const AxiosConfigs = {
 
 export const useGetQuery = <ResponseDataType>
 (client: AxiosInstance,
- queryKey: QueryKey,
- endpoint: string,
- config: AxiosRequestConfig,
- options?: UseQueryOptions<ResponseDataType, QueryResponseError>) => {
+    queryKey: QueryKey,
+    endpoint: string,
+    config: AxiosRequestConfig,
+    options?: UseQueryOptions<ResponseDataType, QueryResponseError>) => {
 
     return useQuery<ResponseDataType, any>(queryKey,
         async (): Promise<ResponseDataType> => {
@@ -60,7 +61,7 @@ export const useGetQuery = <ResponseDataType>
                 const message = error.message;
                 const data = error.response.data;
                 const status = error.response.status;
-                throw  { message, data, status } as QueryResponseError;
+                throw { message, data, status } as QueryResponseError;
             }
             return response.data;
         }, options);
@@ -68,10 +69,10 @@ export const useGetQuery = <ResponseDataType>
 
 export const usePostQuery = <ResponseDataType = any, RequestDataType = any>
 (client: AxiosInstance,
- queryKey: QueryKey,
- endpoint: string,
- config?: AxiosRequestConfig,
- options?: UseMutationOptions<ResponseDataType, QueryResponseError, RequestDataType>) => {
+    queryKey: QueryKey,
+    endpoint: string,
+    config?: AxiosRequestConfig,
+    options?: UseMutationOptions<ResponseDataType, QueryResponseError, RequestDataType>) => {
 
     return useMutation<ResponseDataType, QueryResponseError, RequestDataType>(queryKey,
         async (data): Promise<ResponseDataType> => {
@@ -84,19 +85,23 @@ export const usePostQuery = <ResponseDataType = any, RequestDataType = any>
             catch (e) {
                 const error = e as AxiosError<QueryResponseError>;
                 const message = error.message;
-                const data = error.response.data;
-                const status = error.response.status;
-                throw  { message, data, status } as QueryResponseError;
+                const response = error.response || {
+                    data: {},
+                    status: -1
+                };
+                const data = response.data;
+                const status = response.status;
+                throw { message, data, status } as QueryResponseError;
             }
             return response.data;
         }, options);
 };
 
 export const usePutQuery = <ResponseDataType = any, ErrorType = QueryResponseError, RequestDataType = any>(client: AxiosInstance,
-                                                                                                           queryKey: QueryKey,
-                                                                                                           endpoint: string,
-                                                                                                           config: AxiosRequestConfig,
-                                                                                                           options?: UseMutationOptions<ResponseDataType, ErrorType, RequestDataType>) => {
+    queryKey: QueryKey,
+    endpoint: string,
+    config: AxiosRequestConfig,
+    options?: UseMutationOptions<ResponseDataType, ErrorType, RequestDataType>) => {
     return useMutation<ResponseDataType, ErrorType, RequestDataType>(queryKey,
         async (data): Promise<ResponseDataType> => await client.put(endpoint, data, config), options);
 };

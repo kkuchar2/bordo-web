@@ -1,15 +1,16 @@
-import React, {useCallback, useMemo} from 'react';
+import React, { useCallback, useMemo } from 'react';
 
-import {Button, Flex, Text} from '@chakra-ui/react';
-import {OpenReadyDialogArgs} from 'components/DialogSystem/readyDialogs';
-import {useTranslation} from 'react-i18next';
+import { Button, Flex, Text } from '@chakra-ui/react';
+import { useTranslation } from 'react-i18next';
 
-import {IconProps} from '../../icon/icon.types';
+import { IconProps } from '../../icon/icon.types';
+
+import { OpenReadyDialogArgs } from '@/components/DialogSystem/readyDialogs';
 
 export interface EditablePropertyProps {
     id: string;
     name: string;
-    value: string;
+    value?: string;
     type?: string;
     icon?: IconProps;
     editText?: string;
@@ -46,6 +47,7 @@ const EditableProperty = (props: EditablePropertyProps) => {
                     marginRight: '10px',
                     color: `${icon.color}`,
                 }}/>
+
                 <Text fontSize={'13px'}>{t(editText)}</Text>
             </Button>;
         }
@@ -57,6 +59,10 @@ const EditableProperty = (props: EditablePropertyProps) => {
         </Flex>;
     }, [canEdit, onEditButtonClick, value, editText, icon]);
 
+    if (!value) {
+        return null;
+    }
+
     if (hideTitle) {
         return renderEdit;
     }
@@ -65,9 +71,9 @@ const EditableProperty = (props: EditablePropertyProps) => {
         <Flex width={'100%'}>
             <Flex flexGrow={1} gap={2} direction={'column'} align={'flex-start'} justify={'center'}>
                 <Text fontSize={'13px'}
-                      fontWeight={'semibold'}
-                      color={'rgba(255,255,255,0.7)'}
-                      textTransform={props.uppercaseTitle ? 'uppercase' : 'none'}>
+                    fontWeight={'semibold'}
+                    color={'rgba(255,255,255,0.7)'}
+                    textTransform={props.uppercaseTitle ? 'uppercase' : 'none'}>
                     {`${name}:`}
                 </Text>
                 <Text fontSize={'14px'} fontWeight={'normal'}>{value}</Text>
@@ -77,11 +83,6 @@ const EditableProperty = (props: EditablePropertyProps) => {
             </Flex>
         </Flex>
     </Flex>;
-};
-
-EditableProperty.defaultProps = {
-    editText: 'EDIT',
-    uppercaseTitle: true
 };
 
 export default EditableProperty;

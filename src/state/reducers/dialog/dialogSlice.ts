@@ -1,6 +1,6 @@
-import {createSlice, Dispatch, PayloadAction} from '@reduxjs/toolkit';
+import { createSlice, Dispatch, PayloadAction } from '@reduxjs/toolkit';
 
-import {DialogSliceState, IDialogComponentProps, ShowDialogArgs} from './dialogSlice.types';
+import { DialogSliceState, IDialogComponentProps, ShowDialogArgs } from './dialogSlice.types';
 
 const defaultDialogState: DialogSliceState = {
     opened: false,

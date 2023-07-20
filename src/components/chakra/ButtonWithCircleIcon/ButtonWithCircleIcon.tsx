@@ -1,6 +1,6 @@
-import React, {ComponentProps, useCallback, useState} from 'react';
+import React, { ComponentProps, useCallback, useState } from 'react';
 
-import {Button, Circle} from '@chakra-ui/react';
+import { Button, Circle } from '@chakra-ui/react';
 
 interface ButtonWithCircleIconProps {
     IconComponent: React.FC<ComponentProps<'svg'>>
@@ -50,20 +50,20 @@ export const ButtonWithCircleIcon = (props: ButtonWithCircleIconProps) => {
     }, []);
 
     return <Button width={sizePx}
-                   height={sizePx}
-                   onMouseEnter={onMouseEnter}
-                   onMouseLeave={onMouseLeave}
-                   minWidth={0}
-                   title={title}
-                   padding={0}
-                   bg={bg}
-                   _focus={{
-                       bg: bgFocus
-                   }}
-                   _hover={{
-                       bg: bgHover
-                   }}
-                   onClick={onClick}>
+        height={sizePx}
+        onMouseEnter={onMouseEnter}
+        onMouseLeave={onMouseLeave}
+        minWidth={0}
+        title={title}
+        padding={0}
+        bg={bg}
+        _focus={{
+            bg: bgFocus
+        }}
+        _hover={{
+            bg: bgHover
+        }}
+        onClick={onClick}>
         <Circle bg={hovered ? circleBgHover : circleBg} size={`${circleSize}px`}>
             <IconComponent width={iconSizePx} height={iconSizePx} color={hovered ? iconColorHover : iconColor}/>
         </Circle>

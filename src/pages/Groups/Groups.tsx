@@ -1,16 +1,18 @@
-import React, {useCallback, useEffect} from 'react';
+import React, { useCallback, useEffect } from 'react';
 
-import {Flex, Text} from '@chakra-ui/react';
-import {getGroups} from 'queries/groups';
-import {useParams} from 'react-router-dom';
+import { Flex, Text } from '@chakra-ui/react';
+import { PlusIcon } from '@heroicons/react/24/solid';
+import { useParams } from 'next/navigation';
 import styled from 'styled-components';
+
 import WithAuth from '../../hoc/WithAuth';
 
-import {ButtonWithIcon} from "components/chakra/ButtonWithIcon/ButtonWithIcon";
-import {PlusIcon} from "@heroicons/react/24/solid";
-import {GroupItem} from "./GroupItem";
-import {showCreateGroupDialog} from "components/DialogSystem/readyDialogs";
-import {CollapseSection} from "components/CollapseSection/CollapseSection";
+import { GroupItem } from './GroupItem';
+
+import { ButtonWithIcon } from '@/components/chakra/ButtonWithIcon/ButtonWithIcon';
+import { CollapseSection } from '@/components/CollapseSection/CollapseSection';
+import { showCreateGroupDialog } from '@/components/DialogSystem/readyDialogs';
+import { getGroups } from '@/queries/groups';
 
 export interface Group {
     uuid: string,
@@ -62,7 +64,7 @@ const Groups = () => {
     }, []);
 
     if (isLoading) {
-        return <div className={'flex items-center justify-center gap-2 h-[400px] min-h-[400px]'}>
+        return <div className={'flex h-[400px] min-h-[400px] items-center justify-center gap-2'}>
             <Text fontSize={'md'} color={'#dedede'}>{'Loading...'}</Text>
         </div>;
     }
@@ -73,24 +75,24 @@ const Groups = () => {
         </Flex>;
     }
 
-    return <CollapseSection className={'flex flex-col grow'}
-                            title={'Your groups'}
-                            showIcon={groups && groups.length > 3}
-                            actionButtonRenderer={() => {
-                                return <ButtonWithIcon
-                                    title={'Create group'}
-                                    className={'ml-auto'}
-                                    iconSize={20}
-                                    iconColor={'rgba(255,255,255,0.78)'}
-                                    iconColorHover={'white'}
-                                    IconComponent={PlusIcon}
-                                    onClick={onCreateGroupClick} />
-                            }}>
+    return <CollapseSection className={'flex grow flex-col'}
+        title={'Your groups'}
+        showIcon={groups && groups.length > 3}
+        actionButtonRenderer={() => {
+            return <ButtonWithIcon
+                title={'Create group'}
+                className={'ml-auto'}
+                iconSize={20}
+                iconColor={'rgba(255,255,255,0.78)'}
+                iconColorHover={'white'}
+                IconComponent={PlusIcon}
+                onClick={onCreateGroupClick}/>;
+        }}>
         <HiddenScrollFlex direction={'column'} overflow={'auto'}>
             {groups?.map(group => <GroupItem
                 key={group.uuid}
                 group={group}
-                onClick={() => setSelectedGroup(group)} />)}
+                onClick={() => setSelectedGroup(group)}/>)}
         </HiddenScrollFlex>
     </CollapseSection>;
 };

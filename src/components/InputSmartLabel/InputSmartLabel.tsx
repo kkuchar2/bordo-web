@@ -1,8 +1,9 @@
-import React, {useCallback, useMemo, useRef, useState} from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 
-import {Flex, Input, Text} from '@chakra-ui/react';
-import {EyeIcon, EyeSlashIcon} from '@heroicons/react/24/solid';
-import {ButtonWithIcon} from 'components/chakra/ButtonWithIcon/ButtonWithIcon';
+import { Flex, Input, Text } from '@chakra-ui/react';
+import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/solid';
+
+import { ButtonWithIcon } from '@/components/chakra/ButtonWithIcon/ButtonWithIcon';
 
 interface InputSmartLabelProps {
     value?: string;
@@ -71,40 +72,40 @@ export const InputSmartLabel = (props: InputSmartLabelProps) => {
         }
 
         return <ButtonWithIcon title={reveal ? 'Hide password' : 'Show password'}
-                               tabIndex={-1}
-                               iconSize={20}
-                               iconColor={'rgba(255,255,255,0.48)'}
-                               iconColorHover={'white'}
-                               IconComponent={reveal ? EyeSlashIcon : EyeIcon}
-                               onClick={onShowHideClick}/>;
+            tabIndex={-1}
+            iconSize={20}
+            iconColor={'rgba(255,255,255,0.48)'}
+            iconColorHover={'white'}
+            IconComponent={reveal ? EyeSlashIcon : EyeIcon}
+            onClick={onShowHideClick}/>;
     }, [type, reveal, onShowHideClick, value]);
 
     return <Flex position={'relative'}
-                 align={'center'}
-                 pl={'12px'}
-                 pr={'12px'}
-                 borderRadius={'6px'}
-                 justify={'center'}
-                 onClick={onDummyInputClick}
-                 height={'56px'}
-                 bg={bg}
-                 onMouseEnter={() => {
-                     setPointerWithinBounds(true);
-                 }}
-                 onMouseLeave={() => {
-                     setPointerWithinBounds(false);
-                 }}>
+        align={'center'}
+        pl={'12px'}
+        pr={'12px'}
+        borderRadius={'6px'}
+        justify={'center'}
+        onClick={onDummyInputClick}
+        height={'56px'}
+        bg={bg}
+        onMouseEnter={() => {
+            setPointerWithinBounds(true);
+        }}
+        onMouseLeave={() => {
+            setPointerWithinBounds(false);
+        }}>
 
         <Text fontSize={labelActive ? '12px' : '14px'}
-              position={'absolute'}
-              zIndex={1}
-              color={labelActive ? 'rgba(255,255,255,1)' : 'rgba(255,255,255,0.48)'}
-              transition={'0.2s ease all'}
-              top={labelActive ? '14px' : '50%'}
-              left={'12px'}
-              transform={'translateY(-50%)'}
-              opacity={disabled ? 0.3 : 0.8}
-              fontWeight={'semibold'}>{label}</Text>
+            position={'absolute'}
+            zIndex={1}
+            color={labelActive ? 'rgba(255,255,255,1)' : 'rgba(255,255,255,0.48)'}
+            transition={'0.2s ease all'}
+            top={labelActive ? '14px' : '50%'}
+            left={'12px'}
+            transform={'translateY(-50%)'}
+            opacity={disabled ? 0.3 : 0.8}
+            fontWeight={'semibold'}>{label}</Text>
         <Input
             ref={inputRef}
             id={id}

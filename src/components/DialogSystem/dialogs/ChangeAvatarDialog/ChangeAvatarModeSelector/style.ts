@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import {StyledSelectGIFCircleProps} from './ChangeAvatarModeSelector.types';
+import { StyledSelectGIFCircleProps } from './ChangeAvatarModeSelector.types';
 
 export const StyledSelectGIFCircle = styled.div<StyledSelectGIFCircleProps>`
   width: 150px;

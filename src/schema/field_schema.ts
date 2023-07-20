@@ -1,4 +1,4 @@
-import {ref, string} from 'yup';
+import { ref, string } from 'yup';
 
 export const NewPasswordSchema = (t: any) => string()
     .required(t('FIELD_REQUIRED'))

@@ -1,16 +1,16 @@
-import React, {useCallback, useEffect} from 'react';
+import React, { useCallback, useEffect } from 'react';
 
-import {Flex} from '@chakra-ui/react';
-import {DelayedTransition} from 'components/chakra/DelayedTransition/DelayedTransition';
-import {showDialogAfterFirstPasswordSetupRequest} from 'components/DialogSystem/readyDialogs';
-import Form from 'components/Forms/Form/Form';
-import {closeDialog, setCloseable} from 'state/reducers/dialog/dialogSlice';
-import {BaseDialogProps, DialogProps} from 'state/reducers/dialog/dialogSlice.types';
+import { Flex } from '@chakra-ui/react';
 
-import {useFormConfig} from '../../../api/formConfig';
-import {createNewPassword} from '../../../queries/account';
+import { ChangePropertyDialogProps } from './ChangePropertyDialog';
 
-import {ChangePropertyDialogProps} from './ChangePropertyDialog';
+import { DelayedTransition } from '@/components/chakra/DelayedTransition/DelayedTransition';
+import { showDialogAfterFirstPasswordSetupRequest } from '@/components/DialogSystem/readyDialogs';
+import Form from '@/components/Forms/Form/Form';
+import { useFormConfig } from '@/form/formConfig';
+import { createNewPassword } from '@/queries/account';
+import { closeDialog, setCloseable } from '@/state/reducers/dialog/dialogSlice';
+import { BaseDialogProps, DialogProps } from '@/state/reducers/dialog/dialogSlice.types';
 
 export const PasswordCreationRequiredDialog = (props: DialogProps<ChangePropertyDialogProps> & BaseDialogProps) => {
 

@@ -1,32 +1,38 @@
 import React, { useCallback } from 'react';
 
-import {Badge, Flex, Text} from '@chakra-ui/react';
-import {useParams} from 'react-router-dom';
+import { Badge, Flex, Text } from '@chakra-ui/react';
+import { useParams } from 'next/navigation';
 
-import {deleteGroup, getGroup, subscribeToGroup, unsubscribeFromGroup} from '../../queries/groups';
+import WithAuth from '../../hoc/WithAuth';
 
-import {getUser} from 'queries/account';
 import { GroupMember } from './GroupMember';
-import WithAuth from "../../hoc/WithAuth";
 
+import { getUser } from '@/queries/account';
+import { deleteGroup, getGroup, subscribeToGroup, unsubscribeFromGroup } from '@/queries/groups';
 
 export const GroupPreview = () => {
 
     const params = useParams();
 
-    const {
-        data: group,
-        isError: groupError,
-    } = getGroup(params.uuid);
-
     const { data: user } = getUser();
+
+    if (!params.uuid) {
+        return null;
+    }
 
     const { mutate: subscribeToGroupMutate } = subscribeToGroup();
     const { mutate: unsubscribeFromGroupMutate } = unsubscribeFromGroup();
-    const { mutate: deleteGroupMutate} = deleteGroup();
+    const { mutate: deleteGroupMutate } = deleteGroup();
+    const { data: group, isError: groupError } = getGroup(params.uuid);
 
     const onSubscribeClick = useCallback(() => {
         console.log('Subscribing to group ', group, 'user: ', user);
+
+        if (!group || !user) {
+            console.log('Group or user is null');
+            return;
+        }
+
         subscribeToGroupMutate({
             group_uuid: group.uuid,
         });
@@ -34,6 +40,12 @@ export const GroupPreview = () => {
 
     const onUnsubscribeClick = useCallback(() => {
         console.log('Unsubscribing from group ', group, 'user: ', user);
+
+        if (!group || !user) {
+            console.log('Group or user is null');
+            return;
+        }
+
         unsubscribeFromGroupMutate({
             group_uuid: group.uuid,
         });
@@ -41,6 +53,12 @@ export const GroupPreview = () => {
 
     const onDeleteGroupClick = useCallback(() => {
         console.log('Deleting group ', group, 'user: ', user);
+
+        if (!group || !user) {
+            console.log('Group or user is null');
+            return;
+        }
+
         deleteGroupMutate({
             group_uuid: group.uuid,
         });
@@ -54,15 +72,15 @@ export const GroupPreview = () => {
     console.log('Group error: ', groupError);
 
     if (groupError) {
-        return <div className={'w-full h-full p-2 flex flex-col items-center justify-center'}>
-            <div>Group does not exist</div>
+        return <div className={'flex h-full w-full flex-col items-center justify-center p-2'}>
+            <div>{'Group does not exist'}</div>
         </div>;
     }
 
     return <Flex direction={'column'} gap={4} h={'100%'} flexGrow={1} maxW={'1000px'}>
         {/*Header with group name*/}
         <Flex direction={'row'} gap={4} align={'center'} justify={'space-between'} pt={'40px'} pb={'40px'} pl={4} pr={4}
-              bg={'rgba(255,255,255,0.02)'}>
+            bg={'rgba(255,255,255,0.02)'}>
             <Flex direction={'row'} gap={4} align={'center'}>
                 {/*Group name*/}
                 <Text fontSize={'24px'} fontWeight={'semibold'}>
@@ -76,11 +94,11 @@ export const GroupPreview = () => {
                     </Text>
                 </Flex>
                 {/*Delete button if current user is the leader*/}
-                {group.leader === user.username && <Flex  gap={1} align={'end'} justify={'end'} ml={'auto'}>
+                {group.leader === user.username && <Flex gap={1} align={'end'} justify={'end'} ml={'auto'}>
                     <button
-                        className={'bg-red-900/30 text-white px-2 py-2 font-semibold hover:bg-red-900/50 rounded-md'}
+                        className={'rounded-md bg-red-900/30 p-2 font-semibold text-white hover:bg-red-900/50'}
                         onClick={onDeleteGroupClick}>
-                        Delete group
+                        {'Delete group'}
                     </button>
                 </Flex>}
 
@@ -88,9 +106,9 @@ export const GroupPreview = () => {
                 {!group.members.includes(user.username) &&
                     <Flex direction={'row'} gap={1} align={'center'} justify={'center'}>
                         <button
-                            className={'bg-white/10 text-white px-4 py-2 font-semibold hover:bg-white/20 text-white/80 hover:text-white/100'}
+                            className={'bg-white/10 px-4 py-2 font-semibold text-white/80 hover:bg-white/20 hover:text-white/100'}
                             onClick={onSubscribeClick}>
-                            Subscribe
+                            {'Subscribe'}
                         </button>
                     </Flex>
                 }
@@ -98,9 +116,9 @@ export const GroupPreview = () => {
                 {group.members.includes(user.username) && group.leader !== user.username &&
                     <Flex direction={'row'} gap={1} align={'center'} justify={'center'}>
                         <button
-                            className={'bg-white/10 text-white px-4 py-2 font-semibold hover:bg-white/20 text-white/80 hover:text-white/100'}
+                            className={'bg-white/10 px-4 py-2 font-semibold text-white/80 hover:bg-white/20 hover:text-white/100'}
                             onClick={onUnsubscribeClick}>
-                            Unsubscribe
+                            {'Unsubscribe'}
                         </button>
                     </Flex>
                 }
@@ -115,18 +133,18 @@ export const GroupPreview = () => {
         </Flex>
 
         {group.leader === user.username &&
-        <Flex direction={'column'} gap={4} h={'100%'} p={'20px'}>
-            <Text fontSize={'18px'} fontWeight={'semibold'}>
-                {'Subscribers'}
-            </Text>
-            <Flex direction={'column'} gap={4} h={'100%'} w={'100%'}>
-                {group.members.map((username) => <Flex key={username} direction={'row'} gap={4} align={'center'}
-                                                       justify={'space-between'} bg={'rgba(255,255,255,0.02)'}
-                                                       w={'100%'}>
-                    <GroupMember username={username} isOwner={username === group.leader} groupID={group.uuid}/>
-                </Flex>)}
-            </Flex>
-        </Flex>}
+            <Flex direction={'column'} gap={4} h={'100%'} p={'20px'}>
+                <Text fontSize={'18px'} fontWeight={'semibold'}>
+                    {'Subscribers'}
+                </Text>
+                <Flex direction={'column'} gap={4} h={'100%'} w={'100%'}>
+                    {group.members.map((username) => <Flex key={username} direction={'row'} gap={4} align={'center'}
+                        justify={'space-between'} bg={'rgba(255,255,255,0.02)'}
+                        w={'100%'}>
+                        <GroupMember username={username} isOwner={username === group.leader} groupID={group.uuid}/>
+                    </Flex>)}
+                </Flex>
+            </Flex>}
     </Flex>;
 };
 

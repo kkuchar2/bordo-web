@@ -1,6 +1,6 @@
-import {createSlice, PayloadAction} from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import {PusherState, PusherSubscribeArgs, PusherTriggerArgs} from './pusherSlice.types';
+import { PusherState, PusherSubscribeArgs, PusherTriggerArgs } from './pusherSlice.types';
 
 export const pusherSlice = createSlice({
     name: 'pusher',

@@ -1,10 +1,11 @@
-import {createSlice, PayloadAction} from '@reduxjs/toolkit';
-import {DefaultResponseArgs, ResponseArgs} from 'tools/client/client.types';
-import {mapFrom} from 'util/util';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import {requestList} from './constants';
-import {ConversationsSliceState} from './conversationsSlice.requests';
-import {Message} from './conversationsSlice.types';
+import { requestList } from './constants';
+import { ConversationsSliceState } from './conversationsSlice.requests';
+import { Message } from './conversationsSlice.types';
+
+import { DefaultResponseArgs, ResponseArgs } from '@/tools/client/client.types';
+import { mapFrom } from '@/util/util';
 
 export const conversationsSlice = createSlice({
     name: 'conversations',

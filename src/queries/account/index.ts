@@ -1,20 +1,19 @@
+import { authGet, authPost, authPut, AxiosConfigs, QueryResponseError } from '../base';
+
+import { User } from './types';
+
 import {
     showEmailChangeConfirmationSentDialog,
     showRegistrationCompleteDialog,
     showVerifyAccountDialog
-} from 'components/DialogSystem/readyDialogs';
-import {getNonFieldErrors} from 'components/Forms/util';
-import {showSuccessToast} from 'components/Toast/readyToastNotifications';
-import {closeDialog} from 'state/reducers/dialog/dialogSlice';
-import {pusherConnect} from 'state/services/pusherService';
-import {store} from 'state/store';
-
-import {isPusherEnvSet} from '../../api/config';
-import {queryClient} from '../../App';
-import {authGet, authPost, authPut, AxiosConfigs, QueryResponseError} from '../base';
-
-import {User} from './types';
-import {clearCurrentView} from "state/reducers/application/appSlice";
+} from '@/components/DialogSystem/readyDialogs';
+import { getNonFieldErrors } from '@/components/Forms/util';
+import { showSuccessToast } from '@/components/Toast/readyToastNotifications';
+import { isPusherEnvSet, queryClient } from '@/config';
+import { clearCurrentView } from '@/state/reducers/application/appSlice';
+import { closeDialog } from '@/state/reducers/dialog/dialogSlice';
+import { pusherConnect } from '@/state/services/pusherService';
+import { store } from '@/state/store';
 
 export const changeAbout = () => {
     return authPut(['setAbout'], 'account/change-description')({
@@ -201,7 +200,7 @@ export const googleDisconnect = () => {
 export const getUser = () => {
     return authGet<User>(['user'], 'account/user')({
         onSuccess: () => {
-            if (isPusherEnvSet){
+            if (isPusherEnvSet) {
                 store.dispatch(pusherConnect());
             }
         },

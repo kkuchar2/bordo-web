@@ -1,18 +1,19 @@
-import React, {useCallback, useEffect, useMemo} from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 
-import {Box, chakra, Flex, HStack, Stack, Text} from '@chakra-ui/react';
-import {XMarkIcon} from '@heroicons/react/24/outline';
-import {ArrowLeftIcon} from '@heroicons/react/24/solid';
-import {ButtonWithIcon} from 'components/chakra/ButtonWithIcon/ButtonWithIcon';
-import {dialogAnimation, dialogBgAnimation} from 'components/Forms/animation';
-import {isValidMotionProp, motion} from 'framer-motion';
-import {useTranslation} from 'react-i18next';
-import {useSelector} from 'react-redux';
-import {closeDialog} from 'state/reducers/dialog/dialogSlice';
-import {DialogSliceState} from 'state/reducers/dialog/dialogSlice.types';
-import {RootState, useAppDispatch} from 'state/store';
+import { Box, chakra, Flex, HStack, Stack, Text } from '@chakra-ui/react';
+import { XMarkIcon } from '@heroicons/react/24/outline';
+import { ArrowLeftIcon } from '@heroicons/react/24/solid';
+import { isValidMotionProp, motion } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
 
 import * as dialogs from './dialogs';
+
+import { ButtonWithIcon } from '@/components/chakra/ButtonWithIcon/ButtonWithIcon';
+import { dialogAnimation, dialogBgAnimation } from '@/components/Forms/animation';
+import { closeDialog } from '@/state/reducers/dialog/dialogSlice';
+import { DialogSliceState } from '@/state/reducers/dialog/dialogSlice.types';
+import { RootState, useAppDispatch } from '@/state/store';
 
 const MotionFlex = motion(Flex);
 
@@ -101,12 +102,12 @@ const Dialogs = () => {
 
         if (arrowBack) {
             return <ButtonWithIcon title={'Back'}
-                                   className={'w-[40px] h-[40px] bg-opacity-10 hover:bg-opacity-20 active:bg-opacity-20 focus:bg-opacity-20'}
-                                   iconSize={25}
-                                   iconColor={'rgba(255,255,255,0.48)'}
-                                   iconColorHover={'white'}
-                                   IconComponent={ArrowLeftIcon}
-                                   onClick={handleBack}/>;
+                className={'h-[40px] w-[40px] bg-opacity-10 hover:bg-opacity-20 focus:bg-opacity-20 active:bg-opacity-20'}
+                iconSize={25}
+                iconColor={'rgba(255,255,255,0.48)'}
+                iconColorHover={'white'}
+                IconComponent={ArrowLeftIcon}
+                onClick={handleBack}/>;
         }
 
     }, [componentProps]);
@@ -122,12 +123,12 @@ const Dialogs = () => {
                 </Flex>}
             <Text flexGrow={1} fontSize={'md'} fontWeight={'bold'}>{t(title)}</Text>
             <ButtonWithIcon title={'Close'}
-                            className={'w-[40px] h-[40px] bg-opacity-10 hover:bg-opacity-20 active:bg-opacity-20 focus:bg-opacity-20'}
-                            iconSize={25}
-                            iconColor={'rgba(255,255,255,0.48)'}
-                            iconColorHover={'white'}
-                            IconComponent={XMarkIcon}
-                            onClick={handleCancel}/>
+                className={'h-[40px] w-[40px] bg-opacity-10 hover:bg-opacity-20 focus:bg-opacity-20 active:bg-opacity-20'}
+                iconSize={25}
+                iconColor={'rgba(255,255,255,0.48)'}
+                iconColorHover={'white'}
+                IconComponent={XMarkIcon}
+                onClick={handleCancel}/>
         </HStack>;
     }, [componentProps, t]);
 
@@ -139,12 +140,12 @@ const Dialogs = () => {
         const Component = componentMap[componentName];
 
         return <MotionFlex direction={'column'}
-                           key={componentName}
-                           bg={'#2f2f2f'}
-                           gap={'20px'}
-                           borderRadius={'md'}
-                           {...componentProps.dialog.flexProps}
-                           {...dialogAnimation}>
+            key={componentName}
+            bg={'#2f2f2f'}
+            gap={'20px'}
+            borderRadius={'md'}
+            {...componentProps.dialog.flexProps}
+            {...dialogAnimation}>
             <Flex direction={'column'} gap={'20px'} w={'100%'} p={'20px'} pb={0}>
                 <Flex w={'100%'} gap={'20px'}>
                     {renderArrowBack}

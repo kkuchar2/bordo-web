@@ -1,12 +1,13 @@
-import React, {useRef} from 'react';
+import React, { useRef } from 'react';
 
-import {Flex, Text} from '@chakra-ui/react';
-import {CheckIcon, XMarkIcon} from '@heroicons/react/24/solid';
-import {ProfileAvatar} from 'components/chakra/Avatar/Avatar';
-import {ButtonWithIcon} from 'components/chakra/ButtonWithIcon/ButtonWithIcon';
+import { Flex, Text } from '@chakra-ui/react';
+import { CheckIcon, XMarkIcon } from '@heroicons/react/24/solid';
 import toast from 'react-hot-toast';
 
-import {getProfile} from '../../queries/people';
+import { getProfile } from '../../queries/people';
+
+import { ProfileAvatar } from '@/components/chakra/Avatar/Avatar';
+import { ButtonWithIcon } from '@/components/chakra/ButtonWithIcon/ButtonWithIcon';
 
 export const showFriendRequestReceived = (friendRequest: any) => {
     console.log(friendRequest);
@@ -32,12 +33,12 @@ export const showFriendRequestReceived = (friendRequest: any) => {
                 </Text>
                 <Flex gap={'20px'} color={'white'} mt={'10px'}>
                     <ButtonWithIcon title={'Accept'}
-                                    iconSize={20}
-                                    className={'flex gap-[20px]'}
-                                    onClick={() => toast.dismiss(t.id)}
-                                    iconColor={'rgba(255,255,255,0.48)'}
-                                    iconColorHover={'white'}
-                                    IconComponent={CheckIcon}>
+                        iconSize={20}
+                        className={'flex gap-[20px]'}
+                        onClick={() => toast.dismiss(t.id)}
+                        iconColor={'rgba(255,255,255,0.48)'}
+                        iconColorHover={'white'}
+                        IconComponent={CheckIcon}>
                         <Text fontSize={'sm'} fontWeight={'medium'} color={'rgba(255,255,255,0.8)'}>
                             {'Accept'}
                         </Text>

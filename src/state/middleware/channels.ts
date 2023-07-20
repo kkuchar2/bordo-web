@@ -1,12 +1,11 @@
-import {Dispatch} from '@reduxjs/toolkit';
-import {Middleware} from 'redux';
-import {onConnectionEstablished} from 'state/services/pusherService';
-import {AppDispatch} from 'state/store';
+import { Dispatch } from '@reduxjs/toolkit';
+import Pusher from 'pusher-js';
+import { Middleware } from 'redux';
 import Cookies from 'universal-cookie';
 
-import {getEnvVar, isPusherEnvSet} from '../../api/config';
-
-import Pusher from 'pusher-js'
+import { getEnvVar, isPusherEnvSet } from '@/config';
+import { onConnectionEstablished } from '@/state/services/pusherService';
+import { AppDispatch } from '@/state/store';
 
 const styleOf = (bgColor: string) => `background: ${bgColor}; color: #ffffff; padding: 5px; margin: 5px; font-weight: bold`;
 
@@ -22,9 +21,12 @@ Pusher.Runtime.createXHR = function () {
 };
 
 export const channelMiddleware: Middleware = ({
-                                                  dispatch,
-                                                  getState
-                                              }: { dispatch: AppDispatch, getState: () => any }) => (next: Dispatch) => (action) => {
+    dispatch,
+    getState
+}: {
+    dispatch: AppDispatch,
+    getState: () => any
+}) => (next: Dispatch) => (action) => {
     if (action.type === 'pusher/connect') {
 
         if (!isPusherEnvSet) {
@@ -35,13 +37,13 @@ export const channelMiddleware: Middleware = ({
         if (client === null) {
             console.log('%c channelMiddleware %c Starting channel connection to 127.0.0.1:6001', COLOR1, COLOR2);
 
-            client = new Pusher(getEnvVar('PUSHER_API_KEY'), {
-                wsHost: getEnvVar('VITE_PUSHER_WS_HOST'),
-                wsPort: getEnvVar('VITE_PUSHER_WS_PORT'),
+            client = new Pusher(getEnvVar('NEXT_PUBLIC_PUSHER_API_KEY'), {
+                wsHost: getEnvVar('NEXT_PUBLIC_PUSHER_WS_HOST'),
+                wsPort: getEnvVar('NEXT_PUBLIC_PUSHER_WS_PORT'),
                 forceTLS: false,
                 channelAuthorization: {
                     transport: 'ajax',
-                    endpoint: `${getEnvVar('VITE_BORDO_API_URL')}.channels/authChannel`,
+                    endpoint: `${getEnvVar('NEXT_PUBLIC_BORDO_API_URL')}.channels/authChannel`,
                     params: {
                         withCredentials: true
                     },

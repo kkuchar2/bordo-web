@@ -1,8 +1,7 @@
-import {Group} from 'pages/Groups/Groups';
+import { authGet, authPost } from './base';
 
-import {queryClient} from '../App';
-
-import {authGet, authPost} from './base';
+import { queryClient } from '@/config';
+import { Group } from '@/pages/Groups/Groups';
 
 export const getGroups = () => {
     return authGet<Group[]>(['getGroups'], 'groups/')({
@@ -26,7 +25,7 @@ export const subscribeToGroup = () => {
             queryClient.invalidateQueries(['group']);
         }
     });
-}
+};
 
 export const unsubscribeFromGroup = () => {
     return authPost<any>(['unsubscribeFromGroup'], 'groups/unsubscribe/')({
@@ -34,7 +33,7 @@ export const unsubscribeFromGroup = () => {
             queryClient.invalidateQueries(['group']);
         }
     });
-}
+};
 
 export const removeMemberFromGroup = () => {
     return authPost<any>(['removeMemberFromGroup'], 'groups/remove_member/')({
@@ -42,7 +41,7 @@ export const removeMemberFromGroup = () => {
             queryClient.invalidateQueries(['group']);
         }
     });
-}
+};
 
 export const createGroup = () => {
     return authPost<any>(['createGroup'], 'groups/create_group/')({

@@ -1,7 +1,8 @@
-import {Dispatch} from '@reduxjs/toolkit';
-import {showServiceUnavailableDialog} from 'components/DialogSystem/readyDialogs';
-import {Middleware} from 'redux';
-import {RequestStatus} from 'tools/client/client.types';
+import { Dispatch } from '@reduxjs/toolkit';
+import { Middleware } from 'redux';
+
+import { showServiceUnavailableDialog } from '@/components/DialogSystem/readyDialogs';
+import { RequestStatus } from '@/tools/client/client.types';
 
 export const serverErrorMiddleware: Middleware = () => (next: Dispatch) => (action) => {
     const returnValue = next(action);

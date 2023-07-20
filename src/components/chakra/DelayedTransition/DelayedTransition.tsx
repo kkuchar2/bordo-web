@@ -1,6 +1,6 @@
-import React, {ReactNode, useEffect, useRef, useState} from 'react';
+import React, { ReactNode, useEffect, useRef, useState } from 'react';
 
-import {Box, BoxProps, Progress} from '@chakra-ui/react';
+import { Box, BoxProps, Progress } from '@chakra-ui/react';
 
 interface DelayedTransitionProps {
     pending: boolean;

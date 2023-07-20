@@ -8,9 +8,9 @@
 const createImage = (url) =>
     new Promise((resolve, reject) => {
         const image = new Image();
-        image.addEventListener("load", () => resolve(image));
-        image.addEventListener("error", (error) => reject(error));
-        image.setAttribute("crossOrigin", "anonymous"); // needed to avoid cross-origin issues on CodeSandbox
+        image.addEventListener('load', () => resolve(image));
+        image.addEventListener('error', (error) => reject(error));
+        image.setAttribute('crossOrigin', 'anonymous'); // needed to avoid cross-origin issues on CodeSandbox
         image.src = url;
     });
 
@@ -20,8 +20,8 @@ function getRadianAngle(degreeValue) {
 
 export default async function getCroppedImg(imageSrc, pixelCrop, rotation = 0) {
     const image = await createImage(imageSrc);
-    const canvas = document.createElement("canvas");
-    const ctx = canvas.getContext("2d");
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
 
     const maxSize = Math.max(image.width, image.height);
     const safeArea = 2 * ((maxSize / 2) * Math.sqrt(2));
@@ -72,14 +72,14 @@ export const generateDownload = async (imageSrc, crop) => {
         (blob) => {
             const previewUrl = window.URL.createObjectURL(blob);
 
-            const anchor = document.createElement("a");
-            anchor.download = "image.jpeg";
+            const anchor = document.createElement('a');
+            anchor.download = 'image.jpeg';
             anchor.href = URL.createObjectURL(blob);
             anchor.click();
 
             window.URL.revokeObjectURL(previewUrl);
         },
-        "image/jpeg",
+        'image/jpeg',
         0.66
     );
 };

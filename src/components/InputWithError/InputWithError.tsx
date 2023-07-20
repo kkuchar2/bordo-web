@@ -1,10 +1,11 @@
-import React, {useCallback, useMemo, useState} from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 
-import {Input, InputGroup, InputRightElement, Text, VStack} from '@chakra-ui/react';
-import {EyeIcon, EyeSlashIcon} from '@heroicons/react/24/solid';
-import {ButtonWithIcon} from 'components/chakra/ButtonWithIcon/ButtonWithIcon';
-import {ErrorText} from 'components/chakra/ErrorText/ErrorText';
-import {useTranslation} from 'react-i18next';
+import { Input, InputGroup, InputRightElement, Text, VStack } from '@chakra-ui/react';
+import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/solid';
+import { useTranslation } from 'react-i18next';
+
+import { ButtonWithIcon } from '@/components/chakra/ButtonWithIcon/ButtonWithIcon';
+import { ErrorText } from '@/components/chakra/ErrorText/ErrorText';
 
 export const InputWithError = ({ field, id, label, type, autoComplete, placeholder, disabled, errors, form }) => {
 
@@ -53,29 +54,29 @@ export const InputWithError = ({ field, id, label, type, autoComplete, placehold
 
         return <InputRightElement width={'4.5rem'} height={'100%'}>
             <ButtonWithIcon title={show ? 'Hide password' : 'Show password'}
-                            iconSize={20}
-                            iconColor={'rgba(255,255,255,0.48)'}
-                            iconColorHover={'white'}
-                            IconComponent={show ? EyeSlashIcon : EyeIcon}
-                            onClick={onShowHideClick}/>
+                iconSize={20}
+                iconColor={'rgba(255,255,255,0.48)'}
+                iconColorHover={'white'}
+                IconComponent={show ? EyeSlashIcon : EyeIcon}
+                onClick={onShowHideClick}/>
         </InputRightElement>;
     }, [type, show, onShowHideClick, field.value]);
 
     return <VStack spacing={'7px'} align={'stretch'} position={'relative'}>
         {focused ? <Text fontSize={'12px'}
-                         zIndex={1}
-                         top={0}
-                         left={3}
-                         opacity={disabled ? 0.3 : 1}
-                         fontWeight={'bold'}>{label}</Text> : null}
+            zIndex={1}
+            top={0}
+            left={3}
+            opacity={disabled ? 0.3 : 1}
+            fontWeight={'bold'}>{label}</Text> : null}
 
         <InputGroup size={'md'}
-                    onMouseEnter={() => {
-                        setPointerWithinBounds(true);
-                    }}
-                    onMouseLeave={() => {
-                        setPointerWithinBounds(false);
-                    }}>
+            onMouseEnter={() => {
+                setPointerWithinBounds(true);
+            }}
+            onMouseLeave={() => {
+                setPointerWithinBounds(false);
+            }}>
             <Input
                 type={inputType}
                 isInvalid={errors?.includes(id) || formikErrors?.[id]}

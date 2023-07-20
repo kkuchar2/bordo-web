@@ -1,12 +1,13 @@
-import React, {useCallback, useState} from 'react';
+import React, { useCallback, useState } from 'react';
 
-import {Avatar, Flex} from '@chakra-ui/react';
-import {XMarkIcon} from '@heroicons/react/24/outline';
-import Select, {components, IndicatorsContainerProps, MultiValueRemoveProps, OptionProps} from 'react-select';
-import {queryClient} from '../../../App';
-import {QueryResponseError} from '../../../queries/base';
-import {searchGroup} from '../../../queries/people';
-import {useTranslation} from "react-i18next";
+import { Flex } from '@chakra-ui/react';
+import { XMarkIcon } from '@heroicons/react/24/outline';
+import { useTranslation } from 'react-i18next';
+import Select, { components, IndicatorsContainerProps, MultiValueRemoveProps, OptionProps } from 'react-select';
+
+import { queryClient } from '@/config';
+import { QueryResponseError } from '@/queries/base';
+import { searchGroup } from '@/queries/people';
 
 const MultiValueRemove = (props: MultiValueRemoveProps<GroupSearchOption>) => {
     return <components.MultiValueRemove {...props}>
@@ -48,7 +49,6 @@ export interface GroupSearchOption {
     readonly label: string;
 }
 
-
 interface GroupsSearchProps {
     onSelect: (option: GroupSearchOption) => void;
 }
@@ -59,7 +59,7 @@ export const GroupsSearch = (props: GroupsSearchProps) => {
 
     const [searchResult, setSearchResult] = useState<GroupSearchOption[]>([]);
 
-    const {t} = useTranslation();
+    const { t } = useTranslation();
 
     const searchGroupMutation = searchGroup()({
         onSuccess: (data: any) => {

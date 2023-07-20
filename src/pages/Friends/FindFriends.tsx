@@ -1,18 +1,20 @@
-import React, {useCallback} from 'react';
+import React, { useCallback } from 'react';
 
-import {Box, Flex} from '@chakra-ui/react';
-import {UserSearch} from 'components/Select/UserSearch/UserSearch';
-import {useNavigate} from 'react-router-dom';
+import { Box, Flex } from '@chakra-ui/react';
+import { useRouter } from 'next/navigation';
 
 import WithAuth from '../../hoc/WithAuth';
-import {UserSearchOption} from '../Chats/ChatWindow';
+import { UserSearchOption } from '../Chats/ChatWindow';
+
+import { UserSearch } from '@/components/Select/UserSearch/UserSearch';
 
 const FindFriends = () => {
-    const navigate = useNavigate();
+
+    const router = useRouter();
 
     const onPersonSelected = useCallback((option: UserSearchOption) => {
         console.log('Selected person: ', option);
-        navigate(`/user/${option.value.username}`);
+        router.push(`/user/${option.value.username}`);
     }, []);
 
     return <Flex direction={'column'} w={'100%'} h={'100%'}>

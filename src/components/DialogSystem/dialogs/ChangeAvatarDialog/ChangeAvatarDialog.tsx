@@ -1,20 +1,20 @@
-import React, {useCallback, useEffect, useMemo, useState} from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
-import {Box, Button, Flex} from '@chakra-ui/react';
-import {IGif} from '@giphy/js-types';
-import {DelayedTransition} from 'components/chakra/DelayedTransition/DelayedTransition';
-import {Crop} from 'components/Image/Crop/Crop';
-import {GIFSelect} from 'components/Image/GIFSelect/GIFSelect';
-import {useTranslation} from 'react-i18next';
-import {changeDialog, closeDialog} from 'state/reducers/dialog/dialogSlice';
-import {DialogProps} from 'state/reducers/dialog/dialogSlice.types';
-import {useAppDispatch} from 'state/store';
+import { Box, Button, Flex } from '@chakra-ui/react';
+import { IGif } from '@giphy/js-types';
+import { useTranslation } from 'react-i18next';
 
-import {giphyFetch} from '../../../../api/config';
-import {changeAvatar, prepareAvatarUploadInfo} from '../../../../queries/account';
+import { ChangeAvatarModeSelector } from './ChangeAvatarModeSelector/ChangeAvatarModeSelector';
+import { generateCroppedImageFile } from './cropImage';
 
-import {ChangeAvatarModeSelector} from './ChangeAvatarModeSelector/ChangeAvatarModeSelector';
-import {generateCroppedImageFile} from './cropImage';
+import { DelayedTransition } from '@/components/chakra/DelayedTransition/DelayedTransition';
+import { Crop } from '@/components/Image/Crop/Crop';
+import { GIFSelect } from '@/components/Image/GIFSelect/GIFSelect';
+import { giphyFetch } from '@/config';
+import { changeAvatar, prepareAvatarUploadInfo } from '@/queries/account';
+import { changeDialog, closeDialog } from '@/state/reducers/dialog/dialogSlice';
+import { DialogProps } from '@/state/reducers/dialog/dialogSlice.types';
+import { useAppDispatch } from '@/state/store';
 
 const FILE_SIZE_LIMIT_BYTES = 5 * 1024 * 1024;
 

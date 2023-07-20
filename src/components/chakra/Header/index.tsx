@@ -1,7 +1,7 @@
 import React from 'react';
 
-import {Box, Center, Flex, IconButton, Text} from '@chakra-ui/react';
-import {MenuAlt3Icon} from '@heroicons/react/solid';
+import { Box, Center, Flex, IconButton, Text } from '@chakra-ui/react';
+import { MenuAlt3Icon } from '@heroicons/react/solid';
 
 interface Props {
     onShowSidebar: () => void,

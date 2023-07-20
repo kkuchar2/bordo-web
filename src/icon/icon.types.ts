@@ -1,7 +1,9 @@
-import {FlexProps} from '@chakra-ui/react';
+import { ReactNode } from 'react';
+
+import { FlexProps } from '@chakra-ui/react';
 
 export interface IconProps {
-    component?: (props: any) => JSX.Element;
+    component?: (props: any) => ReactNode;
     color?: string;
     size?: number;
     flexProps?: FlexProps;

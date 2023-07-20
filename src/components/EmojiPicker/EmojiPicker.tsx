@@ -1,6 +1,6 @@
-import React, {useCallback, useEffect, useRef} from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 
-import {Box, BoxProps} from '@chakra-ui/react';
+import { Box, BoxProps } from '@chakra-ui/react';
 import Picker from '@emoji-mart/react';
 
 export interface SelectedEmoji {
@@ -43,12 +43,12 @@ export const EmojiPicker = (props: EmojiPickerProps & BoxProps) => {
 
     return <Box {...rest} ref={ref}>
         <Picker onEmojiSelect={onEmojiSelect}
-                autoFocus={true}
-                theme={'dark'}
-                previewPosition={'none'}
-                icons={'solid'}
-                maxFrequentRows={2}
-                native={true}
-                disableAutoFocus={true}/>
+            autoFocus={true}
+            theme={'dark'}
+            previewPosition={'none'}
+            icons={'solid'}
+            maxFrequentRows={2}
+            native={true}
+            disableAutoFocus={true}/>
     </Box>;
 };

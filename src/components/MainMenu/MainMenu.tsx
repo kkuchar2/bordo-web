@@ -1,11 +1,12 @@
-import React, {ReactNode, useCallback, useMemo} from 'react';
+import React, { ReactNode, useCallback, useMemo } from 'react';
 
-import {Divider, Flex, Text} from '@chakra-ui/react';
-import {MainMenuItemComponent} from 'components/MainMenu/MainMenuItemComponent';
-import {Group, MainMenuItem, MainMenuItemsMap, MenuItems} from 'components/MainMenu/mainMenuItems';
-import {useTranslation} from 'react-i18next';
+import { Divider, Flex, Text } from '@chakra-ui/react';
+import { useTranslation } from 'react-i18next';
 
-import {getUser} from '../../queries/account';
+import { getUser } from '../../queries/account';
+
+import { MainMenuItemComponent } from '@/components/MainMenu/MainMenuItemComponent';
+import { Group, MainMenuItem, MainMenuItemsMap, MenuItems } from '@/components/MainMenu/mainMenuItems';
 
 interface MainMenuProps {
     items: MenuItems,
@@ -35,9 +36,9 @@ const MainMenu = (props: MainMenuProps) => {
     const renderGroup = useCallback((group: Group): ReactNode => {
         return <Flex direction={'column'} gap={2}>
             {group.groupName ? <Text fontSize={'12px'}
-                                     marginLeft={2}
-                                     color={'#848484'}
-                                     fontWeight={'semibold'}>
+                marginLeft={2}
+                color={'#848484'}
+                fontWeight={'semibold'}>
                 {t(group.groupName)}
             </Text> : null}
             <Flex className={'a'} direction={'column'} align={'flex-start'} gap={1}>
@@ -58,8 +59,8 @@ const MainMenu = (props: MainMenuProps) => {
         return null;
     }
 
-    return <div className={'flex flex-col align-start relative w-full'}>
-            <div className={'flex flex-col gap-[15px]'}>{groups}</div>
+    return <div className={'align-start relative flex w-full flex-col'}>
+        <div className={'flex flex-col gap-[15px]'}>{groups}</div>
     </div>;
 };
 

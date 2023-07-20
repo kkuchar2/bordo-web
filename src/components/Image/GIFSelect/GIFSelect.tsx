@@ -1,13 +1,14 @@
-import React, {SyntheticEvent, useCallback, useState} from 'react';
+import React, { SyntheticEvent, useCallback, useState } from 'react';
 
-import {Box, Flex, Image} from '@chakra-ui/react';
-import {IGif} from '@giphy/js-types';
-import {InputSmartLabel} from 'components/InputSmartLabel/InputSmartLabel';
-import {useTranslation} from 'react-i18next';
-import {useMeasure} from 'react-use';
+import { Box, Flex, Image } from '@chakra-ui/react';
+import { IGif } from '@giphy/js-types';
+import { useTranslation } from 'react-i18next';
+import { useMeasure } from 'react-use';
 
-import {GIFPresentation} from './GIFPresentation/GIFPresentation';
-import {GIFSelectProps} from './GIFSelect.types';
+import { GIFPresentation } from './GIFPresentation/GIFPresentation';
+import { GIFSelectProps } from './GIFSelect.types';
+
+import { InputSmartLabel } from '@/components/InputSmartLabel/InputSmartLabel';
 
 export const GIFSelect = (props: GIFSelectProps) => {
 

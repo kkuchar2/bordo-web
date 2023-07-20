@@ -1,14 +1,15 @@
-import React, {useCallback} from 'react';
+import React, { useCallback } from 'react';
 
-import {Box, Flex, Text} from '@chakra-ui/react';
-import {InputWithEmoji} from 'components/chakra/InputWithEmoji/InputWithEmoji';
-import {MultiUserSelect} from 'components/Select/MultiUserSelect/MultiUserSelect';
-import {getSocketId} from 'state/middleware/channels';
-import {Conversation} from 'state/reducers/conversations/conversationsSlice.types';
-import {sendMessageCreateConversation, sendMessageToExistingConversation} from 'state/services/conversationsService';
-import {useAppDispatch} from 'state/store';
+import { Box, Flex, Text } from '@chakra-ui/react';
 
-import {UserProfile} from '../../queries/account/types';
+import { UserProfile } from '../../queries/account/types';
+
+import { InputWithEmoji } from '@/components/chakra/InputWithEmoji/InputWithEmoji';
+import { MultiUserSelect } from '@/components/Select/MultiUserSelect/MultiUserSelect';
+import { getSocketId } from '@/state/middleware/channels';
+import { Conversation } from '@/state/reducers/conversations/conversationsSlice.types';
+import { sendMessageCreateConversation, sendMessageToExistingConversation } from '@/state/services/conversationsService';
+import { useAppDispatch } from '@/state/store';
 
 interface ChatFullWindowProps {
     conversation?: Conversation | null;

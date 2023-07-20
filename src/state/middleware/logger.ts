@@ -1,5 +1,5 @@
-import {Dispatch} from '@reduxjs/toolkit';
-import {Middleware} from 'redux';
+import { Dispatch } from '@reduxjs/toolkit';
+import { Middleware } from 'redux';
 
 const styleOf = (bgColor: string) => `background: ${bgColor}; color: #ffffff; padding: 5px; margin: 5px; font-weight: bold`;
 

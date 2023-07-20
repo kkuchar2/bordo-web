@@ -1,26 +1,26 @@
-import React, {useCallback} from 'react';
+import React, { useCallback } from 'react';
 
-import {Box, Button, Flex, Text} from '@chakra-ui/react';
-import {showDisconnectGoogleDialog} from 'components/DialogSystem/readyDialogs';
-import GoogleButton from 'components/GoogleButton/GoogleButton';
-import {GoogleIcon} from 'components/Icons/GoogleIcon';
+import { Box, Button, Flex, Text } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 
-import {GOOGLE_CLIENT_ID} from '../../config';
-import {googleConnect} from '../../queries/account';
-import {GoogleAccountInfo} from '../../queries/account/types';
+import { showDisconnectGoogleDialog } from '@/components/DialogSystem/readyDialogs';
+import GoogleButton from '@/components/GoogleButton/GoogleButton';
+import { GoogleIcon } from '@/components/Icons/GoogleIcon';
+import { GOOGLE_CLIENT_ID } from '@/config';
+import { googleConnect } from '@/queries/account';
+import { GoogleAccountInfo } from '@/queries/account/types';
 
 interface GoogleAccountConnectionProps {
-    connection: GoogleAccountInfo | null;
+    connection: GoogleAccountInfo;
 }
 
 export const GoogleAccountConnection = (props: GoogleAccountConnectionProps) => {
 
     const { connection } = props;
 
-    const { isLoading, error, isSuccess, mutate, reset } = googleConnect();
+    const { mutate } = googleConnect();
 
-    const {t} = useTranslation();
+    const { t } = useTranslation();
 
     if (!connection) {
         return null;

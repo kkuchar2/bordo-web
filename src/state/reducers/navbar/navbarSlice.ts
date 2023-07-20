@@ -1,12 +1,13 @@
-import {createSlice, Dispatch} from "@reduxjs/toolkit";
-import {NavbarSliceState} from "state/reducers/navbar/navbarSlice.types";
+import { createSlice, Dispatch } from '@reduxjs/toolkit';
+
+import { NavbarSliceState } from '@/state/reducers/navbar/navbarSlice.types';
 
 const defaultState: NavbarSliceState = {
     opened: false,
 };
 
 const navbarSlice = createSlice({
-    name: "navbar",
+    name: 'navbar',
     initialState: defaultState,
     reducers: {
         onOpenNavbar: (state,) => {

@@ -1,4 +1,4 @@
-import {Area} from 'react-easy-crop/types';
+import { Area } from 'react-easy-crop/types';
 
 export interface CropProps {
     image?: string

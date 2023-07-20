@@ -1,11 +1,12 @@
-import {Dispatch} from 'redux';
-import {Conversation, Message} from 'state/reducers/conversations/conversationsSlice.types';
-import {RequestType} from 'tools/client/client.types';
-import {request} from 'tools/requests';
+import { Dispatch } from 'redux';
 
 import ApiClient from '../../client';
-import {AxiosConfigs} from '../../queries/base';
-import {conversationsActions as actions} from '../reducers/conversations/conversationsSlice';
+import { AxiosConfigs } from '../../queries/base';
+import { conversationsActions as actions } from '../reducers/conversations/conversationsSlice';
+
+import { Conversation, Message } from '@/state/reducers/conversations/conversationsSlice.types';
+import { RequestType } from '@/tools/client/client.types';
+import { request } from '@/tools/requests';
 
 export const sendMessageToExistingConversation = (conversation: Conversation, message: string, socketId: string) => {
     return request({

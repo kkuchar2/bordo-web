@@ -1,15 +1,15 @@
-import React, {useCallback, useEffect} from 'react';
+import React, { useCallback, useEffect } from 'react';
 
-import { VStack} from '@chakra-ui/react';
-import {DelayedTransition} from 'components/chakra/DelayedTransition/DelayedTransition';
-import Form from 'components/Forms/Form/Form';
-import {useTranslation} from 'react-i18next';
-import {useNavigate} from 'react-router-dom';
-import {closeDialog} from 'state/reducers/dialog/dialogSlice';
-import {useAppDispatch} from 'state/store';
+import { VStack } from '@chakra-ui/react';
+import { useRouter } from 'next/navigation';
+import { useTranslation } from 'react-i18next';
 
-import {useFormConfig} from '../../../api/formConfig';
-import {createGroup} from '../../../queries/groups';
+import { DelayedTransition } from '@/components/chakra/DelayedTransition/DelayedTransition';
+import Form from '@/components/Forms/Form/Form';
+import { useFormConfig } from '@/form/formConfig';
+import { createGroup } from '@/queries/groups';
+import { closeDialog } from '@/state/reducers/dialog/dialogSlice';
+import { useAppDispatch } from '@/state/store';
 
 export const CreateGroupDialog = () => {
 
@@ -17,7 +17,7 @@ export const CreateGroupDialog = () => {
 
     const dispatch = useAppDispatch();
 
-    const navigate = useNavigate();
+    const router = useRouter();
 
     const {
         mutate,
@@ -39,7 +39,7 @@ export const CreateGroupDialog = () => {
     useEffect(() => {
         if (isSuccess) {
             dispatch(closeDialog());
-            navigate('/');
+            router.push('/');
         }
     }, [isSuccess]);
 

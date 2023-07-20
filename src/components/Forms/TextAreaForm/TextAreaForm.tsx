@@ -1,12 +1,13 @@
-import React, {useCallback, useMemo} from 'react';
+import React, { useCallback, useMemo } from 'react';
 
-import {Button, Flex, HStack, Text, VStack} from '@chakra-ui/react';
-import {ErrorText} from 'components/chakra/ErrorText/ErrorText';
-import {TextAreaFormProps} from 'components/Forms/TextAreaForm/TextAreaForm.types';
-import {getFormFieldErrors, getNonFieldErrors} from 'components/Forms/util';
-import {InputWithError} from 'components/InputWithError/InputWithError';
-import {Field, Form as FormikForm, Formik} from 'formik';
+import { Button, Flex, HStack, Text, VStack } from '@chakra-ui/react';
+import { Field, Form as FormikForm, Formik } from 'formik';
 import { useTranslation } from 'react-i18next';
+
+import { ErrorText } from '@/components/chakra/ErrorText/ErrorText';
+import { TextAreaFormProps } from '@/components/Forms/TextAreaForm/TextAreaForm.types';
+import { getFormFieldErrors, getNonFieldErrors } from '@/components/Forms/util';
+import { InputWithError } from '@/components/InputWithError/InputWithError';
 
 export const TextAreaForm = (props: TextAreaFormProps) => {
     const {
@@ -55,10 +56,10 @@ export const TextAreaForm = (props: TextAreaFormProps) => {
         }
 
         return <Button type={'button'}
-                       minWidth={'100px'}
-                       className={'cancelButton'}
-                       onClick={onCancel}
-                       isDisabled={disabled}>
+            minWidth={'100px'}
+            className={'cancelButton'}
+            onClick={onCancel}
+            isDisabled={disabled}>
             <Text fontSize={'12px'}>{t('CANCEL')}</Text>
         </Button>;
     }, [useCancelButton, disabled]);
@@ -111,10 +112,10 @@ export const TextAreaForm = (props: TextAreaFormProps) => {
                     <HStack {...buttonsStackProps}>
                         {renderCancelButton}
                         <Button bg={'#5568FE'}
-                                _hover={{ bg: '#5f70fb' }}
-                                type={'submit'}
-                                width={'100%'}
-                                isDisabled={disabled}>
+                            _hover={{ bg: '#5f70fb' }}
+                            type={'submit'}
+                            width={'100%'}
+                            isDisabled={disabled}>
                             <Text fontSize={'12px'}>{submitButtonTextKey}</Text>
                         </Button>
                     </HStack>

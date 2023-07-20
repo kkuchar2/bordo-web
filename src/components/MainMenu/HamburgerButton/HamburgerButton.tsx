@@ -1,6 +1,6 @@
-import React from "react";
+import React from 'react';
 
-import {StyledHamburgerButton, StyledHamburgerButtonInner} from "./style";
+import { StyledHamburgerButton, StyledHamburgerButtonInner } from './style';
 
 interface HamburgerButtonProps {
     onClick: () => void;

@@ -1,4 +1,4 @@
-import {Conversation} from 'state/reducers/conversations/conversationsSlice.types';
+import { Conversation } from '@/state/reducers/conversations/conversationsSlice.types';
 
 export const getConversationName = (currentUsername: string, conversation: Conversation, isNew: boolean) => {
 

@@ -1,8 +1,8 @@
-import {queryClient} from '../App';
-import {FriendshipRequest} from '../types/friendship';
+import { UserProfile } from './account/types';
+import { authGet, authPost } from './base';
 
-import {UserProfile} from './account/types';
-import {authGet, authPost} from './base';
+import { queryClient } from '@/config';
+import { FriendshipRequest } from '@/types/friendship';
 
 interface FriendRequestIdRequestData {
     id: number;

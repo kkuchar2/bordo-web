@@ -1,6 +1,8 @@
-import {useEffect, useState} from "react";
-import i18n from "../i18n";
-import {SUPPORTED_LANGUAGES} from "../App";
+import { useEffect, useState } from 'react';
+
+import i18n from '../i18n';
+
+import { SUPPORTED_LANGUAGES } from '@/config';
 
 export const useI18n = () => {
     const [loaded, setLoaded] = useState(false);
@@ -38,4 +40,4 @@ export const useI18n = () => {
     }, []);
 
     return loaded;
-}
+};

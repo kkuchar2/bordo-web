@@ -1,11 +1,12 @@
-import React, {useCallback, useRef} from 'react';
+import React, { useCallback, useRef } from 'react';
 
-import {Button, Input, Text} from '@chakra-ui/react';
-import {CloudArrowUpIcon} from '@heroicons/react/24/solid';
-import {CenterFlex} from 'components/chakra/CenterFlex/CenterFlex';
+import { Button, Input, Text } from '@chakra-ui/react';
+import { CloudArrowUpIcon } from '@heroicons/react/24/solid';
 
-import {ChangeAvatarModeSelectorProps} from './ChangeAvatarModeSelector.types';
-import {StyledSelectGIFCircle} from './style';
+import { ChangeAvatarModeSelectorProps } from './ChangeAvatarModeSelector.types';
+import { StyledSelectGIFCircle } from './style';
+
+import { CenterFlex } from '@/components/chakra/CenterFlex/CenterFlex';
 
 export const ChangeAvatarModeSelector = (props: ChangeAvatarModeSelectorProps) => {
 
@@ -20,32 +21,32 @@ export const ChangeAvatarModeSelector = (props: ChangeAvatarModeSelectorProps) =
     return <CenterFlex gap={'20px'}>
         <CenterFlex direction={'column'} gap={'20px'}>
             <Button onClick={openFileSelectionWindow}
-                    borderRadius={'full'}
-                    width={'150px'}
-                    height={'150px'}
-                    display={'flex'}
-                    alignItems={'center'}
-                    justifyContent={'center'}
-                    flexDirection={'column'}
-                    gap={'20px'}>
+                borderRadius={'full'}
+                width={'150px'}
+                height={'150px'}
+                display={'flex'}
+                alignItems={'center'}
+                justifyContent={'center'}
+                flexDirection={'column'}
+                gap={'20px'}>
 
                 <CloudArrowUpIcon width={40} color={'#a5a5a5'}/>
             </Button>
             <Input type={'file'} accept={'image/*'} ref={inputRef} onChange={onFileSelected}
-                   style={{ display: 'none' }}/>
+                style={{ display: 'none' }}/>
             <Text>{translation('UPLOAD_IMAGE')}</Text>
         </CenterFlex>
 
         <CenterFlex direction={'column'} gap={'20px'}>
             <Button onClick={onAnimatedAvatarSelected}
-                    borderRadius={'full'}
-                    width={'150px'}
-                    height={'150px'}
-                    display={'flex'}
-                    alignItems={'center'}
-                    justifyContent={'center'}
-                    flexDirection={'column'}
-                    gap={'20px'}>
+                borderRadius={'full'}
+                width={'150px'}
+                height={'150px'}
+                display={'flex'}
+                alignItems={'center'}
+                justifyContent={'center'}
+                flexDirection={'column'}
+                gap={'20px'}>
 
                 <StyledSelectGIFCircle url={'https://media3.giphy.com/media/lgcUUCXgC8mEo/giphy.gif?'}/>
             </Button>

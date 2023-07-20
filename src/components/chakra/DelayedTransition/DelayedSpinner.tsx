@@ -1,9 +1,10 @@
-import React, {ReactNode, useEffect, useRef, useState} from 'react';
+import React, { ReactNode, useEffect, useRef, useState } from 'react';
 
-import {FlexProps} from '@chakra-ui/layout';
-import {Box, BoxProps, Flex, Spinner, SpinnerProps} from '@chakra-ui/react';
-import {opacityShowUpAnimation} from 'components/Forms/animation';
-import {motion} from 'framer-motion';
+import { FlexProps } from '@chakra-ui/layout';
+import { Box, BoxProps, Flex, Spinner, SpinnerProps } from '@chakra-ui/react';
+import { motion } from 'framer-motion';
+
+import { opacityShowUpAnimation } from '@/components/Forms/animation';
 
 interface DelayedSpinnerProps {
     pending: boolean;

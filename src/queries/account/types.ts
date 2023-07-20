@@ -14,23 +14,23 @@ export interface Friend {
 }
 
 export interface UserProfile {
-    about: string | null;
-    avatar: string | null;
+    about: string;
+    avatar: string;
     friends: Friend[];
 }
 
 export interface GoogleAccountInfo {
     connected: boolean;
-    email: string | null;
+    email: string;
 }
 
 export interface UserInfo {
     email: EmailAddress,
     username: string,
     profile: UserProfile,
-    role?: string;
-    google_account?: GoogleAccountInfo;
-    has_usable_password?: boolean;
+    role: string;
+    google_account: GoogleAccountInfo;
+    has_usable_password: boolean;
 }
 
 export type User = UserAuth & UserInfo;

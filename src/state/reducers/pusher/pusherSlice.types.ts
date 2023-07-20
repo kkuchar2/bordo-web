@@ -1,4 +1,4 @@
-import {NotificationSubscription} from '../../../queries/notifications';
+import { NotificationSubscription } from '../../../queries/notifications';
 
 export interface PusherState {
     auths: SocketAuthInfo;

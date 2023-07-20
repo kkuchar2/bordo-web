@@ -1,7 +1,8 @@
-import React, {useEffect, useMemo, useState} from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
-import {List, ListItem, Text} from '@chakra-ui/react';
-import {emojiMap, getExtendedMatchingEmojiMap} from 'tools/smileToEmoji';
+import { List, ListItem, Text } from '@chakra-ui/react';
+
+import { emojiMap, getExtendedMatchingEmojiMap } from '@/tools/smileToEmoji';
 
 interface EmojiSuggestionPanelProps {
     query: string;
@@ -69,33 +70,33 @@ export const EmojiSuggestionPanel = (props: EmojiSuggestionPanelProps) => {
     }, [itemHeight, borderSize, availableEmojis]);
 
     return <List w={'75%'}
-                 maxW={'300px'}
-                 h={`${itemHeight * availableEmojis.length + 2 * borderSize}px`}
-                 top={topPosition}
-                 boxSizing={'border-box'}
-                 border={`${borderSize}px solid ${'#484848'}`}
-                 left={0}
-                 bg={'#1e1e1e'}
-                 zIndex={1}
-                 position={'absolute'}>
+        maxW={'300px'}
+        h={`${itemHeight * availableEmojis.length + 2 * borderSize}px`}
+        top={topPosition}
+        boxSizing={'border-box'}
+        border={`${borderSize}px solid ${'#484848'}`}
+        left={0}
+        bg={'#1e1e1e'}
+        zIndex={1}
+        position={'absolute'}>
         {availableEmojis.map((emoji, index) => {
             return <ListItem key={index}
-                             display={'flex'}
-                             justifyContent={'flex-start'}
-                             alignItems={'center'}
-                             gap={'10px'}
-                             pl={3}
-                             pr={3}
-                             h={`${itemHeight}px`}
-                             boxSizing={'border-box'}
-                             bg={index === focusedIndex ? '#484848' : '#1e1e1e'}
-                             onClick={() => {
-                                 onSelect(emojiMap[emoji]);
-                             }}
-                             _hover={{
-                                 bg: hoverColor,
-                                 cursor: 'pointer'
-                             }}>
+                display={'flex'}
+                justifyContent={'flex-start'}
+                alignItems={'center'}
+                gap={'10px'}
+                pl={3}
+                pr={3}
+                h={`${itemHeight}px`}
+                boxSizing={'border-box'}
+                bg={index === focusedIndex ? '#484848' : '#1e1e1e'}
+                onClick={() => {
+                    onSelect(emojiMap[emoji]);
+                }}
+                _hover={{
+                    bg: hoverColor,
+                    cursor: 'pointer'
+                }}>
                 <Text>{emojiMap[emoji]}</Text>
                 <Text>{emoji}</Text>
             </ListItem>;

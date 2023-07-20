@@ -1,7 +1,8 @@
-import {NotificationChannelInfo, NotificationSubscription} from 'queries/notifications';
-import {Dispatch} from 'redux';
+import { Dispatch } from 'redux';
 
-import {pusherActions as actions} from './../reducers/pusher/pusherSlice';
+import { pusherActions as actions } from './../reducers/pusher/pusherSlice';
+
+import { NotificationChannelInfo, NotificationSubscription } from '@/queries/notifications';
 
 export const pusherConnect = () => {
     return async (dispatch: Dispatch) => {

@@ -1,7 +1,8 @@
-import {FlexProps} from '@chakra-ui/layout';
-import {IconProps} from 'icon/icon.types';
-import {AppDispatch} from 'state/store';
-import {TFunction} from "i18next";
+import { FlexProps } from '@chakra-ui/layout';
+import { TFunction } from 'i18next';
+
+import { IconProps } from '@/icon/icon.types';
+import { AppDispatch } from '@/state/store';
 
 export interface IDialogComponentProps {
     title?: string;

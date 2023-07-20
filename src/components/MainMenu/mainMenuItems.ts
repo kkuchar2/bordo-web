@@ -1,12 +1,4 @@
-import {ArrowRightOnRectangleIcon} from '@heroicons/react/20/solid';
-import {AxiosConfigs} from 'queries/base';
-import {NavigateFunction} from 'react-router-dom';
-import {clearCurrentView, storeCurrentView} from 'state/reducers/application/appSlice';
-import {store} from 'state/store';
-
-import {queryClient} from '../../App';
-import ApiClient from '../../client';
-import {IconProps} from '../../icon/icon.types';
+import { IconProps } from '@/icon/icon.types';
 
 export interface MainMenuItem {
     id: string;
@@ -14,7 +6,6 @@ export interface MainMenuItem {
     displayName: string;
     description: string;
     isAction?: boolean;
-    onClick?: (navigate: NavigateFunction) => void;
     icon?: IconProps;
 }
 
@@ -31,49 +22,39 @@ export interface MenuItems {
     [groupKey: string]: Group
 }
 
-const viewSwitchItem = (item: MainMenuItem) => {
-    return {
-        ...item,
-        onClick: (navigate: NavigateFunction) => {
-            store.dispatch(storeCurrentView(item.id));
-            navigate(item.url);
-        }
-    };
-};
-
 export const mainMenuItems: MenuItems = {
     pages: {
         groupName: 'PAGES',
         groupItems: {
-            Home: viewSwitchItem({
+            Home: {
                 id: 'home',
                 url: '/home',
                 displayName: 'HOME_PAGE',
-                description: ''
-            }),
-            Friends: viewSwitchItem({
+                description: '',
+            },
+            Friends: {
                 id: 'friends',
                 url: '/friends',
                 displayName: 'FRIENDS',
                 description: '',
-            }),
-            Account: viewSwitchItem({
+            },
+            Account: {
                 id: 'account',
                 url: '/account',
                 displayName: 'ACCOUNT_SETTINGS',
                 description: '',
-            })
+            }
         }
     },
     personalisation: {
         groupName: 'PERSONALISATION',
         groupItems: {
-            Language: viewSwitchItem({
+            Language: {
                 id: 'language',
                 url: '/language',
                 displayName: 'LANGUAGE',
                 description: '',
-            })
+            }
         }
     },
     actions: {

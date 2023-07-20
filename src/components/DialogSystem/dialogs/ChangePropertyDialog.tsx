@@ -1,12 +1,12 @@
-import React, {useCallback, useEffect} from 'react';
+import React, { useCallback, useEffect } from 'react';
 
-import {Box} from '@chakra-ui/react';
-import {DelayedTransition} from 'components/chakra/DelayedTransition/DelayedTransition';
-import Form from 'components/Forms/Form/Form';
-import {closeDialog} from 'state/reducers/dialog/dialogSlice';
-import {BaseDialogProps, DialogProps} from 'state/reducers/dialog/dialogSlice.types';
+import { Box } from '@chakra-ui/react';
 
-import {useFormConfig} from '../../../api/formConfig';
+import { DelayedTransition } from '@/components/chakra/DelayedTransition/DelayedTransition';
+import Form from '@/components/Forms/Form/Form';
+import { useFormConfig } from '@/form/formConfig';
+import { closeDialog } from '@/state/reducers/dialog/dialogSlice';
+import { BaseDialogProps, DialogProps } from '@/state/reducers/dialog/dialogSlice.types';
 
 export interface ChangePropertyDialogProps {
     queryFunc: any;

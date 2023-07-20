@@ -1,8 +1,9 @@
 import React from 'react';
 
-import {Flex, Text} from '@chakra-ui/react';
-import {NavLink} from 'components/chakra/NavLink/NavLink';
-import {useTranslation} from 'react-i18next';
+import { Flex, Text } from '@chakra-ui/react';
+import { useTranslation } from 'react-i18next';
+
+import { NavLink } from '@/components/chakra/NavLink/NavLink';
 
 const UserAgreements = () => {
 
@@ -12,9 +13,11 @@ const UserAgreements = () => {
         <Text textAlign={'center'} fontSize={'sm'} as={'span'}>
             {t('USER_AGREEMENTS')}
             <NavLink color={'#ffffff'}
-                     padding={2}
-                     fontWeight={'semibold'}
-                     to={'/userAgreement'}>{t('MORE')}</NavLink>
+                padding={2}
+                fontWeight={'semibold'}
+                href={'/userAgreement'}>
+                {t('MORE')}
+            </NavLink>
         </Text>
     </Flex>;
 };

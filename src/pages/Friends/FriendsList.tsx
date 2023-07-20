@@ -1,17 +1,17 @@
 import React from 'react';
 
-import {Box, Center, Grid, GridItem} from '@chakra-ui/react';
-
+import { Box, Center, Grid, GridItem } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
-import {getFriends} from '../../queries/people';
 
-import {FriendItem} from './FriendItem';
+import { getFriends } from '../../queries/people';
+
+import { FriendItem } from './FriendItem';
 
 export const FriendsList = () => {
 
     const { data: friends } = getFriends();
 
-    const {t} = useTranslation();
+    const { t } = useTranslation();
 
     if (!friends) {
         return <Center w={'100%'} h={'100%'}>{'Loading...'}</Center>;

@@ -1,10 +1,10 @@
 import React from 'react';
 
-import {VStack} from '@chakra-ui/react';
-import {ErrorText} from 'components/chakra/ErrorText/ErrorText';
+import { VStack } from '@chakra-ui/react';
+import { TFunction } from 'i18next';
 
-import {QueryResponseErrorData} from '../../queries/base';
-import {TFunction} from "i18next";
+import { ErrorText } from '@/components/chakra/ErrorText/ErrorText';
+import { QueryResponseErrorData } from '@/queries/base';
 
 interface Error {
     code: string;
@@ -57,13 +57,13 @@ export const getFormFieldErrors = (error: any, fieldName: string) => {
     return fieldErrors.map(mapError);
 };
 
-export const getNonFieldErrors = (errors: any) => {
+export const getNonFieldErrors = (error: QueryResponseErrorData) => {
 
-    if (!errors) {
+    if (!error) {
         return [];
     }
 
-    const formErrors = errors.form;
+    const formErrors = error.form;
 
     if (!formErrors) {
         return [];
@@ -76,13 +76,15 @@ export const renderNonFieldErrors = (error: QueryResponseErrorData, t: TFunction
     return <VStack spacing={'5px'} align={'stretch'}>
         {
             getNonFieldErrors(error)
-                .filter((err) => {
+                .filter(function (err: QueryResponseErrorData) {
                     if (!excludeList) {
                         return true;
                     }
                     return !excludeList.includes(err);
                 })
-                .map((error, idx) => <ErrorText key={idx}>{t(error)}</ErrorText>)
+                .map((error: any, idx: number) => {
+                    return <ErrorText key={idx}>{t(error)}</ErrorText>;
+                })
         }
     </VStack>;
 };

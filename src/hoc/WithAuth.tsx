@@ -1,8 +1,9 @@
-import React, {ComponentType} from 'react';
+import React, { ComponentType } from 'react';
 
-import {DelayedTransition} from 'components/chakra/DelayedTransition/DelayedTransition';
-import {getUser} from 'queries/account';
-import {Navigate} from 'react-router-dom';
+import { redirect } from 'next/navigation';
+
+import { DelayedTransition } from '@/components/chakra/DelayedTransition/DelayedTransition';
+import { getUser } from '@/queries/account';
 
 interface WithAuthProps {
     name?: string;
@@ -17,10 +18,10 @@ const WithAuth = (WrappedComponent: ComponentType, withAuthProps: WithAuthProps)
 
         if (!user && isLoading) {
             return <DelayedTransition pending={true}
-                               position={'absolute'}
-                               bottom={0}
-                               left={0}
-                               p={0} w={'100%'}/>;
+                position={'absolute'}
+                bottom={0}
+                left={0}
+                p={0} w={'100%'}/>;
         }
 
         const {
@@ -29,10 +30,10 @@ const WithAuth = (WrappedComponent: ComponentType, withAuthProps: WithAuthProps)
         } = withAuthProps;
 
         if (redirectToHomeOnAutologin && user && isSuccess) {
-            return <Navigate to={'/home'}/>;
+            return redirect('/home');
         }
         else if (redirectToLoginPageOnUnauthenticated && !user) {
-            return <Navigate to={'/'}/>;
+            return redirect('/');
         }
         else if (!redirectToHomeOnAutologin && user) {
             return <WrappedComponent {...props} />;

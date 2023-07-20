@@ -1,16 +1,13 @@
-import React, {useCallback, useEffect, useRef} from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 
-import {Button, Flex, Menu, MenuButton, MenuItem, MenuList, Text} from '@chakra-ui/react';
-import {ChatBubbleLeftIcon, UserIcon, UserPlusIcon} from '@heroicons/react/24/solid';
-import {ProfileAvatar} from 'components/chakra/Avatar/Avatar';
-import {ButtonWithIcon} from 'components/chakra/ButtonWithIcon/ButtonWithIcon';
+import { Button, Flex, Menu, MenuButton, MenuItem, MenuList, Text } from '@chakra-ui/react';
+import { ChatBubbleLeftIcon, UserIcon, UserPlusIcon } from '@heroicons/react/24/solid';
+import { useParams } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
-import {useSelector} from 'react-redux';
-import {useParams} from 'react-router-dom';
-import {RootState, useAppDispatch} from 'state/store';
+import { useSelector } from 'react-redux';
 
 import WithAuth from '../hoc/WithAuth';
-import {getUser} from '../queries/account';
+import { getUser } from '../queries/account';
 import {
     cancelFriendRequest,
     getFriends,
@@ -21,7 +18,11 @@ import {
     unfriend
 } from '../queries/people';
 
-import {ReceivedFriendRequest} from './Friends/ReceivedFriendRequest';
+import { ReceivedFriendRequest } from './Friends/ReceivedFriendRequest';
+
+import { ProfileAvatar } from '@/components/chakra/Avatar/Avatar';
+import { ButtonWithIcon } from '@/components/chakra/ButtonWithIcon/ButtonWithIcon';
+import { RootState, useAppDispatch } from '@/state/store';
 
 const UserView = () => {
 
@@ -33,7 +34,7 @@ const UserView = () => {
 
     const listRef = useRef<HTMLUListElement>(null);
 
-    const {t} = useTranslation();
+    const { t } = useTranslation();
 
     const { data: user } = getUser();
     const { data: profile } = getProfile(params.username)({ staleTime: 1 });
@@ -101,7 +102,7 @@ const UserView = () => {
                 {!isFriend && !friendRequest && !isCurrentUser && <ButtonWithIcon
                     title={'add-send-friend-request'}
                     className={`flex gap-[10px] text-[14px] text-white ${requestSent ? 'bg-red-500' : 'bg-purple-500'} 
-                    hover:bg-purple-600 focus:bg-purple-600 active:bg-purple-600 disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed`}
+                    hover:bg-purple-600 focus:bg-purple-600 active:bg-purple-600 disabled:cursor-not-allowed disabled:bg-gray-200 disabled:text-gray-400`}
                     onClick={onSendCancelFriendRequest}
                     IconComponent={requestSent ? null : UserPlusIcon}>
                     {requestSent ? 'Cancel friend request' : 'Send friend request'}</ButtonWithIcon>}
@@ -119,7 +120,7 @@ const UserView = () => {
 
                 {isFriend && <ButtonWithIcon
                     title={'start-conversation'}
-                    className={`flex flex-row-reverse gap-[10px] text-[14px] text-white bg-purple-500 hover:bg-purple-600 focus:bg-purple-600 active:bg-purple-600 disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed`}
+                    className={'flex flex-row-reverse gap-[10px] bg-purple-500 text-[14px] text-white hover:bg-purple-600 focus:bg-purple-600 active:bg-purple-600 disabled:cursor-not-allowed disabled:bg-gray-200 disabled:text-gray-400'}
                     disabled={false}
                     IconComponent={ChatBubbleLeftIcon}>
                     <Text fontSize={'sm'}>{'Message'}</Text>

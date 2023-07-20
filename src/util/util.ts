@@ -1,5 +1,6 @@
 import _ from 'lodash';
-import {User, UserProfile} from 'queries/account/types';
+
+import { User } from '@/queries/account/types';
 
 export const humanize = (str: string) => {
     let i, frags = str.split('_');
@@ -22,13 +23,6 @@ export interface FormData {
 export const getAvatar = (user: User) => {
     const profile = user?.profile;
 
-    if (!profile) {
-        return null;
-    }
-    return profile.avatar;
-};
-
-export const getAvatarFromProfile = (profile: UserProfile) => {
     if (!profile) {
         return null;
     }

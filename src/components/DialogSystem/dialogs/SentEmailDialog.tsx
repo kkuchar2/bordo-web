@@ -1,9 +1,10 @@
-import React, {useCallback} from 'react';
+import React, { useCallback } from 'react';
 
-import {Button, Flex} from '@chakra-ui/react';
-import {useNavigate} from 'react-router-dom';
-import {closeDialog} from 'state/reducers/dialog/dialogSlice';
-import {BaseDialogProps, DialogProps} from 'state/reducers/dialog/dialogSlice.types';
+import { Button, Flex } from '@chakra-ui/react';
+import { useRouter } from 'next/navigation';
+
+import { closeDialog } from '@/state/reducers/dialog/dialogSlice';
+import { BaseDialogProps, DialogProps } from '@/state/reducers/dialog/dialogSlice.types';
 
 export interface SentEmailDialogProps {
     showSignInButton: boolean;
@@ -14,13 +15,13 @@ export const SentEmailDialog = (props: BaseDialogProps & DialogProps<SentEmailDi
 
     const { dialog, data, dispatch, t } = props;
 
-    const { showSignInButton = false, showGotItButton = true } = data;
+    const router = useRouter();
 
-    const navigate = useNavigate();
+    const { showSignInButton = false, showGotItButton = true } = data;
 
     const onSignInClick = useCallback(() => {
         dispatch(closeDialog());
-        navigate('/');
+        router.push('/');
     }, []);
 
     const onGotItClick = useCallback(() => {

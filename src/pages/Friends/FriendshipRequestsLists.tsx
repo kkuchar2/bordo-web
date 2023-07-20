@@ -1,12 +1,12 @@
-import React, {useCallback} from 'react';
+import React, { useCallback } from 'react';
 
-import {Center, Flex, Text} from '@chakra-ui/react';
-
-import {FriendshipRequest} from '../../types/friendship';
-
-import {ReceivedFriendshipRequestList} from './ReceivedFriendshipRequestList';
-import {SentFriendshipRequestList} from './SentFriendshipRequestList';
+import { Center, Flex, Text } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
+
+import { FriendshipRequest } from '../../types/friendship';
+
+import { ReceivedFriendshipRequestList } from './ReceivedFriendshipRequestList';
+import { SentFriendshipRequestList } from './SentFriendshipRequestList';
 
 interface PendingFriendRequestListProps {
     sentRequests: FriendshipRequest[];
@@ -24,7 +24,7 @@ export const FriendshipRequestsLists = (props: PendingFriendRequestListProps) =>
         receivedRequestsTitleFunc,
     } = props;
 
-    const {t} = useTranslation();
+    const { t } = useTranslation();
 
     const onAccept = useCallback((request: FriendshipRequest) => {
         console.log('Accepted: ', request);

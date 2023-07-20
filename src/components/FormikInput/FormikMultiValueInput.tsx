@@ -1,10 +1,11 @@
-import React, {useMemo} from 'react';
+import React, { useMemo } from 'react';
 
-import {VStack} from '@chakra-ui/react';
-import {ErrorText} from 'components/chakra/ErrorText/ErrorText';
-import {MultiUserSelect} from 'components/Select/MultiUserSelect/MultiUserSelect';
-import {FormikFormProps} from 'formik';
-import {useTranslation} from 'react-i18next';
+import { VStack } from '@chakra-ui/react';
+import { FormikFormProps } from 'formik';
+import { useTranslation } from 'react-i18next';
+
+import { ErrorText } from '@/components/chakra/ErrorText/ErrorText';
+import { MultiUserSelect } from '@/components/Select/MultiUserSelect/MultiUserSelect';
 
 interface FormikMultiValueInputProps {
     field: any,
@@ -51,7 +52,7 @@ export const FormikMultiValueInput = (props: FormikMultiValueInputProps) => {
     }, [formikErrors, id]);
 
     return <VStack spacing={'7px'} align={'stretch'} position={'relative'}>
-        <MultiUserSelect />
+        <MultiUserSelect/>
         {renderErrors}
         {renderFormikErrors}
     </VStack>;
