@@ -162,7 +162,7 @@ const Dialogs = () => {
 
     return <div
         className={'dialogScene absolute left-0 top-0 z-[1] box-border flex h-full w-full items-center justify-center bg-[rgba(30,30,30,0.8)] backdrop-blur-[5px]'}
-        onKeyDown={handleKeyDown}
+
         onMouseDown={onClick}{...dialogBgAnimation}>
         {dialog}
     </div>;
