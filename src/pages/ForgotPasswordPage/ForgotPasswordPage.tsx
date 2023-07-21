@@ -86,6 +86,4 @@ const ForgotPassword = () => {
     </Center>;
 };
 
-ForgotPassword.displayName = 'ForgotPassword';
-
 export default ForgotPassword;

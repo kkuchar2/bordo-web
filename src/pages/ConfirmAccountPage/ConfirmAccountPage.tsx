@@ -1,30 +1,35 @@
-import React, { useEffect } from 'react';
+'use client';
 
-import { useParams, useRouter } from 'next/navigation';
+import { useEffect } from 'react';
+
+import { useRouter } from 'next/navigation';
 
 import { DelayedTransition } from '@/components/chakra/DelayedTransition/DelayedTransition';
-import { showErrorToast } from '@/components/Toast/readyToastNotifications';
+import { showErrorToast, showSuccessToast } from '@/components/Toast/readyToastNotifications';
 import { confirmAccount } from '@/queries/account';
 
-const ConfirmAccount = () => {
+type ConfirmAccountPageProps = {
+    token: string;
+}
 
-    const params = useParams();
+const ConfirmAccountPage = (props: ConfirmAccountPageProps) => {
+
+    const { token } = props;
+
     const router = useRouter();
 
-    const { isIdle, isLoading, error, isError, isSuccess, mutate } = confirmAccount();
+    const { isLoading, isError, isSuccess, mutate } = confirmAccount();
 
     useEffect(() => {
-        if (!params) {
+        if (!token) {
             showErrorToast('Verification link invalid or expired');
             router.push('/');
             return;
         }
-
-        console.log('Verifying with token: ', params.token);
         mutate({
-            key: params.token
+            key: decodeURIComponent(token),
         });
-    }, [params]);
+    }, [token]);
 
     useEffect(() => {
         if (isError) {
@@ -35,6 +40,7 @@ const ConfirmAccount = () => {
 
     useEffect(() => {
         if (isSuccess) {
+            showSuccessToast('Account verified successfully');
             router.push('/');
         }
     }, [isSuccess]);
@@ -46,4 +52,4 @@ const ConfirmAccount = () => {
         p={0} w={'100%'}/>;
 };
 
-export default ConfirmAccount;
+export default ConfirmAccountPage;

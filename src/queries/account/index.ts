@@ -10,7 +10,6 @@ import {
 import { getNonFieldErrors } from '@/components/Forms/util';
 import { showSuccessToast } from '@/components/Toast/readyToastNotifications';
 import { queryClient } from '@/config';
-import { clearCurrentView } from '@/state/reducers/application/appSlice';
 import { closeDialog } from '@/state/reducers/dialog/dialogSlice';
 import { store } from '@/state/store';
 
@@ -121,8 +120,23 @@ export const register = () => {
 export const logout = () => {
     return authPost(['logout'], 'account/logout')({
         onSuccess: () => {
-            store.dispatch(clearCurrentView());
-            queryClient.invalidateQueries(['user']);
+            queryClient.setQueryData(['user'], null);
+        }
+    });
+};
+
+export const deleteAccount = () => {
+    return authPost(['deleteAccount'], 'account/delete-account')({
+        onSuccess: () => {
+            queryClient.setQueryData(['user'], null);
+        }
+    });
+};
+
+export const disableAccount = () => {
+    return authPost(['disableAccount'], 'account/disable-account')({
+        onSuccess: () => {
+            queryClient.setQueryData(['user'], null);
         }
     });
 };
@@ -139,23 +153,6 @@ export const googleConnect = () => {
     return authPost(['googleConnect'], 'account/google-connect')({
         onSuccess: () => {
             queryClient.invalidateQueries(['user']);
-        }
-    });
-};
-
-export const deleteAccount = () => {
-    return authPost<any>(['deleteAccount'], 'account/delete-account')({
-        onSuccess: () => {
-            showSuccessToast('Account deleted');
-            queryClient.removeQueries(['user']);
-        },
-    });
-};
-
-export const disableAccount = () => {
-    return authPost(['disableAccount'], 'account/disable-account')({
-        onSuccess: () => {
-            queryClient.removeQueries(['user']);
         }
     });
 };
@@ -197,11 +194,7 @@ export const googleDisconnect = () => {
 };
 
 export const getUser = () => {
-    return authGet<User>(['user'], 'account/user')({
-        onError: () => {
-            queryClient.setQueryData(['user'], null);
-        }
-    });
+    return authGet<User>(['user'], 'account/user')({});
 };
 
 export const prepareAvatarUploadInfo = () => {

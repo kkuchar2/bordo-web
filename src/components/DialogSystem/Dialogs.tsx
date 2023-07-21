@@ -1,9 +1,7 @@
-import React, { useCallback, useEffect, useMemo } from 'react';
+import { ReactElement, useCallback, useEffect, useMemo } from 'react';
 
-import { Box, chakra, Flex, HStack, Stack, Text } from '@chakra-ui/react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import { ArrowLeftIcon } from '@heroicons/react/24/solid';
-import { isValidMotionProp, motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 
@@ -16,30 +14,20 @@ import { closeDialog } from '@/state/reducers/dialog/dialogSlice';
 import { DialogSliceState } from '@/state/reducers/dialog/dialogSlice.types';
 import { RootState, useAppDispatch } from '@/state/store';
 
-const MotionFlex = motion(Flex);
-
 interface IDialogComponentMap {
-    [componentKey: string]: (props: any) => JSX.Element;
+    [componentKey: string]: (props: any) => ReactElement | null;
 }
 
 const componentMap: IDialogComponentMap = {
     SentEmailDialog: dialogs.SentEmailDialog,
     DeleteAccountDialog: dialogs.DeleteAccountDialog,
     DisconnectGoogleDialog: dialogs.DisconnectGoogleDialog,
-    VerifyAccountDialog: dialogs.VerifyAccountDialog,
     ChangeAvatarDialog: dialogs.ChangeAvatarDialog,
     ChangePropertyDialog: dialogs.ChangePropertyDialog,
     ServiceUnavailableDialog: dialogs.ServiceUnavailableDialog,
     PasswordCreationRequiredDialog: dialogs.PasswordCreationRequiredDialog,
-    CreateGroupDialog: dialogs.CreateGroupDialog,
+    VerifyAccountDialog: dialogs.VerifyAccountDialog
 };
-
-const ChakraBox = chakra(motion(Box), {
-    shouldForwardProp: (prop) => {
-        return isValidMotionProp(prop)
-            || prop === 'children' || prop === 'onMouseDown' || prop === 'onKeyDown';
-    },
-});
 
 const Dialogs = () => {
     const dialogState = useSelector<RootState, DialogSliceState>((state: RootState) => state.dialog);
@@ -52,9 +40,8 @@ const Dialogs = () => {
 
     const { t } = useTranslation();
 
-    const handleKeyDown = useCallback((event) => {
-        if (componentProps?.dialog && isOpened && event.keyCode === 27) {
-            // escape
+    const handleKeyDown = useCallback((event: KeyboardEvent) => {
+        if (componentProps?.dialog && isOpened && event.key === 'Escape') {
             handleCancel();
         }
     }, [componentProps, isOpened]);
@@ -84,11 +71,13 @@ const Dialogs = () => {
 
     const renderDescription = useMemo(() => {
         if (isOpened && componentProps.dialog?.description) {
-            return <Text maxW={'400px'} fontSize={'sm'}>{t(componentProps.dialog.description)}</Text>;
+            return <div className={'max-w-[400px] text-sm'}>
+                {t(componentProps.dialog.description)}
+            </div>;
         }
     }, [componentProps, isOpened, t]);
 
-    const onClick = useCallback((e) => {
+    const onClick = useCallback((e: any) => {
         if (!componentProps?.dialog?.closeable) {
             return;
         }
@@ -119,14 +108,12 @@ const Dialogs = () => {
         const title = componentProps?.dialog?.title;
         const icon = componentProps?.dialog?.icon;
 
-        return <HStack spacing={'10px'} justifyContent={'flex-start'} align={'center'} flexGrow={1}>
+        return <div className={'flex grow items-center justify-start gap-[10px]'}>
             {icon &&
-                <Flex align={'center'} justify={'center'}>
+                <div className={'grid place-items-center'}>
                     <Icon {...icon}/>
-                </Flex>}
-            {title && <Text flexGrow={1} fontSize={'md'} fontWeight={'bold'}>
-                {t(title)}
-            </Text>}
+                </div>}
+            {title && <div className={'grow font-bold'}>{t(title)}</div>}
             <ButtonWithIcon title={'Close'}
                 className={'h-[40px] w-[40px] bg-opacity-10 hover:bg-opacity-20 focus:bg-opacity-20 active:bg-opacity-20'}
                 iconColor={'rgba(255,255,255,0.48)'}
@@ -136,7 +123,7 @@ const Dialogs = () => {
                     size: 25
                 }}
                 onClick={handleCancel}/>
-        </HStack>;
+        </div>;
     }, [componentProps, t]);
 
     const dialog = useMemo(() => {
@@ -146,26 +133,22 @@ const Dialogs = () => {
 
         const Component = componentMap[componentName];
 
-        return <MotionFlex direction={'column'}
-            key={componentName}
-            bg={'#2f2f2f'}
-            gap={'20px'}
-            borderRadius={'md'}
+        return <div className={'flex flex-col gap-[20px] rounded-md bg-[#2f2f2f]'}
             {...componentProps.dialog.flexProps}
             {...dialogAnimation}>
-            <Flex direction={'column'} gap={'20px'} w={'100%'} p={'20px'} pb={0}>
-                <Flex w={'100%'} gap={'20px'}>
+            <div className={'flex w-full flex-col gap-[20px] p-[20px] pb-0'}>
+                <div className={'flex w-full gap-[20px]'}>
                     {renderArrowBack}
                     {renderTitle}
-                </Flex>
-                {componentProps?.dialog?.description && <Flex>
+                </div>
+                {componentProps?.dialog?.description && <div className={'flex'}>
                     {renderDescription}
-                </Flex>}
-            </Flex>
-            <Stack p={'20px'} pt={0}>
+                </div>}
+            </div>
+            <div className={'flex p-[20px] pt-0'}>
                 <Component dispatch={dispatch} t={t} {...componentProps} />
-            </Stack>
-        </MotionFlex>;
+            </div>
+        </div>;
     }, [componentProps, t]);
 
     if (!componentName) {
@@ -177,24 +160,12 @@ const Dialogs = () => {
         return null;
     }
 
-    return <ChakraBox
-        className={'dialogScene'}
+    return <div
+        className={'dialogScene absolute left-0 top-0 z-[1] box-border flex h-full w-full items-center justify-center bg-[rgba(30,30,30,0.8)] backdrop-blur-[5px]'}
         onKeyDown={handleKeyDown}
-        w={'100%'}
-        h={'100%'}
-        display={'flex'}
-        alignItems={'center'}
-        justifyContent={'center'}
-        zIndex={1}
-        backdropFilter={'blur(5px)'}
-        bg={'rgba(30,30,30,0.8)'}
-        position={'absolute'}
-        top={0}
-        left={0}
-        boxSizing={'border-box'}
         onMouseDown={onClick}{...dialogBgAnimation}>
         {dialog}
-    </ChakraBox>;
+    </div>;
 };
 
 export default Dialogs;

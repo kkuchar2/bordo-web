@@ -1,7 +1,7 @@
 // noinspection SpellCheckingInspection
 
 import { GiphyFetch } from '@giphy/js-fetch-api';
-import { QueryClient } from '@tanstack/react-query';
+import { QueryCache, QueryClient } from '@tanstack/react-query';
 
 export const GOOGLE_CLIENT_ID = '548057113652-60s2uh11sbfvb8sorn2amii2d4316pbi.apps.googleusercontent.com';
 
@@ -55,6 +55,11 @@ export const giphyFetch = giphyKey ? new GiphyFetch(giphyKey) : null;
 export const SUPPORTED_LANGUAGES = ['en', 'pl'];
 
 export const queryClient = new QueryClient({
+    queryCache: new QueryCache({
+        onError: (err, query) => {
+            console.error(`QueryCache[${query.queryKey}]`, err);
+        }
+    }),
     defaultOptions: {
         queries: {
             refetchOnWindowFocus: false,

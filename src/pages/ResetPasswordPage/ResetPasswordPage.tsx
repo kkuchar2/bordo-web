@@ -3,7 +3,7 @@
 import { useCallback, useEffect } from 'react';
 
 import { Center, Flex, Text } from '@chakra-ui/react';
-import { redirect, useParams } from 'next/navigation';
+import { redirect } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 
 import { DelayedTransition } from '@/components/chakra/DelayedTransition/DelayedTransition';
@@ -12,11 +12,17 @@ import Form from '@/components/Forms/Form/Form';
 import { useFormConfig } from '@/form/formConfig';
 import { getUser, resetPassword, verifyResetPasswordToken } from '@/queries/account';
 
-const ResetPasswordPage = () => {
+type ResetPasswordPageProps = {
+    token: string;
+}
+
+const ResetPasswordPage = (props: ResetPasswordPageProps) => {
 
     const { t } = useTranslation();
 
-    const params = useParams();
+    const { token } = props;
+
+    console.log('Reset password token: ', token);
 
     const formConfig = useFormConfig('resetPassword', t);
 
@@ -44,48 +50,35 @@ const ResetPasswordPage = () => {
         // Get form data
         const { new_password, new_password_confirm } = formData;
 
-        // Get token from url
-        if (!params) {
-            console.error('No params');
-            return;
-        }
-        const token = params.token;
-
         if (!token) {
-            console.error('No token');
+            console.error('No key');
             return;
         }
 
-        // check if token is string or string[]
-        const tokenArr = Array.isArray(token) ? token : token.split(':');
-        const uid = tokenArr[0];
-        const tk = tokenArr[1];
+        const decodedToken = decodeURIComponent(token);
+        const uid = decodedToken.split(':')[0];
+        const tok = decodedToken.split(':')[1];
 
         resetPasswordMutate({
-            new_password: new_password,
-            new_password_confirm: new_password_confirm,
+            new_password1: new_password,
+            new_password2: new_password_confirm,
             uid: uid,
-            token: tk
+            token: tok
         });
-    }, [params]);
+    }, [token]);
 
     useEffect(() => {
-        if (!params) {
-            console.error('No params');
-            return;
-        }
-
-        if (!params.token) {
+        if (!token) {
             console.log('No token');
             return;
         }
 
-        const tokenArr = Array.isArray(params.token) ? params.token : params.token.split(':');
-        const uid = tokenArr[0];
-        const tk = tokenArr[1];
+        const decodedToken = decodeURIComponent(token);
+        const uid = decodedToken.split(':')[0];
+        const tok = decodedToken.split(':')[1];
 
-        verifyTokenMutate({ uid: uid, token: tk });
-    }, []);
+        verifyTokenMutate({ uid: uid, token: tok });
+    }, [token]);
 
     if (verifyTokenLoading || verifyResetPasswordTokenIdle) {
         return <DelayedTransition pending={true}
@@ -96,7 +89,8 @@ const ResetPasswordPage = () => {
     }
 
     if (verifyTokenError) {
-        return redirect('/');
+        console.log('Error: ', verifyTokenError);
+        return null;
     }
 
     if (verifyTokenSuccess) {

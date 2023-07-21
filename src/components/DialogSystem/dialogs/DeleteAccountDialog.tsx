@@ -34,7 +34,6 @@ export const DeleteAccountDialog = () => {
     useEffect(() => {
         if (isSuccess) {
             dispatch(closeDialog());
-            router.push('/');
         }
     }, [isSuccess]);
 
