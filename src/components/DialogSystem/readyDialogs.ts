@@ -117,10 +117,7 @@ export const showChangeAvatarDialog = () => {
             props: {
                 dialog: {
                     title: 'CHANGE_AVATAR',
-                    description: '',
-                    flexProps: {
-                        minWidth: 400
-                    },
+                    description: ''
                 },
                 data: {}
             }
@@ -156,11 +153,7 @@ export const showChangeUsernameDialog = (args: OpenReadyDialogArgs) => {
             props: {
                 dialog: {
                     title: 'CHANGE_USERNAME',
-                    description: 'CHANGE_USERNAME_DESCRIPTION',
-                    flexProps: {
-                        minWidth: 200,
-                        maxWidth: 400
-                    },
+                    description: 'CHANGE_USERNAME_DESCRIPTION'
                 },
                 data: {
                     formConfigKey: 'changeUsername',
@@ -190,10 +183,7 @@ export const showChangeEmailDialog = (args: OpenReadyDialogArgs) => {
                     icon: {
                         component: EnvelopeIcon,
                         color: '#8ed3ed'
-                    },
-                    flexProps: {
-                        minWidth: 400
-                    },
+                    }
                 },
                 data: {
                     formConfigKey: 'changeEmail',
@@ -219,9 +209,6 @@ export const showChangePasswordDialog = (args: OpenReadyDialogArgs) => {
                 dialog: {
                     title: 'CHANGE_PASSWORD',
                     description: 'CHANGE_PASSWORD_DESCRIPTION',
-                    flexProps: {
-                        minWidth: 400
-                    },
                     icon: {
                         component: KeyIcon,
                         color: '#ffb700'
@@ -264,10 +251,6 @@ export const showPasswordCreationRequiredDialog = () => {
                 dialog: {
                     title: 'PASSWORD_CREATION_REQUIRED_TITLE',
                     description: 'PASSWORD_REQUIRED_DESCRIPTION',
-                    flexProps: {
-                        minW: 400,
-                        maxW: 500
-                    },
                     icon: {
                         component: EnvelopeIcon,
                         color: '#24a0ed'
@@ -288,10 +271,6 @@ export const showDeleteAccountDialog = () => {
             component: 'DeleteAccountDialog',
             props: {
                 dialog: {
-                    flexProps: {
-                        minWidth: 200,
-                        maxWidth: 400
-                    },
                     title: 'DELETE_ACCOUNT',
                     description: '',
                     icon: {
@@ -316,11 +295,7 @@ export const showCreateGroupDialog = () => {
                     icon: {
                         component: UsersIcon,
                         color: '#24a0ed'
-                    },
-                    flexProps: {
-                        minWidth: 400,
-                        maxWidth: 500
-                    },
+                    }
                 },
                 data: {}
             }
@@ -339,10 +314,6 @@ export const showDisconnectGoogleDialog = () => {
             props: {
                 dialog: {
                     title: 'DISCONNECT_GOOGLE_ACCOUNT',
-                    flexProps: {
-                        minWidth: 400,
-                        maxWidth: 400
-                    },
                     icon: {
                         component: GoogleIcon
                     },

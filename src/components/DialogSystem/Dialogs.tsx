@@ -8,7 +8,6 @@ import { useSelector } from 'react-redux';
 import * as dialogs from './dialogs';
 
 import { ButtonWithIcon } from '@/components/chakra/ButtonWithIcon/ButtonWithIcon';
-import { dialogAnimation, dialogBgAnimation } from '@/components/Forms/animation';
 import { Icon } from '@/components/Icons/Icon';
 import { closeDialog } from '@/state/reducers/dialog/dialogSlice';
 import { DialogSliceState } from '@/state/reducers/dialog/dialogSlice.types';
@@ -92,7 +91,7 @@ const Dialogs = () => {
 
         if (arrowBack) {
             return <ButtonWithIcon title={'Back'}
-                className={'h-[40px] w-[40px] bg-opacity-10 hover:bg-opacity-20 focus:bg-opacity-20 active:bg-opacity-20'}
+                className={'h-[40px] w-[40px]'}
                 iconColor={'rgba(255,255,255,0.48)'}
                 iconColorHover={'white'}
                 icon={{
@@ -115,7 +114,7 @@ const Dialogs = () => {
                 </div>}
             {title && <div className={'grow font-bold'}>{t(title)}</div>}
             <ButtonWithIcon title={'Close'}
-                className={'h-[40px] w-[40px] bg-opacity-10 hover:bg-opacity-20 focus:bg-opacity-20 active:bg-opacity-20'}
+                className={'h-[40px] w-[40px]'}
                 iconColor={'rgba(255,255,255,0.48)'}
                 iconColorHover={'white'}
                 icon={{
@@ -133,9 +132,7 @@ const Dialogs = () => {
 
         const Component = componentMap[componentName];
 
-        return <div className={'flex flex-col gap-[20px] rounded-md bg-[#2f2f2f]'}
-            {...componentProps.dialog.flexProps}
-            {...dialogAnimation}>
+        return <div className={'flex flex-col gap-[20px] rounded-md bg-[#2f2f2f]'}>
             <div className={'flex w-full flex-col gap-[20px] p-[20px] pb-0'}>
                 <div className={'flex w-full gap-[20px]'}>
                     {renderArrowBack}
@@ -162,8 +159,7 @@ const Dialogs = () => {
 
     return <div
         className={'dialogScene absolute left-0 top-0 z-[1] box-border flex h-full w-full items-center justify-center bg-[rgba(30,30,30,0.8)] backdrop-blur-[5px]'}
-
-        onMouseDown={onClick}{...dialogBgAnimation}>
+        onMouseDown={onClick}>
         {dialog}
     </div>;
 };

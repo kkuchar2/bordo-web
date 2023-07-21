@@ -4,8 +4,6 @@ import { FlexProps } from '@chakra-ui/layout';
 import { Box, BoxProps, Flex, Spinner, SpinnerProps } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 
-import { opacityShowUpAnimation } from '@/components/Forms/animation';
-
 interface DelayedSpinnerProps {
     pending: boolean;
     delay?: number;
@@ -50,10 +48,10 @@ export const DelayedSpinner = (props: DelayedSpinnerProps) => {
         return null;
     }
 
-    return showProgress ? <MotionBox {...boxProps} {...opacityShowUpAnimation}>
+    return showProgress ? <Box {...boxProps}>
         <Flex {...flexProps}>
             <Spinner {...spinnerProps}/>
             {children}
         </Flex>
-    </MotionBox> : null;
+    </Box> : null;
 };

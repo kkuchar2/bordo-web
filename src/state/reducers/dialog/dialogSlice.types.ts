@@ -1,4 +1,3 @@
-import { FlexProps } from '@chakra-ui/layout';
 import { TFunction } from 'i18next';
 
 import { IconProps } from '@/components/Icons/Icon';
@@ -11,7 +10,6 @@ export interface IDialogComponentProps {
     onCancel?: () => void;
     onBack?: () => void;
     onConfirm?: () => void;
-    flexProps?: FlexProps;
     closeable?: boolean;
     arrowBack?: boolean;
 }

@@ -69,10 +69,7 @@ export const changeDialog = (newTitle: string, newWidth: number, arrowBack?: boo
         dispatch(onDialogPropsChange({
             title: newTitle,
             arrowBack: arrowBack,
-            onBack: onBack,
-            flexProps: {
-                width: newWidth
-            },
+            onBack: onBack
         }));
     };
 };
