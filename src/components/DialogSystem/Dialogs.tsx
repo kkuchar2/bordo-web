@@ -142,7 +142,7 @@ const Dialogs = () => {
                     {renderDescription}
                 </div>}
             </div>
-            <div className={'flex p-[20px] pt-0'}>
+            <div className={'flex w-full p-[20px] pt-0'}>
                 <Component dispatch={dispatch} t={t} {...componentProps} />
             </div>
         </div>;

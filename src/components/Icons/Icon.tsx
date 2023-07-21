@@ -17,7 +17,7 @@ export type IconProps = {
 }
 
 export const Icon = (props: IconProps) => {
-    const { component: IconComponent, color = 'white', className, size } = props;
+    const { component: IconComponent, color = 'white', className, size = 25 } = props;
 
     if (!IconComponent) {
         return null;

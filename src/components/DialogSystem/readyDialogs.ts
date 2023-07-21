@@ -252,8 +252,9 @@ export const showPasswordCreationRequiredDialog = () => {
                     title: 'PASSWORD_CREATION_REQUIRED_TITLE',
                     description: 'PASSWORD_REQUIRED_DESCRIPTION',
                     icon: {
-                        component: EnvelopeIcon,
-                        color: '#24a0ed'
+                        component: KeyIcon,
+                        color: '#c88f00',
+                        size: 25
                     },
                 }
             }
