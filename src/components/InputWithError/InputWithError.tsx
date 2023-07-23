@@ -4,7 +4,7 @@ import { Input, InputGroup, InputRightElement, Text, VStack } from '@chakra-ui/r
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/solid';
 import { useTranslation } from 'react-i18next';
 
-import { ButtonWithIcon } from '@/components/chakra/ButtonWithIcon/ButtonWithIcon';
+import { ButtonWithIcon } from '@/components/ButtonWithIcon/ButtonWithIcon';
 import { ErrorText } from '@/components/chakra/ErrorText/ErrorText';
 
 export const InputWithError = ({ field, id, label, type, autoComplete, placeholder, disabled, errors, form }) => {

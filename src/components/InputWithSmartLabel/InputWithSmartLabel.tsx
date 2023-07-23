@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 
 import styles from './InputWithSmartLabel.module.scss';
 
-import { ButtonWithIcon } from '@/components/chakra/ButtonWithIcon/ButtonWithIcon';
+import { ButtonWithIcon } from '@/components/ButtonWithIcon/ButtonWithIcon';
 
 type InputWithSmartLabelProps = {
     value?: string;

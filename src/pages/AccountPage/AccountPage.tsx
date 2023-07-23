@@ -13,7 +13,7 @@ import {
     showChangeUsernameDialog,
     showDeleteAccountDialog
 } from '@/components/DialogSystem/readyDialogs';
-import EditableProfilePictureProperty from '@/components/EditableProperties/EditableProfilePictureProperty';
+import { EditableProfilePictureProperty } from '@/components/EditableProperties/EditableProfilePictureProperty';
 import EditableProperty from '@/components/EditableProperties/EditableProperty';
 import { SettingsSection } from '@/components/Settings/SettingsSection';
 import { queryClient } from '@/config';
@@ -48,7 +48,7 @@ const AccountPage = () => {
     return <div className={'flex h-full w-[600px] flex-col items-stretch gap-[30px] p-5'}>
         <div className={'flex flex-col gap-[50px] pt-[50px]'}>
             <div className={'grid place-items-center'}>
-                <EditableProfilePictureProperty username={username}/>
+                <EditableProfilePictureProperty/>
             </div>
             <div className={'flex w-full flex-col items-stretch gap-[50px]'}>
                 <EditableProperty

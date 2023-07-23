@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux';
 
 import * as dialogs from './dialogs';
 
-import { ButtonWithIcon } from '@/components/chakra/ButtonWithIcon/ButtonWithIcon';
+import { ButtonWithIcon } from '@/components/ButtonWithIcon/ButtonWithIcon';
 import { Icon } from '@/components/Icons/Icon';
 import { closeDialog } from '@/state/reducers/dialog/dialogSlice';
 import { DialogSliceState } from '@/state/reducers/dialog/dialogSlice.types';
