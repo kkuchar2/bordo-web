@@ -6,6 +6,9 @@ account management
 Stack: NextJS 13, TailwindCSS, SCSS Modules, TanStack Query, GIPHY API
 Backend: Django (separate project publicly available soon)
 
+Currently migrating to NextJS 13 (React with Webpack -> Vite -> NextJS)
+and removing progressively ChakraUI in favour of custom components with just TailwindCSS and SCSS modules.
+
 ### Screens
 
 ![login_page](https://github.com/kkuchar2/bordo-web/assets/23500051/db575269-73dc-4a73-a6fa-0d7154896f03)
