@@ -5,7 +5,6 @@ import React, { useCallback } from 'react';
 import { Center, Flex, Text } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 
-import { CenterFlex } from '@/components/chakra/CenterFlex/CenterFlex';
 import { DelayedTransition } from '@/components/chakra/DelayedTransition/DelayedTransition';
 import { NavLink } from '@/components/chakra/NavLink/NavLink';
 import Form from '@/components/Forms/Form/Form';
@@ -103,7 +102,7 @@ const IndexPage = () => {
                 {renderNonFieldErrors(googleLoginError?.data, t, [])}
             </Center>
 
-            <CenterFlex gap={'20px'}>
+            <div className={'flex flex-col items-center justify-center gap-[20px]'}>
                 <Text fontSize={'md'} color={'#C7C7C7'}>{t('NEED_ACCOUNT')}</Text>
                 <NavLink color={'#77a4df'}
                     fontSize={'md'}
@@ -111,7 +110,7 @@ const IndexPage = () => {
                     href={'/signup'}>
                     {t('CREATE_ACCOUNT')}
                 </NavLink>
-            </CenterFlex>
+            </div>
 
             {(loginPending || googleLoginPending) &&
                 <DelayedTransition pending={true}

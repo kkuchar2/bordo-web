@@ -15,8 +15,6 @@ export const GIFSelect = (props: GIFSelectProps) => {
 
     const [ref, bounds] = useMeasure<HTMLDivElement>();
 
-    console.log('bounds', bounds.width);
-
     const [gifSearchText, setGifSearchText] = useState('');
 
     const onGifClick = useCallback((gif: IGif, e: SyntheticEvent<HTMLElement, Event>) => {

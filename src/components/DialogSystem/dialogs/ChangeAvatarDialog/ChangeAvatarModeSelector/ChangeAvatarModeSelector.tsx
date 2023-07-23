@@ -6,8 +6,6 @@ import { CloudArrowUpIcon } from '@heroicons/react/24/solid';
 import { ChangeAvatarModeSelectorProps } from './ChangeAvatarModeSelector.types';
 import { StyledSelectGIFCircle } from './style';
 
-import { CenterFlex } from '@/components/chakra/CenterFlex/CenterFlex';
-
 export const ChangeAvatarModeSelector = (props: ChangeAvatarModeSelectorProps) => {
 
     const { translation, onFileSelected, onAnimatedAvatarSelected } = props;
@@ -18,8 +16,8 @@ export const ChangeAvatarModeSelector = (props: ChangeAvatarModeSelectorProps) =
         inputRef.current?.click();
     }, [inputRef]);
 
-    return <CenterFlex gap={'20px'}>
-        <CenterFlex direction={'column'} gap={'20px'}>
+    return <div className={'flex items-center justify-center gap-[20px]'}>
+        <div className={'flex flex-col items-center justify-center gap-[20px]'}>
             <Button onClick={openFileSelectionWindow}
                 borderRadius={'full'}
                 width={'150px'}
@@ -35,9 +33,9 @@ export const ChangeAvatarModeSelector = (props: ChangeAvatarModeSelectorProps) =
             <Input type={'file'} accept={'image/*'} ref={inputRef} onChange={onFileSelected}
                 style={{ display: 'none' }}/>
             <Text>{translation('UPLOAD_IMAGE')}</Text>
-        </CenterFlex>
+        </div>
 
-        <CenterFlex direction={'column'} gap={'20px'}>
+        <div className={'flex flex-col items-center justify-center gap-[20px]'}>
             <Button onClick={onAnimatedAvatarSelected}
                 borderRadius={'full'}
                 width={'150px'}
@@ -51,6 +49,6 @@ export const ChangeAvatarModeSelector = (props: ChangeAvatarModeSelectorProps) =
                 <StyledSelectGIFCircle url={'https://media3.giphy.com/media/lgcUUCXgC8mEo/giphy.gif?'}/>
             </Button>
             <Text>{translation('ANIMATED_AVATAR')}</Text>
-        </CenterFlex>
-    </CenterFlex>;
+        </div>
+    </div>;
 };

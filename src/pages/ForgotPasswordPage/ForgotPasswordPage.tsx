@@ -5,7 +5,6 @@ import { useCallback, useEffect } from 'react';
 import { Center, Flex, Progress, VStack } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 
-import { CenterFlex } from '@/components/chakra/CenterFlex/CenterFlex';
 import { NavLink } from '@/components/chakra/NavLink/NavLink';
 import { showDialogAfterPasswordResetRequest } from '@/components/DialogSystem/readyDialogs';
 import Form from '@/components/Forms/Form/Form';
@@ -69,14 +68,14 @@ const ForgotPassword = () => {
                         justifyContent: 'center',
                     }}/>
 
-                <CenterFlex gap={'20px'}>
+                <div className={'flex flex-col items-center justify-center gap-[20px]'}>
                     <NavLink color={'#77a4df'}
                         fontSize={'md'}
                         fontWeight={'semibold'}
                         href={'/'}>
                         {t('GO_BACK')}
                     </NavLink>
-                </CenterFlex>
+                </div>
 
                 {forgotPasswordPending ? <Progress size={'xs'} isIndeterminate/> : null}
             </VStack>

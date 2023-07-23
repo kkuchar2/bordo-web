@@ -5,7 +5,6 @@ import { FC, useCallback } from 'react';
 import { Center, Flex, Heading, Text } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 
-import { CenterFlex } from '@/components/chakra/CenterFlex/CenterFlex';
 import { DelayedTransition } from '@/components/chakra/DelayedTransition/DelayedTransition';
 import { NavLink } from '@/components/chakra/NavLink/NavLink';
 import Form from '@/components/Forms/Form/Form';
@@ -68,10 +67,10 @@ const SignUpPage = () => {
                     justifyContent: 'center',
                 }}/>
 
-            <CenterFlex gap={'20px'}>
+            <div className={'flex flex-col items-center justify-center gap-[20px]'}>
                 <Text fontSize={'md'} color={'#C7C7C7'}>{t('ALREADY_HAVE_ACCOUNT')}</Text>
                 <NavLink color={'#77a4df'} fontSize={'md'} fontWeight={'semibold'} href={'/'}>{t('SIGN_IN')}</NavLink>
-            </CenterFlex>
+            </div>
 
             <UserAgreements/>
             {registrationPending && <DelayedTransition
