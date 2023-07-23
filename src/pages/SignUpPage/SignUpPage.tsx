@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback } from 'react';
+import { FC, useCallback } from 'react';
 
 import { Center, Flex, Heading, Text } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
@@ -9,16 +9,15 @@ import { CenterFlex } from '@/components/chakra/CenterFlex/CenterFlex';
 import { DelayedTransition } from '@/components/chakra/DelayedTransition/DelayedTransition';
 import { NavLink } from '@/components/chakra/NavLink/NavLink';
 import Form from '@/components/Forms/Form/Form';
+import { registrationForm } from '@/components/Forms/formConfig';
+import { RegistrationFormArgs } from '@/components/Forms/formConfig.types';
 import UserAgreements from '@/components/UserAgreements';
-import { useFormConfig } from '@/form/formConfig';
 import WithAuth from '@/hoc/WithAuth';
 import { register } from '@/queries/account';
 
 const SignUpPage = () => {
 
     const { t } = useTranslation();
-
-    const formConfig = useFormConfig('registration', t);
 
     const {
         isIdle: registerIdle,
@@ -46,12 +45,11 @@ const SignUpPage = () => {
             gap={'30px'}>
             <Heading fontSize={'2xl'}>{t('REGISTRATION')}</Heading>
 
-            <Form
+            <Form<RegistrationFormArgs>
+                config={registrationForm}
                 submitButtonTextKey={'SIGN_UP'}
                 error={registerError?.data}
                 disabled={registrationPending}
-                fieldBg={'#232323'}
-                config={formConfig}
                 useCancelButton={false}
                 onSubmit={attemptRegister}
                 fieldsSpacing={'20px'}
@@ -89,4 +87,4 @@ const SignUpPage = () => {
 export default WithAuth(SignUpPage, {
     redirectToHomeOnAutologin: true,
     redirectToLoginPageOnUnauthenticated: false
-}) as React.FC;
+}) as FC;

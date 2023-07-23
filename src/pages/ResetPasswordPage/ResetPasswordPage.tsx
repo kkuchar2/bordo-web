@@ -2,14 +2,14 @@
 
 import { useCallback, useEffect } from 'react';
 
-import { Center, Flex, Text } from '@chakra-ui/react';
 import { redirect } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 
 import { DelayedTransition } from '@/components/chakra/DelayedTransition/DelayedTransition';
 import { NavLink } from '@/components/chakra/NavLink/NavLink';
 import Form from '@/components/Forms/Form/Form';
-import { useFormConfig } from '@/form/formConfig';
+import { resetPasswordForm } from '@/components/Forms/formConfig';
+import { ResetPasswordFormArgs } from '@/components/Forms/formConfig.types';
 import { getUser, resetPassword, verifyResetPasswordToken } from '@/queries/account';
 
 type ResetPasswordPageProps = {
@@ -22,31 +22,13 @@ const ResetPasswordPage = (props: ResetPasswordPageProps) => {
 
     const { token } = props;
 
-    console.log('Reset password token: ', token);
-
-    const formConfig = useFormConfig('resetPassword', t);
-
     const { data: user } = getUser();
 
-    const {
-        isIdle: resetPasswordIdle,
-        isLoading: resetPasswordLoading,
-        error: resetPasswordError,
-        data: resetPasswordData,
-        isSuccess: resetPasswordSuccess,
-        mutate: resetPasswordMutate
-    } = resetPassword();
+    const resetPasswordQuery = resetPassword();
 
-    const {
-        isIdle: verifyResetPasswordTokenIdle,
-        isLoading: verifyTokenLoading,
-        error: verifyTokenError,
-        data: verifyTokenData,
-        isSuccess: verifyTokenSuccess,
-        mutate: verifyTokenMutate
-    } = verifyResetPasswordToken();
+    const verifyTokenQuery = verifyResetPasswordToken();
 
-    const onSubmit = useCallback((formData: any) => {
+    const onSubmit = useCallback((formData: ResetPasswordFormArgs) => {
         // Get form data
         const { new_password, new_password_confirm } = formData;
 
@@ -59,7 +41,7 @@ const ResetPasswordPage = (props: ResetPasswordPageProps) => {
         const uid = decodedToken.split(':')[0];
         const tok = decodedToken.split(':')[1];
 
-        resetPasswordMutate({
+        resetPasswordQuery.mutate({
             new_password1: new_password,
             new_password2: new_password_confirm,
             uid: uid,
@@ -77,10 +59,10 @@ const ResetPasswordPage = (props: ResetPasswordPageProps) => {
         const uid = decodedToken.split(':')[0];
         const tok = decodedToken.split(':')[1];
 
-        verifyTokenMutate({ uid: uid, token: tok });
+        verifyTokenQuery.mutate({ uid: uid, token: tok });
     }, [token]);
 
-    if (verifyTokenLoading || verifyResetPasswordTokenIdle) {
+    if (verifyTokenQuery.isLoading || verifyTokenQuery.isIdle) {
         return <DelayedTransition pending={true}
             position={'absolute'}
             bottom={0}
@@ -88,46 +70,30 @@ const ResetPasswordPage = (props: ResetPasswordPageProps) => {
             p={0} w={'100%'}/>;
     }
 
-    if (verifyTokenError) {
-        console.log('Error: ', verifyTokenError);
+    if (verifyTokenQuery.isError) {
+        console.log('Error: ', verifyTokenQuery.error);
         return null;
     }
 
-    if (verifyTokenSuccess) {
+    if (verifyTokenQuery.isSuccess) {
 
-        if (resetPasswordSuccess) {
+        if (resetPasswordQuery.isSuccess) {
             return redirect('/');
         }
 
-        return <Center w={'100%'} h={'100%'}>
-            <Flex borderRadius={{ base: 0, sm: 8 }}
-                direction={'column'}
-                bg={'#2a2a2a'}
-                width={{ base: '100%', sm: '400px' }}
-                p={'40px'}
-                gap={'30px'}>
+        return <div className={'grid h-full w-full place-items-center'}>
+            <div className={'flex flex-col gap-[30px] bg-neutral-800 p-[20px]'}>
 
-                <Text textAlign={'center'} fontWeight={'bold'} fontSize={'2xl'}>{'Set up new password'}</Text>
+                <div className={'text-xl font-semibold'}>
+                    {'Set up new password'}
+                </div>
 
-                <Form
-                    config={formConfig}
+                <Form<ResetPasswordFormArgs>
+                    config={resetPasswordForm}
                     submitButtonTextKey={'SET_NEW_PASSWORD'}
-                    error={resetPasswordError?.data}
-                    fieldBg={'#212121'}
-                    disabled={resetPasswordLoading}
+                    error={resetPasswordQuery.error?.data}
+                    disabled={resetPasswordQuery.isLoading}
                     useCancelButton={false}
-                    buttonsStackProps={{
-                        m: 0,
-                        justifyContent: 'center',
-                    }}
-                    buttonProps={{
-                        bg: '#434343',
-                        w: '250px',
-                        h: '50px',
-                        justifySelf: 'flex-end',
-                        borderRadius: '100px',
-                        fontSize: 'md'
-                    }}
                     onSubmit={onSubmit}/>
 
                 {!user && <NavLink color={'#77a4df'}
@@ -137,13 +103,13 @@ const ResetPasswordPage = (props: ResetPasswordPageProps) => {
                     {'Back to login'}
                 </NavLink>}
 
-                <DelayedTransition pending={resetPasswordLoading}
+                <DelayedTransition pending={resetPasswordQuery.isLoading}
                     position={'absolute'}
                     bottom={0}
                     left={0}
                     p={0} w={'100%'}/>
-            </Flex>
-        </Center>;
+            </div>
+        </div>;
     }
 
 };

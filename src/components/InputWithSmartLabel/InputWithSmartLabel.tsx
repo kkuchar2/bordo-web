@@ -2,10 +2,11 @@ import React, { useCallback, useMemo, useRef, useState } from 'react';
 
 import { Flex, Input, Text } from '@chakra-ui/react';
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/solid';
+import { useTranslation } from 'react-i18next';
 
 import { ButtonWithIcon } from '@/components/chakra/ButtonWithIcon/ButtonWithIcon';
 
-interface InputSmartLabelProps {
+type InputWithSmartLabelProps = {
     value?: string;
     type: string;
     id: string;
@@ -22,7 +23,7 @@ interface InputSmartLabelProps {
     bg?: string;
 }
 
-export const InputSmartLabel = (props: InputSmartLabelProps) => {
+export const InputWithSmartLabel = (props: InputWithSmartLabelProps) => {
 
     const {
         id,
@@ -31,6 +32,7 @@ export const InputSmartLabel = (props: InputSmartLabelProps) => {
         type,
         label,
         disabled,
+        placeholder,
         autoComplete = 'off',
         spellCheck = false,
         errors,
@@ -43,6 +45,8 @@ export const InputSmartLabel = (props: InputSmartLabelProps) => {
     const [focused, setFocused] = useState(false);
     const [pointerWithinBounds, setPointerWithinBounds] = useState(false);
     const inputRef = useRef(null);
+
+    const { t } = useTranslation();
 
     const onDummyInputClick = useCallback(() => {
         setFocused(true);
@@ -105,7 +109,9 @@ export const InputSmartLabel = (props: InputSmartLabelProps) => {
             left={'12px'}
             transform={'translateY(-50%)'}
             opacity={disabled ? 0.3 : 0.8}
-            fontWeight={'semibold'}>{label}</Text>
+            fontWeight={'semibold'}>
+            {t(label)}
+        </Text>
         <Input
             ref={inputRef}
             id={id}
@@ -133,11 +139,12 @@ export const InputSmartLabel = (props: InputSmartLabelProps) => {
                 boxShadow: '0 0 0px 1000px transparent inset',
                 transition: 'background-color 5000s ease-in-out 0s',
             }}
+            value={value}
             borderRadius={'none'}
             errorBorderColor={'crimson'}
             autoComplete={autoComplete}
             isDisabled={disabled}
-            placeholder={null}
+            placeholder={placeholder}
             onChange={onChange}
             _placeholder={{
                 color: focused ? 'transparent' : '#a5a5a5',

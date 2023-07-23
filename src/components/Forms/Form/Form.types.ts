@@ -1,24 +1,25 @@
 import { ButtonProps, StackProps } from '@chakra-ui/react';
-import { QueryResponseErrorData } from 'queries/base';
+import { FieldValues } from 'react-hook-form/dist/types';
 
-import { FormConfig } from '../../../api/formConfig';
+import { FormConfig } from '@/components/Forms/formConfig';
+import { QueryResponseErrorData } from '@/queries/base';
 
-export interface FormProps {
-    config: FormConfig;
-    initialValues?: object;
+export interface FormProps<TFieldValues extends FieldValues = FieldValues> {
+    config: FormConfig<TFieldValues>;
+    initialValues?: TFieldValues;
     title?: string;
     description?: string;
-    onSubmit?: (formData: FormData) => void; // TODO: change to dynamic fields
+    onSubmit?: (values: TFieldValues) => void;
     onCancel?: any
     disabled?: boolean;
     excludeErrors?: string[];
     error?: QueryResponseErrorData;
     fieldsSpacing?: StackProps['spacing'];
     contentSpacing?: StackProps['spacing'];
-    onChange?: (formData: any) => void;
+    onChange?: (values: TFieldValues) => void;
     submitButtonTextKey?: string;
     useCancelButton?: boolean;
     buttonsStackProps?: StackProps;
-    fieldBg?: string;
     buttonProps?: ButtonProps
+    className?: string;
 }

@@ -1,21 +1,14 @@
-import React from 'react';
+import { ReactElement, ReactNode } from 'react';
 
-import { Text, TextProps } from '@chakra-ui/react';
-import { motion } from 'framer-motion';
+type ErrorTextProps = {
+    children: ReactNode;
+}
 
-import { shakeAnimation } from '@/components/Forms/animation';
+export const ErrorText = (props: ErrorTextProps): ReactElement => {
 
-const MotionText = motion(Text);
+    const { children } = props;
 
-export const ErrorText = (props: TextProps) => {
-
-    const { children, ...rest } = props;
-
-    return <MotionText color={'#ff4949'}
-        fontSize={'14px'}
-        key={Math.random()}
-        {...rest}
-        {...shakeAnimation}>
+    return <div className={'text-[#ff4949]'} key={Math.random()}>
         {children}
-    </MotionText>;
+    </div>;
 };

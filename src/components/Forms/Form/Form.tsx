@@ -1,21 +1,28 @@
 import React, { useCallback, useMemo } from 'react';
 
 import { Button, Flex, Text, VStack } from '@chakra-ui/react';
-import { Field, Form as FormikForm, Formik } from 'formik';
+import {
+    Controller,
+    ControllerFieldState,
+    ControllerRenderProps,
+    FieldValues,
+    Path,
+    useForm,
+    UseFormStateReturn
+} from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { FormProps } from './Form.types';
 
-import { getFormFieldErrors, renderNonFieldErrors } from '@/components/Forms/util';
+import useYupValidationResolver from '@/components/Forms/Form/useYupValidationResolver';
 
-const Form = (props: FormProps) => {
+const Form = <TFieldValues extends FieldValues = FieldValues>(props: FormProps<TFieldValues>) => {
     const {
         initialValues,
         onSubmit,
         onCancel,
         config,
         disabled,
-        error,
         title,
         excludeErrors,
         description,
@@ -24,13 +31,27 @@ const Form = (props: FormProps) => {
         submitButtonTextKey,
         useCancelButton,
         buttonsStackProps,
-        fieldBg,
-        buttonProps
+        buttonProps,
+        className
     } = props;
 
     const { t } = useTranslation();
 
-    const onFormSubmitted = useCallback((values): any => {
+    const resolver = useYupValidationResolver<TFieldValues>(config.validationSchema);
+
+    const {
+        control,
+        handleSubmit,
+        setError,
+        formState: {
+            errors: formErrors,
+        },
+    } = useForm<TFieldValues>({
+        resolver: resolver,
+        criteriaMode: 'all',
+    });
+
+    const onFormSubmitted = useCallback((values: TFieldValues) => {
         onSubmit?.(values);
     }, [onSubmit]);
 
@@ -39,92 +60,71 @@ const Form = (props: FormProps) => {
             return null;
         }
 
-        return Object.keys(config.fields).map((fieldId, idx) => {
-            const fieldCfg = config.fields[fieldId];
-
-            return <Field
-                key={idx}
-                id={fieldId}
-                disabled={disabled}
-                errors={getFormFieldErrors(error, fieldCfg.id)}
-                component={fieldCfg.component}
-                bg={fieldBg}
-                {...fieldCfg}/>;
-        });
-    }, [config, error, disabled, initialValues]);
-
-    const renderCancelButton = useMemo(() => {
-        if (!useCancelButton) {
+        if (Object.keys(config.fields).length === 0) {
             return null;
         }
 
-        return <Button type={'button'}
-            minWidth={'100px'}
-            className={'cancelButton'}
-            onClick={onCancel}
-            isDisabled={disabled}>
-            <Text fontSize={'sm'}>{t('CANCEL')}</Text>
-        </Button>;
-    }, [useCancelButton, disabled]);
+        return <VStack spacing={fieldsSpacing} align={'stretch'}>
+            {
+                config.fields.map(f => {
 
-    const computedInitialValues = useMemo(() => {
+                    const { id, name, component: FieldComponent } = f;
 
-        const values = {};
-
-        if (!config || !config.fields) {
-            return null;
-        }
-
-        Object.keys(config.fields).map((fieldId,) => {
-            const fieldCfg = config.fields[fieldId];
-            const fieldName = fieldCfg.name;
-
-            if (initialValues && initialValues[fieldName]) {
-                values[fieldName] = initialValues[fieldName];
+                    return <Controller
+                        key={id}
+                        control={control}
+                        name={name}
+                        render={({ field, fieldState, formState }: {
+                            field: ControllerRenderProps<TFieldValues, Path<TFieldValues>>;
+                            fieldState: ControllerFieldState;
+                            formState: UseFormStateReturn<TFieldValues>;
+                        }) => {
+                            return <FieldComponent
+                                {...f}
+                                field={field}
+                                fieldState={fieldState}
+                                formState={formState}
+                                errors={formErrors}
+                            />;
+                        }}
+                    />;
+                })
             }
-            else {
-                values[fieldName] = '';
-            }
-        });
+        </VStack>;
+    }, [config, formErrors, disabled, initialValues]);
 
-        return values;
-    }, [initialValues, config]);
+    if (!config) {
+        console.error('No config');
+        return null;
+    }
 
-    const nonFieldErrors = useMemo(() => {
-        return renderNonFieldErrors(error, t, excludeErrors);
-    }, [error, t]);
-
-    return <Formik
-        initialValues={computedInitialValues}
-        validationSchema={config.validationSchema ? config.validationSchema : null}
-        validateOnChange={false}
-        validateOnBlur={false}
-        validateOnMount={false}
-        onSubmit={onFormSubmitted}>
-        {() => (
-            <FormikForm>
-                <Flex direction={'column'} gap={contentSpacing} align={'stretch'}>
-                    {title ? <Text fontSize={'2xl'} fontWeight={'semibold'}>{title}</Text> : null}
-                    {description ? <Text>{description}</Text> : null}
-                    <VStack spacing={fieldsSpacing} align={'stretch'}>
-                        {renderFields}
-                    </VStack>
-                    {nonFieldErrors}
-                    <Flex {...buttonsStackProps}>
-                        {renderCancelButton}
-                        <Button bg={'#006C52'}
-                            _hover={{ bg: '#00785a' }}
-                            type={'submit'}
-                            width={'100%'}
-                            isDisabled={disabled}
-                            {...buttonProps}>
-                            <Text fontSize={'sm'}>{t(submitButtonTextKey)}</Text>
-                        </Button>
-                    </Flex>
-                </Flex>
-            </FormikForm>
-        )}
-    </Formik>;
+    return <form onSubmit={handleSubmit(onFormSubmitted)}>
+        <Flex className={className} direction={'column'} gap={contentSpacing}>
+            {title ? <Text fontSize={'2xl'} fontWeight={'semibold'}>{title}</Text> : null}
+            {description ? <Text>{description}</Text> : null}
+            {renderFields}
+            {/*{error && nonFieldErrors}*/}
+            <Flex {...buttonsStackProps}>
+                {useCancelButton && <Button type={'button'}
+                    minWidth={'100px'}
+                    className={'cancelButton'}
+                    onClick={onCancel}
+                    isDisabled={disabled}>
+                    <Text fontSize={'sm'}>{t('CANCEL')}</Text>
+                </Button>}
+                <Button bg={'#006C52'}
+                    _hover={{ bg: '#00785a' }}
+                    type={'submit'}
+                    width={'100%'}
+                    isDisabled={disabled}
+                    {...buttonProps}>
+                    <Text fontSize={'sm'}>
+                        {t(submitButtonTextKey || 'SUBMIT')}
+                    </Text>
+                </Button>
+            </Flex>
+        </Flex>
+    </form>;
 };
 
 export default Form;

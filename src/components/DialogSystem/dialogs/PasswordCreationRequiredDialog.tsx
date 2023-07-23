@@ -1,13 +1,12 @@
 import React, { useCallback, useEffect } from 'react';
 
-import { Flex } from '@chakra-ui/react';
-
 import { ChangePropertyDialogProps } from './ChangePropertyDialog';
 
 import { DelayedTransition } from '@/components/chakra/DelayedTransition/DelayedTransition';
 import { showDialogAfterFirstPasswordSetupRequest } from '@/components/DialogSystem/readyDialogs';
 import Form from '@/components/Forms/Form/Form';
-import { useFormConfig } from '@/form/formConfig';
+import { resetPasswordForm } from '@/components/Forms/formConfig';
+import { CreateNewPasswordFormArgs } from '@/components/Forms/formConfig.types';
 import { createNewPassword } from '@/queries/account';
 import { closeDialog, setCloseable } from '@/state/reducers/dialog/dialogSlice';
 import { BaseDialogProps, DialogProps } from '@/state/reducers/dialog/dialogSlice.types';
@@ -17,8 +16,6 @@ export const PasswordCreationRequiredDialog = (props: DialogProps<ChangeProperty
     const { dialog, dispatch, t } = props;
     const { onCancel } = dialog;
     const { isLoading, error, isError, data, isSuccess, mutate } = createNewPassword();
-
-    const formConfig = useFormConfig('emptyForm', t);
 
     useEffect(() => {
         if (isSuccess) {
@@ -43,18 +40,22 @@ export const PasswordCreationRequiredDialog = (props: DialogProps<ChangeProperty
         mutate({});
     }, []);
 
-    return <Flex direction={'column'} gap={'gap.small'}>
-        <Form
-            config={formConfig}
+    return <div className={'flex w-full flex-col gap-3'}>
+        <Form<CreateNewPasswordFormArgs>
+            config={resetPasswordForm}
             submitButtonTextKey={'SET_NEW_PASSWORD'}
             useCancelButton={false}
             disabled={isLoading}
             onCancel={onCancelRequest}
             onSubmit={onSubmit}
+            initialValues={{
+                new_password: '',
+                new_password_confirm: ''
+            }}
             buttonsStackProps={{
                 p: { base: 2, sm: 2, md: 4, lg: 3 },
                 m: 0
             }}/>
         <DelayedTransition pending={isLoading}/>
-    </Flex>;
+    </div>;
 };

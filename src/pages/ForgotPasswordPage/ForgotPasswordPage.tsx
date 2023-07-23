@@ -9,7 +9,8 @@ import { CenterFlex } from '@/components/chakra/CenterFlex/CenterFlex';
 import { NavLink } from '@/components/chakra/NavLink/NavLink';
 import { showDialogAfterPasswordResetRequest } from '@/components/DialogSystem/readyDialogs';
 import Form from '@/components/Forms/Form/Form';
-import { useFormConfig } from '@/form/formConfig';
+import { forgotPasswordForm } from '@/components/Forms/formConfig';
+import { ForgotPasswordFormArgs } from '@/components/Forms/formConfig.types';
 import { forgotPassword } from '@/queries/account';
 
 const ForgotPassword = () => {
@@ -22,8 +23,6 @@ const ForgotPassword = () => {
     } = forgotPassword();
 
     const { t } = useTranslation();
-
-    const formConfig = useFormConfig('forgotPassword', t);
 
     const requestPasswordReset = useCallback((formData: any) => {
         const { email } = formData;
@@ -47,14 +46,13 @@ const ForgotPassword = () => {
             p={'40px'}
             gap={'40px'}>
             <VStack align={'stretch'} spacing={'20px'}>
-                <Form
+                <Form<ForgotPasswordFormArgs>
+                    config={forgotPasswordForm}
                     title={t('RESET_PASSWORD')}
                     description={t('RESET_PASSWORD_DESCRIPTION')}
                     submitButtonTextKey={'RESET_PASSWORD'}
                     error={forgotPasswordError?.data}
                     disabled={forgotPasswordPending}
-                    fieldBg={'#232323'}
-                    config={formConfig}
                     useCancelButton={false}
                     onSubmit={requestPasswordReset}
                     buttonProps={{

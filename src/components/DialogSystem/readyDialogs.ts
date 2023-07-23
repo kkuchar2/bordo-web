@@ -4,6 +4,7 @@ import { EnvelopeIcon, KeyIcon, TrashIcon, UsersIcon } from '@heroicons/react/24
 import { SentEmailDialogArgs } from './readyDialogs.types';
 
 import { VerifyAccountDialogProps } from '@/components/DialogSystem/dialogs';
+import { changeEmailForm, changePasswordForm, changeUsernameForm } from '@/components/Forms/formConfig';
 import { GoogleIcon } from '@/components/Icons/GoogleIcon';
 import { queryClient } from '@/config';
 import { changeEmail, changePassword, changeUsername } from '@/queries/account';
@@ -13,7 +14,7 @@ import { store } from '@/state/store';
 
 export interface OpenReadyDialogArgs {
     passwordRequired: boolean;
-    initialData?: any;
+    initialValues?: any;
 }
 
 const checkShowPasswordRequired = (passwordRequired: boolean) => {
@@ -92,7 +93,7 @@ export const showSentEmailDialog = <T = any>(args: SentEmailDialogArgs<T>) => {
 
 export const showVerifyAccountDialog = (data: VerifyAccountDialogProps) => {
     store.dispatch(
-        openDialog<VerifyAccountDialogProps>({
+        openDialog({
             component: 'VerifyAccountDialog',
             props: {
                 dialog: {
@@ -141,7 +142,7 @@ export const showConfirmEmailDialog = <T>(data: T) => {
 };
 
 export const showChangeUsernameDialog = (args: OpenReadyDialogArgs) => {
-    const { passwordRequired, initialData } = args;
+    const { passwordRequired, initialValues } = args;
 
     if (checkShowPasswordRequired(passwordRequired)) {
         return;
@@ -156,10 +157,10 @@ export const showChangeUsernameDialog = (args: OpenReadyDialogArgs) => {
                     description: 'CHANGE_USERNAME_DESCRIPTION'
                 },
                 data: {
-                    formConfigKey: 'changeUsername',
+                    formConfig: changeUsernameForm,
                     propertyName: 'username',
-                    queryFunc: changeUsername,
-                    initialArgs: initialData
+                    queryFunction: changeUsername,
+                    initialValues: initialValues
                 }
             }
         })
@@ -167,7 +168,7 @@ export const showChangeUsernameDialog = (args: OpenReadyDialogArgs) => {
 };
 
 export const showChangeEmailDialog = (args: OpenReadyDialogArgs) => {
-    const { passwordRequired } = args;
+    const { passwordRequired, initialValues } = args;
 
     if (checkShowPasswordRequired(passwordRequired)) {
         return;
@@ -186,9 +187,10 @@ export const showChangeEmailDialog = (args: OpenReadyDialogArgs) => {
                     }
                 },
                 data: {
-                    formConfigKey: 'changeEmail',
+                    formConfig: changeEmailForm,
                     propertyName: 'email',
-                    queryFunc: changeEmail,
+                    queryFunction: changeEmail,
+                    initialValues: initialValues
                 }
             }
         })
@@ -196,7 +198,7 @@ export const showChangeEmailDialog = (args: OpenReadyDialogArgs) => {
 };
 
 export const showChangePasswordDialog = (args: OpenReadyDialogArgs) => {
-    const { passwordRequired, initialData } = args;
+    const { passwordRequired, initialValues } = args;
 
     if (checkShowPasswordRequired(passwordRequired)) {
         return;
@@ -215,8 +217,9 @@ export const showChangePasswordDialog = (args: OpenReadyDialogArgs) => {
                     },
                 },
                 data: {
-                    formConfigKey: 'changePassword',
-                    queryFunc: changePassword,
+                    formConfigKey: changePasswordForm,
+                    queryFunction: changePassword,
+                    initialValues: initialValues
                 }
             }
         })

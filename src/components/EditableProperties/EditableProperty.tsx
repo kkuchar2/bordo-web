@@ -16,12 +16,16 @@ export interface EditablePropertyProps {
     hideTitle?: boolean;
     passwordRequired: boolean;
     uppercaseTitle?: boolean;
+    initialValues?: any;
     showDialogFunc?: (args: OpenReadyDialogArgs) => void
 }
 
 const EditableProperty = (props: EditablePropertyProps) => {
 
-    const { name, value, showDialogFunc, canEdit, icon, editText = 'EDIT', hideTitle, passwordRequired } = props;
+    const {
+        name, value, showDialogFunc, canEdit, icon, initialValues,
+        editText = 'EDIT', hideTitle, passwordRequired
+    } = props;
 
     const { t } = useTranslation();
 
@@ -31,7 +35,7 @@ const EditableProperty = (props: EditablePropertyProps) => {
         }
         showDialogFunc({
             passwordRequired: passwordRequired,
-            initialData: {},
+            initialValues: initialValues,
         });
     }, [passwordRequired]);
 

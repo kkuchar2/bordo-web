@@ -9,18 +9,17 @@ import { CenterFlex } from '@/components/chakra/CenterFlex/CenterFlex';
 import { DelayedTransition } from '@/components/chakra/DelayedTransition/DelayedTransition';
 import { NavLink } from '@/components/chakra/NavLink/NavLink';
 import Form from '@/components/Forms/Form/Form';
+import { loginForm } from '@/components/Forms/formConfig';
+import { LoginFormArgs } from '@/components/Forms/formConfig.types';
 import { renderNonFieldErrors } from '@/components/Forms/util';
 import GoogleButton from '@/components/GoogleButton/GoogleButton';
 import { GOOGLE_CLIENT_ID, queryClient } from '@/config';
-import { useFormConfig } from '@/form/formConfig';
 import WithAuth from '@/hoc/WithAuth';
 import { googleLogin, login } from '@/queries/account';
 
 const IndexPage = () => {
 
     const { t } = useTranslation();
-
-    const formConfig = useFormConfig('login', t);
 
     const {
         isIdle: googleLoginIdle,
@@ -62,11 +61,10 @@ const IndexPage = () => {
 
             <Text textAlign={'center'} fontWeight={'bold'} fontSize={'2xl'}>{t('SIGN_IN_TO_YOUR_ACCOUNT')}</Text>
 
-            <Form
+            <Form<LoginFormArgs>
+                config={loginForm}
                 submitButtonTextKey={'SIGN_IN'}
                 error={loginError?.data}
-                config={formConfig}
-                fieldBg={'#232323'}
                 excludeErrors={['email_not_verified']}
                 useCancelButton={false}
                 onSubmit={attemptLogin}

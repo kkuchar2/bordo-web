@@ -8,7 +8,7 @@ import { useMeasure } from 'react-use';
 import { GIFPresentation } from './GIFPresentation/GIFPresentation';
 import { GIFSelectProps } from './GIFSelect.types';
 
-import { InputSmartLabel } from '@/components/InputSmartLabel/InputSmartLabel';
+import { InputWithSmartLabel } from '@/components/InputWithSmartLabel/InputWithSmartLabel';
 
 export const GIFSelect = (props: GIFSelectProps) => {
 
@@ -28,14 +28,14 @@ export const GIFSelect = (props: GIFSelectProps) => {
     }, [onGifSelected, pending]);
 
     return <Flex direction={'column'} w={'100%'}>
-        <InputSmartLabel
+        <InputWithSmartLabel
             id={'gif_search'}
             name={'gifSearch'}
             type={'text'}
             onChange={e => {
                 setGifSearchText(e.target.value);
             }}
-            label={t('GIPHY_SEARCH_PLACEHOLDER')}/>
+            label={'GIPHY_SEARCH_PLACEHOLDER'}/>
         <Box mr={'20px'} ref={ref}>
             <GIFPresentation
                 width={bounds.width}

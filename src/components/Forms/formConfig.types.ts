@@ -1,48 +1,46 @@
-export interface LoginFormArgs {
+export type LoginFormArgs = {
     username_or_email: string;
     password: string;
 }
 
-export interface SignupFormArgs {
+export type RegistrationFormArgs = {
     email: string;
     username: string;
     password: string;
 }
 
-export interface ForgotPasswordFormArgs {
+export type ForgotPasswordFormArgs = {
     email: string;
 }
 
-export interface CreateNewPasswordFormArgs {
+export type CreateNewPasswordFormArgs = {
     new_password: string;
     new_password_confirm: string;
 }
 
-export interface ChangeUsernameFormArgs {
+export type ChangeUsernameFormArgs = {
     new_username: string;
     current_password: string;
 }
 
-export interface ChangeEmailFormArgs {
+export type ChangeEmailFormArgs = {
     new_email: string;
     current_password: string;
 }
 
-export interface ResetPasswordFormArgs {
+export type ResetPasswordFormArgs = {
     new_password: string;
     new_password_confirm: string;
 }
 
-export interface ChangePasswordFormArgs {
+export type ChangePasswordFormArgs = {
     current_password: string;
     new_password: string;
     new_password_confirm: string;
 }
 
-export interface DeleteAccountFormArgs {
+export type DeleteAccountFormArgs = {
     current_password: string;
 }
 
-export interface CreateGroupFormArgs {
-    group_name: string;
-}
+export type EmptyFormArgs = {}

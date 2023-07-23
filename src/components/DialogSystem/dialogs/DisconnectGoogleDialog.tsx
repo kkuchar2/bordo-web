@@ -5,7 +5,8 @@ import { useTranslation } from 'react-i18next';
 
 import { DelayedTransition } from '@/components/chakra/DelayedTransition/DelayedTransition';
 import Form from '@/components/Forms/Form/Form';
-import { useFormConfig } from '@/form/formConfig';
+import { deleteAccountForm } from '@/components/Forms/formConfig';
+import { DeleteAccountFormArgs } from '@/components/Forms/formConfig.types';
 import { googleDisconnect } from '@/queries/account';
 import { closeDialog } from '@/state/reducers/dialog/dialogSlice';
 import { useAppDispatch } from '@/state/store';
@@ -17,8 +18,6 @@ export const DisconnectGoogleDialog = () => {
     const dispatch = useAppDispatch();
 
     const { isLoading, error, mutate } = googleDisconnect();
-
-    const formConfig = useFormConfig('deleteAccount', t);
 
     const onSubmit = useCallback((formData: any) => {
         mutate({ ...formData });
@@ -33,7 +32,8 @@ export const DisconnectGoogleDialog = () => {
             <Text fontWeight={'semibold'} fontSize={'sm'}>{t('DISCONNECT_GOOGLE_ACCOUNT_WARNING')}</Text>
         </Box>
 
-        <Form config={formConfig}
+        <Form<DeleteAccountFormArgs>
+            config={deleteAccountForm}
             error={error?.data}
             disabled={isLoading}
             onCancel={onCancelRequest}
