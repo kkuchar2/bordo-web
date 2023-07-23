@@ -2,7 +2,7 @@
 
 import { FC, useCallback } from 'react';
 
-import { Box, Button, Center, Flex, VStack } from '@chakra-ui/react';
+import { Button, Center, Flex, VStack } from '@chakra-ui/react';
 import { KeyIcon } from '@heroicons/react/24/solid';
 import { useTranslation } from 'react-i18next';
 
@@ -47,11 +47,11 @@ const AccountPage = () => {
     const { username, email, profile, google_account } = user;
 
     return <VStack spacing={'30px'} w={'600px'} h={'100%'} justify={'flex-start'} p={5} align={'stretch'}>
-        <Box bg={'#2a2a2a'} borderRadius={'10px'} p={'15px'}>
+        <div className={'flex flex-col gap-[50px] pt-[50px]'}>
             <Center>
                 <EditableProfilePictureProperty username={username}/>
             </Center>
-            <VStack spacing={'30px'} padding={3} width={'100%'} align={'stretch'}>
+            <VStack spacing={'50px'} width={'100%'} align={'stretch'}>
                 <EditableProperty
                     id={'username'}
                     name={t('USERNAME')}
@@ -73,7 +73,7 @@ const AccountPage = () => {
                     w={'100%'}
                     h={'150px'}
                     borderRadius={'10px'}
-                    bg={'#232323'}
+                    bg={'rgba(255,255,255,0.04)'}
                     maxLength={300}
                     toolbarEnabled={true}
                     toolbarHeight={50}
@@ -103,7 +103,7 @@ const AccountPage = () => {
                     }}
                 />
             </VStack>
-        </Box>
+        </div>
 
         <VStack spacing={'20px'} align={'stretch'}>
             <SettingsSection title={t('PASSWORD_AND_AUTHENTICATION')} show={hasUsablePassword}>

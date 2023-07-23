@@ -62,7 +62,7 @@ const EditableProperty = (props: EditablePropertyProps) => {
         return renderEdit;
     }
 
-    return <div className={'flex w-full flex-col p-2'}>
+    return <div className={'flex w-full flex-col'}>
         <div className={'flex w-full'}>
             <div className={'flex grow flex-col items-start justify-center gap-2'}>
                 <div className={'font-semibold text-sm text-white/70 ' + (props.uppercaseTitle ? 'uppercase' : 'none')}>

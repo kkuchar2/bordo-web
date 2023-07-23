@@ -34,7 +34,7 @@ export const TextAreaWithEmoji = (props: TextAreaWithEmojiProps & HTMLChakraProp
     const {
         name,
         uppercaseTitle = true,
-        outerPadding = '0.5rem',
+        outerPadding = '0',
         maxLength = 300,
         toolbarEnabled = true,
         toolbarHeight = 300,
