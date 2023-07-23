@@ -1,8 +1,7 @@
 import React, { SyntheticEvent, useCallback, useState } from 'react';
 
-import { Box, Flex, Image } from '@chakra-ui/react';
 import { IGif } from '@giphy/js-types';
-import { useTranslation } from 'react-i18next';
+import Image from 'next/image';
 import { useMeasure } from 'react-use';
 
 import { GIFPresentation } from './GIFPresentation/GIFPresentation';
@@ -14,11 +13,11 @@ export const GIFSelect = (props: GIFSelectProps) => {
 
     const { onGifSelected, giphyFetch, pending } = props;
 
-    const [ref, bounds] = useMeasure();
+    const [ref, bounds] = useMeasure<HTMLDivElement>();
+
+    console.log('bounds', bounds.width);
 
     const [gifSearchText, setGifSearchText] = useState('');
-
-    const { t } = useTranslation();
 
     const onGifClick = useCallback((gif: IGif, e: SyntheticEvent<HTMLElement, Event>) => {
         if (pending) {
@@ -27,7 +26,7 @@ export const GIFSelect = (props: GIFSelectProps) => {
         onGifSelected?.(gif, e);
     }, [onGifSelected, pending]);
 
-    return <Flex direction={'column'} w={'100%'}>
+    return <div className={'relative flex w-[400px] flex-col'}>
         <InputWithSmartLabel
             id={'gif_search'}
             name={'gifSearch'}
@@ -36,15 +35,16 @@ export const GIFSelect = (props: GIFSelectProps) => {
                 setGifSearchText(e.target.value);
             }}
             label={'GIPHY_SEARCH_PLACEHOLDER'}/>
-        <Box mr={'20px'} ref={ref}>
+        <div className={'mr-[20px] w-full'} ref={ref}>
             <GIFPresentation
                 width={bounds.width}
                 onGifClick={onGifClick}
                 searchText={gifSearchText}
                 giphyFetch={giphyFetch}/>
-        </Box>
-        <Flex w={'100%'} mt={3}>
-            <Image src={'assets/images/powered_by_giphy.png'} w={150} alt={'gif'}/>
-        </Flex>
-    </Flex>;
+        </div>
+        <div className={'mt-[30px] flex w-full justify-end'}>
+            <Image src={'/images/PoweredBy_Horizontal_Dark Backgrounds_With Logo.png'}
+                width={130} height={50} alt={'powered_by_giphy'}/>
+        </div>
+    </div>;
 };

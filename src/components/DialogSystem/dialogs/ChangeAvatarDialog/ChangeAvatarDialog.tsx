@@ -86,7 +86,10 @@ export const ChangeAvatarDialog = (props: DialogProps) => {
             return <Crop image={image} onCroppedAreaChange={setCroppedArea}/>;
         }
         else if (mode === 'gif') {
-            return <GIFSelect giphyFetch={giphyFetch} onGifSelected={onGifSelected} pending={changeAvatarIsPending}/>;
+            return <GIFSelect
+                giphyFetch={giphyFetch}
+                onGifSelected={onGifSelected}
+                pending={changeAvatarIsPending}/>;
         }
     }, [mode, image, onGifSelected, changeAvatarIsPending]);
 

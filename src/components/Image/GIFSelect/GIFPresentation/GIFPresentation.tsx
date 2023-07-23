@@ -10,7 +10,7 @@ interface StyledGIFPresentationProps {
 }
 
 const StyledGIFPresentation = styled.div<StyledGIFPresentationProps>`
-  height: 500px;
+  height: 400px;
   width: ${({ width }) => width + 20}px;
   overflow-y: scroll;
   overflow-x: hidden;
@@ -40,6 +40,10 @@ export const GIFPresentation = (props: GIFPresentationProps) => {
             return (offset: number) => giphyFetch.search(searchText, { offset, limit: 10 });
         }
     }, [searchText]);
+
+    if (!giphyFetch) {
+        return null;
+    }
 
     return <StyledGIFPresentation width={width}>
         <Grid onGifClick={onGifClick}
