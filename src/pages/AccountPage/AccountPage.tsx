@@ -2,7 +2,6 @@
 
 import { FC, useCallback } from 'react';
 
-import { Button, Center, Flex, VStack } from '@chakra-ui/react';
 import { KeyIcon } from '@heroicons/react/24/solid';
 import { useTranslation } from 'react-i18next';
 
@@ -46,12 +45,12 @@ const AccountPage = () => {
 
     const { username, email, profile, google_account } = user;
 
-    return <VStack spacing={'30px'} w={'600px'} h={'100%'} justify={'flex-start'} p={5} align={'stretch'}>
+    return <div className={'flex h-full w-[600px] flex-col items-stretch gap-[30px] p-5'}>
         <div className={'flex flex-col gap-[50px] pt-[50px]'}>
-            <Center>
+            <div className={'grid place-items-center'}>
                 <EditableProfilePictureProperty username={username}/>
-            </Center>
-            <VStack spacing={'50px'} width={'100%'} align={'stretch'}>
+            </div>
+            <div className={'flex w-full flex-col items-stretch gap-[50px]'}>
                 <EditableProperty
                     id={'username'}
                     name={t('USERNAME')}
@@ -72,7 +71,6 @@ const AccountPage = () => {
                     value={profile.about}
                     w={'100%'}
                     h={'150px'}
-                    borderRadius={'10px'}
                     bg={'rgba(255,255,255,0.04)'}
                     maxLength={300}
                     toolbarEnabled={true}
@@ -102,10 +100,10 @@ const AccountPage = () => {
                         boxShadow: 'none',
                     }}
                 />
-            </VStack>
+            </div>
         </div>
 
-        <VStack spacing={'20px'} align={'stretch'}>
+        <div className={'flex flex-col gap-[20px]'}>
             <SettingsSection title={t('PASSWORD_AND_AUTHENTICATION')} show={hasUsablePassword}>
                 <EditableProperty
                     id={'password'}
@@ -123,20 +121,19 @@ const AccountPage = () => {
             </SettingsSection>
 
             <SettingsSection title={t('SOCIAL_ACCOUNTS')}>
-                <Flex align={'center'} justify={'flex-end'} w={'100%'}>
+                <div className={'flex w-full items-center justify-end'}>
                     <GoogleAccountConnection connection={google_account}/>
-                </Flex>
+                </div>
             </SettingsSection>
 
             <SettingsSection title={t('ACCOUNT')}>
-                <Button bg={'red.600'} _hover={{
-                    bg: 'red.500',
-                }} fontSize={'13px'} onClick={onDeleteAccountAction}>
+                <button className={'rounded-md bg-red-600 p-2 text-sm font-semibold hover:bg-red-500'}
+                    onClick={onDeleteAccountAction}>
                     {t('DELETE_ACCOUNT')}
-                </Button>
+                </button>
             </SettingsSection>
-        </VStack>
-    </VStack>;
+        </div>
+    </div>;
 };
 
 export default WithAuth(AccountPage, {
