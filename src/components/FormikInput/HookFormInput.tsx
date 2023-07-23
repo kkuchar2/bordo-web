@@ -1,6 +1,5 @@
 import React, { ReactElement } from 'react';
 
-import { VStack } from '@chakra-ui/react';
 import { ErrorMessage } from '@hookform/error-message';
 import {
     ControllerFieldState,
@@ -35,7 +34,7 @@ export const HookFormInput = <TFieldValues extends FieldValues>
         errors,
     } = props;
 
-    return <VStack spacing={'7px'} align={'stretch'} position={'relative'}>
+    return <div className={'flex flex-col gap-3'}>
         <InputWithSmartLabel
             label={label}
             type={type}
@@ -50,5 +49,5 @@ export const HookFormInput = <TFieldValues extends FieldValues>
             name={id as any}
             render={FieldErrorsComponent}/>
         }
-    </VStack>;
+    </div>;
 };
