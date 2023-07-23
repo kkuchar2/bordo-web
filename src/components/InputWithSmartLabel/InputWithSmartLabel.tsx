@@ -1,8 +1,9 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 
-import { Flex, Input, Text } from '@chakra-ui/react';
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/solid';
 import { useTranslation } from 'react-i18next';
+
+import styles from './InputWithSmartLabel.module.scss';
 
 import { ButtonWithIcon } from '@/components/chakra/ButtonWithIcon/ButtonWithIcon';
 
@@ -20,7 +21,6 @@ type InputWithSmartLabelProps = {
     errors?: string[];
     isValid?: boolean;
     onBlur?: (e: any) => void;
-    bg?: string;
 }
 
 export const InputWithSmartLabel = (props: InputWithSmartLabelProps) => {
@@ -33,12 +33,11 @@ export const InputWithSmartLabel = (props: InputWithSmartLabelProps) => {
         label,
         disabled,
         placeholder,
-        autoComplete = 'off',
+        autoComplete,
         spellCheck = false,
         errors,
         onBlur,
-        onChange,
-        bg = '#272727'
+        onChange
     } = props;
 
     const [reveal, setReveal] = useState(false);
@@ -47,11 +46,6 @@ export const InputWithSmartLabel = (props: InputWithSmartLabelProps) => {
     const inputRef = useRef(null);
 
     const { t } = useTranslation();
-
-    const onDummyInputClick = useCallback(() => {
-        setFocused(true);
-        inputRef.current.focus();
-    }, [inputRef]);
 
     const labelActive = value && value !== '' || focused;
 
@@ -75,24 +69,19 @@ export const InputWithSmartLabel = (props: InputWithSmartLabelProps) => {
             return null;
         }
 
-        return <ButtonWithIcon title={reveal ? 'Hide password' : 'Show password'}
+        return <ButtonWithIcon
+            title={reveal ? 'Hide password' : 'Reveal password'}
+            onClick={onShowHideClick}
             tabIndex={-1}
-            iconSize={20}
-            iconColor={'rgba(255,255,255,0.48)'}
-            iconColorHover={'white'}
-            IconComponent={reveal ? EyeSlashIcon : EyeIcon}
-            onClick={onShowHideClick}/>;
+            iconColor={'#878787'}
+            iconColorHover={'#a5a5a5'}
+            icon={{
+                size: 20,
+                component: reveal ? EyeSlashIcon : EyeIcon
+            }}/>;
     }, [type, reveal, onShowHideClick, value]);
 
-    return <Flex position={'relative'}
-        align={'center'}
-        pl={'12px'}
-        pr={'12px'}
-        borderRadius={'6px'}
-        justify={'center'}
-        onClick={onDummyInputClick}
-        height={'56px'}
-        bg={bg}
+    return <div className={styles.inputWithSmartLabel}
         onMouseEnter={() => {
             setPointerWithinBounds(true);
         }}
@@ -100,57 +89,21 @@ export const InputWithSmartLabel = (props: InputWithSmartLabelProps) => {
             setPointerWithinBounds(false);
         }}>
 
-        <Text fontSize={labelActive ? '12px' : '14px'}
-            position={'absolute'}
-            zIndex={1}
-            color={labelActive ? 'rgba(255,255,255,1)' : 'rgba(255,255,255,0.48)'}
-            transition={'0.2s ease all'}
-            top={labelActive ? '14px' : '50%'}
-            left={'12px'}
-            transform={'translateY(-50%)'}
-            opacity={disabled ? 0.3 : 0.8}
-            fontWeight={'semibold'}>
+        <div className={[styles.label, labelActive ? styles.active : ''].join(' ')}>
             {t(label)}
-        </Text>
-        <Input
+        </div>
+        <input
             ref={inputRef}
             id={id}
             name={name}
             type={inputType}
-            isInvalid={errors?.includes(id)}
             spellCheck={spellCheck}
-            borderColor={'transparent'}
-            position={'relative'}
-            fontSize={'sm'}
-            h={'30px'}
-            mt={'15px'}
-            pl={0}
-            pr={0}
-            bg={'none'}
-            fontWeight={'semibold'}
-            focusBorderColor={'none'}
-            _hover={{ bg: 'none' }}
-            _focus={{ bg: 'none' }}
-            _autofill={{
-                bg: 'none',
-                border: '1px solid transparent',
-                textFillWeight: 'bold',
-                textFillColor: '#c6c6c6',
-                boxShadow: '0 0 0px 1000px transparent inset',
-                transition: 'background-color 5000s ease-in-out 0s',
-            }}
+            className={styles.input}
             value={value}
-            borderRadius={'none'}
-            errorBorderColor={'crimson'}
             autoComplete={autoComplete}
-            isDisabled={disabled}
+            disabled={disabled}
             placeholder={placeholder}
             onChange={onChange}
-            _placeholder={{
-                color: focused ? 'transparent' : '#a5a5a5',
-                fontSize: 'sm',
-                fontWeight: 'semibold'
-            }}
             onFocus={() => {
                 setFocused(true);
             }}
@@ -159,5 +112,5 @@ export const InputWithSmartLabel = (props: InputWithSmartLabelProps) => {
                 onBlur?.(e);
             }}/>
         {showHideButton}
-    </Flex>;
+    </div>;
 };

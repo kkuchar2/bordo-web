@@ -40,6 +40,7 @@ export const HookFormInput = <TFieldValues extends FieldValues>
             label={label}
             type={type}
             id={id}
+            value={field.value}
             name={name}
             onChange={field.onChange}
             autoComplete={autoComplete}
