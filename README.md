@@ -8,11 +8,10 @@ Backend: Django (separate project publicly available soon)
 
 ### Screens
 
-
-![signup_page](https://github.com/kkuchar2/bordo-web/assets/23500051/d298c7e6-18f0-4a50-91d4-6a58cf065c96)
-![login_page](https://github.com/kkuchar2/bordo-web/assets/23500051/e561f228-42a2-4501-ae05-190b3b598381)
-![forgot_password_page](https://github.com/kkuchar2/bordo-web/assets/23500051/9f951adc-af16-4b46-b4a0-28c5aa598b77)
-![account_settings_page](https://github.com/kkuchar2/bordo-web/assets/23500051/0c3187e3-fa13-4355-8ced-747d0cbc5fcd)
-![change_avatar_select](https://github.com/kkuchar2/bordo-web/assets/23500051/d2dbbe54-c6be-4283-9842-7bc70293a472)
-![edit_image_upload](https://github.com/kkuchar2/bordo-web/assets/23500051/5d72f88b-bf83-4118-b243-760e2b9507b6)
-![gif_select](https://github.com/kkuchar2/bordo-web/assets/23500051/c13c0de4-257c-486b-b6e0-3dc45817dd03)
+![login_page](https://github.com/kkuchar2/bordo-web/assets/23500051/db575269-73dc-4a73-a6fa-0d7154896f03)
+![signup_page](https://github.com/kkuchar2/bordo-web/assets/23500051/b06e0c72-e4e8-486a-8664-348b95907754)
+![forgot_password_page](https://github.com/kkuchar2/bordo-web/assets/23500051/9dbd3785-19fe-4c4c-bbd8-ab1f45d98110)
+![account_settings_page](https://github.com/kkuchar2/bordo-web/assets/23500051/9cbbdd2b-cda9-48a9-8937-98a8323e668d)
+![change_avatar_select](https://github.com/kkuchar2/bordo-web/assets/23500051/f0da5379-5bbc-44a3-8a31-0bd67889f9f6)
+![edit_image_upload](https://github.com/kkuchar2/bordo-web/assets/23500051/bfb55b0a-aeda-4e99-ba4a-d7f9180c560d)
+![gif_select](https://github.com/kkuchar2/bordo-web/assets/23500051/8e55e0f4-6efe-4e29-a7e2-147b08f4a156)
