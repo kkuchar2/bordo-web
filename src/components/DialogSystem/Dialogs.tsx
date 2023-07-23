@@ -132,7 +132,7 @@ const Dialogs = () => {
 
         const Component = componentMap[componentName];
 
-        return <div className={'flex flex-col gap-[20px] rounded-md bg-[#2f2f2f]'}>
+        return <div className={'flex translate-y-[-100px] animate-dialog flex-col gap-[20px] rounded-md bg-[#2f2f2f]'}>
             <div className={'flex w-full flex-col gap-[20px] p-[20px] pb-0'}>
                 <div className={'flex w-full gap-[20px]'}>
                     {renderArrowBack}

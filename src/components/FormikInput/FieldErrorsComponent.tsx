@@ -18,7 +18,7 @@ export const FieldErrorsComponent = (props: FieldErrorsProps) => {
     const { t } = useTranslation();
 
     if (message) {
-        return <div className={'text-[#ff4949]'} key={Math.random()}>
+        return <div className={'translate-y-[-20px] animate-fieldError text-[#ff4949]'} key={Math.random()}>
             {t(message)}
         </div>;
     }
