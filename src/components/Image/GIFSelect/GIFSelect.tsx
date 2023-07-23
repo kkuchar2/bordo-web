@@ -24,7 +24,7 @@ export const GIFSelect = (props: GIFSelectProps) => {
         onGifSelected?.(gif, e);
     }, [onGifSelected, pending]);
 
-    return <div className={'relative flex w-[400px] flex-col'}>
+    return <div className={'relative flex w-full flex-col'}>
         <InputWithSmartLabel
             id={'gif_search'}
             name={'gifSearch'}
@@ -33,7 +33,7 @@ export const GIFSelect = (props: GIFSelectProps) => {
                 setGifSearchText(e.target.value);
             }}
             label={'GIPHY_SEARCH_PLACEHOLDER'}/>
-        <div className={'mr-[20px] w-full'} ref={ref}>
+        <div className={'w-full pr-[20px]'} ref={ref}>
             <GIFPresentation
                 width={bounds.width}
                 onGifClick={onGifClick}

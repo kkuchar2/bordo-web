@@ -1,16 +1,19 @@
 import React, { useCallback, useRef } from 'react';
 
-import { Button, Input, Text } from '@chakra-ui/react';
+import { Button, Input } from '@chakra-ui/react';
 import { CloudArrowUpIcon } from '@heroicons/react/24/solid';
+import { useTranslation } from 'react-i18next';
 
 import { ChangeAvatarModeSelectorProps } from './ChangeAvatarModeSelector.types';
 import { StyledSelectGIFCircle } from './style';
 
 export const ChangeAvatarModeSelector = (props: ChangeAvatarModeSelectorProps) => {
 
-    const { translation, onFileSelected, onAnimatedAvatarSelected } = props;
+    const { onFileSelected, onAnimatedAvatarSelected } = props;
 
     const inputRef = useRef<HTMLInputElement>(null);
+
+    const { t } = useTranslation();
 
     const openFileSelectionWindow = useCallback(() => {
         inputRef.current?.click();
@@ -32,7 +35,9 @@ export const ChangeAvatarModeSelector = (props: ChangeAvatarModeSelectorProps) =
             </Button>
             <Input type={'file'} accept={'image/*'} ref={inputRef} onChange={onFileSelected}
                 style={{ display: 'none' }}/>
-            <Text>{translation('UPLOAD_IMAGE')}</Text>
+            <div className={'font-semibold'}>
+                {t('UPLOAD_IMAGE')}
+            </div>
         </div>
 
         <div className={'flex flex-col items-center justify-center gap-[20px]'}>
@@ -48,7 +53,9 @@ export const ChangeAvatarModeSelector = (props: ChangeAvatarModeSelectorProps) =
 
                 <StyledSelectGIFCircle url={'https://media3.giphy.com/media/lgcUUCXgC8mEo/giphy.gif?'}/>
             </Button>
-            <Text>{translation('ANIMATED_AVATAR')}</Text>
+            <div className={'font-semibold'}>
+                {t('ANIMATED_AVATAR')}
+            </div>
         </div>
     </div>;
 };

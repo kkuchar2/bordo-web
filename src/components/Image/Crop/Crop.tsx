@@ -1,13 +1,17 @@
 import React, { useCallback, useState } from 'react';
 
-import { Flex, Slider, SliderFilledTrack, SliderThumb, SliderTrack } from '@chakra-ui/react';
+import { Slider, SliderFilledTrack, SliderThumb, SliderTrack } from '@chakra-ui/react';
 import { PhotoIcon } from '@heroicons/react/24/solid';
 import Cropper from 'react-easy-crop';
 import { Area } from 'react-easy-crop/types';
 
-import { CropProps } from './Crop.types';
-
 import { CropContainer } from '@/components/DialogSystem/dialogs/ChangeAvatarDialog/style';
+
+interface CropProps {
+    image?: string
+    disabled?: boolean
+    onCroppedAreaChange?: (area: Area) => void
+}
 
 export const Crop = (props: CropProps) => {
 
@@ -37,7 +41,7 @@ export const Crop = (props: CropProps) => {
         onCroppedAreaChange(croppedAreaPixels);
     }, [disabled, onCroppedAreaChange]);
 
-    return <Flex direction={'column'} gap={'40px'}>
+    return <div className={'flex flex-col gap-[40px]'}>
         <CropContainer imageSelected={image != null} width={400}>
             <Cropper
                 image={image}
@@ -53,7 +57,7 @@ export const Crop = (props: CropProps) => {
                 onCropComplete={onCropComplete}
                 onCropChange={setCrop}/>
         </CropContainer>
-        <Flex gap={'20px'} w={'100%'} align={'center'} justify={'center'} p={'40px'}>
+        <div className={'flex w-full items-center justify-center gap-[20px] p-[40px]'}>
             <PhotoIcon width={30} height={30}/>
             <Slider aria-label={'slider-ex-4'}
                 defaultValue={10}
@@ -67,6 +71,6 @@ export const Crop = (props: CropProps) => {
                 <SliderThumb boxSize={6}/>
             </Slider>
             <PhotoIcon width={60} height={60}/>
-        </Flex>
-    </Flex>;
+        </div>
+    </div>;
 };

@@ -92,7 +92,5 @@ export const generateCroppedImageFile = async (imageSrc, crop, resolve) => {
 
     const canvas = await getCroppedImg(imageSrc, crop);
 
-    canvas.toBlob(function (blob) {
-        resolve(blob);
-    }, 'image/png', 1);
+    return await new Promise(resolve => canvas.toBlob(resolve, 'image/png', 1));
 };

@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { Box, Button, Flex } from '@chakra-ui/react';
 import { IGif } from '@giphy/js-types';
 import { useTranslation } from 'react-i18next';
 
@@ -18,11 +17,13 @@ import { useAppDispatch } from '@/state/store';
 
 const FILE_SIZE_LIMIT_BYTES = 5 * 1024 * 1024;
 
+type ChangeAvatarMode = 'upload' | 'gif' | null;
+
 export const ChangeAvatarDialog = (props: DialogProps) => {
     const { t } = useTranslation();
 
     const [file, setFile] = useState(null);
-    const [mode, setMode] = useState('gif');
+    const [mode, setMode] = useState<ChangeAvatarMode>(null);
     const [image, setImage] = useState(null);
     const [extension, setExtension] = useState('.png');
 
@@ -30,7 +31,7 @@ export const ChangeAvatarDialog = (props: DialogProps) => {
 
     const dispatch = useAppDispatch();
 
-    const { isLoading: changeAvatarIsPending, mutate: changeAvatarMutate } = changeAvatar();
+    const changeAvatarQuery = changeAvatar();
 
     const { data: avatarUploadInfo, mutate: avatarUploadInfoMutate } = prepareAvatarUploadInfo();
 
@@ -57,7 +58,7 @@ export const ChangeAvatarDialog = (props: DialogProps) => {
         }).then((response) => {
             console.log('File uploaded successfully: ', response);
             console.log('Sending to server that file is uploaded: ', avatarUploadInfo.url);
-            changeAvatarMutate({
+            changeAvatarQuery.mutate({
                 avatar: 'https://storage.cloud.google.com/bordo-bucket-private-dev/' + avatarUploadInfo.url,
             });
         });
@@ -76,7 +77,7 @@ export const ChangeAvatarDialog = (props: DialogProps) => {
 
     const onGifSelected = useCallback(
         (gif: IGif) => {
-            changeAvatarMutate({
+            changeAvatarQuery.mutate({
                 avatar: `https://media.giphy.com/media/${gif.id}/giphy.gif`,
             });
         }, []);
@@ -89,9 +90,9 @@ export const ChangeAvatarDialog = (props: DialogProps) => {
             return <GIFSelect
                 giphyFetch={giphyFetch}
                 onGifSelected={onGifSelected}
-                pending={changeAvatarIsPending}/>;
+                pending={changeAvatarQuery.isLoading}/>;
         }
-    }, [mode, image, onGifSelected, changeAvatarIsPending]);
+    }, [mode, image, onGifSelected, changeAvatarQuery.isLoading]);
 
     const onAnimatedAvatarSelect = useCallback(() => {
         setMode('gif');
@@ -138,22 +139,46 @@ export const ChangeAvatarDialog = (props: DialogProps) => {
         avatarUploadInfoMutate({ file_extension: extension.slice(1) });
     }, [image, croppedArea, extension, file, sendChangeProfileImage]);
 
+    const cropAndSendImage = useCallback(async () => {
+        const blob = await generateCroppedImageFile(image, croppedArea, sendChangeProfileImage);
+
+        if (blob) {
+            sendChangeProfileImage(blob);
+        }
+
+    }, [image, croppedArea, sendChangeProfileImage]);
+
     useEffect(() => {
+
+        const cropImage = async () => {
+            const blob = await generateCroppedImageFile(image, croppedArea, sendChangeProfileImage);
+            return blob;
+        };
+
         if (mode === 'upload' && avatarUploadInfo && avatarUploadInfo.signed_url) {
-            generateCroppedImageFile(image, croppedArea, sendChangeProfileImage);
+            cropAndSendImage();
         }
     }, [avatarUploadInfo]);
 
     const renderButtons = useMemo(() => {
         if (mode === 'upload') {
-            return <Flex w={'100%'} justify={'flex-end'} gap={'20px'}>
-                <Button onClick={onCancelClick} disabled={false}>{t('CANCEL')}</Button>
-                <Button onClick={onConfirmClick} disabled={false}>{t('CONFIRM')}</Button>
-            </Flex>;
+            return <div className={'w-fill flex justify-end gap-[20px]'}>
+                <button
+                    className={'min-w-[120px] rounded-md bg-neutral-800 p-2 hover:bg-neutral-600'}
+                    onClick={onCancelClick}
+                    disabled={false}>
+                    {t('CANCEL')}
+                </button>
+                <button
+                    className={'min-w-[120px] rounded-md bg-neutral-800 p-2 hover:bg-neutral-600'}
+                    onClick={onConfirmClick} disabled={false}>
+                    {t('CONFIRM')}
+                </button>
+            </div>;
         }
     }, [mode, image, croppedArea, onCancelClick, onConfirmClick]);
 
-    return <Box maxW={400}>
+    return <div className={!mode ? 'max-w-[400px]' : 'w-[500px]'}>
         {!mode && <ChangeAvatarModeSelector
             translation={t}
             onFileSelected={onFileSelected}
@@ -161,6 +186,6 @@ export const ChangeAvatarDialog = (props: DialogProps) => {
 
         {gifSearchOrCropContainer}
         {renderButtons}
-        <DelayedTransition pending={changeAvatarIsPending}/>
-    </Box>;
+        <DelayedTransition pending={changeAvatarQuery.isLoading}/>
+    </div>;
 };
