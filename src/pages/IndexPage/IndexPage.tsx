@@ -60,6 +60,7 @@ const IndexPage = () => {
             <GoogleButton
                 clientId={GOOGLE_CLIENT_ID}
                 context={'signin'}
+                width={'320'}
                 customText={t('CONTINUE_WITH_GOOGLE')}
                 text={'signin'}
                 useOneTap={true}
