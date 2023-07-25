@@ -66,22 +66,7 @@ const IndexPage = () => {
                 error={loginError?.data}
                 excludeErrors={['email_not_verified']}
                 useCancelButton={false}
-                onSubmit={attemptLogin}
-                fieldsSpacing={'20px'}
-                contentSpacing={'10px'}
-                buttonProps={{
-                    bg: '#434343',
-                    w: '250px',
-                    h: '52px',
-                    justifySelf: 'flex-end',
-                    borderRadius: '100px',
-                    fontSize: 'md'
-                }}
-                buttonsStackProps={{
-                    pt: { base: 2, sm: 2, md: 1, lg: '20px' },
-                    m: 0,
-                    justifyContent: 'center',
-                }}/>
+                onSubmit={attemptLogin}/>
 
             <NavLink color={'#77a4df'}
                 fontSize={'md'}

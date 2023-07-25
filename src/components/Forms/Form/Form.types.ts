@@ -1,4 +1,3 @@
-import { ButtonProps, StackProps } from '@chakra-ui/react';
 import { FieldValues } from 'react-hook-form/dist/types';
 
 import { FormConfig } from '@/components/Forms/formConfig';
@@ -14,12 +13,8 @@ export interface FormProps<TFieldValues extends FieldValues = FieldValues> {
     disabled?: boolean;
     excludeErrors?: string[];
     error?: QueryResponseErrorData;
-    fieldsSpacing?: StackProps['spacing'];
-    contentSpacing?: StackProps['spacing'];
     onChange?: (values: TFieldValues) => void;
     submitButtonTextKey?: string;
     useCancelButton?: boolean;
-    buttonsStackProps?: StackProps;
-    buttonProps?: ButtonProps
     className?: string;
 }

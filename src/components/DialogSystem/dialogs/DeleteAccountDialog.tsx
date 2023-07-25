@@ -47,9 +47,7 @@ export const DeleteAccountDialog = () => {
             initialValues={{
                 current_password: '',
             }}
-            buttonsStackProps={{
-                gap: { base: 2, sm: 3, md: 3, lg: 3 },
-            }}/>
+        />
         <DelayedTransition pending={deleteAccountQuery.isLoading}/>
     </VStack>;
 };

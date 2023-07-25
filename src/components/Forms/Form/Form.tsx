@@ -1,6 +1,5 @@
-import React, { useCallback, useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 
-import { Button, Flex, Text, VStack } from '@chakra-ui/react';
 import {
     Controller,
     ControllerFieldState,
@@ -26,12 +25,8 @@ const Form = <TFieldValues extends FieldValues = FieldValues>(props: FormProps<T
         title,
         excludeErrors,
         description,
-        fieldsSpacing = '20px',
-        contentSpacing = '20px',
         submitButtonTextKey,
         useCancelButton,
-        buttonsStackProps,
-        buttonProps,
         className
     } = props;
 
@@ -64,7 +59,7 @@ const Form = <TFieldValues extends FieldValues = FieldValues>(props: FormProps<T
             return null;
         }
 
-        return <VStack spacing={fieldsSpacing} align={'stretch'}>
+        return <div className={'flex flex-col items-stretch gap-[20px]'}>
             {
                 config.fields.map(f => {
 
@@ -90,7 +85,7 @@ const Form = <TFieldValues extends FieldValues = FieldValues>(props: FormProps<T
                     />;
                 })
             }
-        </VStack>;
+        </div>;
     }, [config, formErrors, disabled, initialValues]);
 
     if (!config) {
@@ -99,31 +94,27 @@ const Form = <TFieldValues extends FieldValues = FieldValues>(props: FormProps<T
     }
 
     return <form onSubmit={handleSubmit(onFormSubmitted)}>
-        <Flex className={className} direction={'column'} gap={contentSpacing}>
-            {title ? <Text fontSize={'2xl'} fontWeight={'semibold'}>{title}</Text> : null}
-            {description ? <Text>{description}</Text> : null}
+        <div className={[className, 'flex flex-col gap-[20px]'].join(' ')}>
+            {title ? <div className={'text-2xl font-semibold'}>{title}</div> : null}
+            {description ? <div>{description}</div> : null}
             {renderFields}
             {/*{error && nonFieldErrors}*/}
-            <Flex {...buttonsStackProps}>
-                {useCancelButton && <Button type={'button'}
-                    minWidth={'100px'}
-                    className={'cancelButton'}
+            <div className={'flex'}>
+                {useCancelButton && <button
+                    type={'button'}
+                    className={'cancelButton min-w-[100px]'}
                     onClick={onCancel}
-                    isDisabled={disabled}>
-                    <Text fontSize={'sm'}>{t('CANCEL')}</Text>
-                </Button>}
-                <Button bg={'#006C52'}
-                    _hover={{ bg: '#00785a' }}
+                    disabled={disabled}>
+                    {t('CANCEL')}
+                </button>}
+                <button
+                    className={'w-full rounded-md bg-[#006C52] p-3 font-semibold hover:bg-[#00785a]'}
                     type={'submit'}
-                    width={'100%'}
-                    isDisabled={disabled}
-                    {...buttonProps}>
-                    <Text fontSize={'sm'}>
-                        {t(submitButtonTextKey || 'SUBMIT')}
-                    </Text>
-                </Button>
-            </Flex>
-        </Flex>
+                    disabled={disabled}>
+                    {t(submitButtonTextKey || 'SUBMIT')}
+                </button>
+            </div>
+        </div>
     </form>;
 };
 

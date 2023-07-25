@@ -50,22 +50,7 @@ const SignUpPage = () => {
                 error={registerError?.data}
                 disabled={registrationPending}
                 useCancelButton={false}
-                onSubmit={attemptRegister}
-                fieldsSpacing={'20px'}
-                contentSpacing={'10px'}
-                buttonProps={{
-                    bg: '#434343',
-                    w: '250px',
-                    h: '50px',
-                    justifySelf: 'flex-end',
-                    borderRadius: '100px',
-                    fontSize: 'md'
-                }}
-                buttonsStackProps={{
-                    pt: { base: 2, sm: 2, md: 1, lg: '20px' },
-                    m: 0,
-                    justifyContent: 'center',
-                }}/>
+                onSubmit={attemptRegister}/>
 
             <div className={'flex flex-col items-center justify-center gap-[20px]'}>
                 <Text fontSize={'md'} color={'#C7C7C7'}>{t('ALREADY_HAVE_ACCOUNT')}</Text>

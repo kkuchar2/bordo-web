@@ -37,10 +37,7 @@ export const DisconnectGoogleDialog = () => {
             error={error?.data}
             disabled={isLoading}
             onCancel={onCancelRequest}
-            onSubmit={onSubmit}
-            buttonsStackProps={{
-                gap: { base: 2, sm: 3, md: 3, lg: 3 },
-            }}/>
+            onSubmit={onSubmit}/>
         <DelayedTransition pending={isLoading}/>
     </Flex>;
 };

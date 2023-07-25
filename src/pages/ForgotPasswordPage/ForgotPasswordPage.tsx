@@ -54,19 +54,7 @@ const ForgotPassword = () => {
                     disabled={forgotPasswordPending}
                     useCancelButton={false}
                     onSubmit={requestPasswordReset}
-                    buttonProps={{
-                        bg: '#434343',
-                        w: '250px',
-                        h: '50px',
-                        justifySelf: 'flex-end',
-                        borderRadius: '100px',
-                        fontSize: 'md'
-                    }}
-                    buttonsStackProps={{
-                        m: 0,
-                        mb: '20px',
-                        justifyContent: 'center',
-                    }}/>
+                />
 
                 <div className={'flex flex-col items-center justify-center gap-[20px]'}>
                     <NavLink color={'#77a4df'}

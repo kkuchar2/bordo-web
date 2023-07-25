@@ -1,7 +1,5 @@
 import React, { useCallback, useEffect } from 'react';
 
-import { ChangePropertyDialogProps } from './ChangePropertyDialog';
-
 import { DelayedTransition } from '@/components/chakra/DelayedTransition/DelayedTransition';
 import { showDialogAfterFirstPasswordSetupRequest } from '@/components/DialogSystem/readyDialogs';
 import Form from '@/components/Forms/Form/Form';
@@ -11,9 +9,9 @@ import { createNewPassword } from '@/queries/account';
 import { closeDialog, setCloseable } from '@/state/reducers/dialog/dialogSlice';
 import { BaseDialogProps, DialogProps } from '@/state/reducers/dialog/dialogSlice.types';
 
-export const PasswordCreationRequiredDialog = (props: DialogProps<ChangePropertyDialogProps> & BaseDialogProps) => {
+export const PasswordCreationRequiredDialog = (props: DialogProps & BaseDialogProps) => {
 
-    const { dialog, dispatch, t } = props;
+    const { dialog, dispatch } = props;
     const { onCancel } = dialog;
     const { isLoading, error, isError, data, isSuccess, mutate } = createNewPassword();
 
@@ -24,7 +22,7 @@ export const PasswordCreationRequiredDialog = (props: DialogProps<ChangeProperty
         else if (isError) {
             dispatch(closeDialog());
         }
-    }, [isSuccess, t]);
+    }, [isSuccess]);
 
     const onCancelRequest = useCallback(() => {
         if (onCancel) {
@@ -51,10 +49,6 @@ export const PasswordCreationRequiredDialog = (props: DialogProps<ChangeProperty
             initialValues={{
                 new_password: '',
                 new_password_confirm: ''
-            }}
-            buttonsStackProps={{
-                p: { base: 2, sm: 2, md: 4, lg: 3 },
-                m: 0
             }}/>
         <DelayedTransition pending={isLoading}/>
     </div>;
