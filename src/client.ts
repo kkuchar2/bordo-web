@@ -24,6 +24,11 @@ ApiClient.interceptors.response.use(
     },
     async (error) => {
         const originalRequest = error.config;
+
+        if (!error.response) {
+            return Promise.reject(error);
+        }
+
         if (error.response.status === 401 && !originalRequest._retry && originalRequest.url !== 'account/token-refresh') {
             await refreshTokenFn();
             originalRequest._retry = true;

@@ -3,6 +3,8 @@
 import { GiphyFetch } from '@giphy/js-fetch-api';
 import { QueryCache, QueryClient } from '@tanstack/react-query';
 
+import { showErrorToast } from '@/components/Toast/readyToastNotifications';
+
 export const GOOGLE_CLIENT_ID = '548057113652-60s2uh11sbfvb8sorn2amii2d4316pbi.apps.googleusercontent.com';
 
 export const environment = {
@@ -56,8 +58,15 @@ export const SUPPORTED_LANGUAGES = ['en', 'pl'];
 
 export const queryClient = new QueryClient({
     queryCache: new QueryCache({
-        onError: (err, query) => {
-            console.error(`QueryCache[${query.queryKey}]`, err);
+        onError: (error, query) => {
+            // console.error(`QueryCache[${query.queryKey}]`, error);
+
+            if (error.message === 'Network Error') {
+                showErrorToast('Error connecting to server');
+            }
+            else if (error.status === 500) {
+                showErrorToast('Server error');
+            }
         }
     }),
     defaultOptions: {

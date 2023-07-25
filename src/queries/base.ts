@@ -1,86 +1,69 @@
-import { QueryKey } from '@tanstack/query-core';
+import { MutationKey, QueryKey } from '@tanstack/query-core';
 import { useMutation, UseMutationOptions, useQuery } from '@tanstack/react-query';
 import { UseQueryOptions } from '@tanstack/react-query/src/types';
-import { AxiosError, AxiosInstance, AxiosRequestConfig } from 'axios';
+import { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 
-import ApiClient from '../client';
+export type QueryResponseErrorData = {}
 
-import { checkPasswordRequired } from './util';
-
-import { showErrorToast } from '@/components/Toast/readyToastNotifications';
-
-export interface QueryResponseErrorData {
-
-}
-
-export interface QueryResponseError {
+export type QueryResponseError = {
     message: string;
     data: QueryResponseErrorData;
     status: number;
 }
 
-export const CSRF_CONFIG = {
-    xsrfCookieName: 'csrftoken',
-    xsrfHeaderName: 'X-CSRFTOKEN'
-};
-
 export const AxiosConfigs = {
-    /**
-     * Do not send and receive cookies.
-     */
+    // Do not send and receive cookies.
     NO_CREDENTIALS: { withCredentials: false },
 
-    /**
-     * Send and receive all cookies
-     */
+    //Send and receive all cookies
     WITH_CREDENTIALS: { withCredentials: true },
 
-    /**
-     * Send and receive all cookies.
-     * Also, send CSRF token in the header and receive it as a cookie.
-     */
-    WITH_CREDENTIALS_AND_CSRF: { withCredentials: true, ...CSRF_CONFIG },
+    // Send and receive all cookies + CSRF token in the header.
+    WITH_CREDENTIALS_AND_CSRF: {
+        withCredentials: true,
+        xsrfCookieName: 'csrftoken',
+        xsrfHeaderName: 'X-CSRFTOKEN'
+    },
 };
 
-export const useGetQuery = <ResponseDataType>
-(client: AxiosInstance,
-    queryKey: QueryKey,
-    endpoint: string,
+export const getQueryInternal = <
+    TQueryFnData = unknown,
+    TError = unknown,
+    TData = TQueryFnData,
+    TQueryKey extends QueryKey = QueryKey,
+>(client: AxiosInstance, queryKey: TQueryKey, endpoint: string,
     config: AxiosRequestConfig,
-    options?: UseQueryOptions<ResponseDataType, QueryResponseError>) => {
+    options?: UseQueryOptions<TQueryFnData, TError, TData, TQueryKey>) => {
 
-    return useQuery<ResponseDataType, any>(queryKey,
-        async (): Promise<ResponseDataType> => {
-            let response = null;
-
-            try {
-                response = await client.get<ResponseDataType>(endpoint, config);
-            }
-            catch (e) {
-                const error = e as AxiosError<QueryResponseError>;
-                const message = error.message;
-                const data = error.response.data;
-                const status = error.response.status;
-                throw { message, data, status } as QueryResponseError;
-            }
+    return useQuery<TQueryFnData, TError, TData, TQueryKey>(queryKey,
+        async (): Promise<TQueryFnData> => {
+            let response = await client.get<TQueryFnData, AxiosResponse<TQueryFnData>, TData>(endpoint, config);
             return response.data;
         }, options);
 };
 
-export const usePostQuery = <ResponseDataType = any, RequestDataType = any>
+export const postQueryInternal = <
+    TData = unknown,
+    TError = unknown,
+    TVariables = void,
+    TContext = unknown,
+>
 (client: AxiosInstance,
-    queryKey: QueryKey,
+    mutationKey: MutationKey,
     endpoint: string,
     config?: AxiosRequestConfig,
-    options?: UseMutationOptions<ResponseDataType, QueryResponseError, RequestDataType>) => {
+    options?: Omit<
+    UseMutationOptions<TData, TError, TVariables, TContext>,
+    'mutationKey' | 'mutationFn'
+    >) => {
 
-    return useMutation<ResponseDataType, QueryResponseError, RequestDataType>(queryKey,
-        async (data): Promise<ResponseDataType> => {
+    return useMutation<TData, TError, TVariables, TContext>(mutationKey,
+        async (data): Promise<TData> => {
             let response = null;
 
             try {
                 config = config ? config : AxiosConfigs.WITH_CREDENTIALS_AND_CSRF;
-                response = await client.post<ResponseDataType>(endpoint, data, config);
+                response = await client.post<TData>(endpoint, data, config);
             }
             catch (e) {
                 const error = e as AxiosError<QueryResponseError>;
@@ -97,68 +80,40 @@ export const usePostQuery = <ResponseDataType = any, RequestDataType = any>
         }, options);
 };
 
-export const usePutQuery = <ResponseDataType = any, ErrorType = QueryResponseError, RequestDataType = any>(client: AxiosInstance,
-    queryKey: QueryKey,
+export const putQueryInternal = <
+    TData = unknown,
+    TError = unknown,
+    TVariables = void,
+    TContext = unknown,
+>
+(client: AxiosInstance,
+    mutationKey: MutationKey,
     endpoint: string,
-    config: AxiosRequestConfig,
-    options?: UseMutationOptions<ResponseDataType, ErrorType, RequestDataType>) => {
-    return useMutation<ResponseDataType, ErrorType, RequestDataType>(queryKey,
-        async (data): Promise<ResponseDataType> => await client.put(endpoint, data, config), options);
-};
+    config?: AxiosRequestConfig,
+    options?: Omit<
+    UseMutationOptions<TData, TError, TVariables, TContext>,
+    'mutationKey' | 'mutationFn'
+    >) => {
 
-export const makeGet = <T>(queryKey: QueryKey, endpoint: string, config: AxiosRequestConfig) => {
-    return (options?: UseQueryOptions<T>) => {
-        return useGetQuery<T>(ApiClient, queryKey, endpoint, config, options);
-    };
-};
+    return useMutation<TData, TError, TVariables, TContext>(mutationKey,
+        async (data): Promise<TData> => {
+            let response = null;
 
-export const makePost = <ResponseDataType = any, RequestDataType = any>(queryKey: QueryKey, endpoint: string, config: AxiosRequestConfig) => {
-    return (options?: UseMutationOptions<ResponseDataType, unknown, RequestDataType>) => {
-        return usePostQuery<ResponseDataType, RequestDataType>(ApiClient, queryKey, endpoint, config, options);
-    };
-};
-
-export const authGet = <ResponseDataType = any>(queryKey: QueryKey, endpoint: string) => {
-    return (options?: UseQueryOptions<ResponseDataType>) => {
-        return useGetQuery<ResponseDataType>(ApiClient, queryKey, endpoint,
-            { ...AxiosConfigs.WITH_CREDENTIALS_AND_CSRF }, {
-                ...options,
-                onError: (error: QueryResponseError) => {
-                    if (error.message === 'Network Error') {
-                        showErrorToast('Error connecting to server');
-                    }
-                    else if (error.status === 500) {
-                        showErrorToast('Server error');
-                    }
-                    options?.onError?.(error);
-                }
-            });
-    };
-};
-
-export const authPost = <ResponseDataType = any, RequestDataType = any>(queryKey: QueryKey, endpoint: string, config?: AxiosRequestConfig) => {
-    return (options?: UseMutationOptions<ResponseDataType, QueryResponseError, RequestDataType>) => {
-        return usePostQuery<ResponseDataType, RequestDataType>(ApiClient, queryKey, endpoint, config, {
-            ...options,
-            onError: (error: QueryResponseError, variables, recover) => {
-                if (error.message === 'Network Error') {
-                    showErrorToast('Error connecting to server');
-                }
-                else if (error.status === 500) {
-                    showErrorToast('Server error');
-                }
-
-                checkPasswordRequired(error);
-
-                options?.onError?.(error, variables, recover);
+            try {
+                config = config ? config : AxiosConfigs.WITH_CREDENTIALS_AND_CSRF;
+                response = await client.put<TData>(endpoint, data, config);
             }
-        });
-    };
-};
-
-export const authPut = <ResponseDataType = any, ErrorType = QueryResponseError, RequestDataType = any>(queryKey: QueryKey, endpoint: string) => {
-    return (options?: UseMutationOptions<ResponseDataType, ErrorType, RequestDataType>) => {
-        return usePutQuery<ResponseDataType, ErrorType, RequestDataType>(ApiClient, queryKey, endpoint,
-            { ...AxiosConfigs.WITH_CREDENTIALS_AND_CSRF }, options);
-    };
+            catch (e) {
+                const error = e as AxiosError<QueryResponseError>;
+                const message = error.message;
+                const response = error.response || {
+                    data: {},
+                    status: -1
+                };
+                const data = response.data;
+                const status = response.status;
+                throw { message, data, status } as QueryResponseError;
+            }
+            return response.data;
+        }, options);
 };

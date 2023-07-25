@@ -1,4 +1,5 @@
-import { authGet, authPost, authPut, AxiosConfigs, QueryResponseError } from '../base';
+import { authGetQuery, authPostQuery, authPutQuery } from '../authQueries';
+import { AxiosConfigs, QueryResponseError } from '../base';
 
 import { User, UserProfile } from './types';
 
@@ -14,7 +15,7 @@ import { closeDialog } from '@/state/reducers/dialog/dialogSlice';
 import { store } from '@/state/store';
 
 export const changeAbout = () => {
-    return authPut(['setAbout'], 'account/change-description')({
+    return authPutQuery(['setAbout'], 'account/change-description')({
         onMutate: async (data: any) => {
 
             console.log('Change about onMutate', data);
@@ -44,7 +45,7 @@ export const changeAbout = () => {
 };
 
 export const changeEmail = () => {
-    return authPost(['changeEmail'], 'account/change-email')({
+    return authPostQuery(['changeEmail'], 'account/change-email')({
         onSuccess: () => {
             showEmailChangeConfirmationSentDialog();
         }
@@ -52,7 +53,7 @@ export const changeEmail = () => {
 };
 
 export const changeUsername = () => {
-    return authPost(['changeUsername'], 'account/change-username')({
+    return authPostQuery(['changeUsername'], 'account/change-username')({
         onSuccess: () => {
             queryClient.invalidateQueries(['user']);
             showSuccessToast('Username has been changed');
@@ -61,7 +62,7 @@ export const changeUsername = () => {
 };
 
 export const changePassword = () => {
-    return authPost(['changePassword'], 'account/change-password')({
+    return authPostQuery(['changePassword'], 'account/change-password')({
         onSuccess: () => {
             showSuccessToast('Password has been changed');
         }
@@ -69,7 +70,7 @@ export const changePassword = () => {
 };
 
 export const changeAvatar = () => {
-    return authPost(['changeAvatar'], 'account/change-avatar')({
+    return authPostQuery(['changeAvatar'], 'account/change-avatar')({
         onSuccess: () => {
             // TODO: Add progress handler in mutation
             queryClient.invalidateQueries(['user']);
@@ -79,11 +80,11 @@ export const changeAvatar = () => {
 };
 
 export const forgotPassword = () => {
-    return authPost(['forgotPassword'], 'account/forgot-password')({});
+    return authPostQuery(['forgotPassword'], 'account/forgot-password')({});
 };
 
 export const changeAnimatedAvatar = () => {
-    return authPut(['changeAnimatedAvatar'], 'account/change-animated-avatar')({
+    return authPutQuery(['changeAnimatedAvatar'], 'account/change-animated-avatar')({
         onSuccess: () => {
             queryClient.invalidateQueries(['user']);
             store.dispatch(closeDialog());
@@ -92,7 +93,7 @@ export const changeAnimatedAvatar = () => {
 };
 
 export const login = () => {
-    return authPost(['login'], 'account/login')({
+    return authPostQuery(['login'], 'account/login')({
         onSuccess: () => {
             queryClient.invalidateQueries(['user']);
         },
@@ -110,7 +111,7 @@ export const login = () => {
 };
 
 export const register = () => {
-    return authPost(['register'], 'account/register')({
+    return authPostQuery(['register'], 'account/register')({
         onSuccess: () => {
             showRegistrationCompleteDialog();
         }
@@ -118,7 +119,7 @@ export const register = () => {
 };
 
 export const logout = () => {
-    return authPost(['logout'], 'account/logout')({
+    return authPostQuery(['logout'], 'account/logout')({
         onSuccess: () => {
             queryClient.setQueryData(['user'], null);
         }
@@ -126,7 +127,7 @@ export const logout = () => {
 };
 
 export const deleteAccount = () => {
-    return authPost(['deleteAccount'], 'account/delete-account')({
+    return authPostQuery(['deleteAccount'], 'account/delete-account')({
         onSuccess: () => {
             queryClient.setQueryData(['user'], null);
         }
@@ -134,7 +135,7 @@ export const deleteAccount = () => {
 };
 
 export const disableAccount = () => {
-    return authPost(['disableAccount'], 'account/disable-account')({
+    return authPostQuery(['disableAccount'], 'account/disable-account')({
         onSuccess: () => {
             queryClient.setQueryData(['user'], null);
         }
@@ -142,7 +143,7 @@ export const disableAccount = () => {
 };
 
 export const googleLogin = () => {
-    return authPost(['googleLogin'], 'account/google-login')({
+    return authPostQuery(['googleLogin'], 'account/google-login')({
         onSuccess: () => {
             queryClient.invalidateQueries(['user']);
         }
@@ -150,7 +151,7 @@ export const googleLogin = () => {
 };
 
 export const googleConnect = () => {
-    return authPost(['googleConnect'], 'account/google-connect')({
+    return authPostQuery(['googleConnect'], 'account/google-connect')({
         onSuccess: () => {
             queryClient.invalidateQueries(['user']);
         }
@@ -158,15 +159,15 @@ export const googleConnect = () => {
 };
 
 export const createNewPassword = () => {
-    return authPost(['createNewPassword'], 'account/create-new-password')({});
+    return authPostQuery(['createNewPassword'], 'account/create-new-password')({});
 };
 
 export const verifyResetPasswordToken = () => {
-    return authPost(['verifyResetPasswordToken'], 'account/verify-reset-password-token')({});
+    return authPostQuery(['verifyResetPasswordToken'], 'account/verify-reset-password-token')({});
 };
 
 export const confirmAccount = () => {
-    return authPost(['confirmAccount'],
+    return authPostQuery(['confirmAccount'],
         'account/verify-email',
         { ...AxiosConfigs.NO_CREDENTIALS })({
         onSuccess: () => {
@@ -177,15 +178,15 @@ export const confirmAccount = () => {
 };
 
 export const resendRegistrationEmail = () => {
-    return authPost(['resendRegistrationEmail'], 'account/resend-email')({});
+    return authPostQuery(['resendRegistrationEmail'], 'account/resend-email')({});
 };
 
 export const resetPassword = () => {
-    return authPost(['resetPassword'], 'account/reset-password')({});
+    return authPostQuery(['resetPassword'], 'account/reset-password')({});
 };
 
 export const googleDisconnect = () => {
-    return authPost(['googleDisconnect'], 'account/google-disconnect')({
+    return authPostQuery(['googleDisconnect'], 'account/google-disconnect')({
         onSuccess: () => {
             store.dispatch(closeDialog());
             queryClient.invalidateQueries(['user']);
@@ -194,13 +195,13 @@ export const googleDisconnect = () => {
 };
 
 export const getUser = () => {
-    return authGet<User>(['user'], 'account/user')({});
+    return authGetQuery<User>(['user'], 'account/user')({});
 };
 
 export const prepareAvatarUploadInfo = () => {
-    return authPost(['avatarUploadInfo'], 'account/avatar-upload-info')({});
+    return authPostQuery(['avatarUploadInfo'], 'account/avatar-upload-info')({});
 };
 
 export const getProfile = (username: string) => {
-    return authGet<UserProfile>(['profile', username], `people/profile/${username}`);
+    return authGetQuery<UserProfile>(['profile', username], `people/profile/${username}`);
 };
