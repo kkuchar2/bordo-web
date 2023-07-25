@@ -3,5 +3,5 @@ export interface SentEmailDialogArgs<T> {
     title: string,
     description: string,
     closeable?: boolean
-    data?: T
+    data: T
 }

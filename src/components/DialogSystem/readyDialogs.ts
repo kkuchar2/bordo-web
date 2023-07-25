@@ -35,7 +35,8 @@ export const showRegistrationCompleteDialog = () => {
         component: 'SentEmailDialog',
         title: 'REGISTRATION_COMPLETE_TITLE',
         description: 'REGISTRATION_COMPLETE_DESCRIPTION',
-        closeable: true
+        closeable: true,
+        data: {}
     });
 };
 
@@ -44,7 +45,8 @@ export const showEmailChangeConfirmationSentDialog = () => {
         component: 'SentEmailDialog',
         title: 'EMAIL_CHANGE_CONFIRMATION_SENT_TITLE',
         description: 'EMAIL_CHANGE_CONFIRMATION_SENT_DESCRIPTION',
-        closeable: true
+        closeable: true,
+        data: {}
     });
 };
 
@@ -53,7 +55,8 @@ export const showDialogAfterPasswordResetRequest = () => {
         component: 'SentEmailDialog',
         title: 'PASSWORD_RESET_MAIL_SENT_TITLE',
         description: 'PASSWORD_RESET_MAIL_SENT_DESCRIPTION',
-        closeable: true
+        closeable: true,
+        data: {}
     });
 };
 
@@ -251,6 +254,7 @@ export const showPasswordCreationRequiredDialog = () => {
         openDialog({
             component: 'PasswordCreationRequiredDialog',
             props: {
+                data: {},
                 dialog: {
                     title: 'PASSWORD_CREATION_REQUIRED_TITLE',
                     description: 'PASSWORD_REQUIRED_DESCRIPTION',

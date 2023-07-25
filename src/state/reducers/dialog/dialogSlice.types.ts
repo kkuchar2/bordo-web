@@ -1,5 +1,3 @@
-import { TFunction } from 'i18next';
-
 import { IconProps } from '@/components/Icons/Icon';
 import { AppDispatch } from '@/state/store';
 
@@ -15,13 +13,12 @@ export interface IDialogComponentProps {
 }
 
 export interface BaseDialogProps {
-    dispatch?: AppDispatch,
-    t?: TFunction,
+    dispatch: AppDispatch
 }
 
 export interface DialogProps<T = any> {
     dialog: IDialogComponentProps,
-    data?: T;
+    data: T;
 }
 
 export interface DialogSliceState {

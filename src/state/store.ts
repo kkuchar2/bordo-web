@@ -1,7 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 
-import { middlewares } from './middleware';
 import appReducer from './reducers/application/appSlice';
 import dialogReducer from './reducers/dialog/dialogSlice';
 import navbarReducer from './reducers/navbar/navbarSlice';
@@ -17,7 +16,7 @@ export const store = configureStore({
         navbar: navbarReducer,
     },
     middleware: getDefaultMiddleware => {
-        return getDefaultMiddleware(defaultMiddlewareOptions).concat(middlewares);
+        return getDefaultMiddleware(defaultMiddlewareOptions);
     }
 });
 
