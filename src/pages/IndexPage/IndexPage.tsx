@@ -2,7 +2,6 @@
 
 import React, { useCallback } from 'react';
 
-import { Center, Flex, Text } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 
 import { DelayedTransition } from '@/components/chakra/DelayedTransition/DelayedTransition';
@@ -20,50 +19,33 @@ const IndexPage = () => {
 
     const { t } = useTranslation();
 
-    const {
-        isIdle: googleLoginIdle,
-        isLoading: googleLoginPending,
-        error: googleLoginError,
-        isSuccess: googleLoginSuccess,
-        mutate: googleLoginMutate,
-        reset: googleLoginReset
-    } = googleLogin();
+    const googleLoginQuery = googleLogin();
 
-    const {
-        isIdle: loginIdle,
-        isLoading: loginPending,
-        error: loginError,
-        isSuccess: loginSuccess,
-        mutate: loginMutate,
-        reset: loginReset
-    } = login();
+    const loginQuery = login();
 
     const attemptLogin = useCallback((formData: any) => {
         const { username_or_email, password } = formData;
         queryClient.removeQueries(['googleLogin']);
-        googleLoginReset();
-        loginMutate({ username_or_email, password });
+        googleLoginQuery.reset();
+        loginQuery.mutate({ username_or_email, password });
     }, []);
 
     const onSignInWithGoogle = useCallback((credentialResponse: any) => {
-        loginReset();
-        googleLoginMutate(credentialResponse);
+        loginQuery.reset();
+        googleLoginQuery.mutate(credentialResponse);
     }, []);
 
-    return <Center w={'100%'} h={'100%'}>
-        <Flex borderRadius={{ base: 0, sm: 8 }}
-            direction={'column'}
-            bg={'#2a2a2a'}
-            width={{ base: '100%', sm: '400px' }}
-            p={'40px'}
-            gap={'30px'}>
+    return <div className={'grid h-full w-full place-items-center'}>
+        <div className={'flex w-full flex-col gap-[30px] bg-[#2a2a2a] p-[40px] sm:w-[400px] sm:rounded-md'}>
 
-            <Text textAlign={'center'} fontWeight={'bold'} fontSize={'2xl'}>{t('SIGN_IN_TO_YOUR_ACCOUNT')}</Text>
+            <div className={'text-center text-2xl font-bold'}>
+                {t('SIGN_IN_TO_YOUR_ACCOUNT')}
+            </div>
 
             <Form<LoginFormArgs>
                 config={loginForm}
                 submitButtonTextKey={'SIGN_IN'}
-                error={loginError?.data}
+                error={loginQuery.error?.data}
                 excludeErrors={['email_not_verified']}
                 useCancelButton={false}
                 onSubmit={attemptLogin}/>
@@ -72,7 +54,7 @@ const IndexPage = () => {
                 fontSize={'md'}
                 fontWeight={'semibold'}
                 href={'/forgotPassword'}>
-                <Text>{t('FORGOT_PASSWORD_QUESTION')}</Text>
+                {t('FORGOT_PASSWORD_QUESTION')}
             </NavLink>
 
             <GoogleButton
@@ -83,12 +65,14 @@ const IndexPage = () => {
                 useOneTap={true}
                 onSuccess={onSignInWithGoogle}/>
 
-            <Center mt={'-20px'}>
-                {renderNonFieldErrors(googleLoginError?.data, t, [])}
-            </Center>
+            <div className={'mt-[-20px] grid place-items-center'}>
+                {renderNonFieldErrors(googleLoginQuery.error?.data, t, [])}
+            </div>
 
             <div className={'flex flex-col items-center justify-center gap-[20px]'}>
-                <Text fontSize={'md'} color={'#C7C7C7'}>{t('NEED_ACCOUNT')}</Text>
+                <div className={'text-[#C7C7C7]'}>
+                    {t('NEED_ACCOUNT')}
+                </div>
                 <NavLink color={'#77a4df'}
                     fontSize={'md'}
                     fontWeight={'semibold'}
@@ -97,14 +81,14 @@ const IndexPage = () => {
                 </NavLink>
             </div>
 
-            {(loginPending || googleLoginPending) &&
+            {(loginQuery.isLoading || googleLoginQuery.isLoading) &&
                 <DelayedTransition pending={true}
                     position={'absolute'}
                     bottom={0}
                     left={0}
                     p={0} w={'100%'}/>}
-        </Flex>
-    </Center>;
+        </div>
+    </div>;
 };
 
 export default WithAuth(IndexPage, {
