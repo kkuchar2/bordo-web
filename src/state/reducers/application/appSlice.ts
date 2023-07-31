@@ -7,7 +7,7 @@ export interface AppSliceState {
 }
 
 const defaultState: AppSliceState = {
-    currentView: 'Home'
+    currentView: 'home'
 };
 
 const appSlice = createSlice({
@@ -17,7 +17,7 @@ const appSlice = createSlice({
         onLoadLastView: state => {
             const persistedView = localStorage.getItem('currentView');
             if (persistedView) {
-                state.currentView = persistedView ? persistedView : 'Home';
+                state.currentView = persistedView ? persistedView : 'home';
             }
         },
         onStoreCurrentView: (state, action) => {

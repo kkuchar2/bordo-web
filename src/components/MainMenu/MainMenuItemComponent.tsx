@@ -1,6 +1,3 @@
-import React from 'react';
-
-import { Button, Flex, Text } from '@chakra-ui/react';
 import { useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 
@@ -28,30 +25,16 @@ export const MainMenuItemComponent = (props: MainMenuItemProps) => {
             dispatch(storeCurrentView(item.id));
         }
     };
-
-    return <Button display={'flex'}
+    return <button
         key={item.id}
-        borderRadius={3}
-        paddingLeft={3}
-        paddingRight={2}
-        paddingTop={0}
-        justifyContent={'flex-start'}
-        alignItems={'center'}
-        width={'200px'}
-        paddingBottom={0}
         onClick={onButtonClick}
-        h={'35px'}
-        gap={2}
-        bg={active ? 'rgba(255,255,255,0.1)' : 'none'}>
-        <Text fontSize={'14px'}
-            lineHeight={'35px'}
-            fontWeight={'medium'}
-            color={'#bcbcbc'}
-            textOverflow={'ellipsis'}
-            whiteSpace={'nowrap'}
-            overflow={'hidden'}>{t(item.displayName)}</Text>
-        <Flex flexGrow={1} justify={'flex-end'}>
+        className={'flex h-[40px] w-[200px] items-center gap-2 rounded-md py-0 pl-3 pr-2 '
+            + (active ? 'bg-white/20 hover:bg-white/20' : 'transparent hover:bg-white/10')}>
+        <div className={'truncate text-sm font-semibold text-[#bcbcbc]'}>
+            {t(item.displayName)}
+        </div>
+        <div className={'flex grow justify-end'}>
             {item.icon && <item.icon.component width={20}/>}
-        </Flex>
-    </Button>;
+        </div>
+    </button>;
 };
