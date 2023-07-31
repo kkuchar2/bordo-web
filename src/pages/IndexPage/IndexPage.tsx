@@ -50,10 +50,7 @@ const IndexPage = () => {
                 useCancelButton={false}
                 onSubmit={attemptLogin}/>
 
-            <NavLink color={'#77a4df'}
-                fontSize={'md'}
-                fontWeight={'semibold'}
-                href={'/forgotPassword'}>
+            <NavLink className={'font-semibold text-[#77a4df]'} href={'/forgotPassword'}>
                 {t('FORGOT_PASSWORD_QUESTION')}
             </NavLink>
 
@@ -74,10 +71,7 @@ const IndexPage = () => {
                 <div className={'text-[#C7C7C7]'}>
                     {t('NEED_ACCOUNT')}
                 </div>
-                <NavLink color={'#77a4df'}
-                    fontSize={'md'}
-                    fontWeight={'semibold'}
-                    href={'/signup'}>
+                <NavLink className={'font-semibold text-[#77a4df]'} href={'/signup'}>
                     {t('CREATE_ACCOUNT')}
                 </NavLink>
             </div>

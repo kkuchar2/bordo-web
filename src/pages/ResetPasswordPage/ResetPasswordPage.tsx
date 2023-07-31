@@ -96,10 +96,7 @@ const ResetPasswordPage = (props: ResetPasswordPageProps) => {
                     useCancelButton={false}
                     onSubmit={onSubmit}/>
 
-                {!user && <NavLink color={'#77a4df'}
-                    alignSelf={'center'}
-                    fontWeight={'semibold'}
-                    href={'/'}>
+                {!user && <NavLink className={'self-center font-semibold text-[#77a4df]'} href={'/'}>
                     {'Back to login'}
                 </NavLink>}
 

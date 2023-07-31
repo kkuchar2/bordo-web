@@ -54,7 +54,9 @@ const SignUpPage = () => {
 
             <div className={'flex flex-col items-center justify-center gap-[20px]'}>
                 <Text fontSize={'md'} color={'#C7C7C7'}>{t('ALREADY_HAVE_ACCOUNT')}</Text>
-                <NavLink color={'#77a4df'} fontSize={'md'} fontWeight={'semibold'} href={'/'}>{t('SIGN_IN')}</NavLink>
+                <NavLink className={'font-semibold text-[#77a4df]'} href={'/'}>
+                    {t('SIGN_IN')}
+                </NavLink>
             </div>
 
             <UserAgreements/>

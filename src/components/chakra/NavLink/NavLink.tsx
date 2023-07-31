@@ -1,20 +1,23 @@
-import React from 'react';
+import { ReactNode } from 'react';
 
-import { Link as ChakraLink, LinkProps as ChakraLinkProps } from '@chakra-ui/react';
 import Link, { LinkProps } from 'next/link';
 
 interface NavLinkProps {
     disabled?: boolean;
+    children: ReactNode;
+    className?: string;
 }
 
-export const NavLink = (props: LinkProps & ChakraLinkProps & NavLinkProps) => {
+export const NavLink = (props: LinkProps & NavLinkProps) => {
 
     const { children, disabled, ...rest } = props;
 
-    return <ChakraLink pointerEvents={disabled ? 'none' : 'auto'}
-        opacity={disabled ? 0.3 : 1}
-        as={Link}
+    return <Link
+        style={{
+            pointerEvents: disabled ? 'none' : 'auto',
+            opacity: disabled ? 0.3 : 1
+        }}
         {...rest}>
         {children}
-    </ChakraLink>;
+    </Link>;
 };

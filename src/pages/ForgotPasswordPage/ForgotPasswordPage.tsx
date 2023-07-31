@@ -57,10 +57,7 @@ const ForgotPassword = () => {
                 />
 
                 <div className={'flex flex-col items-center justify-center gap-[20px]'}>
-                    <NavLink color={'#77a4df'}
-                        fontSize={'md'}
-                        fontWeight={'semibold'}
-                        href={'/'}>
+                    <NavLink className={'font-semibold text-[#77a4df]'} href={'/'}>
                         {t('GO_BACK')}
                     </NavLink>
                 </div>

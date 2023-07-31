@@ -12,9 +12,7 @@ const UserAgreements = () => {
     return <Flex flexGrow={1} direction={'column'} justify={'flex-end'}>
         <Text textAlign={'center'} fontSize={'sm'} as={'span'}>
             {t('USER_AGREEMENTS')}
-            <NavLink color={'#ffffff'}
-                padding={2}
-                fontWeight={'semibold'}
+            <NavLink className={'p-2 font-semibold text-white'}
                 href={'/userAgreement'}>
                 {t('MORE')}
             </NavLink>
