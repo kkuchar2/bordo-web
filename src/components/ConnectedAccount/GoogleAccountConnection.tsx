@@ -1,6 +1,5 @@
 import React, { useCallback } from 'react';
 
-import { Box, Button, Flex, Text } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 
 import { showDisconnectGoogleDialog } from '@/components/DialogSystem/readyDialogs';
@@ -37,26 +36,33 @@ export const GoogleAccountConnection = (props: GoogleAccountConnectionProps) => 
     }, []);
 
     if (!connected) {
-        return <Box w={'300px'}>
+        return <div className={'w-[300px]'}>
             <GoogleButton
                 clientId={GOOGLE_CLIENT_ID}
                 context={'signin'}
                 customText={t('CONNECT_GOOGLE_ACCOUNT')}
                 text={'signin_with'}
                 onSuccess={onConnectWithGoogleAccount}/>
-        </Box>;
+        </div>;
     }
 
-    return <Flex gap={'20px'} flexGrow={1}>
-        <Flex direction={'column'} gap={'10px'}>
-            <Flex align={'center'} gap={'10px'}>
+    return <div className={'flex gap-[20px]'}>
+        <div className={'flex flex-col gap-[10px]'}>
+            <div className={'flex items-center gap-[10px]'}>
                 <GoogleIcon/>
-                <Text fontSize={'15px'} fontWeight={'semibold'}>{'Google'}</Text>
-            </Flex>
-            {connected ? <Text fontSize={'sm'}>{email}</Text> : null}
-        </Flex>
-        <Button flexGrow={1} onClick={onDisconnectClick}>
-            <Text mt={'1px'} fontSize={'13px'}>{t('DISCONNECT_ACCOUNT')}</Text>
-        </Button>
-    </Flex>;
+                <div className={'font-semibold'}>
+                    {'Google'}
+                </div>
+            </div>
+            {connected && <div className={'text-sm'}>
+                {email}
+            </div>}
+        </div>
+        <div>
+            <button className={'rounded-full bg-white/5 px-3 py-2 text-sm font-semibold hover:bg-white/30'}
+                onClick={onDisconnectClick}>
+                {t('DISCONNECT_ACCOUNT')}
+            </button>
+        </div>
+    </div>;
 };

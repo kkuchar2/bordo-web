@@ -40,7 +40,7 @@ const GoogleButton = (props: GoogleButtonProps) => {
         }
     }, [onError]);
 
-    return <div className={'flex w-full items-center justify-center'} style={{ colorScheme: 'foo' }}>
+    return <div className={'flex items-center justify-center'}>
         <GoogleOAuthProvider clientId={clientId}>
             <GoogleLogin
                 useOneTap={useOneTap}
