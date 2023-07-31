@@ -26,6 +26,7 @@ const Form = <TFieldValues extends FieldValues = FieldValues>(props: FormProps<T
         excludeErrors,
         description,
         submitButtonTextKey,
+        submitButtonClassName,
         useCancelButton,
         className
     } = props;
@@ -108,7 +109,8 @@ const Form = <TFieldValues extends FieldValues = FieldValues>(props: FormProps<T
                     {t('CANCEL')}
                 </button>}
                 <button
-                    className={'w-full rounded-md bg-[#006C52] p-3 font-semibold hover:bg-[#00785a]'}
+                    className={'w-full rounded-md bg-[#006C52] p-3 font-semibold hover:bg-[#00785a] '
+                        + submitButtonClassName}
                     type={'submit'}
                     disabled={disabled}>
                     {t(submitButtonTextKey || 'SUBMIT')}

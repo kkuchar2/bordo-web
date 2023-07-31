@@ -283,7 +283,7 @@ export const showDeleteAccountDialog = () => {
                     description: '',
                     icon: {
                         component: TrashIcon,
-                        color: '#801010'
+                        color: '#ca3535'
                     },
                 },
                 data: {}

@@ -15,6 +15,7 @@ export interface FormProps<TFieldValues extends FieldValues = FieldValues> {
     error?: QueryResponseErrorData;
     onChange?: (values: TFieldValues) => void;
     submitButtonTextKey?: string;
+    submitButtonClassName?: string;
     useCancelButton?: boolean;
     className?: string;
 }

@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect } from 'react';
 
-import { Box, Text, VStack } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 
 import { DelayedTransition } from '@/components/DelayedTransition/DelayedTransition';
@@ -33,14 +32,16 @@ export const DeleteAccountDialog = () => {
         }
     }, [deleteAccountQuery.isSuccess]);
 
-    return <VStack align={'stretch'} spacing={5}>
-        <Box p={4} bg={'rgba(230,52,52,0.18)'} border={`1px solid ${'rgba(230,52,52,0.47)'}`}>
-            <Text fontWeight={'semibold'} fontSize={'sm'}>{t('DELETE_ACCOUNT_WARNING')}</Text>
-        </Box>
+    return <div className={'flex max-w-[400px] flex-col gap-5'}>
+        <div className={'rounded-md bg-red-800/20 p-4 text-sm font-medium'}>
+            {t('DELETE_ACCOUNT_WARNING')}
+        </div>
 
         <Form<DeleteAccountFormArgs>
             config={deleteAccountForm}
             error={deleteAccountQuery.error?.data}
+            submitButtonClassName={'bg-red-900 hover:bg-red-800'}
+            submitButtonTextKey={'DELETE_ACCOUNT_PERMANENTLY'}
             disabled={deleteAccountQuery.isLoading}
             onCancel={onCancelRequest}
             onSubmit={onSubmit}
@@ -49,5 +50,5 @@ export const DeleteAccountDialog = () => {
             }}
         />
         <DelayedTransition pending={deleteAccountQuery.isLoading}/>
-    </VStack>;
+    </div>;
 };
