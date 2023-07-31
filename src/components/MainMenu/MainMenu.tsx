@@ -1,12 +1,10 @@
-import React, { ReactNode, useCallback, useMemo } from 'react';
+import { ReactNode, useCallback, useMemo } from 'react';
 
-import { Divider, Flex, Text } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
-
-import { getUser } from '../../queries/account';
 
 import { MainMenuItemComponent } from '@/components/MainMenu/MainMenuItemComponent';
 import { Group, MainMenuItem, MainMenuItemsMap, MenuItems } from '@/components/MainMenu/mainMenuItems';
+import { getUser } from '@/queries/account';
 
 interface MainMenuProps {
     items: MenuItems,
@@ -34,25 +32,22 @@ const MainMenu = (props: MainMenuProps) => {
     }, [currentViewId]);
 
     const renderGroup = useCallback((group: Group): ReactNode => {
-        return <Flex direction={'column'} gap={2}>
-            {group.groupName ? <Text fontSize={'12px'}
-                marginLeft={2}
-                color={'#848484'}
-                fontWeight={'semibold'}>
+        return <div className={'flex flex-col gap-2'}>
+            {group.groupName && <div className={'ml-2 font-semibold text-[#848484]'}>
                 {t(group.groupName)}
-            </Text> : null}
-            <Flex className={'a'} direction={'column'} align={'flex-start'} gap={1}>
+            </div>}
+            <div className={'flex flex-col items-start gap-1'}>
                 {renderGroupItems(group.groupItems)}
-            </Flex>
-        </Flex>;
+            </div>
+        </div>;
     }, [currentViewId, t]);
 
     const groups = useMemo(() => Object.keys(items)
         .map((k, idx) => {
-            return <Flex direction={'column'} gap={3} key={idx}>
-                {idx > 0 ? <Divider w={'80%'} marginLeft={2}/> : null}
+            return <div className={'flex flex-col gap-2'} key={idx}>
+                {idx > 0 && <div className={'ml-2 h-[1px] w-[80%] bg-white/20'}/>}
                 {renderGroup(items[k])}
-            </Flex>;
+            </div>;
         }), [currentViewId, t]);
 
     if (!user) {
