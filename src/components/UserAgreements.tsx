@@ -3,7 +3,7 @@ import React from 'react';
 import { Flex, Text } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 
-import { NavLink } from '@/components/chakra/NavLink/NavLink';
+import { NavLink } from '@/components/NavLink/NavLink';
 
 const UserAgreements = () => {
 

@@ -6,10 +6,10 @@ import { redirect } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 
 import { DelayedTransition } from '@/components/chakra/DelayedTransition/DelayedTransition';
-import { NavLink } from '@/components/chakra/NavLink/NavLink';
 import Form from '@/components/Forms/Form/Form';
 import { resetPasswordForm } from '@/components/Forms/formConfig';
 import { ResetPasswordFormArgs } from '@/components/Forms/formConfig.types';
+import { NavLink } from '@/components/NavLink/NavLink';
 import { getUser, resetPassword, verifyResetPasswordToken } from '@/queries/account';
 
 type ResetPasswordPageProps = {

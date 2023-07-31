@@ -5,12 +5,12 @@ import React, { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { DelayedTransition } from '@/components/chakra/DelayedTransition/DelayedTransition';
-import { NavLink } from '@/components/chakra/NavLink/NavLink';
 import Form from '@/components/Forms/Form/Form';
 import { loginForm } from '@/components/Forms/formConfig';
 import { LoginFormArgs } from '@/components/Forms/formConfig.types';
 import { renderNonFieldErrors } from '@/components/Forms/util';
 import GoogleButton from '@/components/GoogleButton/GoogleButton';
+import { NavLink } from '@/components/NavLink/NavLink';
 import { GOOGLE_CLIENT_ID, queryClient } from '@/config';
 import WithAuth from '@/hoc/WithAuth';
 import { googleLogin, login } from '@/queries/account';

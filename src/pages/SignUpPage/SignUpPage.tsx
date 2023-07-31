@@ -6,10 +6,10 @@ import { Center, Flex, Heading, Text } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 
 import { DelayedTransition } from '@/components/chakra/DelayedTransition/DelayedTransition';
-import { NavLink } from '@/components/chakra/NavLink/NavLink';
 import Form from '@/components/Forms/Form/Form';
 import { registrationForm } from '@/components/Forms/formConfig';
 import { RegistrationFormArgs } from '@/components/Forms/formConfig.types';
+import { NavLink } from '@/components/NavLink/NavLink';
 import UserAgreements from '@/components/UserAgreements';
 import WithAuth from '@/hoc/WithAuth';
 import { register } from '@/queries/account';

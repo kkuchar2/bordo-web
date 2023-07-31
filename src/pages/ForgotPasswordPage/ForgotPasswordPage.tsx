@@ -5,11 +5,11 @@ import { useCallback, useEffect } from 'react';
 import { Center, Flex, Progress, VStack } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 
-import { NavLink } from '@/components/chakra/NavLink/NavLink';
 import { showDialogAfterPasswordResetRequest } from '@/components/DialogSystem/readyDialogs';
 import Form from '@/components/Forms/Form/Form';
 import { forgotPasswordForm } from '@/components/Forms/formConfig';
 import { ForgotPasswordFormArgs } from '@/components/Forms/formConfig.types';
+import { NavLink } from '@/components/NavLink/NavLink';
 import { forgotPassword } from '@/queries/account';
 
 const ForgotPassword = () => {
