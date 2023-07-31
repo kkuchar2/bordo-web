@@ -96,7 +96,7 @@ const Form = <TFieldValues extends FieldValues = FieldValues>(props: FormProps<T
 
     return <form onSubmit={handleSubmit(onFormSubmitted)}>
         <div className={[className, 'flex flex-col gap-[20px]'].join(' ')}>
-            {title ? <div className={'text-2xl font-semibold'}>{title}</div> : null}
+            {title ? <div className={'text-2xl font-semibold tracking-tight'}>{title}</div> : null}
             {description ? <div>{description}</div> : null}
             {renderFields}
             {/*{error && nonFieldErrors}*/}

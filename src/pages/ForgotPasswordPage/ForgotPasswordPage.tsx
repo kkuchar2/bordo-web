@@ -2,9 +2,9 @@
 
 import { useCallback, useEffect } from 'react';
 
-import { Center, Flex, Progress, VStack } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 
+import { DelayedTransition } from '@/components/DelayedTransition/DelayedTransition';
 import { showDialogAfterPasswordResetRequest } from '@/components/DialogSystem/readyDialogs';
 import Form from '@/components/Forms/Form/Form';
 import { forgotPasswordForm } from '@/components/Forms/formConfig';
@@ -37,14 +37,9 @@ const ForgotPassword = () => {
 
     }, [forgotPasswordSuccess, t]);
 
-    return <Center w={'100%'} h={'100%'}>
-        <Flex borderRadius={{ base: 0, sm: 8 }}
-            direction={'column'}
-            bg={'#2a2a2a'}
-            width={{ base: '100%', sm: '400px' }}
-            p={'40px'}
-            gap={'40px'}>
-            <VStack align={'stretch'} spacing={'20px'}>
+    return <div className={'grid h-full w-full place-items-center'}>
+        <div className={'rounded-0 flex w-full flex-col gap-[40px] bg-[#2a2a2a] p-[40px] sm:w-[400px] sm:rounded-md'}>
+            <div className={'flex flex-col gap-[20px]'}>
                 <Form<ForgotPasswordFormArgs>
                     config={forgotPasswordForm}
                     title={t('RESET_PASSWORD')}
@@ -62,10 +57,10 @@ const ForgotPassword = () => {
                     </NavLink>
                 </div>
 
-                {forgotPasswordPending ? <Progress size={'xs'} isIndeterminate/> : null}
-            </VStack>
-        </Flex>
-    </Center>;
+                <DelayedTransition pending={forgotPasswordPending}/>
+            </div>
+        </div>
+    </div>;
 };
 
 export default ForgotPassword;
