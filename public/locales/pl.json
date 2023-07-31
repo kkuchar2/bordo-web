@@ -32,7 +32,7 @@
   "DISABLE_ACCOUNT_WARNING": "Zdezaktywowane konto będzie nie dostępne do logowania, ale wszystkie dane zostaną zachowane",
   "DISCONNECT_GOOGLE_ACCOUNT": "Odłącz konto Google",
   "DISCONNECT_GOOGLE_ACCOUNT_WARNING": "Wprowadź aktualne hasło, aby odłączyć konto. Po tej operacji jedyną formą logowania będzie nazwa użytkownika lub adres email i hasło.",
-  "DISCONNECT_SOCIAL_ACCOUNT": "Odłącz",
+  "DISCONNECT_ACCOUNT": "Odłącz konto",
   "E-mail is not verified": "E-mail nie został zweryfikowany",
   "EDIT": "Edytuj",
   "EDIT_IMAGE": "Edytuj obraz",

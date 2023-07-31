@@ -1,6 +1,5 @@
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
 
-import { Box, Flex, Text } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 
 import { DelayedTransition } from '@/components/DelayedTransition/DelayedTransition';
@@ -27,17 +26,20 @@ export const DisconnectGoogleDialog = () => {
         dispatch(closeDialog());
     }, []);
 
-    return <Flex direction={'column'} gap={'20px'}>
-        <Box p={4} bg={'rgba(230,52,52,0.18)'} border={`1px solid ${'rgba(230,52,52,0.47)'}`}>
-            <Text fontWeight={'semibold'} fontSize={'sm'}>{t('DISCONNECT_GOOGLE_ACCOUNT_WARNING')}</Text>
-        </Box>
+    return <div className={'flex max-w-[400px] flex-col gap-[20px]'}>
+        <div className={'bg-red-800/20 p-4'}>
+            <div className={'text-sm font-medium'}>
+                {t('DISCONNECT_GOOGLE_ACCOUNT_WARNING')}
+            </div>
+        </div>
 
         <Form<DeleteAccountFormArgs>
             config={deleteAccountForm}
             error={error?.data}
+            submitButtonTextKey={'DISCONNECT_ACCOUNT'}
             disabled={isLoading}
             onCancel={onCancelRequest}
             onSubmit={onSubmit}/>
         <DelayedTransition pending={isLoading}/>
-    </Flex>;
+    </div>;
 };

@@ -56,7 +56,7 @@ export const GoogleAccountConnection = (props: GoogleAccountConnectionProps) => 
             {connected ? <Text fontSize={'sm'}>{email}</Text> : null}
         </Flex>
         <Button flexGrow={1} onClick={onDisconnectClick}>
-            <Text mt={'1px'} fontSize={'13px'}>{t('DISCONNECT_SOCIAL_ACCOUNT')}</Text>
+            <Text mt={'1px'} fontSize={'13px'}>{t('DISCONNECT_ACCOUNT')}</Text>
         </Button>
     </Flex>;
 };
