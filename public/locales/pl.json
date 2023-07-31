@@ -28,7 +28,7 @@
   "DELETE": "Usuń",
   "DELETE_ACCOUNT": "Usuń konto",
   "DELETE_ACCOUNT_PERMANENTLY": "Usuń konto na stałe",
-  "DELETE_ACCOUNT_WARNING": "Wszystkie dane powiązane z tym kontem zostaną usunięte"
+  "DELETE_ACCOUNT_WARNING": "Wszystkie dane powiązane z tym kontem zostaną usunięte",
   "DISABLE_ACCOUNT": "Dezaktywuj konto",
   "DISABLE_ACCOUNT_WARNING": "Zdezaktywowane konto będzie nie dostępne do logowania, ale wszystkie dane zostaną zachowane",
   "DISCONNECT_GOOGLE_ACCOUNT": "Odłącz konto Google",
