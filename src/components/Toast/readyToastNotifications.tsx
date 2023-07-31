@@ -56,9 +56,10 @@ export const showSuccessToast = (message: string) => {
         position: 'bottom-center',
         // Styling
         style: {
-            background: '#00ac00',
+            background: '#000000',
             color: 'white',
-            boxShadow: 'none'
+            boxShadow: 'none',
+            fontSize: '1.1rem',
         },
         className: '',
         // Custom Icon
