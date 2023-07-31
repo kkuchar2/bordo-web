@@ -79,6 +79,10 @@ const LanguagePage = () => {
             return;
         }
 
+        if (i18n.language === selected) {
+            return;
+        }
+
         i18n.changeLanguage(selected).then(() => {
             showSuccessToast(`${t('LANGUAGE_CHANGED_TO')} ` + flags[selected].name + ' ' + flags[selected].emojiFlag);
         });
