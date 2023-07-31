@@ -3,7 +3,7 @@ import React, { useCallback, useEffect } from 'react';
 import { Box, Text, VStack } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 
-import { DelayedTransition } from '@/components/chakra/DelayedTransition/DelayedTransition';
+import { DelayedTransition } from '@/components/DelayedTransition/DelayedTransition';
 import Form from '@/components/Forms/Form/Form';
 import { deleteAccountForm } from '@/components/Forms/formConfig';
 import { DeleteAccountFormArgs } from '@/components/Forms/formConfig.types';

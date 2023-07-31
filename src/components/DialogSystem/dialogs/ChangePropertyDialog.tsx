@@ -2,7 +2,7 @@ import React, { useCallback, useEffect } from 'react';
 
 import { FieldValues } from 'react-hook-form/dist/types';
 
-import { DelayedTransition } from '@/components/chakra/DelayedTransition/DelayedTransition';
+import { DelayedTransition } from '@/components/DelayedTransition/DelayedTransition';
 import Form from '@/components/Forms/Form/Form';
 import { FormConfig } from '@/components/Forms/formConfig';
 import { closeDialog } from '@/state/reducers/dialog/dialogSlice';
@@ -56,11 +56,7 @@ export const ChangePropertyDialog = <TFieldValues extends FieldValues>(
             disabled={query.isLoading}
             onCancel={onCancelRequest}
             onSubmit={onSubmit}/>
-        {query.isLoading && <DelayedTransition
-            pending={true}
-            position={'absolute'}
-            bottom={0}
-            left={0}
-            p={0} w={'100%'}/>}
+
+        <DelayedTransition pending={query.isLoading}/>
     </div>;
 };

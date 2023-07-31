@@ -3,7 +3,7 @@ import React, { useCallback, useEffect } from 'react';
 import { Button, Flex } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 
-import { DelayedTransition } from '@/components/chakra/DelayedTransition/DelayedTransition';
+import { DelayedTransition } from '@/components/DelayedTransition/DelayedTransition';
 import { resendRegistrationEmail } from '@/queries/account';
 import { DialogProps } from '@/state/reducers/dialog/dialogSlice.types';
 
@@ -45,12 +45,6 @@ export const VerifyAccountDialog = (props: DialogProps<VerifyAccountDialogProps>
             color={'#cacaca'}>
             {t('RESEND_VERIFICATION_EMAIL')}
         </Button>
-        {isLoading &&
-            <DelayedTransition pending={true}
-                delay={1000}
-                position={'absolute'}
-                bottom={0}
-                left={0}
-                p={0} w={'100%'}/>}
+        <DelayedTransition pending={isLoading}/>
     </Flex>;
 };

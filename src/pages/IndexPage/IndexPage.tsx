@@ -4,7 +4,7 @@ import React, { useCallback } from 'react';
 
 import { useTranslation } from 'react-i18next';
 
-import { DelayedTransition } from '@/components/chakra/DelayedTransition/DelayedTransition';
+import { DelayedTransition } from '@/components/DelayedTransition/DelayedTransition';
 import Form from '@/components/Forms/Form/Form';
 import { loginForm } from '@/components/Forms/formConfig';
 import { LoginFormArgs } from '@/components/Forms/formConfig.types';
@@ -76,12 +76,7 @@ const IndexPage = () => {
                 </NavLink>
             </div>
 
-            {(loginQuery.isLoading || googleLoginQuery.isLoading) &&
-                <DelayedTransition pending={true}
-                    position={'absolute'}
-                    bottom={0}
-                    left={0}
-                    p={0} w={'100%'}/>}
+            <DelayedTransition pending={loginQuery.isLoading || googleLoginQuery.isLoading}/>
         </div>
     </div>;
 };

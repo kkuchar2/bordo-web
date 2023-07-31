@@ -4,7 +4,7 @@ import { FC, useCallback } from 'react';
 
 import { useTranslation } from 'react-i18next';
 
-import { DelayedTransition } from '@/components/chakra/DelayedTransition/DelayedTransition';
+import { DelayedTransition } from '@/components/DelayedTransition/DelayedTransition';
 import Form from '@/components/Forms/Form/Form';
 import { registrationForm } from '@/components/Forms/formConfig';
 import { RegistrationFormArgs } from '@/components/Forms/formConfig.types';
@@ -54,19 +54,13 @@ const SignUpPage = () => {
             <div className={'flex grow flex-col justify-end'}>
                 <div className={'text-center text-sm'}>
                     {t('USER_AGREEMENTS')}
-                    <NavLink className={'p-2 font-semibold text-white'}
-                        href={'/userAgreement'}>
+                    <NavLink className={'p-2 font-semibold text-white'} href={'/userAgreement'}>
                         {t('MORE')}
                     </NavLink>
                 </div>
             </div>
 
-            {signUpQuery.isLoading && <DelayedTransition
-                pending={true}
-                position={'absolute'}
-                bottom={0}
-                left={0}
-                p={0} w={'100%'}/>}
+            <DelayedTransition pending={signUpQuery.isLoading}/>
         </div>
     </div>;
 };

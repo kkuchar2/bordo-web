@@ -5,7 +5,7 @@ import { useCallback, useEffect } from 'react';
 import { redirect } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 
-import { DelayedTransition } from '@/components/chakra/DelayedTransition/DelayedTransition';
+import { DelayedTransition } from '@/components/DelayedTransition/DelayedTransition';
 import Form from '@/components/Forms/Form/Form';
 import { resetPasswordForm } from '@/components/Forms/formConfig';
 import { ResetPasswordFormArgs } from '@/components/Forms/formConfig.types';
@@ -100,11 +100,7 @@ const ResetPasswordPage = (props: ResetPasswordPageProps) => {
                     {'Back to login'}
                 </NavLink>}
 
-                <DelayedTransition pending={resetPasswordQuery.isLoading}
-                    position={'absolute'}
-                    bottom={0}
-                    left={0}
-                    p={0} w={'100%'}/>
+                <DelayedTransition pending={resetPasswordQuery.isLoading}/>
             </div>
         </div>;
     }

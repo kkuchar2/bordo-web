@@ -2,7 +2,6 @@ import React, { ReactNode, useEffect, useRef, useState } from 'react';
 
 import { FlexProps } from '@chakra-ui/layout';
 import { Box, BoxProps, Flex, Spinner, SpinnerProps } from '@chakra-ui/react';
-import { motion } from 'framer-motion';
 
 interface DelayedSpinnerProps {
     pending: boolean;
@@ -13,13 +12,11 @@ interface DelayedSpinnerProps {
     flexProps?: FlexProps;
 }
 
-const MotionBox = motion(Box);
-
 export const DelayedSpinner = (props: DelayedSpinnerProps) => {
 
     const { children, pending, delay = 300, boxProps = {}, spinnerProps = {}, flexProps = {} } = props;
 
-    const timerRef = useRef<number>(null);
+    const timerRef = useRef<number | null>(null);
 
     const [showProgress, setShowProgress] = useState(false);
 

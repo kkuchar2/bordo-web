@@ -2,7 +2,7 @@ import React, { ComponentType } from 'react';
 
 import { redirect } from 'next/navigation';
 
-import { DelayedTransition } from '@/components/chakra/DelayedTransition/DelayedTransition';
+import { DelayedTransition } from '@/components/DelayedTransition/DelayedTransition';
 import { getUser } from '@/queries/account';
 
 interface WithAuthProps {
@@ -17,11 +17,7 @@ const WithAuth = (WrappedComponent: ComponentType, withAuthProps: WithAuthProps)
         const { isLoading, isSuccess, isError, data: user } = getUser();
 
         if (!user && isLoading) {
-            return <DelayedTransition pending={true}
-                position={'absolute'}
-                bottom={0}
-                left={0}
-                p={0} w={'100%'}/>;
+            return <DelayedTransition pending={true}/>;
         }
 
         const {

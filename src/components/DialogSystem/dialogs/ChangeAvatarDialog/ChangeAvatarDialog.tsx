@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { ChangeAvatarModeSelector } from './ChangeAvatarModeSelector/ChangeAvatarModeSelector';
 import { generateCroppedImageFile } from './cropImage';
 
-import { DelayedTransition } from '@/components/chakra/DelayedTransition/DelayedTransition';
+import { DelayedTransition } from '@/components/DelayedTransition/DelayedTransition';
 import { Crop } from '@/components/Image/Crop/Crop';
 import { GIFSelect } from '@/components/Image/GIFSelect/GIFSelect';
 import { giphyFetch } from '@/config';

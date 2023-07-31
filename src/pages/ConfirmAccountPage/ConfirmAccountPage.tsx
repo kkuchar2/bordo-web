@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 
 import { useRouter } from 'next/navigation';
 
-import { DelayedTransition } from '@/components/chakra/DelayedTransition/DelayedTransition';
+import { DelayedTransition } from '@/components/DelayedTransition/DelayedTransition';
 import { showErrorToast, showSuccessToast } from '@/components/Toast/readyToastNotifications';
 import { confirmAccount } from '@/queries/account';
 
@@ -45,11 +45,7 @@ const ConfirmAccountPage = (props: ConfirmAccountPageProps) => {
         }
     }, [isSuccess]);
 
-    return isLoading && <DelayedTransition pending={true}
-        position={'absolute'}
-        bottom={0}
-        left={0}
-        p={0} w={'100%'}/>;
+    return <DelayedTransition pending={isLoading}/>;
 };
 
 export default ConfirmAccountPage;

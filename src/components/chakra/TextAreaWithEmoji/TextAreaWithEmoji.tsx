@@ -5,9 +5,9 @@ import { useTranslation } from 'react-i18next';
 import runes from 'runes';
 import { useStateWithCallbackLazy } from 'use-state-with-callback';
 
-import { DelayedSpinner } from '@/components/chakra/DelayedTransition/DelayedSpinner';
 import { EmojiButton } from '@/components/chakra/EmojiButton/EmojiButton';
 import { EmojiSuggestionPanel } from '@/components/chakra/EmojiSuggestionPanel/EmojiSuggestionPanel';
+import { DelayedSpinner } from '@/components/DelayedTransition/DelayedSpinner';
 import { EmojiPicker, SelectedEmoji } from '@/components/EmojiPicker/EmojiPicker';
 import { emojiMap } from '@/tools/smileToEmoji';
 

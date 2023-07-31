@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect } from 'react';
 
-import { DelayedTransition } from '@/components/chakra/DelayedTransition/DelayedTransition';
+import { DelayedTransition } from '@/components/DelayedTransition/DelayedTransition';
 import { showDialogAfterFirstPasswordSetupRequest } from '@/components/DialogSystem/readyDialogs';
 import Form from '@/components/Forms/Form/Form';
 import { resetPasswordForm } from '@/components/Forms/formConfig';
