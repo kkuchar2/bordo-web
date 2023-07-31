@@ -5,7 +5,7 @@ import { List, ListItem, Text } from '@chakra-ui/react';
 import { emojiMap, getExtendedMatchingEmojiMap } from '@/tools/smileToEmoji';
 
 interface EmojiSuggestionPanelProps {
-    query: string;
+    query: string | null;
     onSelect: (emoji: string) => void;
     onClose: () => void;
     itemHeight?: number;
@@ -31,6 +31,11 @@ export const EmojiSuggestionPanel = (props: EmojiSuggestionPanelProps) => {
     const [availableEmojis, setAvailableEmojis] = useState([] as any[]);
 
     useEffect(() => {
+        if (query === null) {
+            setAvailableEmojis([]);
+            return;
+        }
+
         if (query.length >= 3) {
             setAvailableEmojis(getExtendedMatchingEmojiMap(query, maxItems));
         }

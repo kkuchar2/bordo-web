@@ -68,7 +68,7 @@ export const TextAreaWithEmoji = (props: TextAreaWithEmojiProps) => {
         setSuggestionPanelOpen(query !== null && query.length > 0);
     }, [query]);
 
-    const onColonTyped = useCallback((e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    const onColonTyped = useCallback(() => {
         if (!textAreaRef.current) {
             return;
         }
@@ -129,7 +129,7 @@ export const TextAreaWithEmoji = (props: TextAreaWithEmojiProps) => {
         }
 
         if (e.key === ':') {
-            onColonTyped(e);
+            onColonTyped();
         }
 
         if ((e.key === 'ArrowUp' || e.key === 'ArrowDown') && suggestionPanelOpen) {

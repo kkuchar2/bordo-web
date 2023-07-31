@@ -5,7 +5,6 @@ import { FC, useCallback } from 'react';
 import { KeyIcon } from '@heroicons/react/24/solid';
 import { useTranslation } from 'react-i18next';
 
-import { TextAreaWithEmoji } from '@/components/chakra/TextAreaWithEmoji/TextAreaWithEmoji';
 import { GoogleAccountConnection } from '@/components/ConnectedAccount/GoogleAccountConnection';
 import {
     showChangeEmailDialog,
@@ -16,6 +15,7 @@ import {
 import { EditableProfilePictureProperty } from '@/components/EditableProperties/EditableProfilePictureProperty';
 import EditableProperty from '@/components/EditableProperties/EditableProperty';
 import { SettingsSection } from '@/components/Settings/SettingsSection';
+import { TextAreaWithEmoji } from '@/components/TextAreaWithEmoji/TextAreaWithEmoji';
 import { queryClient } from '@/config';
 import WithAuth from '@/hoc/WithAuth';
 import { changeAbout, getUser } from '@/queries/account';
