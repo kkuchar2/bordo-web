@@ -1,6 +1,5 @@
-import React, { useCallback, useEffect } from 'react';
+import { useCallback } from 'react';
 
-import { Button, Flex } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 
 import { DelayedTransition } from '@/components/DelayedTransition/DelayedTransition';
@@ -23,28 +22,21 @@ export const VerifyAccountDialog = (props: DialogProps<VerifyAccountDialogProps>
 
     const { usernameOrEmail } = data;
 
-    const { isIdle, isLoading, error, isSuccess, mutate } = resendRegistrationEmail();
-
-    useEffect(() => {
-        if (usernameOrEmail) {
-            mutate({ username_or_email: usernameOrEmail });
-        }
-
-    }, [usernameOrEmail]);
+    const query = resendRegistrationEmail();
 
     const onResendEmailClick = useCallback(() => {
         if (usernameOrEmail) {
-            mutate({ username_or_email: usernameOrEmail });
+            query.mutate({ username_or_email: usernameOrEmail });
         }
     }, [usernameOrEmail]);
 
-    return <Flex w={'100%'} p={'10px'} align={'center'} justify={'flex-end'} gap={'20px'}>
-        <Button fontSize={'sm'}
-            disabled={isLoading}
-            onClick={onResendEmailClick}
-            color={'#cacaca'}>
+    return <div className={'flex w-full flex-col items-center justify-end gap-[20px] p-[10px]'}>
+        <button
+            className={'rounded-full bg-white/5 px-5 py-2 hover:bg-white/10'}
+            disabled={query.isLoading}
+            onClick={onResendEmailClick}>
             {t('RESEND_VERIFICATION_EMAIL')}
-        </Button>
-        <DelayedTransition pending={isLoading}/>
-    </Flex>;
+        </button>
+        <DelayedTransition pending={query.isLoading}/>
+    </div>;
 };
