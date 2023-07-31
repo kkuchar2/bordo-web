@@ -1,6 +1,5 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { ChangeEvent, KeyboardEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-import { Box, Button, Flex, HTMLChakraProps, Text, Textarea } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import runes from 'runes';
 import { useStateWithCallbackLazy } from 'use-state-with-callback';
@@ -12,17 +11,15 @@ import { EmojiPicker, SelectedEmoji } from '@/components/EmojiPicker/EmojiPicker
 import { emojiMap } from '@/tools/smileToEmoji';
 
 interface TextAreaWithEmojiProps {
+    id?: string;
     name?: string;
     maxLength?: number;
     value?: string;
     uppercaseTitle?: boolean;
     placeholder?: string;
-    onChange?: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
-    onKeyDown?: (e: React.KeyboardEvent<HTMLTextAreaElement>) => void;
-    outerPadding?: string;
+    onChange?: (e: ChangeEvent<HTMLTextAreaElement>) => void;
+    onKeyDown?: (e: KeyboardEvent<HTMLTextAreaElement>) => void;
     toolbarEnabled?: boolean;
-    toolbarHeight?: number;
-    toolbarBg?: string;
     emojiPickerEnabled?: boolean;
     emojiPickerButtonTextSize?: number;
     enableMaxCharacterCounter?: boolean;
@@ -30,35 +27,36 @@ interface TextAreaWithEmojiProps {
     isSaving?: boolean;
 }
 
-export const TextAreaWithEmoji = (props: TextAreaWithEmojiProps & HTMLChakraProps<'textarea'>) => {
+export const TextAreaWithEmoji = (props: TextAreaWithEmojiProps) => {
     const {
+        id,
         name,
-        uppercaseTitle = true,
-        outerPadding = '0',
         maxLength = 300,
         toolbarEnabled = true,
-        toolbarHeight = 300,
-        toolbarBg = 'white',
         emojiPickerEnabled = true,
         emojiPickerButtonTextSize = 20,
         enableMaxCharacterCounter = true,
         isSaving = false,
         placeholder,
-        onChange,
+        onKeyDown,
         onSave,
-        ...rest
     } = props;
 
     const [currentValue, setCurrentValue] = useStateWithCallbackLazy<string>(props.value || '');
     const [emojiPanelOpen, setEmojiPanelOpen] = useState(false);
     const [suggestionPanelOpen, setSuggestionPanelOpen] = useState(false);
-    const [query, setQuery] = useState('');
+    const [query, setQuery] = useState<string | null>('');
+
     const tracking = useRef({ pending: false, caretPosition: -1 });
-    const textAreaRef = useRef(null);
+    const textAreaRef = useRef<HTMLTextAreaElement | null>(null);
 
     const { t } = useTranslation();
 
     const startTracking = useCallback(() => {
+        if (!textAreaRef.current) {
+            return;
+        }
+
         tracking.current = { pending: true, caretPosition: textAreaRef.current.selectionStart };
     }, [textAreaRef.current]);
 
@@ -67,7 +65,7 @@ export const TextAreaWithEmoji = (props: TextAreaWithEmojiProps & HTMLChakraProp
     }, []);
 
     useEffect(() => {
-        setSuggestionPanelOpen(query && query.length >= 3);
+        setSuggestionPanelOpen(query !== null && query.length > 0);
     }, [query]);
 
     const onColonTyped = useCallback((e: React.KeyboardEvent<HTMLTextAreaElement>) => {
@@ -84,12 +82,19 @@ export const TextAreaWithEmoji = (props: TextAreaWithEmojiProps & HTMLChakraProp
     }, [currentValue, textAreaRef.current]);
 
     const onEmojiSuggestionSelect = useCallback((emoji: string) => {
-        textAreaRef.current.focus();
+
+        if (!textAreaRef.current) {
+            return;
+        }
+
+        const textArea = textAreaRef.current;
+
+        textArea.focus();
+
         setSuggestionPanelOpen(false);
 
         // TODO: Prevent exceeding max length
 
-        const split = runes(currentValue);
         const currentCaretPosition = textAreaRef.current.selectionStart;
         const trackStartPosition = tracking.current.caretPosition;
 
@@ -103,8 +108,8 @@ export const TextAreaWithEmoji = (props: TextAreaWithEmojiProps & HTMLChakraProp
         const result = [...splitLeft, emoji, ...splitRight].join('');
 
         setCurrentValue(result, () => {
-            textAreaRef.current.selectionStart = trackStartPosition + 1;
-            textAreaRef.current.selectionEnd = trackStartPosition + 1;
+            textArea.selectionStart = trackStartPosition + 1;
+            textArea.selectionEnd = trackStartPosition + 1;
         });
 
         stopTracking();
@@ -117,7 +122,12 @@ export const TextAreaWithEmoji = (props: TextAreaWithEmojiProps & HTMLChakraProp
         props.onChange?.(e);
     }, [props.onChange]);
 
-    const onKeyDown = useCallback((e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    const innerOnKeyDown = useCallback((e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+
+        if (!textAreaRef.current) {
+            return;
+        }
+
         if (e.key === ':') {
             onColonTyped(e);
         }
@@ -131,13 +141,16 @@ export const TextAreaWithEmoji = (props: TextAreaWithEmojiProps & HTMLChakraProp
                 stopTracking();
             }
 
-            const currentCaretPosition = textAreaRef.current.selectionStart;
+            const textArea = textAreaRef.current;
+
+            const currentCaretPosition = textArea.selectionStart;
 
             const lastSpace = currentValue.lastIndexOf(' ', currentCaretPosition - 1);
             const lastEnter = currentValue.lastIndexOf('\n');
 
             const startingIndex = lastSpace === currentCaretPosition ? -1 : Math.max(lastSpace, lastEnter);
-            const text = startingIndex > -1 ? currentValue.slice(startingIndex + 1, currentCaretPosition) : currentValue.slice(0, currentCaretPosition);
+            const text = startingIndex > -1 ? currentValue.slice(startingIndex + 1, currentCaretPosition)
+                : currentValue.slice(0, currentCaretPosition);
             const emoji = text in emojiMap ? emojiMap[text] : null;
 
             if (emoji) {
@@ -145,13 +158,13 @@ export const TextAreaWithEmoji = (props: TextAreaWithEmojiProps & HTMLChakraProp
                 const right = currentValue.slice(currentCaretPosition, currentValue.length);
                 const result = left + emoji + right;
                 setCurrentValue(result, () => {
-                    textAreaRef.current.selectionStart = currentCaretPosition - text.length + 1;
-                    textAreaRef.current.selectionEnd = currentCaretPosition - text.length + 1;
+                    textArea.selectionStart = currentCaretPosition - text.length + 1;
+                    textArea.selectionEnd = currentCaretPosition - text.length + 1;
                 });
             }
         }
-        props.onKeyDown?.(e);
-    }, [currentValue, props.onKeyDown, suggestionPanelOpen, textAreaRef.current]);
+        onKeyDown?.(e);
+    }, [currentValue, onKeyDown, suggestionPanelOpen, textAreaRef.current]);
 
     useEffect(() => {
         if (!textAreaRef.current || !currentValue || currentValue === '') {
@@ -166,18 +179,24 @@ export const TextAreaWithEmoji = (props: TextAreaWithEmojiProps & HTMLChakraProp
     }, [tracking.current, textAreaRef.current, currentValue]);
 
     const onManualEmojiSelect = useCallback((emoji: SelectedEmoji) => {
+        if (!textAreaRef.current) {
+            return;
+        }
+
         if (currentValue && currentValue.length + emoji.native.length > maxLength) {
             return;
         }
 
+        const textArea = textAreaRef.current;
+
         const split = runes(currentValue);
-        const currentCaretPosition = textAreaRef.current.selectionStart;
+        const currentCaretPosition = textArea.selectionStart;
 
         if (split.length === 0) {
             setCurrentValue(emoji.native, () => {
-                textAreaRef.current.selectionStart = 1;
-                textAreaRef.current.selectionEnd = 1;
-                textAreaRef.current.focus();
+                textArea.selectionStart = 1;
+                textArea.selectionEnd = 1;
+                textArea.focus();
             });
             return;
         }
@@ -197,9 +216,9 @@ export const TextAreaWithEmoji = (props: TextAreaWithEmojiProps & HTMLChakraProp
         const result = split.join('');
 
         setCurrentValue(result, () => {
-            textAreaRef.current.selectionStart = currentCaretPosition + emoji.native.length;
-            textAreaRef.current.selectionEnd = currentCaretPosition + emoji.native.length;
-            textAreaRef.current.focus();
+            textArea.selectionStart = currentCaretPosition + emoji.native.length;
+            textArea.selectionEnd = currentCaretPosition + emoji.native.length;
+            textArea.focus();
         });
     }, [currentValue]);
 
@@ -223,49 +242,24 @@ export const TextAreaWithEmoji = (props: TextAreaWithEmojiProps & HTMLChakraProp
         onSave?.(currentValue);
     }, [onSave, currentValue]);
 
-    return <Flex direction={'column'} p={outerPadding} gap={'10px'}>
-        {name ? <Text fontSize={'13px'}
-            fontWeight={'semibold'}
-            color={'rgba(255,255,255,0.73)'}
-            textTransform={uppercaseTitle ? 'uppercase' : 'none'}>
+    return <div className={'flex flex-col gap-[10px]'}>
+        {name && <div className={'text-sm font-bold text-white/60'}>
             {`${name}:`}
-        </Text> : null}
+        </div>}
 
-        <Box position={'relative'}
-            w={rest.w}
-            borderRadius={rest.borderRadius}
-            pb={'50px'}
-            bg={rest.bg ?? 'none'}>
-            {/* Main TextArea */}
-            <Textarea
-                {...rest}
-                bg={'none'}
-                _hover={{
-                    bg: 'none',
-                    border: 'none',
-                    boxShadow: 'none',
-                }}
-                _active={{
-                    bg: 'none',
-                    border: 'none',
-                    boxShadow: 'none',
-                }}
-                _focus={{
-                    bg: 'none',
-                    border: 'none',
-                    boxShadow: 'none',
-                }}
+        <div className={'relative h-[200px] bg-white/10'}>
+            <textarea
+                ref={textAreaRef}
+                id={id}
+                className={'text-md h-full w-full resize-none bg-transparent bg-none p-3 font-medium text-white/80 outline-none'}
                 placeholder={placeholder}
-                borderBottomRadius={0}
                 maxLength={maxLength}
                 spellCheck={false}
-                ref={textAreaRef}
-                onKeyDown={onKeyDown}
+                onKeyDown={innerOnKeyDown}
                 onChange={onInnerChange}
-                value={currentValue ? currentValue : ''}
+                value={currentValue || ''}
             />
 
-            {/* Manual emoji picker */}
             <EmojiPicker
                 position={'absolute'}
                 right={0}
@@ -274,50 +268,36 @@ export const TextAreaWithEmoji = (props: TextAreaWithEmojiProps & HTMLChakraProp
                 onEmojiSelect={onManualEmojiSelect}
                 onEmojiClose={onEmojiPickerClosed}/>
 
-            {/* Emoji suggestion panel */}
             {suggestionPanelOpen && <EmojiSuggestionPanel
                 query={query}
                 onClose={() => setSuggestionPanelOpen(false)}
                 onSelect={onEmojiSuggestionSelect}/>}
 
-            {/* Toolbar */}
-            {toolbarEnabled ?
-                <Flex position={'absolute'}
-                    width={'100%'}
-                    display={'flex'}
-                    align={'center'}
-                    borderBottomRadius={rest.borderRadius}
-                    bg={toolbarBg}
-                    height={`${toolbarHeight}px`}
-                    zIndex={1}
-                    right={0}
-                    bottom={0}>
-                    {/* Button to toggle manual emoji picker */}
-                    {enableMaxCharacterCounter ?
-                        <Text position={'absolute'}
-                            bottom={'15px'}
-                            fontSize={'14px'}
-                            fontWeight={'semibold'}
-                            color={'rgba(255,255,255,0.5)'}
-                            left={'15px'}>{`${remaining}`}</Text> : null}
+            {toolbarEnabled &&
+                <div className={'absolute bottom-0 right-0 flex w-full items-center'}>
+                    {enableMaxCharacterCounter &&
+                        <div className={'absolute bottom-[15px] left-[15px] text-sm font-semibold text-white/50'}>
+                            {`${remaining}`}
+                        </div>}
 
-                    <Flex flexGrow={1} justify={'flex-end'} align={'center'}>
+                    <div className={'flex grow items-center justify-end'}>
                         {props.value !== currentValue &&
-                            <Button h={'30px'} fontSize={'12px'} disabled={isSaving}
+                            <button
+                                className={'rounded-full bg-neutral-700 px-4 py-1 text-sm font-semibold hover:bg-neutral-600'}
+                                disabled={isSaving}
                                 onClick={onSaveButtonClick}>
                                 {t('SAVE')}
-                            </Button>}
+                            </button>}
 
                         <DelayedSpinner pending={isSaving}/>
 
-                        {/* Button to toggle manual emoji picker */}
                         {emojiPickerEnabled ?
                             <EmojiButton
                                 title={t('PICK_EMOJI')}
                                 textSize={emojiPickerButtonTextSize}
                                 onClick={onEmojiButtonPressed}/> : null}
-                    </Flex>
-                </Flex> : null}
-        </Box>
-    </Flex>;
+                    </div>
+                </div>}
+        </div>
+    </div>;
 };

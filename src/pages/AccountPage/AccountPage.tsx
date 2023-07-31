@@ -73,36 +73,12 @@ const AccountPage = () => {
                     id={'about'}
                     name={t('ABOUT_ME')}
                     value={profile.about}
-                    w={'100%'}
-                    h={'150px'}
-                    bg={'rgba(255,255,255,0.04)'}
-                    maxLength={300}
                     toolbarEnabled={true}
-                    toolbarHeight={50}
-                    toolbarBg={'none'}
                     emojiPickerEnabled={true}
                     emojiPickerButtonTextSize={20}
                     enableMaxCharacterCounter={true}
-                    fontSize={'md'}
-                    resize={'none'}
                     isSaving={isAboutSaving}
                     onSave={onAboutSave}
-                    border={'none'}
-                    _hover={{
-                        bg: 'rgba(255, 255, 255, 0.02)',
-                        border: 'none',
-                        boxShadow: 'none',
-                    }}
-                    _active={{
-                        bg: 'rgba(255, 255, 255, 0.02)',
-                        border: 'none',
-                        boxShadow: 'none',
-                    }}
-                    _focus={{
-                        bg: 'rgba(255, 255, 255, 0.02)',
-                        border: 'none',
-                        boxShadow: 'none',
-                    }}
                 />
             </div>
         </div>

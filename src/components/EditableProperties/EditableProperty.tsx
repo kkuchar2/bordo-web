@@ -1,15 +1,16 @@
 import React, { useCallback, useMemo } from 'react';
 
-import { PencilIcon } from '@heroicons/react/24/solid';
 import { useTranslation } from 'react-i18next';
 
 import { OpenReadyDialogArgs } from '@/components/DialogSystem/readyDialogs';
+import { Icon } from '@/components/Icons/Icon';
 
 export interface EditablePropertyProps {
     id: string;
     name: string;
     value?: string;
     type?: string;
+    icon?: IconProps;
     editText?: string;
     canEdit?: boolean;
     hideTitle?: boolean;
@@ -22,7 +23,7 @@ export interface EditablePropertyProps {
 const EditableProperty = (props: EditablePropertyProps) => {
 
     const {
-        name, value, showDialogFunc, canEdit, initialValues,
+        name, value, showDialogFunc, canEdit, icon, initialValues,
         editText = 'EDIT', hideTitle, passwordRequired
     } = props;
 
@@ -49,7 +50,7 @@ const EditableProperty = (props: EditablePropertyProps) => {
                     'text-sm font-semibold hover:bg-neutral-600'}
                 onClick={onEditButtonClick}>
                 {t(editText)}
-                <PencilIcon className={'h-4 w-4'}/>
+                {icon && <Icon {...icon}/>}
             </button>
         </div>;
     }, [canEdit, onEditButtonClick, editText]);
