@@ -45,7 +45,11 @@ const AccountPage = () => {
 
     const { username, email, profile, google_account } = user;
 
-    return <div className={'flex h-full w-[600px] flex-col items-stretch gap-[30px] p-5'}>
+    return <div className={'flex h-full w-[800px] flex-col items-stretch gap-[30px] px-[50px]'}>
+        <h1 className={'mt-[50px] text-3xl font-semibold tracking-tighter'}>
+            {t('ACCOUNT_SETTINGS')}
+        </h1>
+
         <div className={'flex flex-col gap-[50px] pt-[50px]'}>
             <div className={'grid place-items-center'}>
                 <EditableProfilePictureProperty/>

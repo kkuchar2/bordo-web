@@ -88,7 +88,7 @@ const LanguagePage = () => {
         setSelected(value);
     }, []);
 
-    return <div className={'flex h-full flex-col gap-[20px] p-[20px] pt-[100px]'}>
+    return <div className={'flex h-full flex-col gap-[20px] p-[20px] px-[50px] pt-[50px]'}>
         <h1 className={'text-3xl font-semibold tracking-tighter'}>
             {t('CHANGE_LANGUAGE')}
         </h1>
