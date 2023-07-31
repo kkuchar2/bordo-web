@@ -1,16 +1,15 @@
 import React, { useCallback, useMemo } from 'react';
 
+import { PencilIcon } from '@heroicons/react/24/solid';
 import { useTranslation } from 'react-i18next';
 
 import { OpenReadyDialogArgs } from '@/components/DialogSystem/readyDialogs';
-import { Icon, IconProps } from '@/components/Icons/Icon';
 
 export interface EditablePropertyProps {
     id: string;
     name: string;
     value?: string;
     type?: string;
-    icon?: IconProps;
     editText?: string;
     canEdit?: boolean;
     hideTitle?: boolean;
@@ -23,7 +22,7 @@ export interface EditablePropertyProps {
 const EditableProperty = (props: EditablePropertyProps) => {
 
     const {
-        name, value, showDialogFunc, canEdit, icon, initialValues,
+        name, value, showDialogFunc, canEdit, initialValues,
         editText = 'EDIT', hideTitle, passwordRequired
     } = props;
 
@@ -46,10 +45,11 @@ const EditableProperty = (props: EditablePropertyProps) => {
 
         return <div className={'flex justify-end self-end'}>
             <button
-                className={'flex min-w-[100px] items-center justify-center gap-3 rounded-md bg-neutral-700 p-2 text-sm font-semibold hover:bg-neutral-600'}
+                className={'flex items-center justify-center gap-3 rounded-full bg-white/5 py-2 px-4 ' +
+                    'text-sm font-semibold hover:bg-neutral-600'}
                 onClick={onEditButtonClick}>
-                {icon && <Icon {...icon}/>}
                 {t(editText)}
+                <PencilIcon className={'h-4 w-4'}/>
             </button>
         </div>;
     }, [canEdit, onEditButtonClick, editText]);
