@@ -2,7 +2,7 @@
 
 import { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-import { PL, US } from 'country-flag-icons/react/3x2';
+import { ES, PL, US } from 'country-flag-icons/react/3x2';
 import { useTranslation } from 'react-i18next';
 
 import { showSuccessToast } from '@/components/Toast/readyToastNotifications';
@@ -33,6 +33,11 @@ const flags: Record<string, Flag> = {
         component: () => <PL title={'Poland'}/>,
         emojiFlag: '🇵🇱',
     },
+    es: {
+        name: 'Español',
+        component: () => <ES title={'Spain'}/>,
+        emojiFlag: '🇪🇸',
+    }
 };
 
 const RadioCard = (props: RadioCardProps) => {
