@@ -1,9 +1,7 @@
 import React, { useCallback } from 'react';
 
-import { ArrowLeftIcon } from '@heroicons/react/24/solid';
 import { useTranslation } from 'react-i18next';
 
-import { ButtonWithIcon } from '@/components/ButtonWithIcon/ButtonWithIcon';
 import { ProfileAvatar } from '@/components/ProfileAvatar/ProfileAvatar';
 import { logout } from '@/queries/account';
 import { UserInfo } from '@/queries/account/types';
@@ -28,7 +26,7 @@ export const UserBadge = (props: UserBadgeProps) => {
         performLogout({});
     }, []);
 
-    return <div className={'flex w-full gap-4 rounded-md bg-white/5 p-4'}>
+    return <div className={'flex w-full gap-4 rounded-md p-4'}>
         <ProfileAvatar width={50} height={50} fill={false}/>
         <div className={'flex flex-col items-stretch gap-1'}>
             <div className={'font-semibold text-white'}>
@@ -38,18 +36,12 @@ export const UserBadge = (props: UserBadgeProps) => {
                 {user.email.email}
             </div>
             <div className={'flex justify-end pt-2'}>
-                <ButtonWithIcon
+                <button
                     title={'Logout'}
                     onClick={onLogoutButtonClick}
-                    icon={{
-                        component: ArrowLeftIcon,
-                        size: 18,
-                    }}
-                    className={'bg-white/5 p-2 text-[12px] font-semibold hover:bg-white/10'}
-                    iconColor={'rgba(255,255,255,0.8)'}
-                    iconColorHover={'white'}>
+                    className={'rounded-full bg-white/5 px-4 py-2 text-[12px] font-semibold hover:bg-white/10'}>
                     {t('LOGOUT')}
-                </ButtonWithIcon>
+                </button>
             </div>
         </div>
     </div>;
