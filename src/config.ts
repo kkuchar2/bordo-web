@@ -5,7 +5,7 @@ import { QueryCache, QueryClient } from '@tanstack/react-query';
 
 import { showErrorToast } from '@/components/Toast/readyToastNotifications';
 
-export const GOOGLE_CLIENT_ID = '548057113652-60s2uh11sbfvb8sorn2amii2d4316pbi.apps.googleusercontent.com';
+export const GOOGLE_CLIENT_ID = '1013576093087-e1pp5ceoi524s1961r1b52h81md0p4lo.apps.googleusercontent.com';
 
 export const environment = {
     'NEXT_PUBLIC_BORDO_API_URL': process.env.NEXT_PUBLIC_BORDO_API_URL,

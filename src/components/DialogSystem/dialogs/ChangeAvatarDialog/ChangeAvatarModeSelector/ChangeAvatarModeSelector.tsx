@@ -1,11 +1,12 @@
 import React, { useCallback, useRef } from 'react';
 
-import { Button, Input } from '@chakra-ui/react';
+import { Input } from '@chakra-ui/react';
 import { CloudArrowUpIcon } from '@heroicons/react/24/solid';
+import Image from 'next/image';
 import { useTranslation } from 'react-i18next';
 
+import styles from './ChangeAvatarModeSelector.module.scss';
 import { ChangeAvatarModeSelectorProps } from './ChangeAvatarModeSelector.types';
-import { StyledSelectGIFCircle } from './style';
 
 export const ChangeAvatarModeSelector = (props: ChangeAvatarModeSelectorProps) => {
 
@@ -21,18 +22,10 @@ export const ChangeAvatarModeSelector = (props: ChangeAvatarModeSelectorProps) =
 
     return <div className={'flex items-center justify-center gap-[20px]'}>
         <div className={'flex flex-col items-center justify-center gap-[20px]'}>
-            <Button onClick={openFileSelectionWindow}
-                borderRadius={'full'}
-                width={'150px'}
-                height={'150px'}
-                display={'flex'}
-                alignItems={'center'}
-                justifyContent={'center'}
-                flexDirection={'column'}
-                gap={'20px'}>
-
-                <CloudArrowUpIcon width={40} color={'#a5a5a5'}/>
-            </Button>
+            <button onClick={openFileSelectionWindow}
+                className={'flex h-[150px] w-[150px] flex-col items-center justify-center gap-[20px] rounded-full'}>
+                <CloudArrowUpIcon width={40} color={'#bebebe'}/>
+            </button>
             <Input type={'file'} accept={'image/*'} ref={inputRef} onChange={onFileSelected}
                 style={{ display: 'none' }}/>
             <div className={'font-semibold'}>
@@ -41,18 +34,19 @@ export const ChangeAvatarModeSelector = (props: ChangeAvatarModeSelectorProps) =
         </div>
 
         <div className={'flex flex-col items-center justify-center gap-[20px]'}>
-            <Button onClick={onAnimatedAvatarSelected}
-                borderRadius={'full'}
-                width={'150px'}
-                height={'150px'}
-                display={'flex'}
-                alignItems={'center'}
-                justifyContent={'center'}
-                flexDirection={'column'}
-                gap={'20px'}>
+            <button onClick={onAnimatedAvatarSelected}
+                className={'flex h-[150px] w-[150px] flex-col items-center justify-center gap-[20px] rounded-full'}>
 
-                <StyledSelectGIFCircle url={'https://media3.giphy.com/media/lgcUUCXgC8mEo/giphy.gif?'}/>
-            </Button>
+                <div className={styles.selectGifCircle}>
+                    <Image
+                        className={'object-cover'}
+                        src={'https://media3.giphy.com/media/lgcUUCXgC8mEo/giphy.gif?'}
+                        fill={true}
+                        sizes={'150px'}
+                        alt={'gif_preview'}
+                    />
+                </div>
+            </button>
             <div className={'font-semibold'}>
                 {t('ANIMATED_AVATAR')}
             </div>

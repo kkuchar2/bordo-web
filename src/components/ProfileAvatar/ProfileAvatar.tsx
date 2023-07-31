@@ -40,6 +40,10 @@ export const ProfileAvatar = ({ width = 150, height = 150, fill = false }: Profi
                 height: height,
                 objectFit: 'cover'
             }}
+            priority={true}
+            unoptimized={src.endsWith('.gif')}
+            blurDataURL={src}
+            loader={({ src }) => src}
             width={width}
             height={height}
             fill={fill}

@@ -12,6 +12,16 @@ module.exports = {
                 protocol: 'https',
                 hostname: 'media.giphy.com',
                 port: '',
+            },
+            {
+                protocol: 'https',
+                hostname: 'media3.giphy.com',
+                port: '',
+            },
+            {
+                protocol: 'https',
+                hostname: 'storage.cloud.google.com',
+                port: '',
             }
         ]
     }

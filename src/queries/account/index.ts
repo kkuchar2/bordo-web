@@ -1,7 +1,7 @@
 import { authGetQuery, authPostQuery, authPutQuery } from '../authQueries';
 import { AxiosConfigs, QueryResponseError } from '../base';
 
-import { User, UserProfile } from './types';
+import { SignedAvatarUploadInfo, User, UserProfile } from './types';
 
 import {
     showEmailChangeConfirmationSentDialog,
@@ -198,8 +198,8 @@ export const getUser = () => {
     return authGetQuery<User>(['user'], 'account/user')({});
 };
 
-export const prepareAvatarUploadInfo = () => {
-    return authPostQuery(['avatarUploadInfo'], 'account/avatar-upload-info')({});
+export const signAvatarUploadUrl = () => {
+    return authPostQuery<SignedAvatarUploadInfo>(['signedAvatarUploadInfo'], 'account/sign-avatar-upload-url');
 };
 
 export const getProfile = (username: string) => {

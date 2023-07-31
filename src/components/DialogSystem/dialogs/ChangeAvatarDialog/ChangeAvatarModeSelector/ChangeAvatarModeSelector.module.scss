@@ -1,15 +1,11 @@
-import styled from 'styled-components';
-
-import { StyledSelectGIFCircleProps } from './ChangeAvatarModeSelector.types';
-
-export const StyledSelectGIFCircle = styled.div<StyledSelectGIFCircleProps>`
+.selectGifCircle {
   width: 150px;
   height: 150px;
   border-radius: 50%;
+  overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #5b955b url(${props => props.url});
   background-size: cover;
   position: relative;
 
@@ -25,4 +21,4 @@ export const StyledSelectGIFCircle = styled.div<StyledSelectGIFCircleProps>`
       background: rgba(149, 149, 149, 0.5);
     }
   }
-`;
+}

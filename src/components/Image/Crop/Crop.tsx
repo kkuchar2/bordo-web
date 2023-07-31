@@ -5,10 +5,8 @@ import { PhotoIcon } from '@heroicons/react/24/solid';
 import Cropper from 'react-easy-crop';
 import { Area } from 'react-easy-crop/types';
 
-import { CropContainer } from '@/components/DialogSystem/dialogs/ChangeAvatarDialog/style';
-
 interface CropProps {
-    image?: string
+    image: string
     disabled?: boolean
     onCroppedAreaChange?: (area: Area) => void
 }
@@ -38,11 +36,20 @@ export const Crop = (props: CropProps) => {
         if (disabled) {
             return;
         }
+
+        if (!onCroppedAreaChange) {
+            return;
+        }
+
         onCroppedAreaChange(croppedAreaPixels);
     }, [disabled, onCroppedAreaChange]);
 
     return <div className={'flex flex-col gap-[40px]'}>
-        <CropContainer imageSelected={image != null} width={400}>
+        <div className={'relative box-border flex w-full flex-col items-center justify-center'}
+            style={{
+                width: image ? '100%' : 200,
+                height: image ? 400 : 200,
+            }}>
             <Cropper
                 image={image}
                 crop={crop}
@@ -56,7 +63,7 @@ export const Crop = (props: CropProps) => {
                 onZoomChange={onZoomChange}
                 onCropComplete={onCropComplete}
                 onCropChange={setCrop}/>
-        </CropContainer>
+        </div>
         <div className={'flex w-full items-center justify-center gap-[20px] p-[40px]'}>
             <PhotoIcon width={30} height={30}/>
             <Slider aria-label={'slider-ex-4'}

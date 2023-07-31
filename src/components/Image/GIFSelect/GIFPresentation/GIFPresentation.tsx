@@ -1,32 +1,9 @@
 import React, { useMemo } from 'react';
 
 import { Grid } from '@giphy/react-components';
-import styled from 'styled-components';
 
+import styles from './GIFPresentation.module.scss';
 import { GIFPresentationProps } from './GIFPresentation.types';
-
-interface StyledGIFPresentationProps {
-    width: number;
-}
-
-const StyledGIFPresentation = styled.div<StyledGIFPresentationProps>`
-  height: 400px;
-  width: ${({ width }) => width + 20}px;
-  overflow-y: scroll;
-  overflow-x: hidden;
-  margin-top: 20px;
-  box-sizing: border-box;
-
-  .giphy-gif {
-    box-sizing: border-box;
-    border: 3px solid #424242;
-
-    &:hover {
-      cursor: pointer;
-      border: 3px solid #a8a8a8;
-    }
-  }
-`;
 
 export const GIFPresentation = (props: GIFPresentationProps) => {
 
@@ -45,7 +22,9 @@ export const GIFPresentation = (props: GIFPresentationProps) => {
         return null;
     }
 
-    return <StyledGIFPresentation width={width}>
+    return <div
+        className={styles.gifPresentation}
+        style={{ width: width + 20 }}>
         <Grid onGifClick={onGifClick}
             fetchGifs={getFetchFunc}
             borderRadius={10}
@@ -54,5 +33,5 @@ export const GIFPresentation = (props: GIFPresentationProps) => {
             key={searchText}
             gutter={10}
             noLink={true}/>
-    </StyledGIFPresentation>;
+    </div>;
 };

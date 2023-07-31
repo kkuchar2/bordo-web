@@ -41,8 +41,9 @@ export const GIFSelect = (props: GIFSelectProps) => {
                 giphyFetch={giphyFetch}/>
         </div>
         <div className={'mt-[30px] flex w-full justify-end'}>
-            <Image src={'/images/PoweredBy_Horizontal_Dark Backgrounds_With Logo.png'}
-                width={130} height={50} alt={'powered_by_giphy'}/>
+            <Image
+                src={'/images/PoweredBy_Horizontal_Dark Backgrounds_With Logo.png'}
+                width={150} height={100} alt={'powered_by_giphy'}/>
         </div>
     </div>;
 };

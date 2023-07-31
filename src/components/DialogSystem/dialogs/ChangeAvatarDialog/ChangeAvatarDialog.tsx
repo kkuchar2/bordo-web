@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { IGif } from '@giphy/js-types';
+import axios from 'axios';
 import { useTranslation } from 'react-i18next';
 
 import { ChangeAvatarModeSelector } from './ChangeAvatarModeSelector/ChangeAvatarModeSelector';
@@ -10,7 +11,8 @@ import { DelayedTransition } from '@/components/chakra/DelayedTransition/Delayed
 import { Crop } from '@/components/Image/Crop/Crop';
 import { GIFSelect } from '@/components/Image/GIFSelect/GIFSelect';
 import { giphyFetch } from '@/config';
-import { changeAvatar, prepareAvatarUploadInfo } from '@/queries/account';
+import { changeAvatar, signAvatarUploadUrl } from '@/queries/account';
+import { SignedAvatarUploadInfo, SignedUrl } from '@/queries/account/types';
 import { changeDialog, closeDialog } from '@/state/reducers/dialog/dialogSlice';
 import { DialogProps } from '@/state/reducers/dialog/dialogSlice.types';
 import { useAppDispatch } from '@/state/store';
@@ -33,36 +35,54 @@ export const ChangeAvatarDialog = (props: DialogProps) => {
 
     const changeAvatarQuery = changeAvatar();
 
-    const { data: avatarUploadInfo, mutate: avatarUploadInfoMutate } = prepareAvatarUploadInfo();
+    const requestSignedUrlQuery = signAvatarUploadUrl()({
+        onSuccess: (data: SignedAvatarUploadInfo) => {
+            const { signed_url, file_path } = data;
+
+            if (!signed_url) {
+                return;
+            }
+
+            if (mode === 'upload') {
+                generateCroppedImageFile(image, croppedArea)
+                    .then((blob) => {
+                        console.log('Blob generated: ', blob);
+                        uploadToStaticStorage(blob, signed_url, file_path)
+                            .then(() => {
+                                console.log('File uploaded successfully');
+                            })
+                            .catch((error) => {
+                                console.error('Error uploading file: ', error);
+                            });
+                    })
+                    .catch((error) => {
+                        console.error('Error generating blob: ', error);
+                    });
+            }
+        }
+    });
 
     const validateBlobSize = useCallback((blob: Blob) => {
         return blob.size <= FILE_SIZE_LIMIT_BYTES;
     }, []);
 
-    const sendChangeProfileImage = useCallback(async (blob: Blob) => {
-        const isCorrectSize = validateBlobSize(blob);
+    const uploadToStaticStorage = useCallback(async (blob: Blob, signedUrl: SignedUrl, file_path: string) => {
 
-        if (!isCorrectSize) {
-            console.error('File is too big');
-            // TODO: show error
-            return;
-        }
-        console.log('Uploading file using signed URL: ', avatarUploadInfo.signed_url);
+        const fields = signedUrl.fields;
 
-        await fetch(avatarUploadInfo.signed_url, {
-            method: 'PUT',
-            body: blob,
+        const formData = new FormData();
+        Object.keys(fields).forEach((key) => formData.append(key, fields[key]));
+        formData.append('file', blob);
+
+        await axios.post(signedUrl.url, formData, {
             headers: {
-                'Content-Type': 'application/octet-stream',
-            },
-        }).then((response) => {
-            console.log('File uploaded successfully: ', response);
-            console.log('Sending to server that file is uploaded: ', avatarUploadInfo.url);
-            changeAvatarQuery.mutate({
-                avatar: 'https://storage.cloud.google.com/bordo-bucket-private-dev/' + avatarUploadInfo.url,
+                'Content-Type': 'multipart/form-data',
+            }
+        })
+            .then((response) => {
+                changeAvatarQuery.mutate({ avatar: file_path });
             });
-        });
-    }, [extension, avatarUploadInfo]);
+    }, [extension]);
 
     const onBack = useCallback(() => {
         setMode(null);
@@ -127,38 +147,24 @@ export const ChangeAvatarDialog = (props: DialogProps) => {
         if (extension === '.gif') {
             const blob = file.slice(0, file.size, 'image/gif');
 
+            // Validate size on client side
             const isCorrectSize = validateBlobSize(blob);
 
             if (!isCorrectSize) {
                 console.error('File is too big');
-                // TODO: show error
                 return;
             }
         }
         console.log('Requesting signed url');
-        avatarUploadInfoMutate({ file_extension: extension.slice(1) });
-    }, [image, croppedArea, extension, file, sendChangeProfileImage]);
-
-    const cropAndSendImage = useCallback(async () => {
-        const blob = await generateCroppedImageFile(image, croppedArea, sendChangeProfileImage);
-
-        if (blob) {
-            sendChangeProfileImage(blob);
-        }
-
-    }, [image, croppedArea, sendChangeProfileImage]);
+        requestSignedUrlQuery.mutate({ file_extension: extension.slice(1) });
+    }, [image, croppedArea, extension, file, uploadToStaticStorage]);
 
     useEffect(() => {
-
-        const cropImage = async () => {
-            const blob = await generateCroppedImageFile(image, croppedArea, sendChangeProfileImage);
-            return blob;
-        };
-
-        if (mode === 'upload' && avatarUploadInfo && avatarUploadInfo.signed_url) {
-            cropAndSendImage();
+        if (!requestSignedUrlQuery.isSuccess) {
+            return;
         }
-    }, [avatarUploadInfo]);
+
+    }, [requestSignedUrlQuery]);
 
     const renderButtons = useMemo(() => {
         if (mode === 'upload') {

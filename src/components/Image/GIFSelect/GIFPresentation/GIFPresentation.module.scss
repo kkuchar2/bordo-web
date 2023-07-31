@@ -1,8 +1,5 @@
-import styled from 'styled-components';
-
-export const StyledGIFPresentation = styled.div`
-  width: 600px;
-  height: 500px;
+.gifPresentation {
+  height: 400px;
   overflow-y: scroll;
   overflow-x: hidden;
   margin-top: 20px;
@@ -16,6 +13,5 @@ export const StyledGIFPresentation = styled.div`
       cursor: pointer;
       border: 3px solid #a8a8a8;
     }
-
   }
-`;
+}

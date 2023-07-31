@@ -84,7 +84,7 @@ export const generateDownload = async (imageSrc, crop) => {
     );
 };
 
-export const generateCroppedImageFile = async (imageSrc, crop, resolve) => {
+export const generateCroppedImageFile = async (imageSrc, crop) => {
 
     if (!crop || !imageSrc) {
         return;

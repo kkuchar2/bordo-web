@@ -33,3 +33,15 @@ export interface UserInfo {
 }
 
 export type User = UserAuth & UserInfo;
+
+export type SignedUrl = {
+    url: string;
+    fields: {
+        [key: string]: string;
+    }
+}
+
+export type SignedAvatarUploadInfo = {
+    signed_url: SignedUrl;
+    file_path: string;
+}

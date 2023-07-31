@@ -44,7 +44,6 @@ const GoogleButton = (props: GoogleButtonProps) => {
         <GoogleOAuthProvider clientId={clientId}>
             <GoogleLogin
                 useOneTap={useOneTap}
-                width={width}
                 theme={'filled_black'}
                 size={'large'}
                 shape={'rectangular'}
