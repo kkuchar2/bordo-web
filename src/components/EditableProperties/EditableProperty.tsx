@@ -3,7 +3,7 @@ import React, { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { OpenReadyDialogArgs } from '@/components/DialogSystem/readyDialogs';
-import { Icon } from '@/components/Icons/Icon';
+import { Icon, IconProps } from '@/components/Icons/Icon';
 
 export interface EditablePropertyProps {
     id: string;
@@ -55,10 +55,6 @@ const EditableProperty = (props: EditablePropertyProps) => {
         </div>;
     }, [canEdit, onEditButtonClick, editText]);
 
-    if (!value) {
-        return null;
-    }
-
     if (hideTitle) {
         return renderEdit;
     }
@@ -69,7 +65,7 @@ const EditableProperty = (props: EditablePropertyProps) => {
                 <div className={'font-semibold text-sm text-white/70 ' + (props.uppercaseTitle ? 'uppercase' : 'none')}>
                     {`${name}:`}
                 </div>
-                <div>{value}</div>
+                {value && <div>{value}</div>}
             </div>
             <div className={'grid place-items-center'}>
                 {renderEdit}

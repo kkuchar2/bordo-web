@@ -95,6 +95,7 @@ const AccountPage = () => {
                     icon={{
                         component: KeyIcon,
                         color: '#ffb700',
+                        size: 20
                     }}
                     showDialogFunc={showChangePasswordDialog}
                 />

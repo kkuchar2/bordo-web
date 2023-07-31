@@ -46,7 +46,7 @@ export const ChangePropertyDialog = <TFieldValues extends FieldValues>(
         query.mutate(values);
     }, []);
 
-    return <div className={'w-full'}>
+    return <div className={'w-full min-w-[400px]'}>
         <Form<TFieldValues>
             config={formConfig}
             className={'w-full'}

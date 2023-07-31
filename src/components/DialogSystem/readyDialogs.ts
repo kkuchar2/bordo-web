@@ -220,7 +220,7 @@ export const showChangePasswordDialog = (args: OpenReadyDialogArgs) => {
                     },
                 },
                 data: {
-                    formConfigKey: changePasswordForm,
+                    formConfig: changePasswordForm,
                     queryFunction: changePassword,
                     initialValues: initialValues
                 }
