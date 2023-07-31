@@ -9,7 +9,6 @@ import Form from '@/components/Forms/Form/Form';
 import { registrationForm } from '@/components/Forms/formConfig';
 import { RegistrationFormArgs } from '@/components/Forms/formConfig.types';
 import { NavLink } from '@/components/NavLink/NavLink';
-import UserAgreements from '@/components/UserAgreements';
 import WithAuth from '@/hoc/WithAuth';
 import { register } from '@/queries/account';
 
@@ -52,7 +51,16 @@ const SignUpPage = () => {
                 </NavLink>
             </div>
 
-            <UserAgreements/>
+            <div className={'flex grow flex-col justify-end'}>
+                <div className={'text-center text-sm'}>
+                    {t('USER_AGREEMENTS')}
+                    <NavLink className={'p-2 font-semibold text-white'}
+                        href={'/userAgreement'}>
+                        {t('MORE')}
+                    </NavLink>
+                </div>
+            </div>
+
             {signUpQuery.isLoading && <DelayedTransition
                 pending={true}
                 position={'absolute'}
