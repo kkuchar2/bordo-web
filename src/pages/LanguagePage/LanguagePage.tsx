@@ -2,7 +2,7 @@
 
 import { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-import { ES, PL, US } from 'country-flag-icons/react/3x2';
+import { DE, ES, FR, PL, US } from 'country-flag-icons/react/3x2';
 import { useTranslation } from 'react-i18next';
 
 import { showSuccessToast } from '@/components/Toast/readyToastNotifications';
@@ -37,6 +37,16 @@ const flags: Record<string, Flag> = {
         name: 'Español',
         component: () => <ES title={'Spain'}/>,
         emojiFlag: '🇪🇸',
+    },
+    fr: {
+        name: 'Français',
+        component: () => <FR title={'France'}/>,
+        emojiFlag: '🇫🇷',
+    },
+    de: {
+        name: 'Deutsch',
+        component: () => <DE title={'Germany'}/>,
+        emojiFlag: '🇩🇪',
     }
 };
 

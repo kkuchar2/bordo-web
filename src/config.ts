@@ -54,7 +54,7 @@ export const isPusherEnvSet = requiredPusherEnvVars.every((key) => getEnvVar(key
 const giphyKey = getEnvVar('NEXT_PUBLIC_GIPHY_API_KEY');
 export const giphyFetch = giphyKey ? new GiphyFetch(giphyKey) : null;
 
-export const SUPPORTED_LANGUAGES = ['en', 'pl', 'es'];
+export const SUPPORTED_LANGUAGES = ['en', 'pl', 'es', 'fr', 'de'];
 
 export const queryClient = new QueryClient({
     queryCache: new QueryCache({
