@@ -108,7 +108,7 @@ const AccountPage = () => {
             </SettingsSection>
 
             <SettingsSection title={t('ACCOUNT')}>
-                <button className={'rounded-md bg-red-600 p-2 text-sm font-semibold hover:bg-red-500'}
+                <button className={'rounded-md bg-white/5 px-5 py-2 text-sm font-medium text-red-500 hover:bg-white/10 hover:text-red-600'}
                     onClick={onDeleteAccountAction}>
                     {t('DELETE_ACCOUNT')}
                 </button>

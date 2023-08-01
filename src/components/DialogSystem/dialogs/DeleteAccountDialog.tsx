@@ -40,7 +40,7 @@ export const DeleteAccountDialog = () => {
         <Form<DeleteAccountFormArgs>
             config={deleteAccountForm}
             error={deleteAccountQuery.error?.data}
-            submitButtonClassName={'bg-red-900 hover:bg-red-800'}
+            submitButtonClassName={'rounded-md bg-white/5 px-5 py-2 text-sm font-medium text-red-500 hover:bg-white/10 hover:text-red-600'}
             submitButtonTextKey={'DELETE_ACCOUNT_PERMANENTLY'}
             disabled={deleteAccountQuery.isLoading}
             onCancel={onCancelRequest}
