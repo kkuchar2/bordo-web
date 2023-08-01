@@ -2,7 +2,7 @@
 
 import React, { ReactNode, useMemo } from 'react';
 
-import { Box, ChakraProvider } from '@chakra-ui/react';
+import { ChakraProvider } from '@chakra-ui/react';
 import { Toaster } from 'react-hot-toast';
 import { useSelector } from 'react-redux';
 
@@ -38,9 +38,9 @@ export const ContentWithChakra = (props: ContentWithChakraProps) => {
         <Toaster/>
         <div className={'flex h-screen w-full'}>
             {sideBar}
-            <Box flexGrow={1} h={'100%'} data-testid={'content'} overflow={'auto'}>
+            <div className={'h-full grow overflow-auto'}>
                 {props.children}
-            </Box>
+            </div>
         </div>
         <Dialogs/>
     </ChakraProvider>;
