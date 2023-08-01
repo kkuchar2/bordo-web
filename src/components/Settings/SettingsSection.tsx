@@ -1,8 +1,6 @@
-import React, { ReactNode } from 'react';
+import { ReactNode } from 'react';
 
-import { Box, Divider, Flex, Text } from '@chakra-ui/react';
-
-interface SettingsSectionProps {
+type SettingsSectionProps = {
     title: string;
     children: ReactNode;
     show?: boolean;
@@ -16,15 +14,14 @@ export const SettingsSection = (props: SettingsSectionProps) => {
         return null;
     }
 
-    return <Box>
-        <Divider mt={2} mb={4}/>
-        <Flex gap={'20px'} pt={'10px'} pb={'30px'}>
-            <Flex w={'40%'}>
-                <Text fontSize={'sm'} fontWeight={'medium'}>{title}</Text>
-            </Flex>
-            <Flex flexGrow={1} justify={'flex-end'}>
+    return <div className={'bg-[rgba(255,255,255,0.02)] p-3'}>
+        <div className={'flex gap-[20px] pb-[30px] pt-[10px]'}>
+            <div className={'flex w-[40%]'}>
+                <div className={'text-md font-medium tracking-tighter text-white/80'}>{title}</div>
+            </div>
+            <div className={'flex grow justify-end'}>
                 {children}
-            </Flex>
-        </Flex>
-    </Box>;
+            </div>
+        </div>
+    </div>;
 };
