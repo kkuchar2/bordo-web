@@ -14,7 +14,7 @@ const inter = Inter({
 export default function RootLayout({ children }: { children: ReactNode }) {
 
     return <html lang={'en'}>
-        <body className={`${inter.variable} font-sans`}>
+        <body className={`${inter.variable} overflow-hidden font-sans`}>
             <main>
                 <Content>
                     {children}
