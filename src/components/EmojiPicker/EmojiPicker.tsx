@@ -1,6 +1,5 @@
-import React, { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 
-import { Box, BoxProps } from '@chakra-ui/react';
 import Picker from '@emoji-mart/react';
 
 export interface SelectedEmoji {
@@ -13,21 +12,23 @@ export interface SelectedEmoji {
 }
 
 interface EmojiPickerProps {
+    className?: string;
     open: boolean;
     onEmojiSelect: (emoji: SelectedEmoji) => void;
     onEmojiClose: () => void;
 }
 
-export const EmojiPicker = (props: EmojiPickerProps & BoxProps) => {
+export const EmojiPicker = (props: EmojiPickerProps) => {
 
-    const ref = useRef(null);
+    const { className, open, onEmojiSelect, onEmojiClose } = props;
 
-    const { open, onEmojiSelect, onEmojiClose, ...rest } = props;
+    const ref = useRef<HTMLDivElement>(null);
 
-    const handleClickOutside = useCallback((event) => {
-        if (ref.current && !ref.current.contains(event.target)) {
-            onEmojiClose();
+    const handleClickOutside = useCallback((event: MouseEvent) => {
+        if (!ref.current || ref.current.contains(event.target as Node)) {
+            return;
         }
+        onEmojiClose();
     }, []);
 
     useEffect(() => {
@@ -41,7 +42,7 @@ export const EmojiPicker = (props: EmojiPickerProps & BoxProps) => {
         return null;
     }
 
-    return <Box {...rest} ref={ref}>
+    return <div className={className} ref={ref}>
         <Picker onEmojiSelect={onEmojiSelect}
             autoFocus={true}
             theme={'dark'}
@@ -50,5 +51,5 @@ export const EmojiPicker = (props: EmojiPickerProps & BoxProps) => {
             maxFrequentRows={2}
             native={true}
             disableAutoFocus={true}/>
-    </Box>;
+    </div>;
 };

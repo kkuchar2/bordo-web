@@ -261,9 +261,7 @@ export const TextAreaWithEmoji = (props: TextAreaWithEmojiProps) => {
             />
 
             <EmojiPicker
-                position={'absolute'}
-                right={0}
-                zIndex={2}
+                className={'absolute right-0 z-[2]'}
                 open={emojiPanelOpen}
                 onEmojiSelect={onManualEmojiSelect}
                 onEmojiClose={onEmojiPickerClosed}/>
