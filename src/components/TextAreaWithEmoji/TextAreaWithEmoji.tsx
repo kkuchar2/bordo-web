@@ -267,7 +267,7 @@ export const TextAreaWithEmoji = (props: TextAreaWithEmojiProps) => {
                 onEmojiClose={onEmojiPickerClosed}/>
 
             {suggestionPanelOpen && <EmojiSuggestionPanel
-                query={query}
+                query={(query || '').toLowerCase()}
                 onClose={() => setSuggestionPanelOpen(false)}
                 onSelect={onEmojiSuggestionSelect}/>}
 
