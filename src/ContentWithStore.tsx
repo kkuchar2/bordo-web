@@ -2,7 +2,6 @@
 
 import React, { ReactNode, useMemo } from 'react';
 
-import { ChakraProvider } from '@chakra-ui/react';
 import { Toaster } from 'react-hot-toast';
 import { useSelector } from 'react-redux';
 
@@ -12,13 +11,12 @@ import { mainMenuItems } from '@/components/MainMenu/mainMenuItems';
 import { UserBadge } from '@/components/UserStatusBadge/UserBadge';
 import { getUser } from '@/queries/account';
 import { currentView } from '@/state/reducers/application/appSlice';
-import theme from '@/theme';
 
-type ContentWithChakraProps = {
+type ContentWithStoreProps = {
     children: ReactNode;
 }
 
-export const ContentWithChakra = (props: ContentWithChakraProps) => {
+export const ContentWithStore = (props: ContentWithStoreProps) => {
 
     const currentViewId = useSelector(currentView);
 
@@ -34,7 +32,7 @@ export const ContentWithChakra = (props: ContentWithChakraProps) => {
         </div>;
     }, [user, location, currentViewId]);
 
-    return <ChakraProvider theme={theme} resetCSS={true}>
+    return <div className={'text-white'}>
         <Toaster/>
         <div className={'flex h-screen w-full'}>
             {sideBar}
@@ -43,5 +41,5 @@ export const ContentWithChakra = (props: ContentWithChakraProps) => {
             </div>
         </div>
         <Dialogs/>
-    </ChakraProvider>;
+    </div>;
 };

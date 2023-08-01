@@ -13,7 +13,6 @@
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
-    "@chakra-ui/react": "^2.8.0",
     "@emoji-mart/react": "^1.1.1",
     "@giphy/js-fetch-api": "^5.0.0",
     "@giphy/react-components": "^8.0.0",

@@ -7,7 +7,7 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { Provider } from 'react-redux';
 
 import { queryClient } from '@/config';
-import { ContentWithChakra } from '@/ContentWithChakra';
+import { ContentWithStore } from '@/ContentWithStore';
 import { useEnvironment } from '@/hooks/useEnvironment';
 import { useI18n } from '@/hooks/useI18n';
 import { store } from '@/state/store';
@@ -29,9 +29,9 @@ export const Content = (props: ContentProps) => {
         <QueryClientProvider client={queryClient}>
             {process.env.NODE_ENV == 'development' &&
                 <ReactQueryDevtools initialIsOpen={false} position={'top-right'}/>}
-            <ContentWithChakra>
+            <ContentWithStore>
                 {props.children}
-            </ContentWithChakra>
+            </ContentWithStore>
         </QueryClientProvider>
     </Provider>;
 };
