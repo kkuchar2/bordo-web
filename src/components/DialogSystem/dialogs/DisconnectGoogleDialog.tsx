@@ -37,6 +37,7 @@ export const DisconnectGoogleDialog = () => {
             config={deleteAccountForm}
             error={error?.data}
             submitButtonTextKey={'DISCONNECT_ACCOUNT'}
+            submitButtonClassName={'rounded-md bg-white/5 px-5 py-2 text-sm font-medium text-white-50 hover:bg-white/10'}
             disabled={isLoading}
             onCancel={onCancelRequest}
             onSubmit={onSubmit}/>
