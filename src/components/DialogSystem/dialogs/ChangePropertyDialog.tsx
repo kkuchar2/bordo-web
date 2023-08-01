@@ -51,6 +51,7 @@ export const ChangePropertyDialog = <TFieldValues extends FieldValues>(
             config={formConfig}
             className={'w-full'}
             submitButtonTextKey={'CONFIRM'}
+            submitButtonClassName={'rounded-md bg-white/5 px-5 py-2 text-sm font-medium text-white hover:bg-white/10'}
             error={query.error?.data}
             initialValues={initialValues}
             disabled={query.isLoading}
