@@ -46,8 +46,8 @@ const EditableProperty = (props: EditablePropertyProps) => {
 
         return <div className={'flex justify-end self-end'}>
             <button
-                className={'flex items-center justify-center gap-3 rounded-full bg-white/5 py-2 px-4 ' +
-                    'text-sm font-semibold hover:bg-neutral-600'}
+                className={'flex items-center justify-center gap-3 rounded-md bg-white/5 py-2 px-4 ' +
+                    'text-sm font-medium hover:bg-white/10'}
                 onClick={onEditButtonClick}>
                 {t(editText)}
                 {icon && <Icon {...icon}/>}
