@@ -1,20 +1,15 @@
-import React, { ReactNode, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
-import { FlexProps } from '@chakra-ui/layout';
-import { Box, BoxProps, Flex, Spinner, SpinnerProps } from '@chakra-ui/react';
+import styles from './DelayedSpinner.module.scss';
 
-interface DelayedSpinnerProps {
+type DelayedSpinnerProps = {
     pending: boolean;
     delay?: number;
-    children?: ReactNode;
-    boxProps?: BoxProps;
-    spinnerProps?: SpinnerProps;
-    flexProps?: FlexProps;
 }
 
 export const DelayedSpinner = (props: DelayedSpinnerProps) => {
 
-    const { children, pending, delay = 300, boxProps = {}, spinnerProps = {}, flexProps = {} } = props;
+    const { pending, delay = 300 } = props;
 
     const timerRef = useRef<number | null>(null);
 
@@ -45,10 +40,5 @@ export const DelayedSpinner = (props: DelayedSpinnerProps) => {
         return null;
     }
 
-    return showProgress ? <Box {...boxProps}>
-        <Flex {...flexProps}>
-            <Spinner {...spinnerProps}/>
-            {children}
-        </Flex>
-    </Box> : null;
+    return showProgress && <span className={styles.loader}></span>;
 };

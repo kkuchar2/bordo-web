@@ -287,7 +287,7 @@ export const TextAreaWithEmoji = (props: TextAreaWithEmojiProps) => {
                                 {t('SAVE')}
                             </button>}
 
-                        <DelayedSpinner pending={isSaving}/>
+                        <DelayedSpinner pending={false}/>
 
                         {emojiPickerEnabled ?
                             <EmojiButton
