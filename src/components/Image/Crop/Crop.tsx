@@ -1,15 +1,16 @@
-import React, { useCallback, useState } from 'react';
+import { useCallback, useState } from 'react';
 
-import { Slider, SliderFilledTrack, SliderThumb, SliderTrack } from '@chakra-ui/react';
 import { PhotoIcon } from '@heroicons/react/24/solid';
 import Cropper from 'react-easy-crop';
 import { Area } from 'react-easy-crop/types';
 
-interface CropProps {
+type CropProps = {
     image: string
     disabled?: boolean
     onCroppedAreaChange?: (area: Area) => void
 }
+
+import styles from './Crop.module.scss';
 
 export const Crop = (props: CropProps) => {
 
@@ -66,17 +67,12 @@ export const Crop = (props: CropProps) => {
         </div>
         <div className={'flex w-full items-center justify-center gap-[20px] p-[40px]'}>
             <PhotoIcon width={30} height={30}/>
-            <Slider aria-label={'slider-ex-4'}
-                defaultValue={10}
+            <input type={'range'}
+                className={styles.slider}
                 value={zoom * 10}
-                onChange={onZoomSliderChange}
+                onChange={(e) => onZoomSliderChange(parseInt(e.target.value))}
                 min={10}
-                max={100}>
-                <SliderTrack bg={'red.100'}>
-                    <SliderFilledTrack bg={'tomato'}/>
-                </SliderTrack>
-                <SliderThumb boxSize={6}/>
-            </Slider>
+                max={100}/>
             <PhotoIcon width={60} height={60}/>
         </div>
     </div>;
