@@ -1,6 +1,5 @@
-import React, { useCallback, useRef } from 'react';
+import { useCallback, useRef } from 'react';
 
-import { Input } from '@chakra-ui/react';
 import { CloudArrowUpIcon } from '@heroicons/react/24/solid';
 import Image from 'next/image';
 import { useTranslation } from 'react-i18next';
@@ -26,8 +25,7 @@ export const ChangeAvatarModeSelector = (props: ChangeAvatarModeSelectorProps) =
                 className={'flex h-[150px] w-[150px] flex-col items-center justify-center gap-[20px] rounded-full'}>
                 <CloudArrowUpIcon width={40} color={'#bebebe'}/>
             </button>
-            <Input type={'file'} accept={'image/*'} ref={inputRef} onChange={onFileSelected}
-                style={{ display: 'none' }}/>
+            <input type={'file'} accept={'image/*'} ref={inputRef} onChange={onFileSelected} className={'hidden'}/>
             <div className={'font-semibold'}>
                 {t('UPLOAD_IMAGE')}
             </div>
