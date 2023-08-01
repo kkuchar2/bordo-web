@@ -1,12 +1,9 @@
-import React from 'react';
-
-import { VStack } from '@chakra-ui/react';
 import { TFunction } from 'i18next';
 
-import { ErrorText } from '@/components/chakra/ErrorText/ErrorText';
+import { ErrorText } from '@/components/ErrorText/ErrorText';
 import { QueryResponseErrorData } from '@/queries/base';
 
-interface Error {
+type Error = {
     code: string;
     message: string;
 }
@@ -73,7 +70,7 @@ export const getNonFieldErrors = (error: QueryResponseErrorData) => {
 };
 
 export const renderNonFieldErrors = (error: QueryResponseErrorData, t: TFunction<'translation'>, excludeList?: string[]) => {
-    return <VStack spacing={'5px'} align={'stretch'}>
+    return <div className={'flex flex-col items-stretch gap-[5px]'}>
         {
             getNonFieldErrors(error)
                 .filter(function (err: QueryResponseErrorData) {
@@ -86,5 +83,5 @@ export const renderNonFieldErrors = (error: QueryResponseErrorData, t: TFunction
                     return <ErrorText key={idx}>{t(error)}</ErrorText>;
                 })
         }
-    </VStack>;
+    </div>;
 };
