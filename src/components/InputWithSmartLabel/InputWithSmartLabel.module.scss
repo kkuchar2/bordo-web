@@ -20,6 +20,7 @@
   left: 12px;
   transform: translateY(-50%);
   font-weight: 600;
+  pointer-events: none;
 
   &.active {
     font-size: 12px;
