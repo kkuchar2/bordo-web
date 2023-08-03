@@ -4,11 +4,11 @@ import { ErrorMessage } from '@hookform/error-message';
 import {
     ControllerFieldState,
     ControllerRenderProps,
-    FieldErrors,
     FieldValues,
     Path,
     UseFormStateReturn
 } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 
 import { FieldErrorsComponent } from '@/components/FormikInput/FieldErrorsComponent';
 import { FieldProps } from '@/components/Forms/formConfig';
@@ -17,8 +17,8 @@ import { InputWithSmartLabel } from '@/components/InputWithSmartLabel/InputWithS
 export type HookFormInputProps<TFieldValues extends FieldValues> = FieldProps<TFieldValues> & {
     field: ControllerRenderProps<TFieldValues, Path<TFieldValues>>,
     fieldState: ControllerFieldState,
-    formState: UseFormStateReturn<TFieldValues>
-    errors: FieldErrors<TFieldValues>
+    formState: UseFormStateReturn<TFieldValues>,
+    additionalFieldErrors?: string[]
 }
 
 export const HookFormInput = <TFieldValues extends FieldValues>
@@ -31,23 +31,37 @@ export const HookFormInput = <TFieldValues extends FieldValues>
         label,
         type,
         autoComplete,
-        errors,
+        formState: { errors },
+        additionalFieldErrors
     } = props;
+
+    const { t } = useTranslation();
 
     return <div className={'flex flex-col gap-3'}>
         <InputWithSmartLabel
-            label={label}
-            type={type}
-            id={id}
             value={field.value}
+            type={type}
+            label={label}
+            id={id}
             name={name}
-            onChange={field.onChange}
             autoComplete={autoComplete}
-            isValid={true}/>
+            disabled={false}
+            onChange={field.onChange}
+            spellCheck={false}
+            isValid={true} />
+
         {errors && <ErrorMessage
             errors={errors}
-            name={id as any}
-            render={FieldErrorsComponent}/>
+            name={name as any}
+            render={({ message, messages }) => {
+                return <FieldErrorsComponent message={message} messages={messages} t={t} />;
+            }} />
         }
+
+        {additionalFieldErrors && additionalFieldErrors.map((e, i) => {
+            return <div className={'translate-y-[-20px] animate-fieldError text-[#ff4949]'} key={i}>
+                {t(e)}
+            </div>;
+        })}
     </div>;
 };

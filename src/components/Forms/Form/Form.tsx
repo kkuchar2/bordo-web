@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import {
     Controller,
@@ -14,6 +14,7 @@ import { useTranslation } from 'react-i18next';
 import { FormProps } from './Form.types';
 
 import useYupValidationResolver from '@/components/Forms/Form/useYupValidationResolver';
+import { getFormFieldErrors, getNonFieldErrors } from '@/components/Forms/util';
 
 const Form = <TFieldValues extends FieldValues = FieldValues>(props: FormProps<TFieldValues>) => {
     const {
@@ -21,6 +22,7 @@ const Form = <TFieldValues extends FieldValues = FieldValues>(props: FormProps<T
         onSubmit,
         onCancel,
         config,
+        error,
         disabled,
         title,
         excludeErrors,
@@ -35,10 +37,14 @@ const Form = <TFieldValues extends FieldValues = FieldValues>(props: FormProps<T
 
     const resolver = useYupValidationResolver<TFieldValues>(config.validationSchema);
 
+    const [additionalErrors, setAdditionalErrors] = useState(error);
+
+    console.log('additionalErrors', additionalErrors);
+
     const {
         control,
         handleSubmit,
-        setError,
+        watch,
         formState: {
             errors: formErrors,
         },
@@ -50,6 +56,18 @@ const Form = <TFieldValues extends FieldValues = FieldValues>(props: FormProps<T
     const onFormSubmitted = useCallback((values: TFieldValues) => {
         onSubmit?.(values);
     }, [onSubmit]);
+
+    useEffect(() => {
+        setAdditionalErrors(error);
+    }, [error]);
+
+    useEffect(() => {
+        const subscription = watch(() => {
+            // Remove additional errors when field value changes
+            setAdditionalErrors(undefined);
+        });
+        return () => subscription.unsubscribe();
+    }, [watch]);
 
     const renderFields = useMemo(() => {
         if (!config || !config.fields) {
@@ -80,14 +98,14 @@ const Form = <TFieldValues extends FieldValues = FieldValues>(props: FormProps<T
                                 field={field}
                                 fieldState={fieldState}
                                 formState={formState}
-                                errors={formErrors}
+                                additionalFieldErrors={getFormFieldErrors(additionalErrors, name)}
                             />;
                         }}
                     />;
                 })
             }
         </div>;
-    }, [config, formErrors, disabled, initialValues]);
+    }, [config, formErrors, disabled, initialValues, additionalErrors]);
 
     if (!config) {
         console.error('No config');
@@ -96,10 +114,16 @@ const Form = <TFieldValues extends FieldValues = FieldValues>(props: FormProps<T
 
     return <form onSubmit={handleSubmit(onFormSubmitted)}>
         <div className={[className, 'flex flex-col gap-[20px]'].join(' ')}>
-            {title ? <div className={'text-2xl font-semibold tracking-tight'}>{title}</div> : null}
-            {description ? <div>{description}</div> : null}
+            {title && <div className={'text-2xl font-semibold tracking-tight'}>{title}</div>}
+            {description}
             {renderFields}
-            {/*{error && nonFieldErrors}*/}
+            {getNonFieldErrors(additionalErrors)
+                .filter((msg => msg != null && !excludeErrors?.includes(msg)))
+                .map((msg: string | null, idx: number) => {
+                    return msg && <div className={'translate-y-[-20px] animate-fieldError text-[#ff4949]'} key={idx}>
+                        {t(msg)}
+                    </div>;
+                })}
             <div className={'flex'}>
                 {useCancelButton && <button
                     type={'button'}

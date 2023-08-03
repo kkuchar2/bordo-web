@@ -1,29 +1,30 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/solid';
+import { FieldValues, Path, PathValue } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import styles from './InputWithSmartLabel.module.scss';
 
 import { ButtonWithIcon } from '@/components/ButtonWithIcon/ButtonWithIcon';
 
-type InputWithSmartLabelProps = {
-    value?: string;
+type InputWithSmartLabelProps<TFieldValues extends FieldValues> = {
+    value?: PathValue<TFieldValues, Path<TFieldValues>>;
     type: string;
+    label: string;
     id: string;
     name: string;
     autoComplete?: string | undefined;
-    placeholder?: string;
     disabled?: boolean;
-    label: string;
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-    spellCheck?: boolean;
+    spellCheck?: boolean | 'true' | 'false';
     errors?: string[];
     isValid?: boolean;
     onBlur?: (e: any) => void;
 }
 
-export const InputWithSmartLabel = (props: InputWithSmartLabelProps) => {
+export const InputWithSmartLabel = <TFieldValues extends FieldValues>
+(props: InputWithSmartLabelProps<TFieldValues>) => {
 
     const {
         id,
@@ -32,7 +33,6 @@ export const InputWithSmartLabel = (props: InputWithSmartLabelProps) => {
         type,
         label,
         disabled,
-        placeholder,
         autoComplete,
         spellCheck = false,
         errors,
@@ -46,8 +46,6 @@ export const InputWithSmartLabel = (props: InputWithSmartLabelProps) => {
     const inputRef = useRef(null);
 
     const { t } = useTranslation();
-
-    const labelActive = value && value !== '' || focused;
 
     const inputType = useMemo(() => {
         if (type !== 'password') {
@@ -81,6 +79,8 @@ export const InputWithSmartLabel = (props: InputWithSmartLabelProps) => {
             }}/>;
     }, [type, reveal, onShowHideClick, value]);
 
+    const labelActive = value && value !== '' || focused;
+
     return <div className={styles.inputWithSmartLabel}
         onMouseEnter={() => {
             setPointerWithinBounds(true);
@@ -99,10 +99,9 @@ export const InputWithSmartLabel = (props: InputWithSmartLabelProps) => {
             type={inputType}
             spellCheck={spellCheck}
             className={styles.input}
-            value={value}
+            value={value || ''}
             autoComplete={autoComplete}
             disabled={disabled}
-            placeholder={placeholder}
             onChange={onChange}
             onFocus={() => {
                 setFocused(true);

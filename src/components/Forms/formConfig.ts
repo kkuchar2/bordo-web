@@ -52,7 +52,7 @@ export const loginForm: FormConfig<LoginFormArgs> = {
             placeholder: 'ENTER_USERNAME_OR_EMAIL_INPUT_PLACEHOLDER',
             required: true,
             autoComplete: 'on',
-            component: HookFormInput
+            component: HookFormInput<LoginFormArgs>
         },
         {
             id: 'password',
@@ -62,7 +62,7 @@ export const loginForm: FormConfig<LoginFormArgs> = {
             placeholder: 'ENTER_PASSWORD',
             required: true,
             autoComplete: 'current-password',
-            component: HookFormInput
+            component: HookFormInput<LoginFormArgs>
         },
     ],
     validationSchema: object({
@@ -81,7 +81,7 @@ export const registrationForm: FormConfig<RegistrationFormArgs> = {
             placeholder: 'ENTER_EMAIL_INPUT_PLACEHOLDER',
             required: true,
             autoComplete: 'email',
-            component: HookFormInput
+            component: HookFormInput<RegistrationFormArgs>
         },
         {
             id: 'username',
@@ -91,7 +91,7 @@ export const registrationForm: FormConfig<RegistrationFormArgs> = {
             placeholder: 'ENTER_USERNAME_INPUT_PLACEHOLDER',
             required: true,
             autoComplete: 'on',
-            component: HookFormInput
+            component: HookFormInput<RegistrationFormArgs>
         },
         {
             id: 'password',
@@ -101,7 +101,7 @@ export const registrationForm: FormConfig<RegistrationFormArgs> = {
             placeholder: 'ENTER_PASSWORD',
             required: true,
             autoComplete: 'current-password',
-            component: HookFormInput
+            component: HookFormInput<RegistrationFormArgs>
         }
     ],
     validationSchema: object({
@@ -121,7 +121,7 @@ export const forgotPasswordForm: FormConfig<ForgotPasswordFormArgs> = {
             placeholder: 'ENTER_EMAIL_INPUT_PLACEHOLDER',
             required: true,
             autoComplete: 'email',
-            component: HookFormInput
+            component: HookFormInput<ForgotPasswordFormArgs>
         }
     ],
     validationSchema: object({
@@ -139,7 +139,7 @@ export const changeEmailForm: FormConfig<ChangeEmailFormArgs> = {
             placeholder: 'NEW_EMAIL_ADDRESS_ENTER',
             required: true,
             autoComplete: 'on',
-            component: HookFormInput
+            component: HookFormInput<ChangeEmailFormArgs>
         },
         {
             id: 'current_password',
@@ -149,7 +149,7 @@ export const changeEmailForm: FormConfig<ChangeEmailFormArgs> = {
             placeholder: 'CURRENT_PASSWORD_ENTER',
             required: true,
             autoComplete: 'current-password',
-            component: HookFormInput
+            component: HookFormInput<ChangeEmailFormArgs>
         },
     ],
     validationSchema: object({
@@ -168,7 +168,7 @@ export const changeUsernameForm: FormConfig<ChangeUsernameFormArgs> = {
             placeholder: 'ENTER_NEW_USERNAME_INPUT_PLACEHOLDER',
             required: true,
             autoComplete: 'off',
-            component: HookFormInput
+            component: HookFormInput<ChangeUsernameFormArgs>
         },
         {
             id: 'current_password',
@@ -178,7 +178,7 @@ export const changeUsernameForm: FormConfig<ChangeUsernameFormArgs> = {
             placeholder: 'CURRENT_PASSWORD_ENTER',
             required: true,
             autoComplete: 'current-password',
-            component: HookFormInput
+            component: HookFormInput<ChangeUsernameFormArgs>
         },
     ],
     validationSchema: object({
@@ -197,7 +197,7 @@ export const resetPasswordForm: FormConfig<ResetPasswordFormArgs> = {
             placeholder: 'NEW_PASSWORD_ENTER',
             required: true,
             autoComplete: 'off',
-            component: HookFormInput
+            component: HookFormInput<ResetPasswordFormArgs>
         },
         {
             id: 'new_password_confirm',
@@ -207,7 +207,7 @@ export const resetPasswordForm: FormConfig<ResetPasswordFormArgs> = {
             placeholder: 'INPUT_PASSWORD_CONFIRM_PLACEHOLDER',
             required: true,
             autoComplete: 'off',
-            component: HookFormInput
+            component: HookFormInput<ResetPasswordFormArgs>
         },
     ],
     validationSchema: object({
@@ -226,7 +226,7 @@ export const changePasswordForm: FormConfig<ChangePasswordFormArgs> = {
             placeholder: 'CURRENT_PASSWORD_ENTER',
             required: true,
             autoComplete: 'current-password',
-            component: HookFormInput
+            component: HookFormInput<ChangePasswordFormArgs>
         },
         {
             id: 'new_password',
@@ -236,7 +236,7 @@ export const changePasswordForm: FormConfig<ChangePasswordFormArgs> = {
             placeholder: 'NEW_PASSWORD_ENTER',
             required: true,
             autoComplete: 'off',
-            component: HookFormInput
+            component: HookFormInput<ChangePasswordFormArgs>
         },
         {
             id: 'new_password_confirm',
@@ -246,7 +246,7 @@ export const changePasswordForm: FormConfig<ChangePasswordFormArgs> = {
             placeholder: 'INPUT_PASSWORD_CONFIRM_PLACEHOLDER',
             required: true,
             autoComplete: 'off',
-            component: HookFormInput
+            component: HookFormInput<ChangePasswordFormArgs>
         },
     ],
     validationSchema: object({
@@ -266,7 +266,7 @@ export const deleteAccountForm: FormConfig<DeleteAccountFormArgs> = {
             placeholder: 'CURRENT_PASSWORD_ENTER',
             required: true,
             autoComplete: 'current-password',
-            component: HookFormInput
+            component: HookFormInput<DeleteAccountFormArgs>
         },
     ],
     validationSchema: object({

@@ -3,7 +3,23 @@ import { useMutation, UseMutationOptions, useQuery } from '@tanstack/react-query
 import { UseQueryOptions } from '@tanstack/react-query/src/types';
 import { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 
-export type QueryResponseErrorData = {}
+export type CustomError = {
+    code: string;
+    message: string;
+}
+
+export type FieldErrors = {
+    [key: string]: CustomError[];
+}
+
+export type FormError = {
+    non_field_errors?: CustomError[];
+    field_errors?: FieldErrors;
+}
+
+export type QueryResponseErrorData = {
+    form?: FormError;
+}
 
 export type QueryResponseError = {
     message: string;

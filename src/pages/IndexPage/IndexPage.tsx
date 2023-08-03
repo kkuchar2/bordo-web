@@ -1,19 +1,23 @@
 'use client';
 
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 
+import { getAuth, GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup } from '@firebase/auth';
+import { FirebaseError } from '@firebase/util';
+import { redirect } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 
 import { DelayedTransition } from '@/components/DelayedTransition/DelayedTransition';
 import Form from '@/components/Forms/Form/Form';
 import { loginForm } from '@/components/Forms/formConfig';
 import { LoginFormArgs } from '@/components/Forms/formConfig.types';
-import { renderNonFieldErrors } from '@/components/Forms/util';
+import { firebaseFieldErrorConvert } from '@/components/Forms/util';
 import GoogleButton from '@/components/GoogleButton/GoogleButton';
 import { NavLink } from '@/components/NavLink/NavLink';
-import { GOOGLE_CLIENT_ID, queryClient } from '@/config';
-import WithAuth from '@/hoc/WithAuth';
-import { googleLogin, login } from '@/queries/account';
+import { getEnvVar, isFirebaseAuthEnabled, queryClient } from '@/config';
+import { initializeFirebase } from '@/firebase/firebaseApp';
+import { getUser, googleLogin, login } from '@/queries/account';
+import { QueryResponseErrorData } from '@/queries/base';
 
 const IndexPage = () => {
 
@@ -23,17 +27,90 @@ const IndexPage = () => {
 
     const loginQuery = login();
 
-    const attemptLogin = useCallback((formData: any) => {
-        const { username_or_email, password } = formData;
+    const app = initializeFirebase();
+    const auth = getAuth(app);
+
+    const provider = new GoogleAuthProvider();
+
+    const userQuery = getUser();
+
+    const [firebaseLoginPending, setFirebaseLoginPending] = useState(false);
+    const [firebaseError, setFirebaseError] = useState<QueryResponseErrorData | null>(null);
+
+    const signInWithGoogleFirebase = useCallback(async () => {
+        const result = await signInWithPopup(auth, provider);
+        console.log(result.user);
+        const token = await result.user.getIdToken();
+        localStorage.setItem('firebase_token', token);
+        await userQuery.refetch();
+    }, []);
+
+    const signInEmailPasswordFirebase = useCallback(async (formData: LoginFormArgs) => {
+        setFirebaseLoginPending(true);
+        try {
+            const response = await signInWithEmailAndPassword(auth, formData.username_or_email, formData.password);
+            const token = await response.user.getIdToken();
+            localStorage.setItem('firebase_token', token);
+            await userQuery.refetch();
+        }
+        catch (e) {
+            setFirebaseLoginPending(false);
+
+            const firebaseError = e as FirebaseError;
+
+            if (firebaseError.code === 'auth/wrong-password') {
+                setFirebaseError(firebaseFieldErrorConvert(firebaseError.code, 'password'));
+            }
+            else if (firebaseError.code === 'auth/user-not-found') {
+                setFirebaseError(firebaseFieldErrorConvert(firebaseError.code, 'username_or_email'));
+            }
+            else if (firebaseError.code === 'auth/invalid-email') {
+                setFirebaseError(firebaseFieldErrorConvert(firebaseError.code, 'username_or_email'));
+            }
+        }
+    }, []);
+
+    const attemptLogin = useCallback(async (formData: LoginFormArgs) => {
+        if (isFirebaseAuthEnabled) {
+            await signInEmailPasswordFirebase(formData);
+            return;
+        }
         queryClient.removeQueries(['googleLogin']);
         googleLoginQuery.reset();
-        loginQuery.mutate({ username_or_email, password });
+        loginQuery.mutate(formData);
     }, []);
 
     const onSignInWithGoogle = useCallback((credentialResponse: any) => {
         loginQuery.reset();
         googleLoginQuery.mutate(credentialResponse);
     }, []);
+
+    const googleButton = useMemo(() => {
+        if (isFirebaseAuthEnabled) {
+            return <button
+                onClick={signInWithGoogleFirebase}
+                className={'h-12 w-full rounded-md bg-[#4285F4] font-semibold text-white'}>
+                {'Sign in with Google'}
+            </button>;
+        }
+
+        return <GoogleButton
+            clientId={getEnvVar('NEXT_PUBLIC_GOOGLE_CLIENT_ID')}
+            context={'signin'}
+            width={'320'}
+            customText={t('CONTINUE_WITH_GOOGLE')}
+            text={'signin'}
+            useOneTap={true}
+            onSuccess={onSignInWithGoogle}/>;
+    }, []);
+
+    if (userQuery.isLoading) {
+        return <DelayedTransition pending={true}/>;
+    }
+
+    if (userQuery.isSuccess && userQuery.data) {
+        return redirect('/home');
+    }
 
     return <div className={'grid h-full w-full place-items-center'}>
         <div className={'flex w-full flex-col gap-[30px] bg-[#2a2a2a] p-[40px] sm:w-[400px] sm:rounded-md'}>
@@ -45,7 +122,7 @@ const IndexPage = () => {
             <Form<LoginFormArgs>
                 config={loginForm}
                 submitButtonTextKey={'SIGN_IN'}
-                error={loginQuery.error?.data}
+                error={loginQuery.error?.data || firebaseError || userQuery.error || {}}
                 excludeErrors={['email_not_verified']}
                 useCancelButton={false}
                 onSubmit={attemptLogin}/>
@@ -54,18 +131,7 @@ const IndexPage = () => {
                 {t('FORGOT_PASSWORD_QUESTION')}
             </NavLink>
 
-            <GoogleButton
-                clientId={GOOGLE_CLIENT_ID}
-                context={'signin'}
-                width={'320'}
-                customText={t('CONTINUE_WITH_GOOGLE')}
-                text={'signin'}
-                useOneTap={true}
-                onSuccess={onSignInWithGoogle}/>
-
-            <div className={'mt-[-20px] grid place-items-center'}>
-                {renderNonFieldErrors(googleLoginQuery.error?.data, t, [])}
-            </div>
+            {googleButton}
 
             <div className={'flex flex-col items-center justify-center gap-[20px]'}>
                 <div className={'text-[#C7C7C7]'}>
@@ -76,12 +142,9 @@ const IndexPage = () => {
                 </NavLink>
             </div>
 
-            <DelayedTransition pending={loginQuery.isLoading || googleLoginQuery.isLoading}/>
+            <DelayedTransition pending={loginQuery.isLoading || googleLoginQuery.isLoading || firebaseLoginPending}/>
         </div>
     </div>;
 };
 
-export default WithAuth(IndexPage, {
-    redirectToHomeOnAutologin: true,
-    redirectToLoginPageOnUnauthenticated: false
-}) as React.FC;
+export default IndexPage;

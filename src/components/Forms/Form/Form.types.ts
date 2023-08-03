@@ -12,7 +12,7 @@ export interface FormProps<TFieldValues extends FieldValues = FieldValues> {
     onCancel?: any
     disabled?: boolean;
     excludeErrors?: string[];
-    error?: QueryResponseErrorData;
+    error: QueryResponseErrorData | null | undefined;
     onChange?: (values: TFieldValues) => void;
     submitButtonTextKey?: string;
     submitButtonClassName?: string;

@@ -15,6 +15,14 @@ export const authGetQuery = <ResponseDataType = any>(queryKey: QueryKey, endpoin
     };
 };
 
+export const authGetQueryWithHeaders = <ResponseDataType = any>(queryKey: QueryKey, endpoint: string, headers: any) => {
+    return (options?: UseQueryOptions<ResponseDataType>) => {
+        return getQueryInternal<ResponseDataType>(ApiClient, queryKey, endpoint, {
+            ...AxiosConfigs.WITH_CREDENTIALS_AND_CSRF, headers
+        }, { ...options });
+    };
+};
+
 export const authPostQuery = <Resp = any, Req = any>(mutationKey: MutationKey, endpoint: string, config?: AxiosRequestConfig) => {
     return (options?: UseMutationOptions<Resp, QueryResponseError, Req>) => {
         return postQueryInternal<Resp, QueryResponseError, Req>(

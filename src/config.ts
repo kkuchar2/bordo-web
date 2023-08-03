@@ -5,26 +5,19 @@ import { QueryCache, QueryClient } from '@tanstack/react-query';
 
 import { showErrorToast } from '@/components/Toast/readyToastNotifications';
 
-export const GOOGLE_CLIENT_ID = '1013576093087-e1pp5ceoi524s1961r1b52h81md0p4lo.apps.googleusercontent.com';
-
-export const environment = {
+export const environment : Record<string, string | undefined> = {
     'NEXT_PUBLIC_BORDO_API_URL': process.env.NEXT_PUBLIC_BORDO_API_URL,
     'NEXT_PUBLIC_GIPHY_API_KEY': process.env.NEXT_PUBLIC_GIPHY_API_KEY,
-    'NEXT_PUBLIC_PUSHER_API_KEY': process.env.NEXT_PUBLIC_PUSHER_API_KEY,
-    'NEXT_PUBLIC_PUSHER_WS_HOST': process.env.NEXT_PUBLIC_PUSHER_WS_HOST,
-    'NEXT_PUBLIC_PUSHER_WS_PORT': process.env.NEXT_PUBLIC_PUSHER_WS_PORT
+    'NEXT_PUBLIC_GOOGLE_CLIENT_ID': process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID,
+    'NEXT_PUBLIC_USE_FIREBASE_AUTH': process.env.NEXT_PUBLIC_USE_FIREBASE_AUTH || 'false',
+    'NEXT_PUBLIC_FIREBASE_API_KEY': process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+    'NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN': process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+    'NEXT_PUBLIC_FIREBASE_PROJECT_ID': process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+    'NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET': process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+    'NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID': process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+    'NEXT_PUBLIC_FIREBASE_APP_ID': process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
+    'NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID': process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
 };
-
-const requiredBaseEnvVars = [
-    'NEXT_PUBLIC_BORDO_API_URL',
-    'NEXT_PUBLIC_GIPHY_API_KEY',
-];
-
-const requiredPusherEnvVars = [
-    'NEXT_PUBLIC_PUSHER_API_KEY',
-    'NEXT_PUBLIC_PUSHER_WS_HOST',
-    'NEXT_PUBLIC_PUSHER_WS_PORT'
-];
 
 export const getEnvVar = (key: string): any => {
     if (key in environment) {
@@ -33,14 +26,13 @@ export const getEnvVar = (key: string): any => {
     return null;
 };
 
-export const missingEnvVars = [];
+export const missingEnvVars : string[] = [];
 
-requiredBaseEnvVars.forEach((key) => {
-    const v = getEnvVar(key);
-    if (!v) {
+for (const key in environment) {
+    if (!environment[key]) {
         missingEnvVars.push(key);
     }
-});
+}
 
 if (missingEnvVars.length > 0 && process.env.NODE_ENV === 'development') {
     console.error(`Missing environment variables: ${missingEnvVars.join(', ')}`);
@@ -49,12 +41,12 @@ else if (missingEnvVars.length > 0) {
     console.error('Configuration of app is missing. ', missingEnvVars, 'Please contact the administrator.');
 }
 
-export const isPusherEnvSet = requiredPusherEnvVars.every((key) => getEnvVar(key));
-
 const giphyKey = getEnvVar('NEXT_PUBLIC_GIPHY_API_KEY');
 export const giphyFetch = giphyKey ? new GiphyFetch(giphyKey) : null;
 
 export const SUPPORTED_LANGUAGES = ['en', 'pl', 'es', 'fr', 'de'];
+
+export const isFirebaseAuthEnabled = getEnvVar('NEXT_PUBLIC_USE_FIREBASE_AUTH') === 'true';
 
 export const queryClient = new QueryClient({
     queryCache: new QueryCache({

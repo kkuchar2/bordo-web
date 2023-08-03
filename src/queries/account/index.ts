@@ -1,4 +1,4 @@
-import { authGetQuery, authPostQuery, authPutQuery } from '../authQueries';
+import { authGetQuery, authGetQueryWithHeaders, authPostQuery, authPutQuery } from '../authQueries';
 import { AxiosConfigs, QueryResponseError } from '../base';
 
 import { SignedAvatarUploadInfo, User, UserProfile } from './types';
@@ -10,7 +10,7 @@ import {
 } from '@/components/DialogSystem/readyDialogs';
 import { getNonFieldErrors } from '@/components/Forms/util';
 import { showSuccessToast } from '@/components/Toast/readyToastNotifications';
-import { queryClient } from '@/config';
+import { isFirebaseAuthEnabled, queryClient } from '@/config';
 import { closeDialog } from '@/state/reducers/dialog/dialogSlice';
 import { store } from '@/state/store';
 
@@ -195,7 +195,11 @@ export const googleDisconnect = () => {
 };
 
 export const getUser = () => {
-    return authGetQuery<User>(['user'], 'account/user')({});
+    const header = isFirebaseAuthEnabled ? {
+        'Authorization': 'Bearer ' + localStorage.getItem('firebase_token')
+    } : {};
+
+    return authGetQueryWithHeaders<User>(['user'], 'account/user', header)({});
 };
 
 export const signAvatarUploadUrl = () => {

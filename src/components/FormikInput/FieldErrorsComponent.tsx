@@ -1,21 +1,21 @@
 import React from 'react';
 
+import { TFunction } from 'i18next';
 import { MultipleFieldErrors } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
 
 type FieldErrorsProps = {
     message: string;
     messages?: MultipleFieldErrors | undefined
+    t: TFunction<'translation', undefined>
 }
 
-/**
- * Component that renders single or multiple field errors.
- */
 export const FieldErrorsComponent = (props: FieldErrorsProps) => {
 
-    const { message, messages } = props;
+    const { message, messages, t } = props;
 
-    const { t } = useTranslation();
+    if (!messages && !message) {
+        return null;
+    }
 
     if (message) {
         return <div className={'translate-y-[-20px] animate-fieldError text-[#ff4949]'} key={Math.random()}>
@@ -28,7 +28,7 @@ export const FieldErrorsComponent = (props: FieldErrorsProps) => {
     }
 
     return Object.entries(messages).map(([type, msg]) => (
-        <div className={'text-[#ff4949]'} key={type}>
+        <div className={'translate-y-[-20px] animate-fieldError text-[#ff4949]'} key={type}>
             {t(msg as string)}
         </div>
     ));

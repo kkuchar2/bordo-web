@@ -128,5 +128,5 @@ LanguagePage.displayName = 'Language';
 
 export default WithAuth(LanguagePage, {
     redirectToHomeOnAutologin: false,
-    redirectToLoginPageOnUnauthenticated: false
+    redirectToLoginPageOnUnauthenticated: true
 }) as FC;

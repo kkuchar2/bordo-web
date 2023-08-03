@@ -29,6 +29,7 @@ export const GIFSelect = (props: GIFSelectProps) => {
             id={'gif_search'}
             name={'gifSearch'}
             type={'text'}
+            value={gifSearchText}
             onChange={e => {
                 setGifSearchText(e.target.value);
             }}
