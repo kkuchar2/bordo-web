@@ -1,7 +1,9 @@
+import { MutationKey, QueryKey } from '@tanstack/query-core';
+
 import { authGetQuery, authPostQuery, authPutQuery } from '../authQueries';
 import { AxiosConfigs, QueryResponseError } from '../base';
 
-import { SignedAvatarUploadInfo, User, UserProfile } from './types';
+import { SignedAvatarUploadInfo, User } from './types';
 
 import {
     showEmailChangeConfirmationSentDialog,
@@ -12,9 +14,22 @@ import { getNonFieldErrors } from '@/components/Forms/util';
 import { showSuccessToast } from '@/components/Toast/readyToastNotifications';
 import { isFirebaseAuthEnabled, queryClient } from '@/config';
 import { getQueryFirebase, postQueryFirebase } from '@/queries/authWithFirebaseQueries';
-import { postQuery } from '@/queries/queries';
 import { closeDialog } from '@/state/reducers/dialog/dialogSlice';
 import { store } from '@/state/store';
+
+const variableAuthPostQuery = <Resp = any>(mutationKey: MutationKey, url: string) => {
+    if (isFirebaseAuthEnabled()) {
+        return postQueryFirebase<Resp>(mutationKey, url);
+    }
+    return authPostQuery<Resp>(mutationKey, url);
+};
+
+const variableAuthGetQuery = <Resp = any>(queryKey: QueryKey, url: string) => {
+    if (isFirebaseAuthEnabled()) {
+        return getQueryFirebase<Resp>(queryKey, url);
+    }
+    return authGetQuery<Resp>(queryKey, url);
+};
 
 export const changeAbout = () => {
     return authPutQuery(['setAbout'], 'account/change-description')({
@@ -72,16 +87,7 @@ export const changePassword = () => {
 };
 
 export const changeAvatar = () => {
-
-    if (isFirebaseAuthEnabled()) {
-        return postQueryFirebase(['changeAvatar'], 'account/change-avatar')({
-            onSuccess: () => {
-                queryClient.invalidateQueries(['user']);
-                store.dispatch(closeDialog());
-            }
-        });
-    }
-    return authPostQuery(['changeAvatar'], 'account/change-avatar')({
+    return variableAuthPostQuery(['changeAvatar'], 'account/change-avatar')({
         onSuccess: () => {
             queryClient.invalidateQueries(['user']);
             store.dispatch(closeDialog());
@@ -135,7 +141,7 @@ export const logout = () => {
 };
 
 export const deleteAccount = () => {
-    return authPostQuery(['deleteAccount'], 'account/delete-account')({
+    return variableAuthPostQuery(['deleteAccount'], 'account/delete-account')({
         onSuccess: () => {
             queryClient.setQueryData(['user'], null);
         }
@@ -143,7 +149,7 @@ export const deleteAccount = () => {
 };
 
 export const disableAccount = () => {
-    return authPostQuery(['disableAccount'], 'account/disable-account')({
+    return variableAuthPostQuery(['disableAccount'], 'account/disable-account')({
         onSuccess: () => {
             queryClient.setQueryData(['user'], null);
         }
@@ -151,7 +157,7 @@ export const disableAccount = () => {
 };
 
 export const googleLogin = () => {
-    return authPostQuery(['googleLogin'], 'account/google-login')({
+    return variableAuthPostQuery(['googleLogin'], 'account/google-login')({
         onSuccess: () => {
             queryClient.invalidateQueries(['user']);
         }
@@ -159,7 +165,7 @@ export const googleLogin = () => {
 };
 
 export const googleConnect = () => {
-    return authPostQuery(['googleConnect'], 'account/google-connect')({
+    return variableAuthPostQuery(['googleConnect'], 'account/google-connect')({
         onSuccess: () => {
             queryClient.invalidateQueries(['user']);
         }
@@ -167,15 +173,15 @@ export const googleConnect = () => {
 };
 
 export const createNewPassword = () => {
-    return authPostQuery(['createNewPassword'], 'account/create-new-password')({});
+    return variableAuthPostQuery(['createNewPassword'], 'account/create-new-password')({});
 };
 
 export const verifyResetPasswordToken = () => {
-    return authPostQuery(['verifyResetPasswordToken'], 'account/verify-reset-password-token')({});
+    return variableAuthPostQuery(['verifyResetPasswordToken'], 'account/verify-reset-password-token')({});
 };
 
 export const confirmAccount = () => {
-    return postQuery(['confirmAccount'], 'account/verify-email', () => AxiosConfigs.NO_CREDENTIALS)({
+    return variableAuthPostQuery(['confirmAccount'], 'account/verify-email', () => AxiosConfigs.NO_CREDENTIALS)({
         onSuccess: () => {
             showSuccessToast('An email has been verified');
             queryClient.invalidateQueries(['user']);
@@ -184,15 +190,15 @@ export const confirmAccount = () => {
 };
 
 export const resendRegistrationEmail = () => {
-    return authPostQuery(['resendRegistrationEmail'], 'account/resend-email')({});
+    return variableAuthPostQuery(['resendRegistrationEmail'], 'account/resend-email')({});
 };
 
 export const resetPassword = () => {
-    return authPostQuery(['resetPassword'], 'account/reset-password')({});
+    return variableAuthPostQuery(['resetPassword'], 'account/reset-password')({});
 };
 
 export const googleDisconnect = () => {
-    return authPostQuery(['googleDisconnect'], 'account/google-disconnect')({
+    return variableAuthPostQuery(['googleDisconnect'], 'account/google-disconnect')({
         onSuccess: () => {
             store.dispatch(closeDialog());
             queryClient.invalidateQueries(['user']);
@@ -201,20 +207,9 @@ export const googleDisconnect = () => {
 };
 
 export const getUser = () => {
-    if (isFirebaseAuthEnabled()) {
-        return getQueryFirebase<User>(['user'], 'account/user')({});
-    }
-
-    return authGetQuery<User>(['user'], 'account/user')({});
+    return variableAuthGetQuery<User>(['user'], 'account/user')({});
 };
 
 export const signAvatarUploadUrl = () => {
-    if (isFirebaseAuthEnabled()) {
-        return postQueryFirebase<SignedAvatarUploadInfo>(['signedAvatarUploadInfo'], 'account/sign-avatar-upload-url');
-    }
-    return authPostQuery<SignedAvatarUploadInfo>(['signedAvatarUploadInfo'], 'account/sign-avatar-upload-url');
-};
-
-export const getProfile = (username: string) => {
-    return authGetQuery<UserProfile>(['profile', username], `people/profile/${username}`);
+    return variableAuthPostQuery<SignedAvatarUploadInfo>(['signedAvatarUploadInfo'], 'account/sign-avatar-upload-url');
 };
