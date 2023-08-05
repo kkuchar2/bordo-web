@@ -6,7 +6,7 @@ import { AxiosRequestConfig } from 'axios';
 import { ApiClientWithFirebase } from '@/client';
 import { getQueryInternal, postQueryInternal, QueryResponseError } from '@/queries/base';
 
-const configProvider = () : AxiosRequestConfig => {
+const defaultConfigProvider = () : AxiosRequestConfig => {
     const token = localStorage.getItem('firebase_token');
 
     const config : AxiosRequestConfig = {
@@ -21,14 +21,18 @@ const configProvider = () : AxiosRequestConfig => {
     return config;
 };
 
-export const getQueryFirebase = <ResponseDataType = any>(queryKey: QueryKey, endpoint: string) => {
+export const getQueryFirebase = <ResponseDataType = any>(
+    queryKey: QueryKey, endpoint: string, configProvider: () => AxiosRequestConfig = defaultConfigProvider
+) => {
     return (options?: UseQueryOptions<ResponseDataType>) : UseQueryResult<ResponseDataType> => {
         return getQueryInternal<ResponseDataType>(ApiClientWithFirebase, queryKey,
             endpoint, configProvider, { ...options });
     };
 };
 
-export const postQueryFirebase = <Resp = any, Req = any>(mutationKey: MutationKey, endpoint: string) => {
+export const postQueryFirebase = <Resp = any, Req = any>(
+    mutationKey: MutationKey, endpoint: string, configProvider: () => AxiosRequestConfig = defaultConfigProvider
+) => {
     return (options?: UseMutationOptions<Resp, QueryResponseError, Req>) => {
         return postQueryInternal<Resp, QueryResponseError, Req>(ApiClientWithFirebase,
             mutationKey, endpoint, configProvider, { ...options, });

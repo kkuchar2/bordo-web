@@ -1,4 +1,5 @@
 import { MutationKey, QueryKey } from '@tanstack/query-core';
+import { AxiosRequestConfig } from 'axios';
 
 import { authGetQuery, authPostQuery, authPutQuery } from '../authQueries';
 import { AxiosConfigs, QueryResponseError } from '../base';
@@ -17,18 +18,22 @@ import { getQueryFirebase, postQueryFirebase } from '@/queries/authWithFirebaseQ
 import { closeDialog } from '@/state/reducers/dialog/dialogSlice';
 import { store } from '@/state/store';
 
-const variableAuthPostQuery = <Resp = any>(mutationKey: MutationKey, url: string) => {
+const variableAuthPostQuery = <Resp = any>(
+    mutationKey: MutationKey, url: string, configProvider?: () => AxiosRequestConfig
+) => {
     if (isFirebaseAuthEnabled()) {
-        return postQueryFirebase<Resp>(mutationKey, url);
+        return postQueryFirebase<Resp>(mutationKey, url, configProvider);
     }
-    return authPostQuery<Resp>(mutationKey, url);
+    return authPostQuery<Resp>(mutationKey, url, configProvider);
 };
 
-const variableAuthGetQuery = <Resp = any>(queryKey: QueryKey, url: string) => {
+const variableAuthGetQuery = <Resp = any>(
+    queryKey: QueryKey, url: string, configProvider?: () => AxiosRequestConfig
+) => {
     if (isFirebaseAuthEnabled()) {
-        return getQueryFirebase<Resp>(queryKey, url);
+        return getQueryFirebase<Resp>(queryKey, url, configProvider);
     }
-    return authGetQuery<Resp>(queryKey, url);
+    return authGetQuery<Resp>(queryKey, url, configProvider);
 };
 
 export const changeAbout = () => {

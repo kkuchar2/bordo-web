@@ -7,18 +7,22 @@ import { ApiClient } from '@/client';
 import { showPasswordCreationRequiredDialog } from '@/components/DialogSystem/readyDialogs';
 import { AxiosConfigs, getQueryInternal, postQueryInternal, putQueryInternal, QueryResponseError } from '@/queries/base';
 
-const configProvider = () : AxiosRequestConfig => {
+const defaultConfigProvider = () : AxiosRequestConfig => {
     return AxiosConfigs.WITH_CREDENTIALS_AND_CSRF;
 };
 
-export const authGetQuery = <ResponseDataType = any>(queryKey: QueryKey, endpoint: string) => {
+export const authGetQuery = <ResponseDataType = any>(
+    queryKey: QueryKey, endpoint: string, configProvider: () => AxiosRequestConfig = defaultConfigProvider
+) => {
     return (options?: UseQueryOptions<ResponseDataType>) => {
         return getQueryInternal<ResponseDataType>(ApiClient, queryKey, endpoint,
             configProvider, { ...options });
     };
 };
 
-export const authPostQuery = <Resp = any, Req = any>(mutationKey: MutationKey, endpoint: string) => {
+export const authPostQuery = <Resp = any, Req = any>(
+    mutationKey: MutationKey, endpoint: string, configProvider: () => AxiosRequestConfig = defaultConfigProvider
+) => {
     return (options?: UseMutationOptions<Resp, QueryResponseError, Req>) => {
         return postQueryInternal<Resp, QueryResponseError, Req>(
             ApiClient, mutationKey, endpoint, configProvider, {
@@ -37,7 +41,7 @@ export const authPostQuery = <Resp = any, Req = any>(mutationKey: MutationKey, e
 };
 
 export const authPutQuery = <ResponseDataType = any, ErrorType = QueryResponseError, RequestDataType = any>
-(queryKey: QueryKey, endpoint: string) => {
+(queryKey: QueryKey, endpoint: string, configProvider: () => AxiosRequestConfig = defaultConfigProvider) => {
     return (options?: UseMutationOptions<ResponseDataType, ErrorType, RequestDataType>) => {
         return putQueryInternal<ResponseDataType, ErrorType, RequestDataType>(ApiClient, queryKey, endpoint,
             configProvider, options);
