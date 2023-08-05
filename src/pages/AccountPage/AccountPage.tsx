@@ -2,6 +2,7 @@
 
 import { FC, useCallback } from 'react';
 
+import { getAuth } from '@firebase/auth';
 import { KeyIcon } from '@heroicons/react/24/solid';
 import { useTranslation } from 'react-i18next';
 
@@ -17,6 +18,7 @@ import EditableProperty from '@/components/EditableProperties/EditableProperty';
 import { SettingsSection } from '@/components/Settings/SettingsSection';
 import { TextAreaWithEmoji } from '@/components/TextAreaWithEmoji/TextAreaWithEmoji';
 import { queryClient } from '@/config';
+import { initializeFirebase } from '@/firebase/firebaseApp';
 import WithAuth from '@/hoc/WithAuth';
 import { changeAbout, getUser } from '@/queries/account';
 import { User } from '@/queries/account/types';
@@ -30,6 +32,10 @@ const AccountPage = () => {
     const hasUsablePassword = queryClient.getQueryData<User>(['user'])?.has_usable_password;
 
     const { data: user } = getUser();
+
+    const app = initializeFirebase();
+    const auth = getAuth(app);
+    const firebaseUser = auth.currentUser;
 
     const onDeleteAccountAction = useCallback(() => {
         showDeleteAccountDialog();
@@ -58,7 +64,7 @@ const AccountPage = () => {
                 <EditableProperty
                     id={'username'}
                     name={t('USERNAME')}
-                    value={username}
+                    value={username || firebaseUser?.displayName}
                     canEdit={true}
                     passwordRequired={true}
                     showDialogFunc={showChangeUsernameDialog}/>

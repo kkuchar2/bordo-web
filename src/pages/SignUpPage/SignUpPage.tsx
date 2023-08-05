@@ -2,7 +2,7 @@
 
 import React, { useCallback, useState } from 'react';
 
-import { createUserWithEmailAndPassword, getAuth, sendEmailVerification } from '@firebase/auth';
+import { createUserWithEmailAndPassword, getAuth, sendEmailVerification, updateProfile } from '@firebase/auth';
 import { FirebaseError } from '@firebase/util';
 import { redirect } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
@@ -42,11 +42,12 @@ const SignUpPage = () => {
 
             if (createdUser && !createdUser.emailVerified) {
                 try {
+                    await updateProfile(createdUser, { displayName: formData.username });
                     await sendEmailVerification(createdUser);
                     showRegistrationCompleteDialog();
                 }
                 catch (e) {
-                    console.log('Error sending email verification', e);
+                    console.log('Error sending email verification or updating profile', e);
                 }
             }
             setFirebaseSignUpPending(false);
