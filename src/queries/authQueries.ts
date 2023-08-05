@@ -3,30 +3,25 @@ import { UseMutationOptions } from '@tanstack/react-query';
 import { UseQueryOptions } from '@tanstack/react-query/src/types';
 import { AxiosRequestConfig } from 'axios';
 
-import ApiClient from '@/client';
+import { ApiClient } from '@/client';
 import { showPasswordCreationRequiredDialog } from '@/components/DialogSystem/readyDialogs';
 import { AxiosConfigs, getQueryInternal, postQueryInternal, putQueryInternal, QueryResponseError } from '@/queries/base';
 
+const configProvider = () : AxiosRequestConfig => {
+    return AxiosConfigs.WITH_CREDENTIALS_AND_CSRF;
+};
+
 export const authGetQuery = <ResponseDataType = any>(queryKey: QueryKey, endpoint: string) => {
     return (options?: UseQueryOptions<ResponseDataType>) => {
-        return getQueryInternal<ResponseDataType>(ApiClient, queryKey, endpoint, {
-            ...AxiosConfigs.WITH_CREDENTIALS_AND_CSRF
-        }, { ...options });
+        return getQueryInternal<ResponseDataType>(ApiClient, queryKey, endpoint,
+            configProvider, { ...options });
     };
 };
 
-export const authGetQueryWithHeaders = <ResponseDataType = any>(queryKey: QueryKey, endpoint: string, headers: any) => {
-    return (options?: UseQueryOptions<ResponseDataType>) => {
-        return getQueryInternal<ResponseDataType>(ApiClient, queryKey, endpoint, {
-            ...AxiosConfigs.WITH_CREDENTIALS_AND_CSRF, headers
-        }, { ...options });
-    };
-};
-
-export const authPostQuery = <Resp = any, Req = any>(mutationKey: MutationKey, endpoint: string, config?: AxiosRequestConfig) => {
+export const authPostQuery = <Resp = any, Req = any>(mutationKey: MutationKey, endpoint: string) => {
     return (options?: UseMutationOptions<Resp, QueryResponseError, Req>) => {
         return postQueryInternal<Resp, QueryResponseError, Req>(
-            ApiClient, mutationKey, endpoint, config, {
+            ApiClient, mutationKey, endpoint, configProvider, {
                 ...options,
                 onError: (error: QueryResponseError, variables, recover) => {
                     const required = error?.status === 403 && error?.data?.['code'] === 'password_setup_required';
@@ -45,6 +40,6 @@ export const authPutQuery = <ResponseDataType = any, ErrorType = QueryResponseEr
 (queryKey: QueryKey, endpoint: string) => {
     return (options?: UseMutationOptions<ResponseDataType, ErrorType, RequestDataType>) => {
         return putQueryInternal<ResponseDataType, ErrorType, RequestDataType>(ApiClient, queryKey, endpoint,
-            { ...AxiosConfigs.WITH_CREDENTIALS_AND_CSRF }, options);
+            configProvider, options);
     };
 };

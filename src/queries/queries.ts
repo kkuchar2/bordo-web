@@ -3,7 +3,7 @@ import { UseMutationOptions } from '@tanstack/react-query';
 import { UseQueryOptions } from '@tanstack/react-query/src/types';
 import { AxiosRequestConfig } from 'axios';
 
-import ApiClient from '@/client';
+import { ApiClient } from '@/client';
 import { getQueryInternal, postQueryInternal, putQueryInternal } from '@/queries/base';
 
 export const getQuery = <
@@ -11,7 +11,7 @@ export const getQuery = <
     TError = unknown,
     TData = TQueryFnData,
     TQueryKey extends QueryKey = QueryKey,
->(queryKey: TQueryKey, endpoint: string, config: AxiosRequestConfig) => {
+>(queryKey: TQueryKey, endpoint: string, configProvider: () => AxiosRequestConfig) => {
     return (options?: Omit<
     UseQueryOptions<TQueryFnData, TError, TData, TQueryKey>,
     'queryKey' | 'queryFn' | 'initialData'
@@ -19,7 +19,7 @@ export const getQuery = <
         initialData?: () => undefined
     }) => {
         return getQueryInternal<TQueryFnData, TError, TData, TQueryKey>(
-            ApiClient, queryKey, endpoint, config, options
+            ApiClient, queryKey, endpoint, configProvider, options
         );
     };
 };
@@ -29,13 +29,13 @@ export const postQuery = <
     TError = unknown,
     TVariables = void,
     TContext = unknown,
->(mutationKey: MutationKey, endpoint: string, config: AxiosRequestConfig) => {
+>(mutationKey: MutationKey, endpoint: string, configProvider: () => AxiosRequestConfig) => {
     return (options?: Omit<
     UseMutationOptions<TData, TError, TVariables, TContext>,
     'mutationKey' | 'mutationFn'
     >) => {
         return postQueryInternal<TData, TError, TVariables, TContext>(
-            ApiClient, mutationKey, endpoint, config, options
+            ApiClient, mutationKey, endpoint, configProvider, options
         );
     };
 };
@@ -45,13 +45,13 @@ export const putQuery = <
     TError = unknown,
     TVariables = void,
     TContext = unknown,
->(mutationKey: MutationKey, endpoint: string, config: AxiosRequestConfig) => {
+>(mutationKey: MutationKey, endpoint: string, configProvider: () => AxiosRequestConfig) => {
     return (options?: Omit<
     UseMutationOptions<TData, TError, TVariables, TContext>,
     'mutationKey' | 'mutationFn'
     >) => {
         return putQueryInternal<TData, TError, TVariables, TContext>(
-            ApiClient, mutationKey, endpoint, config, options
+            ApiClient, mutationKey, endpoint, configProvider, options
         );
     };
 };

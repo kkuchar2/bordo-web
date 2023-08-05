@@ -48,12 +48,12 @@ export const getQueryInternal = <
     TData = TQueryFnData,
     TQueryKey extends QueryKey = QueryKey,
 >(client: AxiosInstance, queryKey: TQueryKey, endpoint: string,
-    config: AxiosRequestConfig,
+    configProvider: () => AxiosRequestConfig,
     options?: UseQueryOptions<TQueryFnData, TError, TData, TQueryKey>) => {
 
     return useQuery<TQueryFnData, TError, TData, TQueryKey>(queryKey,
         async (): Promise<TQueryFnData> => {
-            let response = await client.get<TQueryFnData, AxiosResponse<TQueryFnData>, TData>(endpoint, config);
+            let response = await client.get<TQueryFnData, AxiosResponse<TQueryFnData>, TData>(endpoint, configProvider());
             return response.data;
         }, options);
 };
@@ -67,7 +67,7 @@ export const postQueryInternal = <
 (client: AxiosInstance,
     mutationKey: MutationKey,
     endpoint: string,
-    config?: AxiosRequestConfig,
+    configProvider: () => AxiosRequestConfig,
     options?: Omit<
     UseMutationOptions<TData, TError, TVariables, TContext>,
     'mutationKey' | 'mutationFn'
@@ -78,8 +78,7 @@ export const postQueryInternal = <
             let response = null;
 
             try {
-                config = config ? config : AxiosConfigs.WITH_CREDENTIALS_AND_CSRF;
-                response = await client.post<TData>(endpoint, data, config);
+                response = await client.post<TData>(endpoint, data, configProvider());
             }
             catch (e) {
                 const error = e as AxiosError<QueryResponseError>;
@@ -105,7 +104,7 @@ export const putQueryInternal = <
 (client: AxiosInstance,
     mutationKey: MutationKey,
     endpoint: string,
-    config?: AxiosRequestConfig,
+    configProvider: () => AxiosRequestConfig,
     options?: Omit<
     UseMutationOptions<TData, TError, TVariables, TContext>,
     'mutationKey' | 'mutationFn'
@@ -116,8 +115,7 @@ export const putQueryInternal = <
             let response = null;
 
             try {
-                config = config ? config : AxiosConfigs.WITH_CREDENTIALS_AND_CSRF;
-                response = await client.put<TData>(endpoint, data, config);
+                response = await client.put<TData>(endpoint, data, configProvider());
             }
             catch (e) {
                 const error = e as AxiosError<QueryResponseError>;

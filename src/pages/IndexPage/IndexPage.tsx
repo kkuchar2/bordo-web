@@ -46,8 +46,6 @@ const IndexPage = () => {
 
         const data = userQuery.error?.response?.data?.detail;
 
-        localStorage.removeItem('firebase_token');
-
         if (data === 'account_not_verified') {
             showVerifyAccountDialog();
         }
@@ -66,8 +64,8 @@ const IndexPage = () => {
             const response = await signInWithEmailAndPassword(auth, formData.username_or_email, formData.password);
             const token = await response.user.getIdToken();
             localStorage.setItem('firebase_token', token);
-            console.log('firebase token', token);
             setFirebaseLoginPending(false);
+            await userQuery.refetch();
         }
         catch (e) {
             const firebaseError = e as FirebaseError;
@@ -124,6 +122,10 @@ const IndexPage = () => {
 
     if (userQuery.isSuccess && userQuery.data) {
         return redirect('/home');
+    }
+
+    if (userQuery.isLoading) {
+        return null;
     }
 
     return <div className={'grid h-full w-full place-items-center'}>

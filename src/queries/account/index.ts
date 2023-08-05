@@ -12,6 +12,7 @@ import { getNonFieldErrors } from '@/components/Forms/util';
 import { showSuccessToast } from '@/components/Toast/readyToastNotifications';
 import { isFirebaseAuthEnabled, queryClient } from '@/config';
 import { getQueryFirebase } from '@/queries/authWithFirebaseQueries';
+import { postQuery } from '@/queries/queries';
 import { closeDialog } from '@/state/reducers/dialog/dialogSlice';
 import { store } from '@/state/store';
 
@@ -103,9 +104,7 @@ export const login = () => {
                 ?.some((error: any) => error === 'email_not_verified');
 
             if (hasEmailNotVerified) {
-                showVerifyAccountDialog({
-                    usernameOrEmail: data.username_or_email
-                });
+                showVerifyAccountDialog();
             }
         }
     });
@@ -168,9 +167,7 @@ export const verifyResetPasswordToken = () => {
 };
 
 export const confirmAccount = () => {
-    return authPostQuery(['confirmAccount'],
-        'account/verify-email',
-        { ...AxiosConfigs.NO_CREDENTIALS })({
+    return postQuery(['confirmAccount'], 'account/verify-email', () => AxiosConfigs.NO_CREDENTIALS)({
         onSuccess: () => {
             showSuccessToast('An email has been verified');
             queryClient.invalidateQueries(['user']);
@@ -197,9 +194,7 @@ export const googleDisconnect = () => {
 
 export const getUser = () => {
     if (isFirebaseAuthEnabled()) {
-        return getQueryFirebase<User>(['user'], 'account/user')({
-            enabled: localStorage.getItem('firebase_token') !== null
-        });
+        return getQueryFirebase<User>(['user'], 'account/user')({});
     }
 
     return authGetQuery<User>(['user'], 'account/user')({});
