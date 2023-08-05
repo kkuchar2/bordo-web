@@ -49,9 +49,12 @@ const IndexPage = () => {
     }, [user]);
 
     const signInWithGoogleFirebase = useCallback(async () => {
+        setFirebaseLoginPending(true);
         const result = await signInWithPopup(auth, provider);
         const token = await result.user.getIdToken();
         localStorage.setItem('firebase_token', token);
+        setFirebaseLoginPending(false);
+        await userQuery.refetch();
     }, []);
 
     const signInEmailPasswordFirebase = useCallback(async (formData: LoginFormArgs) => {
