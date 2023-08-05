@@ -2,12 +2,13 @@
 
 import React, { useCallback, useState } from 'react';
 
-import { createUserWithEmailAndPassword, getAuth } from '@firebase/auth';
+import { createUserWithEmailAndPassword, getAuth, sendEmailVerification } from '@firebase/auth';
 import { FirebaseError } from '@firebase/util';
 import { redirect } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 
 import { DelayedTransition } from '@/components/DelayedTransition/DelayedTransition';
+import { showRegistrationCompleteDialog } from '@/components/DialogSystem/readyDialogs';
 import Form from '@/components/Forms/Form/Form';
 import { registrationForm } from '@/components/Forms/formConfig';
 import { RegistrationFormArgs } from '@/components/Forms/formConfig.types';
@@ -37,10 +38,19 @@ const SignUpPage = () => {
         setFirebaseSignUpPending(true);
         try {
             const response = await createUserWithEmailAndPassword(auth, formData.email, formData.password);
-            const token = await response.user.getIdToken();
-            localStorage.setItem('firebase_token', token);
-            await userQuery.refetch();
+            const createdUser = response.user;
+
+            if (createdUser && !createdUser.emailVerified) {
+                try {
+                    await sendEmailVerification(createdUser);
+                    showRegistrationCompleteDialog();
+                }
+                catch (e) {
+                    console.log('Error sending email verification', e);
+                }
+            }
             setFirebaseSignUpPending(false);
+            await auth.signOut();
         }
         catch (e) {
             const firebaseError = e as FirebaseError;

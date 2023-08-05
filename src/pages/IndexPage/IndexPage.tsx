@@ -43,14 +43,10 @@ const IndexPage = () => {
     const firebaseAuthEnabled = isFirebaseAuthEnabled();
 
     useEffect(() => {
-
-        const data = userQuery.error?.response?.data?.detail;
-
-        if (data === 'account_not_verified') {
+        if (user && !user.emailVerified) {
             showVerifyAccountDialog();
         }
-
-    }, [userQuery.error, user]);
+    }, [user]);
 
     const signInWithGoogleFirebase = useCallback(async () => {
         const result = await signInWithPopup(auth, provider);

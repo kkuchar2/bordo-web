@@ -1,13 +1,17 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 
 import { applyActionCode, getAuth } from '@firebase/auth';
 import { redirect, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
+import { showErrorToast, showSuccessToast } from '@/components/Toast/readyToastNotifications';
 import { initializeFirebase } from '@/firebase/firebaseApp';
 
 const AuthActionPage = () => {
+
+    const router = useRouter();
 
     const searchParams = useSearchParams();
 
@@ -27,15 +31,19 @@ const AuthActionPage = () => {
     const auth = getAuth(app);
 
     useEffect(() => {
+        applyAction(mode).then(() => {});
+    }, [mode]);
+
+    const applyAction = useCallback(async (mode?: string) => {
         if (mode === 'verifyEmail' && ooBCode) {
-            applyActionCode(auth, ooBCode)
-                .then(() => {
-                    console.log('Email verified');
-                    redirect('/');
-                })
-                .catch((error) => {
-                    console.log('Error verifying email:', error);
-                });
+            try {
+                await applyActionCode(auth, ooBCode);
+                showSuccessToast('Account verified');
+            }
+            catch (e) {
+                showErrorToast('Verification link invalid or expired');
+            }
+            router.push('/');
         }
     }, [mode]);
 
