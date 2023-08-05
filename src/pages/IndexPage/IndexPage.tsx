@@ -2,7 +2,7 @@
 
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { getAuth, GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup } from '@firebase/auth';
+import { getAuth, GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup, updateProfile } from '@firebase/auth';
 import { FirebaseError } from '@firebase/util';
 import { redirect } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
@@ -51,6 +51,14 @@ const IndexPage = () => {
     const signInWithGoogleFirebase = useCallback(async () => {
         setFirebaseLoginPending(true);
         const result = await signInWithPopup(auth, provider);
+        const currentDisplayName = result.user.displayName;
+
+        if (!currentDisplayName) {
+            await updateProfile(result.user, {
+                displayName: result.user.email?.substring(0, result.user.email.indexOf('@'))
+            });
+        }
+
         const token = await result.user.getIdToken();
         localStorage.setItem('firebase_token', token);
         setFirebaseLoginPending(false);
