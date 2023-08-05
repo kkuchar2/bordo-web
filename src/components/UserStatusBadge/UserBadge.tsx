@@ -1,8 +1,11 @@
 import React, { useCallback } from 'react';
 
+import { getAuth, signOut } from '@firebase/auth';
 import { useTranslation } from 'react-i18next';
 
 import { ProfileAvatar } from '@/components/ProfileAvatar/ProfileAvatar';
+import { isFirebaseAuthEnabled, queryClient } from '@/config';
+import { initializeFirebase } from '@/firebase/firebaseApp';
 import { logout } from '@/queries/account';
 import { UserInfo } from '@/queries/account/types';
 
@@ -18,12 +21,24 @@ export const UserBadge = (props: UserBadgeProps) => {
 
     const { t } = useTranslation();
 
+    const firebaseAuthEnabled = isFirebaseAuthEnabled();
+
+    const app = initializeFirebase();
+    const auth = getAuth(app);
+
     if (!user) {
         return null;
     }
 
-    const onLogoutButtonClick = useCallback(() => {
-        performLogout({});
+    const onLogoutButtonClick = useCallback(async () => {
+        if (firebaseAuthEnabled) {
+            await signOut(auth);
+            localStorage.removeItem('firebase_token');
+            queryClient.setQueryData(['user'], null);
+        }
+        else {
+            performLogout({});
+        }
     }, []);
 
     return <div className={'flex w-full gap-4 rounded-md p-4'}>
