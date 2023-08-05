@@ -1,31 +1,82 @@
 'use client';
 
-import { FC, useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 
+import { createUserWithEmailAndPassword, getAuth } from '@firebase/auth';
+import { FirebaseError } from '@firebase/util';
+import { redirect } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 
 import { DelayedTransition } from '@/components/DelayedTransition/DelayedTransition';
 import Form from '@/components/Forms/Form/Form';
 import { registrationForm } from '@/components/Forms/formConfig';
 import { RegistrationFormArgs } from '@/components/Forms/formConfig.types';
+import { firebaseFieldErrorConvert, firebaseNonFieldErrorConvert } from '@/components/Forms/util';
 import { NavLink } from '@/components/NavLink/NavLink';
-import WithAuth from '@/hoc/WithAuth';
-import { register } from '@/queries/account';
+import { isFirebaseAuthEnabled } from '@/config';
+import { initializeFirebase } from '@/firebase/firebaseApp';
+import { getUser, register } from '@/queries/account';
+import { QueryResponseErrorData } from '@/queries/base';
 
 const SignUpPage = () => {
 
     const { t } = useTranslation();
 
     const signUpQuery = register();
+    const userQuery = getUser();
 
-    const attemptRegister = useCallback((formData: any) => {
-        const { email, username, password } = formData;
-        signUpQuery.mutate({
-            email: email,
-            username: username,
-            password: password
-        });
+    const app = initializeFirebase();
+    const auth = getAuth(app);
+
+    const [firebaseSignUpPending, setFirebaseSignUpPending] = useState(false);
+    const [firebaseError, setFirebaseError] = useState<QueryResponseErrorData | null>(null);
+
+    const firebaseAuthEnabled = isFirebaseAuthEnabled();
+
+    const signupFirebaseFirebase = useCallback(async (formData: RegistrationFormArgs) => {
+        setFirebaseSignUpPending(true);
+        try {
+            const response = await createUserWithEmailAndPassword(auth, formData.email, formData.password);
+            const token = await response.user.getIdToken();
+            localStorage.setItem('firebase_token', token);
+            await userQuery.refetch();
+            setFirebaseSignUpPending(false);
+        }
+        catch (e) {
+            const firebaseError = e as FirebaseError;
+
+            if (firebaseError.code === 'auth/email-already-in-use') {
+                console.log('email already in use');
+                setFirebaseError(firebaseFieldErrorConvert(firebaseError.code, 'email'));
+            }
+            else if (firebaseError.code === 'auth/invalid-email') {
+                setFirebaseError(firebaseFieldErrorConvert(firebaseError.code, 'email'));
+            }
+            else if (firebaseError.code === 'auth/weak-password') {
+                setFirebaseError(firebaseFieldErrorConvert(firebaseError.code, 'password'));
+            }
+            else {
+                setFirebaseError(firebaseNonFieldErrorConvert(firebaseError.code));
+            }
+        }
+        finally {
+            setFirebaseSignUpPending(false);
+        }
     }, []);
+
+    const signUp = useCallback(async (formData: RegistrationFormArgs) => {
+        if (firebaseAuthEnabled) {
+            await signupFirebaseFirebase(formData);
+            return;
+        }
+        signUpQuery.mutate(formData);
+    }, [firebaseAuthEnabled]);
+
+    if (userQuery.isSuccess && userQuery.data) {
+        return redirect('/home');
+    }
+
+    console.log('Firebase error', firebaseError);
 
     return <div className={'grid h-full w-full place-items-center'}>
         <div
@@ -37,10 +88,10 @@ const SignUpPage = () => {
             <Form<RegistrationFormArgs>
                 config={registrationForm}
                 submitButtonTextKey={'SIGN_UP'}
-                error={signUpQuery.error?.data}
+                error={signUpQuery.error?.data || firebaseError || userQuery.error || {}}
                 disabled={signUpQuery.isLoading}
                 useCancelButton={false}
-                onSubmit={attemptRegister}/>
+                onSubmit={signUp}/>
 
             <div className={'flex flex-col items-center justify-center gap-[20px]'}>
                 <div className={'text-[#C7C7C7]'}>
@@ -60,12 +111,9 @@ const SignUpPage = () => {
                 </div>
             </div>
 
-            <DelayedTransition pending={signUpQuery.isLoading}/>
+            <DelayedTransition pending={signUpQuery.isLoading || firebaseSignUpPending}/>
         </div>
     </div>;
 };
 
-export default WithAuth(SignUpPage, {
-    redirectToHomeOnAutologin: true,
-    redirectToLoginPageOnUnauthenticated: false
-}) as FC;
+export default SignUpPage;

@@ -3,7 +3,6 @@ import { EnvelopeIcon, KeyIcon, TrashIcon, UsersIcon } from '@heroicons/react/24
 
 import { SentEmailDialogArgs } from './readyDialogs.types';
 
-import { VerifyAccountDialogProps } from '@/components/DialogSystem/dialogs';
 import { changeEmailForm, changePasswordForm, changeUsernameForm } from '@/components/Forms/formConfig';
 import { GoogleIcon } from '@/components/Icons/GoogleIcon';
 import { queryClient } from '@/config';
@@ -94,7 +93,7 @@ export const showSentEmailDialog = <T = any>(args: SentEmailDialogArgs<T>) => {
     );
 };
 
-export const showVerifyAccountDialog = (data: VerifyAccountDialogProps) => {
+export const showVerifyAccountDialog = () => {
     store.dispatch(
         openDialog({
             component: 'VerifyAccountDialog',
@@ -108,7 +107,7 @@ export const showVerifyAccountDialog = (data: VerifyAccountDialogProps) => {
                     description: 'VERIFY_ACCOUNT_DESCRIPTION',
                     closeable: true
                 },
-                data: data
+                data: {}
             }
         })
     );

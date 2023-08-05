@@ -46,12 +46,22 @@ export const giphyFetch = giphyKey ? new GiphyFetch(giphyKey) : null;
 
 export const SUPPORTED_LANGUAGES = ['en', 'pl', 'es', 'fr', 'de'];
 
-export const isFirebaseAuthEnabled = getEnvVar('NEXT_PUBLIC_USE_FIREBASE_AUTH') === 'true';
+export const isFirebaseAuthEnabled = () => {
+    return process.env.NEXT_PUBLIC_USE_FIREBASE_AUTH === 'true';
+};
 
 export const queryClient = new QueryClient({
     queryCache: new QueryCache({
+        onSuccess: (query) => {
+            //console.log(`QueryCache Success [${query.queryKey}]`, query.data);
+        },
         onError: (error, query) => {
-            // console.error(`QueryCache[${query.queryKey}]`, error);
+            //console.log(`QueryCache Error[${query.queryKey}]`, error);
+
+            // if 401:
+            if (error.status === 401) {
+                console.log('Error data: ' + error.data);
+            }
 
             if (error.message === 'Network Error') {
                 showErrorToast('Error connecting to server');

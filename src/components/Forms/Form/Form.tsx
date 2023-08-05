@@ -39,8 +39,6 @@ const Form = <TFieldValues extends FieldValues = FieldValues>(props: FormProps<T
 
     const [additionalErrors, setAdditionalErrors] = useState(error);
 
-    console.log('additionalErrors', additionalErrors);
-
     const {
         control,
         handleSubmit,

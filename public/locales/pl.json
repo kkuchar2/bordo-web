@@ -18,6 +18,7 @@
   "This field may not be blank.": "To pole nie może być puste.",
   "CHANGE_PASSWORD_DESCRIPTION": "Wprowadź aktualne i nowe hasło",
   "USER_ALREADY_EXISTS": "Użytkownik już istnieje",
+  "VERIFICATION_EMAIL_SENT": "Wiadomość wysłana",
   "USER_NOT_FOUND": "Podany użytkownik nie istnieje",
   "CHANGE_USERNAME": "Zmień nazwę użytkownika",
   "CHANGE_USERNAME_DESCRIPTION": "Aby zmienić nazwę użytkownika, musisz potwierdzić swoje aktualne hasło.",

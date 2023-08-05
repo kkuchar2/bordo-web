@@ -2,9 +2,9 @@ import { CustomError, QueryResponseErrorData } from '@/queries/base';
 
 const firebaseCodesToFieldErrors : { [key: string]: string } = {
     'auth/wrong-password':  'WRONG_PASSWORD',
+    'auth/email-already-in-use': 'EMAIL_ALREADY_IN_USE',
     'auth/user-not-found':  'USER_NOT_FOUND',
     'auth/invalid-email':   'INVALID_EMAIL',
-    'auth/email-already-in-use': 'EMAIL_ALREADY_IN_USE',
     'auth/weak-password': 'WEAK_PASSWORD',
     'auth/invalid-credential': 'INVALID_CREDENTIAL',
     'auth/invalid-verification-code': 'INVALID_VERIFICATION_CODE',
@@ -16,7 +16,6 @@ const mapFirebaseError = (error: CustomError) : string | null => {
         return null;
     }
 
-    // get from firebaseCodesToFieldErrors
     if (firebaseCodesToFieldErrors[error.code]) {
         return firebaseCodesToFieldErrors[error.code];
     }
@@ -60,11 +59,24 @@ export const firebaseFieldErrorConvert = (code: string, field: string) => {
             field_errors: {
                 [field]: [
                     {
-                        message: firebaseCodesToFieldErrors[code],
-                        code: firebaseCodesToFieldErrors[code],
+                        message: code,
+                        code: code,
                     }
                 ]
             }
+        }
+    };
+};
+
+export const firebaseNonFieldErrorConvert = (code: string) => {
+    return {
+        form: {
+            non_field_errors: [
+                {
+                    message: code,
+                    code: code,
+                }
+            ]
         }
     };
 };
@@ -92,16 +104,11 @@ export const getFormFieldErrors
             return [];
         }
 
-        console.log('FIELD ERRORS', fieldErrorsArr);
-
         const serverFieldArr = fieldErrorsArr.map(mapError)
             .filter<string>((x): x is string => x !== null);
 
         const firebaseFieldArr = fieldErrorsArr.map(mapFirebaseError)
             .filter<string>((x): x is string => x !== null);
-
-        console.log('AserverFieldArr', serverFieldArr);
-        console.log('AfirebaseFieldArr', firebaseFieldArr);
 
         return serverFieldArr.concat(firebaseFieldArr);
     };
@@ -123,10 +130,6 @@ export const getNonFieldErrors = (error: QueryResponseErrorData | undefined | nu
 
     const firebaseNonFieldArr = (formErrors.non_field_errors || []).map(mapFirebaseError)
         .filter<string>((x): x is string => x !== null);
-
-    console.log('serverNonFieldArr', serverNonFieldArr);
-    console.log('firebaseNonFieldArr', firebaseNonFieldArr);
-    console.log('result', serverNonFieldArr.concat(firebaseNonFieldArr));
 
     const result =  serverNonFieldArr.concat(firebaseNonFieldArr);
 

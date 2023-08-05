@@ -9,7 +9,6 @@ export const useI18n = () => {
 
     useEffect(() => {
         const lang = localStorage.getItem('i18nextLng') || 'en';
-        console.log('Loading translations, lang:', lang);
 
         i18n
             .init({
@@ -36,7 +35,6 @@ export const useI18n = () => {
             .then(() => {
                 setLoaded(true);
             });
-
     }, []);
 
     return loaded;

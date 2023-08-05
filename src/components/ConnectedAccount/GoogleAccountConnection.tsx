@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { showDisconnectGoogleDialog } from '@/components/DialogSystem/readyDialogs';
 import GoogleButton from '@/components/GoogleButton/GoogleButton';
 import { GoogleIcon } from '@/components/Icons/GoogleIcon';
-import { GOOGLE_CLIENT_ID } from '@/config';
+import { getEnvVar } from '@/config';
 import { googleConnect } from '@/queries/account';
 import { GoogleAccountInfo } from '@/queries/account/types';
 
@@ -38,7 +38,7 @@ export const GoogleAccountConnection = (props: GoogleAccountConnectionProps) => 
     if (!connected) {
         return <div className={'w-[300px]'}>
             <GoogleButton
-                clientId={GOOGLE_CLIENT_ID}
+                clientId={getEnvVar('NEXT_PUBLIC_GOOGLE_CLIENT_ID')}
                 context={'signin'}
                 customText={t('CONNECT_GOOGLE_ACCOUNT')}
                 text={'signin_with'}

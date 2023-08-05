@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { getAuth, GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup } from '@firebase/auth';
 import { FirebaseError } from '@firebase/util';
@@ -8,11 +8,13 @@ import { redirect } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 
 import { DelayedTransition } from '@/components/DelayedTransition/DelayedTransition';
+import { showVerifyAccountDialog } from '@/components/DialogSystem/readyDialogs';
 import Form from '@/components/Forms/Form/Form';
 import { loginForm } from '@/components/Forms/formConfig';
 import { LoginFormArgs } from '@/components/Forms/formConfig.types';
 import { firebaseFieldErrorConvert } from '@/components/Forms/util';
 import GoogleButton from '@/components/GoogleButton/GoogleButton';
+import { GoogleIcon } from '@/components/Icons/GoogleIcon';
 import { NavLink } from '@/components/NavLink/NavLink';
 import { getEnvVar, isFirebaseAuthEnabled, queryClient } from '@/config';
 import { initializeFirebase } from '@/firebase/firebaseApp';
@@ -23,8 +25,6 @@ const IndexPage = () => {
 
     const { t } = useTranslation();
 
-    const googleLoginQuery = googleLogin();
-
     const loginQuery = login();
 
     const app = initializeFirebase();
@@ -32,17 +32,32 @@ const IndexPage = () => {
 
     const provider = new GoogleAuthProvider();
 
+    const user = auth.currentUser;
+
     const userQuery = getUser();
+    const googleLoginQuery = googleLogin();
 
     const [firebaseLoginPending, setFirebaseLoginPending] = useState(false);
     const [firebaseError, setFirebaseError] = useState<QueryResponseErrorData | null>(null);
 
+    const firebaseAuthEnabled = isFirebaseAuthEnabled();
+
+    useEffect(() => {
+
+        const data = userQuery.error?.response?.data?.detail;
+
+        localStorage.removeItem('firebase_token');
+
+        if (data === 'account_not_verified') {
+            showVerifyAccountDialog();
+        }
+
+    }, [userQuery.error, user]);
+
     const signInWithGoogleFirebase = useCallback(async () => {
         const result = await signInWithPopup(auth, provider);
-        console.log(result.user);
         const token = await result.user.getIdToken();
         localStorage.setItem('firebase_token', token);
-        await userQuery.refetch();
     }, []);
 
     const signInEmailPasswordFirebase = useCallback(async (formData: LoginFormArgs) => {
@@ -51,11 +66,10 @@ const IndexPage = () => {
             const response = await signInWithEmailAndPassword(auth, formData.username_or_email, formData.password);
             const token = await response.user.getIdToken();
             localStorage.setItem('firebase_token', token);
-            await userQuery.refetch();
+            console.log('firebase token', token);
+            setFirebaseLoginPending(false);
         }
         catch (e) {
-            setFirebaseLoginPending(false);
-
             const firebaseError = e as FirebaseError;
 
             if (firebaseError.code === 'auth/wrong-password') {
@@ -68,17 +82,20 @@ const IndexPage = () => {
                 setFirebaseError(firebaseFieldErrorConvert(firebaseError.code, 'username_or_email'));
             }
         }
+        finally {
+            setFirebaseLoginPending(false);
+        }
     }, []);
 
     const attemptLogin = useCallback(async (formData: LoginFormArgs) => {
-        if (isFirebaseAuthEnabled) {
+        if (firebaseAuthEnabled) {
             await signInEmailPasswordFirebase(formData);
             return;
         }
         queryClient.removeQueries(['googleLogin']);
         googleLoginQuery.reset();
         loginQuery.mutate(formData);
-    }, []);
+    }, [firebaseAuthEnabled]);
 
     const onSignInWithGoogle = useCallback((credentialResponse: any) => {
         loginQuery.reset();
@@ -86,10 +103,11 @@ const IndexPage = () => {
     }, []);
 
     const googleButton = useMemo(() => {
-        if (isFirebaseAuthEnabled) {
+        if (firebaseAuthEnabled) {
             return <button
                 onClick={signInWithGoogleFirebase}
-                className={'h-12 w-full rounded-md bg-[#4285F4] font-semibold text-white'}>
+                className={'flex h-12 w-full items-center justify-center gap-[10px] rounded-md bg-neutral-900 font-semibold text-white hover:bg-neutral-950'}>
+                <GoogleIcon/>
                 {'Sign in with Google'}
             </button>;
         }
@@ -102,11 +120,7 @@ const IndexPage = () => {
             text={'signin'}
             useOneTap={true}
             onSuccess={onSignInWithGoogle}/>;
-    }, []);
-
-    if (userQuery.isLoading) {
-        return <DelayedTransition pending={true}/>;
-    }
+    }, [firebaseAuthEnabled]);
 
     if (userQuery.isSuccess && userQuery.data) {
         return redirect('/home');
@@ -122,6 +136,8 @@ const IndexPage = () => {
             <Form<LoginFormArgs>
                 config={loginForm}
                 submitButtonTextKey={'SIGN_IN'}
+                disabled={loginQuery.isLoading || firebaseLoginPending || googleLoginQuery.isLoading}
+                submitButtonClassName={'bg-[#77a4df]/80 hover:bg-[#77a4df] text-white py-2 px-4 rounded-md font-semibold disabled:opacity-50 disabled:cursor-not-allowed'}
                 error={loginQuery.error?.data || firebaseError || userQuery.error || {}}
                 excludeErrors={['email_not_verified']}
                 useCancelButton={false}

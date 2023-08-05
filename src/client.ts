@@ -3,9 +3,12 @@ import Cookies from 'universal-cookie';
 
 import { getEnvVar } from '@/config';
 
-const ApiClient = axios.create({
-    baseURL: `${getEnvVar('NEXT_PUBLIC_BORDO_API_URL')}/`,
-    //timeout: 10000,   // 10 seconds for user focus
+export const ApiClient = axios.create({
+    baseURL: `${getEnvVar('NEXT_PUBLIC_BORDO_API_URL')}/`
+});
+
+export const ApiClientWithFirebase = axios.create({
+    baseURL: `${getEnvVar('NEXT_PUBLIC_BORDO_API_URL')}/`
 });
 
 export const refreshTokenFn = async () => {
@@ -37,5 +40,3 @@ ApiClient.interceptors.response.use(
         return Promise.reject(error);
     }
 );
-
-export default ApiClient;
