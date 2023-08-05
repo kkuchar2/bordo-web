@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 
-import { Grid } from '@giphy/react-components';
+import { GifOverlayProps, Grid } from '@giphy/react-components';
 
 import styles from './GIFPresentation.module.scss';
 import { GIFPresentationProps } from './GIFPresentation.types';
@@ -30,6 +30,11 @@ export const GIFPresentation = (props: GIFPresentationProps) => {
             borderRadius={10}
             width={width}
             columns={2}
+            overlay={(props: GifOverlayProps) => {
+                return <div className={'absolute inset-0 z-20 h-full w-full overflow-hidden hover:cursor-pointer hover:border-4 ' +
+                    'hover:border-blue-500 rounded-[10px]'}>
+                </div>;
+            }}
             key={searchText}
             gutter={10}
             noLink={true}/>

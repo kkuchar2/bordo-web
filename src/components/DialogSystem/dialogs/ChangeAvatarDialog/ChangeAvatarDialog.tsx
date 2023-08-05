@@ -74,14 +74,18 @@ export const ChangeAvatarDialog = (props: DialogProps) => {
         Object.keys(fields).forEach((key) => formData.append(key, fields[key]));
         formData.append('file', blob);
 
-        await axios.post(signedUrl.url, formData, {
-            headers: {
-                'Content-Type': 'multipart/form-data',
-            }
-        })
-            .then((response) => {
-                changeAvatarQuery.mutate({ avatar: file_path });
+        try {
+            await axios.post(signedUrl.url, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                }
             });
+
+            changeAvatarQuery.mutate({ avatar: file_path });
+        }
+        catch (error) {
+            console.error('Error uploading file: ', error);
+        }
     }, [extension]);
 
     const onBack = useCallback(() => {
@@ -95,12 +99,9 @@ export const ChangeAvatarDialog = (props: DialogProps) => {
         }
     }, [image, onBack]);
 
-    const onGifSelected = useCallback(
-        (gif: IGif) => {
-            changeAvatarQuery.mutate({
-                avatar: `https://media.giphy.com/media/${gif.id}/giphy.gif`,
-            });
-        }, []);
+    const onGifSelected = useCallback(async (gif: IGif) => {
+        changeAvatarQuery.mutate({ avatar: `https://media.giphy.com/media/${gif.id}/giphy.gif` });
+    }, []);
 
     const gifSearchOrCropContainer = useMemo(() => {
         if (mode === 'upload') {

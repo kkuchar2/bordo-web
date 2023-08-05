@@ -11,7 +11,7 @@ import {
 import { getNonFieldErrors } from '@/components/Forms/util';
 import { showSuccessToast } from '@/components/Toast/readyToastNotifications';
 import { isFirebaseAuthEnabled, queryClient } from '@/config';
-import { getQueryFirebase } from '@/queries/authWithFirebaseQueries';
+import { getQueryFirebase, postQueryFirebase } from '@/queries/authWithFirebaseQueries';
 import { postQuery } from '@/queries/queries';
 import { closeDialog } from '@/state/reducers/dialog/dialogSlice';
 import { store } from '@/state/store';
@@ -72,9 +72,17 @@ export const changePassword = () => {
 };
 
 export const changeAvatar = () => {
+
+    if (isFirebaseAuthEnabled()) {
+        return postQueryFirebase(['changeAvatar'], 'account/change-avatar')({
+            onSuccess: () => {
+                queryClient.invalidateQueries(['user']);
+                store.dispatch(closeDialog());
+            }
+        });
+    }
     return authPostQuery(['changeAvatar'], 'account/change-avatar')({
         onSuccess: () => {
-            // TODO: Add progress handler in mutation
             queryClient.invalidateQueries(['user']);
             store.dispatch(closeDialog());
         }
@@ -201,6 +209,9 @@ export const getUser = () => {
 };
 
 export const signAvatarUploadUrl = () => {
+    if (isFirebaseAuthEnabled()) {
+        return postQueryFirebase<SignedAvatarUploadInfo>(['signedAvatarUploadInfo'], 'account/sign-avatar-upload-url');
+    }
     return authPostQuery<SignedAvatarUploadInfo>(['signedAvatarUploadInfo'], 'account/sign-avatar-upload-url');
 };
 
