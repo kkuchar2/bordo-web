@@ -14,7 +14,7 @@ import {
 import { getNonFieldErrors } from '@/components/Forms/util';
 import { showSuccessToast } from '@/components/Toast/readyToastNotifications';
 import { isFirebaseAuthEnabled, queryClient } from '@/config';
-import { getQueryFirebase, postQueryFirebase } from '@/queries/authWithFirebaseQueries';
+import { getQueryFirebase, postQueryFirebase, putQueryFirebase } from '@/queries/authWithFirebaseQueries';
 import { closeDialog } from '@/state/reducers/dialog/dialogSlice';
 import { store } from '@/state/store';
 
@@ -27,6 +27,15 @@ const variableAuthPostQuery = <Resp = any>(
     return authPostQuery<Resp>(mutationKey, url, configProvider);
 };
 
+const variableAuthPutQuery = <Resp = any>(
+    mutationKey: MutationKey, url: string, configProvider?: () => AxiosRequestConfig
+) => {
+    if (isFirebaseAuthEnabled()) {
+        return putQueryFirebase<Resp>(mutationKey, url, configProvider);
+    }
+    return authPutQuery<Resp>(mutationKey, url, configProvider);
+};
+
 const variableAuthGetQuery = <Resp = any>(
     queryKey: QueryKey, url: string, configProvider?: () => AxiosRequestConfig
 ) => {
@@ -37,7 +46,7 @@ const variableAuthGetQuery = <Resp = any>(
 };
 
 export const changeAbout = () => {
-    return authPutQuery(['setAbout'], 'account/change-description')({
+    return variableAuthPutQuery(['setAbout'], 'account/change-description')({
         onMutate: async (data: any) => {
 
             console.log('Change about onMutate', data);

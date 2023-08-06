@@ -4,7 +4,7 @@ import { UseQueryOptions, UseQueryResult } from '@tanstack/react-query/src/types
 import { AxiosRequestConfig } from 'axios';
 
 import { ApiClientWithFirebase } from '@/client';
-import { getQueryInternal, postQueryInternal, QueryResponseError } from '@/queries/base';
+import { getQueryInternal, postQueryInternal, putQueryInternal, QueryResponseError } from '@/queries/base';
 
 const defaultConfigProvider = () : AxiosRequestConfig => {
     const token = localStorage.getItem('firebase_token');
@@ -35,6 +35,15 @@ export const postQueryFirebase = <Resp = any, Req = any>(
 ) => {
     return (options?: UseMutationOptions<Resp, QueryResponseError, Req>) => {
         return postQueryInternal<Resp, QueryResponseError, Req>(ApiClientWithFirebase,
+            mutationKey, endpoint, configProvider, { ...options, });
+    };
+};
+
+export const putQueryFirebase = <Resp = any, Req = any>(
+    mutationKey: MutationKey, endpoint: string, configProvider: () => AxiosRequestConfig = defaultConfigProvider
+) => {
+    return (options?: UseMutationOptions<Resp, QueryResponseError, Req>) => {
+        return putQueryInternal<Resp, QueryResponseError, Req>(ApiClientWithFirebase,
             mutationKey, endpoint, configProvider, { ...options, });
     };
 };
