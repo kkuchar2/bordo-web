@@ -28,6 +28,7 @@ const SignUpPage = () => {
 
     const app = initializeFirebase();
     const auth = getAuth(app);
+    const firebaseUser = auth.currentUser;
 
     const [firebaseSignUpPending, setFirebaseSignUpPending] = useState(false);
     const [firebaseError, setFirebaseError] = useState<QueryResponseErrorData | null>(null);
@@ -83,11 +84,17 @@ const SignUpPage = () => {
         signUpQuery.mutate(formData);
     }, [firebaseAuthEnabled]);
 
+    if (userQuery.isLoading) {
+        return null;
+    }
+
     if (userQuery.isSuccess && userQuery.data) {
         return redirect('/home');
     }
 
-    console.log('Firebase error', firebaseError);
+    if (firebaseUser && firebaseUser.emailVerified) {
+        return redirect('/home');
+    }
 
     return <div className={'grid h-full w-full place-items-center'}>
         <div
