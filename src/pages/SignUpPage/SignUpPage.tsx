@@ -4,7 +4,6 @@ import React, { useCallback, useState } from 'react';
 
 import { createUserWithEmailAndPassword, getAuth, sendEmailVerification, updateProfile } from '@firebase/auth';
 import { FirebaseError } from '@firebase/util';
-import { redirect } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 
 import { DelayedTransition } from '@/components/DelayedTransition/DelayedTransition';
@@ -27,7 +26,6 @@ const SignUpPage = () => {
 
     const app = initializeFirebase();
     const auth = getAuth(app);
-    const firebaseUser = auth.currentUser;
 
     const [firebaseSignUpPending, setFirebaseSignUpPending] = useState(false);
     const [firebaseError, setFirebaseError] = useState<QueryResponseErrorData | null>(null);
@@ -77,34 +75,24 @@ const SignUpPage = () => {
         await signupFirebaseFirebase(formData);
     }, []);
 
-    if (userQuery.isLoading) {
-        return null;
-    }
-
-    if (userQuery.isSuccess && userQuery.data) {
-        return redirect('/home');
-    }
-
-    if (firebaseUser && firebaseUser.emailVerified) {
-        return redirect('/home');
-    }
-
     return <div className={'grid h-full w-full place-items-center'}>
         <div
             className={'flex w-full flex-col gap-[30px] rounded-none bg-[#2a2a2a] p-[40px] sm:w-[400px] sm:rounded-md'}>
-            <h1 className={'text-center text-2xl font-semibold'}>
+
+            <div className={'text-center text-2xl tracking-tighter'}>
                 {t('REGISTRATION')}
-            </h1>
+            </div>
 
             <Form<RegistrationFormArgs>
                 config={registrationForm}
                 submitButtonTextKey={'SIGN_UP'}
+                submitButtonClassName={'bg-[#77a4df]/80 hover:bg-[#77a4df] text-white py-3 px-4 rounded-sm font-normal disabled:opacity-50 disabled:cursor-not-allowed'}
                 error={firebaseError || userQuery.error || {}}
                 disabled={firebaseSignUpPending || userQuery.isLoading}
                 useCancelButton={false}
                 onSubmit={signUp}/>
 
-            <div className={'flex flex-col items-center justify-center gap-[20px]'}>
+            <div className={'flex justify-center gap-3 text-sm'}>
                 <div className={'text-[#C7C7C7]'}>
                     {t('ALREADY_HAVE_ACCOUNT')}
                 </div>
