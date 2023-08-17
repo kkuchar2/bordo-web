@@ -1,3 +1,5 @@
+import { useCallback } from 'react';
+
 import { useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 
@@ -19,12 +21,13 @@ export const MainMenuItemComponent = (props: MainMenuItemProps) => {
     const dispatch = useAppDispatch();
     const router = useRouter();
 
-    const onButtonClick = () => {
+    const onButtonClick = useCallback(async () => {
         if (item.url) {
             router.push(item.url);
-            dispatch(storeCurrentView(item.id));
+            await dispatch(storeCurrentView(item.id));
         }
-    };
+    }, [item.url]);
+
     return <button
         key={item.id}
         onClick={onButtonClick}
