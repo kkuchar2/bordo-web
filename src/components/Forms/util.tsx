@@ -34,6 +34,9 @@ const mapError = (error: CustomError) : string | null => {
     else if (error.code === 'password_too_short') {
         return error.message;
     }
+    else if (error.code === 'auth/weak-password') {
+        return error.message;
+    }
     else if (error.code === 'password_too_common') {
         return error.message;
     }

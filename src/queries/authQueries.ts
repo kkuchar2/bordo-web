@@ -4,7 +4,6 @@ import { UseQueryOptions } from '@tanstack/react-query/src/types';
 import { AxiosRequestConfig } from 'axios';
 
 import { ApiClient } from '@/client';
-import { showPasswordCreationRequiredDialog } from '@/components/DialogSystem/readyDialogs';
 import { AxiosConfigs, getQueryInternal, postQueryInternal, putQueryInternal, QueryResponseError } from '@/queries/base';
 
 const defaultConfigProvider = () : AxiosRequestConfig => {
@@ -25,18 +24,7 @@ export const authPostQuery = <Resp = any, Req = any>(
 ) => {
     return (options?: UseMutationOptions<Resp, QueryResponseError, Req>) => {
         return postQueryInternal<Resp, QueryResponseError, Req>(
-            ApiClient, mutationKey, endpoint, configProvider, {
-                ...options,
-                onError: (error: QueryResponseError, variables, recover) => {
-                    const required = error?.status === 403 && error?.data?.['code'] === 'password_setup_required';
-
-                    if (required) {
-                        showPasswordCreationRequiredDialog();
-                    }
-
-                    options?.onError?.(error, variables, recover);
-                }
-            });
+            ApiClient, mutationKey, endpoint, configProvider, { ...options });
     };
 };
 

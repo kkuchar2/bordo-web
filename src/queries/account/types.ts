@@ -3,11 +3,6 @@ export interface UserAuth {
     recentlyLoggedOut: boolean;
 }
 
-export interface EmailAddress {
-    email: string;
-    verified: boolean;
-}
-
 export interface Friend {
     id: string;
     username: string;
@@ -24,7 +19,7 @@ export interface GoogleAccountInfo {
 }
 
 export interface UserInfo {
-    email: EmailAddress,
+    email: string;
     username: string,
     profile: UserProfile,
     role: string;

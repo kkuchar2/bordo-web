@@ -7,14 +7,14 @@ import { object, ObjectSchema } from 'yup';
 import { HookFormInput, HookFormInputProps } from '@/components/FormikInput/HookFormInput';
 import {
     ChangeEmailFormArgs,
-    ChangePasswordFormArgs,
+    UpdatePasswordFormArgs,
     ChangeUsernameFormArgs,
     DeleteAccountFormArgs,
     EmptyFormArgs,
     ForgotPasswordFormArgs,
     LoginFormArgs,
     RegistrationFormArgs,
-    ResetPasswordFormArgs
+    ResetPasswordFormArgs, UpdatePasswordFormSmallArgs
 } from '@/components/Forms/formConfig.types';
 import {
     ConfirmPasswordSchema,
@@ -216,7 +216,7 @@ export const resetPasswordForm: FormConfig<ResetPasswordFormArgs> = {
     })
 };
 
-export const changePasswordForm: FormConfig<ChangePasswordFormArgs> = {
+export const updatePasswordForm: FormConfig<UpdatePasswordFormArgs> = {
     fields: [
         {
             id: 'current_password',
@@ -226,7 +226,7 @@ export const changePasswordForm: FormConfig<ChangePasswordFormArgs> = {
             placeholder: 'CURRENT_PASSWORD_ENTER',
             required: true,
             autoComplete: 'current-password',
-            component: HookFormInput<ChangePasswordFormArgs>
+            component: HookFormInput<UpdatePasswordFormArgs>
         },
         {
             id: 'new_password',
@@ -236,7 +236,7 @@ export const changePasswordForm: FormConfig<ChangePasswordFormArgs> = {
             placeholder: 'NEW_PASSWORD_ENTER',
             required: true,
             autoComplete: 'off',
-            component: HookFormInput<ChangePasswordFormArgs>
+            component: HookFormInput<UpdatePasswordFormArgs>
         },
         {
             id: 'new_password_confirm',
@@ -246,11 +246,40 @@ export const changePasswordForm: FormConfig<ChangePasswordFormArgs> = {
             placeholder: 'INPUT_PASSWORD_CONFIRM_PLACEHOLDER',
             required: true,
             autoComplete: 'off',
-            component: HookFormInput<ChangePasswordFormArgs>
+            component: HookFormInput<UpdatePasswordFormArgs>
         },
     ],
     validationSchema: object({
         current_password: RequiredCurrentPasswordSchema,
+        new_password: NewPasswordSchema,
+        new_password_confirm: ConfirmPasswordSchema('new_password')
+    })
+};
+
+export const updatePasswordFormSmall: FormConfig<UpdatePasswordFormSmallArgs> = {
+    fields: [
+        {
+            id: 'new_password',
+            name: 'new_password',
+            type: 'password',
+            label: 'NEW_PASSWORD',
+            placeholder: 'NEW_PASSWORD_ENTER',
+            required: true,
+            autoComplete: 'off',
+            component: HookFormInput<UpdatePasswordFormSmallArgs>
+        },
+        {
+            id: 'new_password_confirm',
+            name: 'new_password_confirm',
+            type: 'password',
+            label: 'NEW_PASSWORD_CONFIRM',
+            placeholder: 'INPUT_PASSWORD_CONFIRM_PLACEHOLDER',
+            required: true,
+            autoComplete: 'off',
+            component: HookFormInput<UpdatePasswordFormSmallArgs>
+        },
+    ],
+    validationSchema: object({
         new_password: NewPasswordSchema,
         new_password_confirm: ConfirmPasswordSchema('new_password')
     })

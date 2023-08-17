@@ -27,7 +27,7 @@ export const ContentWithStore = (props: ContentWithStoreProps) => {
             return null;
         }
         return <div className={'flex w-[330px] flex-col gap-[50px] bg-black/10 p-[20px]'}>
-            <UserBadge user={user}/>
+            <UserBadge />
             <MainMenu items={mainMenuItems} currentViewId={currentViewId}/>
         </div>;
     }, [user, location, currentViewId]);

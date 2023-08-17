@@ -23,8 +23,8 @@ const componentMap: IDialogComponentMap = {
     DisconnectGoogleDialog: dialogs.DisconnectGoogleDialog,
     ChangeAvatarDialog: dialogs.ChangeAvatarDialog,
     ChangePropertyDialog: dialogs.ChangePropertyDialog,
+    UpdatePasswordDialog: dialogs.UpdatePasswordDialog,
     ServiceUnavailableDialog: dialogs.ServiceUnavailableDialog,
-    PasswordCreationRequiredDialog: dialogs.PasswordCreationRequiredDialog,
     VerifyAccountDialog: dialogs.VerifyAccountDialog
 };
 

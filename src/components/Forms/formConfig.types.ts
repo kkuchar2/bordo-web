@@ -33,8 +33,13 @@ export type ResetPasswordFormArgs = {
     new_password_confirm: string;
 }
 
-export type ChangePasswordFormArgs = {
+export type UpdatePasswordFormArgs = {
     current_password: string;
+    new_password: string;
+    new_password_confirm: string;
+}
+
+export type UpdatePasswordFormSmallArgs = {
     new_password: string;
     new_password_confirm: string;
 }

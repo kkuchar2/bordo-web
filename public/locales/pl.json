@@ -13,7 +13,7 @@
   "Please provide a valid email address": "Wprowadź poprawny adres email",
   "CHANGE_EMAIL": "Zmień adres E-mail",
   "CHANGE_EMAIL_DESCRIPTION": "Wprowadź nowy adres email oraz aktualne hasło",
-  "CHANGE_PASSWORD": "Zmień hasło",
+  "UPDATE_PASSWORD": "Zmień hasło",
   "INVALID_EMAIL": "Podaj poprawny adres e-mail",
   "This field may not be blank.": "To pole nie może być puste.",
   "CHANGE_PASSWORD_DESCRIPTION": "Wprowadź aktualne i nowe hasło",

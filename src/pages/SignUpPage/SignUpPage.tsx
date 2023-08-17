@@ -14,16 +14,14 @@ import { registrationForm } from '@/components/Forms/formConfig';
 import { RegistrationFormArgs } from '@/components/Forms/formConfig.types';
 import { firebaseFieldErrorConvert, firebaseNonFieldErrorConvert } from '@/components/Forms/util';
 import { NavLink } from '@/components/NavLink/NavLink';
-import { isFirebaseAuthEnabled } from '@/config';
 import { initializeFirebase } from '@/firebase/firebaseApp';
-import { getUser, register } from '@/queries/account';
+import { getUser } from '@/queries/account';
 import { QueryResponseErrorData } from '@/queries/base';
 
 const SignUpPage = () => {
 
     const { t } = useTranslation();
 
-    const signUpQuery = register();
     const userQuery = getUser();
 
     const app = initializeFirebase();
@@ -32,8 +30,6 @@ const SignUpPage = () => {
 
     const [firebaseSignUpPending, setFirebaseSignUpPending] = useState(false);
     const [firebaseError, setFirebaseError] = useState<QueryResponseErrorData | null>(null);
-
-    const firebaseAuthEnabled = isFirebaseAuthEnabled();
 
     const signupFirebaseFirebase = useCallback(async (formData: RegistrationFormArgs) => {
         setFirebaseSignUpPending(true);
@@ -77,12 +73,8 @@ const SignUpPage = () => {
     }, []);
 
     const signUp = useCallback(async (formData: RegistrationFormArgs) => {
-        if (firebaseAuthEnabled) {
-            await signupFirebaseFirebase(formData);
-            return;
-        }
-        signUpQuery.mutate(formData);
-    }, [firebaseAuthEnabled]);
+        await signupFirebaseFirebase(formData);
+    }, []);
 
     if (userQuery.isLoading) {
         return null;
@@ -106,8 +98,8 @@ const SignUpPage = () => {
             <Form<RegistrationFormArgs>
                 config={registrationForm}
                 submitButtonTextKey={'SIGN_UP'}
-                error={signUpQuery.error?.data || firebaseError || userQuery.error || {}}
-                disabled={signUpQuery.isLoading}
+                error={firebaseError || userQuery.error || {}}
+                disabled={firebaseSignUpPending || userQuery.isLoading}
                 useCancelButton={false}
                 onSubmit={signUp}/>
 
@@ -129,7 +121,7 @@ const SignUpPage = () => {
                 </div>
             </div>
 
-            <DelayedTransition pending={signUpQuery.isLoading || firebaseSignUpPending}/>
+            <DelayedTransition pending={userQuery.isLoading || firebaseSignUpPending}/>
         </div>
     </div>;
 };

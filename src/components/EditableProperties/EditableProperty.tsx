@@ -8,13 +8,12 @@ import { Icon, IconProps } from '@/components/Icons/Icon';
 export interface EditablePropertyProps {
     id: string;
     name: string;
-    value?: string;
+    value?: string | null;
     type?: string;
     icon?: IconProps;
     editText?: string;
     canEdit?: boolean;
     hideTitle?: boolean;
-    passwordRequired: boolean;
     uppercaseTitle?: boolean;
     initialValues?: any;
     showDialogFunc?: (args: OpenReadyDialogArgs) => void
@@ -24,7 +23,7 @@ const EditableProperty = (props: EditablePropertyProps) => {
 
     const {
         name, value, showDialogFunc, canEdit, icon, initialValues,
-        editText = 'EDIT', hideTitle, passwordRequired
+        editText = 'EDIT', hideTitle
     } = props;
 
     const { t } = useTranslation();
@@ -34,10 +33,9 @@ const EditableProperty = (props: EditablePropertyProps) => {
             return;
         }
         showDialogFunc({
-            passwordRequired: passwordRequired,
             initialValues: initialValues,
         });
-    }, [passwordRequired]);
+    }, []);
 
     const renderEdit = useMemo(() => {
         if (!canEdit) {

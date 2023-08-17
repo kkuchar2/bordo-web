@@ -1,54 +1,42 @@
 import React, { useCallback } from 'react';
 
 import { getAuth, signOut } from '@firebase/auth';
+import { useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 
 import { ProfileAvatar } from '@/components/ProfileAvatar/ProfileAvatar';
-import { isFirebaseAuthEnabled, queryClient } from '@/config';
+import {  queryClient } from '@/config';
 import { initializeFirebase } from '@/firebase/firebaseApp';
-import { logout } from '@/queries/account';
-import { UserInfo } from '@/queries/account/types';
 
-type UserBadgeProps = {
-    user: UserInfo;
-}
-
-export const UserBadge = (props: UserBadgeProps) => {
-
-    const { user } = props;
-
-    const { mutate: performLogout } = logout();
+export const UserBadge = () => {
 
     const { t } = useTranslation();
 
-    const firebaseAuthEnabled = isFirebaseAuthEnabled();
-
     const app = initializeFirebase();
     const auth = getAuth(app);
+    const router = useRouter();
 
-    if (!user) {
+    const firebaseUser = auth.currentUser;
+
+    if (!firebaseUser) {
         return null;
     }
 
     const onLogoutButtonClick = useCallback(async () => {
-        if (firebaseAuthEnabled) {
-            await signOut(auth);
-            localStorage.removeItem('firebase_token');
-            queryClient.setQueryData(['user'], null);
-        }
-        else {
-            performLogout({});
-        }
+        await signOut(auth);
+        localStorage.removeItem('firebase_token');
+        queryClient.setQueryData(['user'], null);
+        router.push('/');
     }, []);
 
     return <div className={'flex w-full gap-4 rounded-md p-4'}>
         <ProfileAvatar width={50} height={50} fill={false}/>
         <div className={'flex flex-col items-stretch gap-1'}>
             <div className={'font-semibold text-white'}>
-                {user.username}
+                {firebaseUser.displayName}
             </div>
             <div className={'text-[12px] text-white/80'}>
-                {user.email.email}
+                {firebaseUser.email}
             </div>
             <div className={'flex justify-end pt-2'}>
                 <button

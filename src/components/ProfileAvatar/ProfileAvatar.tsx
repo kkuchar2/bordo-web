@@ -13,41 +13,39 @@ type ProfileAvatarProps = {
 export const ProfileAvatar = ({ width = 150, height = 150, fill = false }: ProfileAvatarProps) => {
     const { data: user } = getUser();
 
-    if (!user || !user.email || !user.email.email) {
+    if (!user || !user.email) {
         return <DefaultPlaceholder width={width} height={height}/>;
     }
 
-    const { profile, email } = user;
+    const { profile, email } = user;console.log('P', profile);
 
     const src = profile?.avatar;
 
     if (!src) {
         return (
             <LetterPlaceHolder
-                letter={email.email[0].toUpperCase()}
+                letter={email.toUpperCase()[0]}
                 width={width}
                 height={height}
             />
         );
     }
 
-    return (
-        <Image
-            className={'rounded-full'}
-            src={src}
-            style={{
-                width: width,
-                height: height,
-                objectFit: 'cover'
-            }}
-            priority={true}
-            unoptimized={src.endsWith('.gif')}
-            blurDataURL={src}
-            loader={({ src }) => src}
-            width={width}
-            height={height}
-            fill={fill}
-            alt={'avatar'}
-        />
-    );
+    return <Image
+        className={'rounded-full'}
+        src={src}
+        style={{
+            width: width,
+            height: height,
+            objectFit: 'cover'
+        }}
+        priority={true}
+        unoptimized={src.endsWith('.gif')}
+        blurDataURL={src}
+        loader={({ src }) => src}
+        width={width}
+        height={height}
+        fill={fill}
+        alt={'avatar'}
+    />;
 };

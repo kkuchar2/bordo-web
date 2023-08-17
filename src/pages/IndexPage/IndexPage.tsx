@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import { getAuth, GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup, updateProfile } from '@firebase/auth';
 import { FirebaseError } from '@firebase/util';
@@ -13,19 +13,15 @@ import Form from '@/components/Forms/Form/Form';
 import { loginForm } from '@/components/Forms/formConfig';
 import { LoginFormArgs } from '@/components/Forms/formConfig.types';
 import { firebaseFieldErrorConvert } from '@/components/Forms/util';
-import GoogleButton from '@/components/GoogleButton/GoogleButton';
 import { GoogleIcon } from '@/components/Icons/GoogleIcon';
 import { NavLink } from '@/components/NavLink/NavLink';
-import { getEnvVar, isFirebaseAuthEnabled, queryClient } from '@/config';
 import { initializeFirebase } from '@/firebase/firebaseApp';
-import { getUser, googleLogin, login } from '@/queries/account';
+import { getUser } from '@/queries/account';
 import { QueryResponseErrorData } from '@/queries/base';
 
 const IndexPage = () => {
 
     const { t } = useTranslation();
-
-    const loginQuery = login();
 
     const app = initializeFirebase();
     const auth = getAuth(app);
@@ -35,18 +31,15 @@ const IndexPage = () => {
     const user = auth.currentUser;
 
     const userQuery = getUser();
-    const googleLoginQuery = googleLogin();
 
     const [firebaseLoginPending, setFirebaseLoginPending] = useState(false);
     const [firebaseError, setFirebaseError] = useState<QueryResponseErrorData | null>(null);
 
-    const firebaseAuthEnabled = isFirebaseAuthEnabled();
-
     useEffect(() => {
-        if (user && !user.emailVerified) {
+        if (user && !user.emailVerified && firebaseLoginPending) {
             showVerifyAccountDialog();
         }
-    }, [user]);
+    }, [user, firebaseLoginPending]);
 
     const signInWithGoogleFirebase = useCallback(async () => {
         setFirebaseLoginPending(true);
@@ -93,39 +86,8 @@ const IndexPage = () => {
     }, []);
 
     const attemptLogin = useCallback(async (formData: LoginFormArgs) => {
-        if (firebaseAuthEnabled) {
-            await signInEmailPasswordFirebase(formData);
-            return;
-        }
-        queryClient.removeQueries(['googleLogin']);
-        googleLoginQuery.reset();
-        loginQuery.mutate(formData);
-    }, [firebaseAuthEnabled]);
-
-    const onSignInWithGoogle = useCallback((credentialResponse: any) => {
-        loginQuery.reset();
-        googleLoginQuery.mutate(credentialResponse);
+        await signInEmailPasswordFirebase(formData);
     }, []);
-
-    const googleButton = useMemo(() => {
-        if (firebaseAuthEnabled) {
-            return <button
-                onClick={signInWithGoogleFirebase}
-                className={'flex h-12 w-full items-center justify-center gap-[10px] rounded-md bg-neutral-900 font-semibold text-white hover:bg-neutral-950'}>
-                <GoogleIcon/>
-                {'Sign in with Google'}
-            </button>;
-        }
-
-        return <GoogleButton
-            clientId={getEnvVar('NEXT_PUBLIC_GOOGLE_CLIENT_ID')}
-            context={'signin'}
-            width={'320'}
-            customText={t('CONTINUE_WITH_GOOGLE')}
-            text={'signin'}
-            useOneTap={true}
-            onSuccess={onSignInWithGoogle}/>;
-    }, [firebaseAuthEnabled]);
 
     if (userQuery.isSuccess && userQuery.data) {
         return redirect('/home');
@@ -145,9 +107,9 @@ const IndexPage = () => {
             <Form<LoginFormArgs>
                 config={loginForm}
                 submitButtonTextKey={'SIGN_IN'}
-                disabled={loginQuery.isLoading || firebaseLoginPending || googleLoginQuery.isLoading}
+                disabled={firebaseLoginPending || userQuery.isLoading}
                 submitButtonClassName={'bg-[#77a4df]/80 hover:bg-[#77a4df] text-white py-2 px-4 rounded-md font-semibold disabled:opacity-50 disabled:cursor-not-allowed'}
-                error={loginQuery.error?.data || firebaseError || userQuery.error || {}}
+                error={firebaseError || userQuery.error || {}}
                 excludeErrors={['email_not_verified']}
                 useCancelButton={false}
                 onSubmit={attemptLogin}/>
@@ -156,7 +118,12 @@ const IndexPage = () => {
                 {t('FORGOT_PASSWORD_QUESTION')}
             </NavLink>
 
-            {googleButton}
+            <button
+                onClick={signInWithGoogleFirebase}
+                className={'flex h-12 w-full items-center justify-center gap-[10px] rounded-md bg-neutral-900 font-semibold text-white hover:bg-neutral-950'}>
+                <GoogleIcon/>
+                {'Sign in with Google'}
+            </button>
 
             <div className={'flex flex-col items-center justify-center gap-[20px]'}>
                 <div className={'text-[#C7C7C7]'}>
@@ -167,7 +134,7 @@ const IndexPage = () => {
                 </NavLink>
             </div>
 
-            <DelayedTransition pending={loginQuery.isLoading || googleLoginQuery.isLoading || firebaseLoginPending}/>
+            <DelayedTransition pending={firebaseLoginPending || userQuery.isFetching} />
         </div>
     </div>;
 };

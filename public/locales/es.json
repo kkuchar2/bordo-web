@@ -13,7 +13,7 @@
   "LANGUAGE_CHANGED_TO": "Idioma cambiado a",
   "CHANGE_EMAIL": "Cambiar dirección de correo electrónico",
   "CHANGE_EMAIL_DESCRIPTION": "Ingresa una nueva dirección de correo electrónico y tu contraseña actual",
-  "CHANGE_PASSWORD": "Cambiar contraseña",
+  "UPDATE_PASSWORD": "Cambiar contraseña",
   "USER_ALREADY_EXISTS": "El usuario ya existe",
   "CHANGE_PASSWORD_DESCRIPTION": "Ingresa tu contraseña actual y la nueva contraseña",
   "CREATE_GROUP_DESCRIPTION": "Crear un grupo",

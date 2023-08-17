@@ -3,31 +3,15 @@ import { EnvelopeIcon, KeyIcon, TrashIcon, UsersIcon } from '@heroicons/react/24
 
 import { SentEmailDialogArgs } from './readyDialogs.types';
 
-import { changeEmailForm, changePasswordForm, changeUsernameForm } from '@/components/Forms/formConfig';
+import { changeEmailForm, changeUsernameForm } from '@/components/Forms/formConfig';
 import { GoogleIcon } from '@/components/Icons/GoogleIcon';
-import { queryClient } from '@/config';
-import { changeEmail, changePassword, changeUsername } from '@/queries/account';
-import { User } from '@/queries/account/types';
+import { changeEmail, changeUsername } from '@/queries/account';
 import { openDialog } from '@/state/reducers/dialog/dialogSlice';
 import { store } from '@/state/store';
 
 export interface OpenReadyDialogArgs {
-    passwordRequired: boolean;
     initialValues?: any;
 }
-
-const checkShowPasswordRequired = (passwordRequired: boolean) => {
-    if (passwordRequired) {
-        const hasUsablePassword = queryClient.getQueryData<User>(['user'])?.has_usable_password;
-
-        if (!hasUsablePassword) {
-            showPasswordCreationRequiredDialog();
-            return true;
-        }
-        return false;
-    }
-    return false;
-};
 
 export const showRegistrationCompleteDialog = () => {
     return showSentEmailDialog({
@@ -144,11 +128,7 @@ export const showConfirmEmailDialog = <T>(data: T) => {
 };
 
 export const showChangeUsernameDialog = (args: OpenReadyDialogArgs) => {
-    const { passwordRequired, initialValues } = args;
-
-    if (checkShowPasswordRequired(passwordRequired)) {
-        return;
-    }
+    const { initialValues } = args;
 
     store.dispatch(
         openDialog({
@@ -170,11 +150,7 @@ export const showChangeUsernameDialog = (args: OpenReadyDialogArgs) => {
 };
 
 export const showChangeEmailDialog = (args: OpenReadyDialogArgs) => {
-    const { passwordRequired, initialValues } = args;
-
-    if (checkShowPasswordRequired(passwordRequired)) {
-        return;
-    }
+    const { initialValues } = args;
 
     store.dispatch(
         openDialog({
@@ -199,30 +175,20 @@ export const showChangeEmailDialog = (args: OpenReadyDialogArgs) => {
     );
 };
 
-export const showChangePasswordDialog = (args: OpenReadyDialogArgs) => {
-    const { passwordRequired, initialValues } = args;
-
-    if (checkShowPasswordRequired(passwordRequired)) {
-        return;
-    }
-
+export const showUpdatePasswordDialog = (args: OpenReadyDialogArgs) => {
     store.dispatch(
         openDialog({
-            component: 'ChangePropertyDialog',
+            component: 'UpdatePasswordDialog',
             props: {
                 dialog: {
-                    title: 'CHANGE_PASSWORD',
+                    title: 'UPDATE_PASSWORD',
                     description: 'CHANGE_PASSWORD_DESCRIPTION',
                     icon: {
                         component: KeyIcon,
                         color: '#ffb700'
                     },
                 },
-                data: {
-                    formConfig: changePasswordForm,
-                    queryFunction: changePassword,
-                    initialValues: initialValues
-                }
+                data: {}
             }
         })
     );
@@ -248,31 +214,7 @@ export const showServiceUnavailableDialog = () => {
     );
 };
 
-export const showPasswordCreationRequiredDialog = () => {
-    store.dispatch(
-        openDialog({
-            component: 'PasswordCreationRequiredDialog',
-            props: {
-                data: {},
-                dialog: {
-                    title: 'PASSWORD_CREATION_REQUIRED_TITLE',
-                    description: 'PASSWORD_REQUIRED_DESCRIPTION',
-                    icon: {
-                        component: KeyIcon,
-                        color: '#c88f00',
-                        size: 25
-                    },
-                }
-            }
-        })
-    );
-};
-
 export const showDeleteAccountDialog = () => {
-    if (checkShowPasswordRequired(true)) {
-        return;
-    }
-
     store.dispatch(
         openDialog({
             component: 'DeleteAccountDialog',
@@ -311,10 +253,6 @@ export const showCreateGroupDialog = () => {
 };
 
 export const showDisconnectGoogleDialog = () => {
-    if (checkShowPasswordRequired(true)) {
-        return;
-    }
-
     store.dispatch(
         openDialog({
             component: 'DisconnectGoogleDialog',

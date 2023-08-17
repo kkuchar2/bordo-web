@@ -1,27 +1,22 @@
 'use client';
 
-import { FC, useCallback } from 'react';
+import { useCallback } from 'react';
 
 import { getAuth } from '@firebase/auth';
 import { KeyIcon } from '@heroicons/react/24/solid';
 import { useTranslation } from 'react-i18next';
 
-import { GoogleAccountConnection } from '@/components/ConnectedAccount/GoogleAccountConnection';
 import {
     showChangeEmailDialog,
-    showChangePasswordDialog,
-    showChangeUsernameDialog,
+    showUpdatePasswordDialog,
     showDeleteAccountDialog
 } from '@/components/DialogSystem/readyDialogs';
 import { EditableProfilePictureProperty } from '@/components/EditableProperties/EditableProfilePictureProperty';
 import EditableProperty from '@/components/EditableProperties/EditableProperty';
 import { SettingsSection } from '@/components/Settings/SettingsSection';
 import { TextAreaWithEmoji } from '@/components/TextAreaWithEmoji/TextAreaWithEmoji';
-import { queryClient } from '@/config';
 import { initializeFirebase } from '@/firebase/firebaseApp';
-import WithAuth from '@/hoc/WithAuth';
 import { changeAbout, getUser } from '@/queries/account';
-import { User } from '@/queries/account/types';
 
 const AccountPage = () => {
 
@@ -29,12 +24,11 @@ const AccountPage = () => {
 
     const { isLoading: isAboutSaving, mutate } = changeAbout();
 
-    const hasUsablePassword = queryClient.getQueryData<User>(['user'])?.has_usable_password;
-
     const { data: user } = getUser();
 
     const app = initializeFirebase();
     const auth = getAuth(app);
+
     const firebaseUser = auth.currentUser;
 
     const onDeleteAccountAction = useCallback(() => {
@@ -45,11 +39,11 @@ const AccountPage = () => {
         mutate({ about: value });
     }, []);
 
-    if (user == null) {
-        return;
+    if (user == null || firebaseUser == null) {
+        return null;
     }
 
-    const { username, email, profile, google_account } = user;
+    const { username, profile, google_account } = user;
 
     return <div className={'flex h-full w-[800px] flex-col items-stretch gap-[30px] px-[50px]'}>
         <h1 className={'mt-[50px] text-3xl font-semibold tracking-tighter'}>
@@ -57,23 +51,25 @@ const AccountPage = () => {
         </h1>
 
         <div className={'flex flex-col gap-[50px] pt-[50px]'}>
-            <div className={'grid place-items-center'}>
-                <EditableProfilePictureProperty/>
+            <div className={'flex flex-col gap-5'}>
+                <div className={'grid place-items-center'}>
+                    <EditableProfilePictureProperty/>
+                </div>
+                <div className={'flex flex-col gap-2'}>
+                    <div className={'w-full text-center text-xl font-medium'}>
+                        {firebaseUser.displayName}
+                    </div>
+                    <div className={'w-full text-center text-sm'}>
+                        {firebaseUser.email}
+                    </div>
+                </div>
             </div>
             <div className={'flex w-full flex-col items-stretch gap-[50px]'}>
                 <EditableProperty
-                    id={'username'}
-                    name={t('USERNAME')}
-                    value={username || firebaseUser?.displayName}
-                    canEdit={true}
-                    passwordRequired={true}
-                    showDialogFunc={showChangeUsernameDialog}/>
-                <EditableProperty
                     id={'email'}
                     name={t('EMAIL')}
-                    value={email.email}
+                    value={firebaseUser.email}
                     canEdit={true}
-                    passwordRequired={true}
                     showDialogFunc={showChangeEmailDialog}/>
                 <TextAreaWithEmoji
                     id={'about'}
@@ -90,27 +86,20 @@ const AccountPage = () => {
         </div>
 
         <div className={'flex flex-col gap-[20px]'}>
-            <SettingsSection title={t('PASSWORD_AND_AUTHENTICATION')} show={hasUsablePassword}>
+            <SettingsSection title={t('PASSWORD_AND_AUTHENTICATION')}>
                 <EditableProperty
                     id={'password'}
-                    name={t('CHANGE_PASSWORD')}
-                    editText={'CHANGE_PASSWORD'}
+                    name={t('UPDATE_PASSWORD')}
+                    editText={'UPDATE_PASSWORD'}
                     canEdit={true}
                     hideTitle={true}
-                    passwordRequired={true}
                     icon={{
                         component: KeyIcon,
                         color: '#ffb700',
                         size: 20
                     }}
-                    showDialogFunc={showChangePasswordDialog}
+                    showDialogFunc={showUpdatePasswordDialog}
                 />
-            </SettingsSection>
-
-            <SettingsSection title={t('SOCIAL_ACCOUNTS')}>
-                <div className={'flex w-full items-center justify-end'}>
-                    <GoogleAccountConnection connection={google_account}/>
-                </div>
             </SettingsSection>
 
             <SettingsSection title={t('ACCOUNT')}>
@@ -123,8 +112,4 @@ const AccountPage = () => {
     </div>;
 };
 
-export default WithAuth(AccountPage, {
-    name: 'Account',
-    redirectToHomeOnAutologin: false,
-    redirectToLoginPageOnUnauthenticated: true
-}) as FC;
+export default AccountPage;

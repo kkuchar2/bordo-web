@@ -1,52 +1,19 @@
-import { MutationKey, QueryKey } from '@tanstack/query-core';
-import { AxiosRequestConfig } from 'axios';
-
-import { authGetQuery, authPostQuery, authPutQuery } from '../authQueries';
+import { authPostQuery, authPutQuery } from '../authQueries';
 import { AxiosConfigs, QueryResponseError } from '../base';
 
 import { SignedAvatarUploadInfo, User } from './types';
 
 import {
-    showEmailChangeConfirmationSentDialog,
-    showRegistrationCompleteDialog,
-    showVerifyAccountDialog
+    showEmailChangeConfirmationSentDialog
 } from '@/components/DialogSystem/readyDialogs';
-import { getNonFieldErrors } from '@/components/Forms/util';
 import { showSuccessToast } from '@/components/Toast/readyToastNotifications';
-import { isFirebaseAuthEnabled, queryClient } from '@/config';
+import { queryClient } from '@/config';
 import { getQueryFirebase, postQueryFirebase, putQueryFirebase } from '@/queries/authWithFirebaseQueries';
 import { closeDialog } from '@/state/reducers/dialog/dialogSlice';
 import { store } from '@/state/store';
 
-const variableAuthPostQuery = <Resp = any>(
-    mutationKey: MutationKey, url: string, configProvider?: () => AxiosRequestConfig
-) => {
-    if (isFirebaseAuthEnabled()) {
-        return postQueryFirebase<Resp>(mutationKey, url, configProvider);
-    }
-    return authPostQuery<Resp>(mutationKey, url, configProvider);
-};
-
-const variableAuthPutQuery = <Resp = any>(
-    mutationKey: MutationKey, url: string, configProvider?: () => AxiosRequestConfig
-) => {
-    if (isFirebaseAuthEnabled()) {
-        return putQueryFirebase<Resp>(mutationKey, url, configProvider);
-    }
-    return authPutQuery<Resp>(mutationKey, url, configProvider);
-};
-
-const variableAuthGetQuery = <Resp = any>(
-    queryKey: QueryKey, url: string, configProvider?: () => AxiosRequestConfig
-) => {
-    if (isFirebaseAuthEnabled()) {
-        return getQueryFirebase<Resp>(queryKey, url, configProvider);
-    }
-    return authGetQuery<Resp>(queryKey, url, configProvider);
-};
-
 export const changeAbout = () => {
-    return variableAuthPutQuery(['setAbout'], 'account/change-description')({
+    return putQueryFirebase(['setAbout'], 'account/change-description')({
         onMutate: async (data: any) => {
 
             console.log('Change about onMutate', data);
@@ -92,16 +59,8 @@ export const changeUsername = () => {
     });
 };
 
-export const changePassword = () => {
-    return authPostQuery(['changePassword'], 'account/change-password')({
-        onSuccess: () => {
-            showSuccessToast('Password has been changed');
-        }
-    });
-};
-
 export const changeAvatar = () => {
-    return variableAuthPostQuery(['changeAvatar'], 'account/change-avatar')({
+    return postQueryFirebase(['changeAvatar'], 'account/change-avatar')({
         onSuccess: () => {
             queryClient.invalidateQueries(['user']);
             store.dispatch(closeDialog());
@@ -122,64 +81,20 @@ export const changeAnimatedAvatar = () => {
     });
 };
 
-export const login = () => {
-    return authPostQuery(['login'], 'account/login')({
-        onSuccess: () => {
-            queryClient.invalidateQueries(['user']);
-        },
-        onError: (error: QueryResponseError, data: any) => {
-            const hasEmailNotVerified = getNonFieldErrors(error?.data)
-                ?.some((error: any) => error === 'email_not_verified');
-
-            if (hasEmailNotVerified) {
-                showVerifyAccountDialog();
-            }
-        }
-    });
-};
-
-export const register = () => {
-    return authPostQuery(['register'], 'account/register')({
-        onSuccess: () => {
-            showRegistrationCompleteDialog();
-        }
-    });
-};
-
-export const logout = () => {
-    return authPostQuery(['logout'], 'account/logout')({
-        onSuccess: () => {
-            queryClient.setQueryData(['user'], null);
-        }
-    });
-};
-
-export const deleteAccount = () => {
-    return variableAuthPostQuery(['deleteAccount'], 'account/delete-account')({
-        onSuccess: () => {
-            queryClient.setQueryData(['user'], null);
-        }
-    });
+export const preDeleteAccount = () => {
+    return postQueryFirebase(['deleteAccount'], 'account/pre-delete-account')({});
 };
 
 export const disableAccount = () => {
-    return variableAuthPostQuery(['disableAccount'], 'account/disable-account')({
+    return postQueryFirebase(['disableAccount'], 'account/disable-account')({
         onSuccess: () => {
             queryClient.setQueryData(['user'], null);
-        }
-    });
-};
-
-export const googleLogin = () => {
-    return variableAuthPostQuery(['googleLogin'], 'account/google-login')({
-        onSuccess: () => {
-            queryClient.invalidateQueries(['user']);
         }
     });
 };
 
 export const googleConnect = () => {
-    return variableAuthPostQuery(['googleConnect'], 'account/google-connect')({
+    return postQueryFirebase(['googleConnect'], 'account/google-connect')({
         onSuccess: () => {
             queryClient.invalidateQueries(['user']);
         }
@@ -187,15 +102,15 @@ export const googleConnect = () => {
 };
 
 export const createNewPassword = () => {
-    return variableAuthPostQuery(['createNewPassword'], 'account/create-new-password')({});
+    return postQueryFirebase(['createNewPassword'], 'account/create-new-password')({});
 };
 
 export const verifyResetPasswordToken = () => {
-    return variableAuthPostQuery(['verifyResetPasswordToken'], 'account/verify-reset-password-token')({});
+    return postQueryFirebase(['verifyResetPasswordToken'], 'account/verify-reset-password-token')({});
 };
 
 export const confirmAccount = () => {
-    return variableAuthPostQuery(['confirmAccount'], 'account/verify-email', () => AxiosConfigs.NO_CREDENTIALS)({
+    return postQueryFirebase(['confirmAccount'], 'account/verify-email', () => AxiosConfigs.NO_CREDENTIALS)({
         onSuccess: () => {
             showSuccessToast('An email has been verified');
             queryClient.invalidateQueries(['user']);
@@ -204,15 +119,15 @@ export const confirmAccount = () => {
 };
 
 export const resendRegistrationEmail = () => {
-    return variableAuthPostQuery(['resendRegistrationEmail'], 'account/resend-email')({});
+    return postQueryFirebase(['resendRegistrationEmail'], 'account/resend-email')({});
 };
 
 export const resetPassword = () => {
-    return variableAuthPostQuery(['resetPassword'], 'account/reset-password')({});
+    return postQueryFirebase(['resetPassword'], 'account/reset-password')({});
 };
 
 export const googleDisconnect = () => {
-    return variableAuthPostQuery(['googleDisconnect'], 'account/google-disconnect')({
+    return postQueryFirebase(['googleDisconnect'], 'account/google-disconnect')({
         onSuccess: () => {
             store.dispatch(closeDialog());
             queryClient.invalidateQueries(['user']);
@@ -221,9 +136,9 @@ export const googleDisconnect = () => {
 };
 
 export const getUser = () => {
-    return variableAuthGetQuery<User>(['user'], 'account/user')({});
+    return getQueryFirebase<User>(['user'], 'account/user')({});
 };
 
 export const signAvatarUploadUrl = () => {
-    return variableAuthPostQuery<SignedAvatarUploadInfo>(['signedAvatarUploadInfo'], 'account/sign-avatar-upload-url');
+    return postQueryFirebase<SignedAvatarUploadInfo>(['signedAvatarUploadInfo'], 'account/sign-avatar-upload-url');
 };
