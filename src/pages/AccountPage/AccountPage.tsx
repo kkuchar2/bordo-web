@@ -40,11 +40,12 @@ const AccountPage = () => {
         mutate({ about: value });
     }, []);
 
-    if (user == null || firebaseUser == null) {
+    if (firebaseUser == null) {
         return null;
     }
 
-    const { profile } = user;
+    const about = user?.profile?.about || '';
+    console.log('AAA:', about);
 
     return <div className={'flex h-full w-[800px] flex-col items-stretch gap-[30px] px-[50px]'}>
         <h1 className={'mt-[50px] text-3xl font-semibold tracking-tighter'}>
@@ -60,9 +61,6 @@ const AccountPage = () => {
                     <div className={'w-full text-center text-xl font-medium'}>
                         {firebaseUser.displayName}
                     </div>
-                    <div className={'w-full text-center text-sm'}>
-                        {firebaseUser.email}
-                    </div>
                 </div>
             </div>
             <div className={'flex w-full flex-col items-stretch gap-[50px]'}>
@@ -76,7 +74,7 @@ const AccountPage = () => {
                 <TextAreaWithEmoji
                     id={'about'}
                     name={t('ABOUT_ME')}
-                    value={profile.about}
+                    value={about}
                     toolbarEnabled={true}
                     emojiPickerEnabled={true}
                     emojiPickerButtonTextSize={20}

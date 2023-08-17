@@ -31,6 +31,7 @@ export const TextAreaWithEmoji = (props: TextAreaWithEmojiProps) => {
     const {
         id,
         name,
+        value,
         maxLength = 300,
         toolbarEnabled = true,
         emojiPickerEnabled = true,
@@ -42,7 +43,7 @@ export const TextAreaWithEmoji = (props: TextAreaWithEmojiProps) => {
         onSave,
     } = props;
 
-    const [currentValue, setCurrentValue] = useStateWithCallbackLazy<string>(props.value || '');
+    const [currentValue, setCurrentValue] = useStateWithCallbackLazy<string>(value || '');
     const [emojiPanelOpen, setEmojiPanelOpen] = useState(false);
     const [suggestionPanelOpen, setSuggestionPanelOpen] = useState(false);
     const [query, setQuery] = useState<string | null>('');
@@ -51,6 +52,10 @@ export const TextAreaWithEmoji = (props: TextAreaWithEmojiProps) => {
     const textAreaRef = useRef<HTMLTextAreaElement | null>(null);
 
     const { t } = useTranslation();
+
+    useEffect(() => {
+        setCurrentValue(value || '', () => {});
+    }, [value]);
 
     const startTracking = useCallback(() => {
         if (!textAreaRef.current) {
@@ -279,7 +284,7 @@ export const TextAreaWithEmoji = (props: TextAreaWithEmojiProps) => {
                         </div>}
 
                     <div className={'flex grow items-center justify-end'}>
-                        {props.value !== currentValue &&
+                        {value !== currentValue &&
                             <button
                                 className={'rounded-full bg-neutral-700 px-4 py-1 text-sm font-semibold hover:bg-neutral-600'}
                                 disabled={isSaving}
