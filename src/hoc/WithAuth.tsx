@@ -24,7 +24,6 @@ const WithAuth = (
         const user = auth.currentUser;
 
         const {
-            name,
             isPublic = false,
             redirectToHomeOnAutologin = false,
             redirectToLoginPageOnUnauthenticated = false,
@@ -42,14 +41,11 @@ const WithAuth = (
             });
         }, []);
 
-        //console.log(`[${name}]`, 'loggedIn:', loggedIn, 'show:', show, 'user', user);
-
         if (!show) {
             return null;
         }
 
         if (isPublic) {
-            // only render if user is not logged in
             if (loggedIn) {
                 if (redirectToHomeOnAutologin) {
                     return redirect('/home');

@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { usePathname } from 'next/navigation';
 
 import MainMenu from '@/components/MainMenu/MainMenu';
