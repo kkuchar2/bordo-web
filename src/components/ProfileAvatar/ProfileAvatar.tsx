@@ -17,7 +17,7 @@ export const ProfileAvatar = ({ width = 150, height = 150, fill = false }: Profi
         return <DefaultPlaceholder width={width} height={height}/>;
     }
 
-    const { profile, email } = user;console.log('P', profile);
+    const { profile, email } = user;
 
     const src = profile?.avatar;
 
@@ -40,7 +40,7 @@ export const ProfileAvatar = ({ width = 150, height = 150, fill = false }: Profi
             objectFit: 'cover'
         }}
         priority={true}
-        unoptimized={src.endsWith('.gif')}
+        unoptimized={true}
         blurDataURL={src}
         loader={({ src }) => src}
         width={width}
