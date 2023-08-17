@@ -6,7 +6,6 @@ import {
     GoogleAuthProvider, reauthenticateWithCredential, reauthenticateWithPopup
 } from '@firebase/auth';
 import { FirebaseError } from '@firebase/util';
-import { useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 
 import { DelayedTransition } from '@/components/DelayedTransition/DelayedTransition';
@@ -28,8 +27,6 @@ export const DeleteAccountDialog = () => {
     const dispatch = useAppDispatch();
 
     const preDeleteAccountQuery = preDeleteAccount();
-
-    const router = useRouter();
 
     const app = initializeFirebase();
     const auth = getAuth(app);
@@ -64,7 +61,6 @@ export const DeleteAccountDialog = () => {
             await reauthenticateWithCredential(firebaseUser, credential);
             await deleteUser(firebaseUser);
             dispatch(closeDialog());
-            router.push('/');
         }
         catch (e) {
             const firebaseError = e as FirebaseError;
@@ -95,12 +91,14 @@ export const DeleteAccountDialog = () => {
             await deleteUser(firebaseUser);
             queryClient.setQueryData(['user'], null);
             dispatch(closeDialog());
-            router.push('/');
         }
         catch (e) {
-            return;
+            console.error(e);
         }
-        setPending(false);
+        finally {
+            setPending(false);
+        }
+
     }, [firebaseUser]);
 
     const onCancelRequest = useCallback(() => {
