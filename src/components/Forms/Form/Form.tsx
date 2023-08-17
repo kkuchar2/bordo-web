@@ -24,6 +24,7 @@ const Form = <TFieldValues extends FieldValues = FieldValues>(props: FormProps<T
         config,
         error,
         disabled,
+        afterFieldsContent,
         title,
         excludeErrors,
         description,
@@ -122,6 +123,7 @@ const Form = <TFieldValues extends FieldValues = FieldValues>(props: FormProps<T
                         {t(msg)}
                     </div>;
                 })}
+            {afterFieldsContent && afterFieldsContent()}
             <div className={'flex'}>
                 {useCancelButton && <button
                     type={'button'}

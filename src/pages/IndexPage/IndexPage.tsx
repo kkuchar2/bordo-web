@@ -91,41 +91,54 @@ const IndexPage = () => {
     }, []);
 
     return <div className={'grid h-full w-full place-items-center'}>
-        <div className={'flex w-full flex-col gap-[30px] bg-[#2a2a2a] p-[40px] sm:w-[400px] sm:rounded-md'}>
+        <div className={'flex w-full flex-col gap-[20px] bg-[#2a2a2a] p-[40px] sm:w-[400px] sm:rounded-md'}>
 
-            <div className={'text-center text-2xl font-bold'}>
-                {t('SIGN_IN_TO_YOUR_ACCOUNT')}
+            <div className={'flex flex-col gap-4'}>
+                <div className={'text-center text-2xl tracking-tighter'}>
+                    {t('WELCOME')}
+                </div>
+
+                <div className={'text-center text-sm'}>
+                    {t('LOGIN_MESSAGE')}
+                </div>
             </div>
 
             <Form<LoginFormArgs>
                 config={loginForm}
-                submitButtonTextKey={'SIGN_IN'}
+                submitButtonTextKey={'CONTINUE'}
                 disabled={firebaseLoginPending || userQuery.isLoading}
-                submitButtonClassName={'bg-[#77a4df]/80 hover:bg-[#77a4df] text-white py-2 px-4 rounded-md font-semibold disabled:opacity-50 disabled:cursor-not-allowed'}
+                submitButtonClassName={'bg-[#77a4df]/80 hover:bg-[#77a4df] text-white py-3 px-4 rounded-sm font-normal disabled:opacity-50 disabled:cursor-not-allowed'}
                 error={firebaseError || userQuery.error || {}}
+                afterFieldsContent={() => {
+                    return <NavLink className={'text-sm font-semibold text-[#77a4df]'} href={'/forgotPassword'}>
+                        {t('FORGOT_PASSWORD_QUESTION')}
+                    </NavLink>;
+                }}
                 excludeErrors={['email_not_verified']}
                 useCancelButton={false}
                 onSubmit={attemptLogin}/>
 
-            <NavLink className={'font-semibold text-[#77a4df]'} href={'/forgotPassword'}>
-                {t('FORGOT_PASSWORD_QUESTION')}
-            </NavLink>
-
-            <button
-                onClick={signInWithGoogleFirebase}
-                className={'flex h-12 w-full items-center justify-center gap-[10px] rounded-md bg-neutral-900 font-semibold text-white hover:bg-neutral-950'}>
-                <GoogleIcon/>
-                {'Sign in with Google'}
-            </button>
-
-            <div className={'flex flex-col items-center justify-center gap-[20px]'}>
+            <div className={'flex gap-3 text-sm'}>
                 <div className={'text-[#C7C7C7]'}>
                     {t('NEED_ACCOUNT')}
                 </div>
                 <NavLink className={'font-semibold text-[#77a4df]'} href={'/signup'}>
-                    {t('CREATE_ACCOUNT')}
+                    {t('SIGN_UP')}
                 </NavLink>
             </div>
+
+            <div className={'flex w-full items-center gap-3'}>
+                <div className={'h-[1px] grow bg-[#C7C7C7]/40'} />
+                <div className={'text-xs font-semibold text-white/60'}>{t('OR')}</div>
+                <div className={'h-[1px] grow bg-[#C7C7C7]/40'} />
+            </div>
+
+            <button
+                onClick={signInWithGoogleFirebase}
+                className={'flex h-12 w-full items-center justify-center gap-[10px] rounded-md bg-neutral-900 font-medium text-white hover:bg-neutral-950'}>
+                <GoogleIcon/>
+                {'Continue with Google'}
+            </button>
 
             <DelayedTransition pending={firebaseLoginPending || userQuery.isLoading} />
         </div>

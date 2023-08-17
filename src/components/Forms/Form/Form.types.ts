@@ -1,3 +1,5 @@
+import { ReactNode } from 'react';
+
 import { FieldValues } from 'react-hook-form/dist/types';
 
 import { FormConfig } from '@/components/Forms/formConfig';
@@ -12,6 +14,7 @@ export interface FormProps<TFieldValues extends FieldValues = FieldValues> {
     onCancel?: any
     disabled?: boolean;
     excludeErrors?: string[];
+    afterFieldsContent?: () => ReactNode;
     error: QueryResponseErrorData | null | undefined;
     onChange?: (values: TFieldValues) => void;
     submitButtonTextKey?: string;
