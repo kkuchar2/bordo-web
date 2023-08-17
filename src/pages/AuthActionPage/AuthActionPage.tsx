@@ -1,7 +1,5 @@
 'use client';
 
-import { useCallback, useEffect } from 'react';
-
 import { applyActionCode, getAuth } from '@firebase/auth';
 import { redirect, useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/navigation';
@@ -21,31 +19,30 @@ const AuthActionPage = () => {
 
     const mode = searchParams.get('mode');
 
-    if (!mode) {
-        return redirect('/');
-    }
-
     const ooBCode = searchParams.get('oobCode');
 
     const app = initializeFirebase();
     const auth = getAuth(app);
 
-    useEffect(() => {
-        applyAction(mode).then(() => {});
-    }, [mode]);
+    if (!mode) {
+        return redirect('/');
+    }
 
-    const applyAction = useCallback(async (mode?: string) => {
-        if (mode === 'verifyEmail' && ooBCode) {
-            try {
-                await applyActionCode(auth, ooBCode);
+    if (mode === 'verifyEmail' && ooBCode) {
+        applyActionCode(auth, ooBCode)
+            .then(() => {
                 showSuccessToast('Account verified');
-            }
-            catch (e) {
+            })
+            .catch(() => {
                 showErrorToast('Verification link invalid or expired');
-            }
-            router.push('/');
-        }
-    }, [mode]);
+            })
+            .finally(() => {
+                router.push('/');
+            });
+    }
+    else if (mode === 'resetPassword' && ooBCode) {
+        return redirect(`/resetPassword/${ooBCode}`);
+    }
 
     return null;
 };

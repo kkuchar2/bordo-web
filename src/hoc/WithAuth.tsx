@@ -1,53 +1,82 @@
-import React, { ComponentType, useEffect } from 'react';
+import { ComponentType, useEffect, useState } from 'react';
 
 import { getAuth } from '@firebase/auth';
-import { redirect, useRouter } from 'next/navigation';
+import { redirect } from 'next/navigation';
 
 import { DelayedTransition } from '@/components/DelayedTransition/DelayedTransition';
 import { initializeFirebase } from '@/firebase/firebaseApp';
-import { getUser } from '@/queries/account';
 
 interface WithAuthProps {
     name?: string;
-    redirectToHomeOnAutologin: boolean;
-    redirectToLoginPageOnUnauthenticated: boolean;
+    isPublic?: boolean;
+    redirectToHomeOnAutologin?: boolean;
+    redirectToLoginPageOnUnauthenticated?: boolean;
 }
 
-const WithAuth = (WrappedComponent: ComponentType, withAuthProps: WithAuthProps) => {
+const WithAuth = (
+    WrappedComponent: ComponentType<any>,
+    withAuthProps: WithAuthProps
+) => {
     const wrappedComponent = (props: any) => {
 
         const app = initializeFirebase();
         const auth = getAuth(app);
+        const user = auth.currentUser;
 
-        const { isLoading, isSuccess, data: user } = getUser();
+        const {
+            name,
+            isPublic = false,
+            redirectToHomeOnAutologin = false,
+            redirectToLoginPageOnUnauthenticated = false,
+        } = withAuthProps;
 
-        const { redirectToHomeOnAutologin, redirectToLoginPageOnUnauthenticated } = withAuthProps;
-
-        const router = useRouter();
+        const [loggedIn, setLoggedIn] = useState(user !== null);
+        const [show, setShow] = useState(false);
+        const [authPending, setAuthPending] = useState(true);
 
         useEffect(() => {
             auth.onAuthStateChanged((user) => {
-                if (!user && redirectToLoginPageOnUnauthenticated) {
-                    router.push('/');
-                }
+                setAuthPending(false);
+                setLoggedIn(user !== null);
+                setShow(true);
             });
         }, []);
 
-        if (!user && isLoading) {
-            return <DelayedTransition pending={true}/>;
+        console.log(`[${name}]`, 'loggedIn:', loggedIn, 'show:', show, 'user', user);
+
+        if (!show) {
+            return null;
         }
 
-        if (redirectToHomeOnAutologin && user && isSuccess) {
-            return redirect('/home');
+        if (isPublic) {
+            // only render if user is not logged in
+            if (loggedIn) {
+                if (redirectToHomeOnAutologin) {
+                    return redirect('/home');
+                }
+                if (authPending) {
+                    return <DelayedTransition pending={true}/>;
+                }
+                return <WrappedComponent {...props} />;
+            }
+            else {
+                return <WrappedComponent {...props} />;
+            }
         }
-        else if (redirectToLoginPageOnUnauthenticated && !user) {
-            return redirect('/');
-        }
-        else if (!redirectToHomeOnAutologin && user) {
+
+        if (loggedIn) {
             return <WrappedComponent {...props} />;
         }
+        else {
+            if (redirectToLoginPageOnUnauthenticated) {
+                return redirect('/');
+            }
 
-        return <WrappedComponent {...props} />;
+            if (authPending) {
+                return <DelayedTransition pending={true}/>;
+            }
+            return null;
+        }
     };
 
     wrappedComponent.displayName = 'WithAuth_' + WrappedComponent.displayName;

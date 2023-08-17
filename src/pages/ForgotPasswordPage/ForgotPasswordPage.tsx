@@ -1,7 +1,9 @@
 'use client';
 
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
+import { getAuth, onAuthStateChanged, sendPasswordResetEmail } from '@firebase/auth';
+import { FirebaseError } from '@firebase/util';
 import { useTranslation } from 'react-i18next';
 
 import { DelayedTransition } from '@/components/DelayedTransition/DelayedTransition';
@@ -9,33 +11,52 @@ import { showDialogAfterPasswordResetRequest } from '@/components/DialogSystem/r
 import Form from '@/components/Forms/Form/Form';
 import { forgotPasswordForm } from '@/components/Forms/formConfig';
 import { ForgotPasswordFormArgs } from '@/components/Forms/formConfig.types';
+import { firebaseFieldErrorConvert } from '@/components/Forms/util';
 import { NavLink } from '@/components/NavLink/NavLink';
-import { forgotPassword } from '@/queries/account';
+import { initializeFirebase } from '@/firebase/firebaseApp';
+import WithAuth from '@/hoc/WithAuth';
+import { QueryResponseErrorData } from '@/queries/base';
 
 const ForgotPassword = () => {
 
-    const {
-        isLoading: forgotPasswordPending,
-        error: forgotPasswordError,
-        isSuccess: forgotPasswordSuccess,
-        mutate: forgotPasswordMutate
-    } = forgotPassword();
+    const app = initializeFirebase();
+    const auth = getAuth(app);
 
     const { t } = useTranslation();
 
-    const requestPasswordReset = useCallback((formData: any) => {
-        const { email } = formData;
-        forgotPasswordMutate({
-            email: email,
+    const [pending, setPending] = useState(false);
+    const [firebaseError, setFirebaseError] = useState<QueryResponseErrorData | null>(null);
+    const [show, setShow] = useState(false);
+
+    useEffect(() => {
+        onAuthStateChanged(auth, (user) => {
+            setShow(!user);
         });
     }, []);
 
-    useEffect(() => {
-        if (forgotPasswordSuccess) {
+    const requestPasswordReset = useCallback(async (formData: ForgotPasswordFormArgs) => {
+        const { email } = formData;
+
+        setPending(true);
+        try {
+            await sendPasswordResetEmail(auth, email);
             showDialogAfterPasswordResetRequest();
         }
+        catch (e) {
+            const firebaseError = e as FirebaseError;
 
-    }, [forgotPasswordSuccess, t]);
+            if (firebaseError.code === 'auth/user-not-found') {
+                setFirebaseError(firebaseFieldErrorConvert(firebaseError.code, 'email'));
+            }
+        }
+        finally {
+            setPending(false);
+        }
+    }, []);
+
+    if (!show) {
+        return null;
+    }
 
     return <div className={'grid h-full w-full place-items-center'}>
         <div className={'rounded-0 flex w-full flex-col gap-[40px] bg-[#2a2a2a] p-[40px] sm:w-[400px] sm:rounded-md'}>
@@ -45,8 +66,8 @@ const ForgotPassword = () => {
                     title={t('RESET_PASSWORD')}
                     description={t('RESET_PASSWORD_DESCRIPTION')}
                     submitButtonTextKey={'RESET_PASSWORD'}
-                    error={forgotPasswordError?.data}
-                    disabled={forgotPasswordPending}
+                    error={firebaseError}
+                    disabled={pending}
                     useCancelButton={false}
                     onSubmit={requestPasswordReset}
                 />
@@ -57,10 +78,15 @@ const ForgotPassword = () => {
                     </NavLink>
                 </div>
 
-                <DelayedTransition pending={forgotPasswordPending}/>
+                <DelayedTransition pending={pending} />
             </div>
         </div>
     </div>;
 };
 
-export default ForgotPassword;
+export default WithAuth(ForgotPassword, {
+    isPublic: true,
+    redirectToHomeOnAutologin: true,
+    redirectToLoginPageOnUnauthenticated: false,
+    name: 'ForgotPassword'
+});

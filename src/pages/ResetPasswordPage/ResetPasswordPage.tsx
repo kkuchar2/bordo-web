@@ -1,110 +1,86 @@
 'use client';
 
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
-import { redirect } from 'next/navigation';
-import { useTranslation } from 'react-i18next';
+import { confirmPasswordReset, getAuth, onAuthStateChanged } from '@firebase/auth';
+import { useRouter } from 'next/navigation';
 
 import { DelayedTransition } from '@/components/DelayedTransition/DelayedTransition';
 import Form from '@/components/Forms/Form/Form';
 import { resetPasswordForm } from '@/components/Forms/formConfig';
 import { ResetPasswordFormArgs } from '@/components/Forms/formConfig.types';
-import { NavLink } from '@/components/NavLink/NavLink';
-import { getUser, resetPassword, verifyResetPasswordToken } from '@/queries/account';
+import { initializeFirebase } from '@/firebase/firebaseApp';
+import WithAuth from '@/hoc/WithAuth';
+import { QueryResponseErrorData } from '@/queries/base';
 
 type ResetPasswordPageProps = {
-    token: string;
+    oobCode: string;
 }
 
 const ResetPasswordPage = (props: ResetPasswordPageProps) => {
 
-    const { t } = useTranslation();
+    const { oobCode } = props;
 
-    const { token } = props;
+    const app = initializeFirebase();
+    const auth = getAuth(app);
 
-    const { data: user } = getUser();
+    const [pending, setPending] = useState(false);
+    const [firebaseError, setFirebaseError] = useState<QueryResponseErrorData | null>(null);
+    const [show, setShow] = useState(false);
 
-    const resetPasswordQuery = resetPassword();
-
-    const verifyTokenQuery = verifyResetPasswordToken();
-
-    const onSubmit = useCallback((formData: ResetPasswordFormArgs) => {
-        // Get form data
-        const { new_password, new_password_confirm } = formData;
-
-        if (!token) {
-            console.error('No key');
-            return;
-        }
-
-        const decodedToken = decodeURIComponent(token);
-        const uid = decodedToken.split(':')[0];
-        const tok = decodedToken.split(':')[1];
-
-        resetPasswordQuery.mutate({
-            new_password1: new_password,
-            new_password2: new_password_confirm,
-            uid: uid,
-            token: tok
-        });
-    }, [token]);
+    const router = useRouter();
 
     useEffect(() => {
-        if (!token) {
-            console.log('No token');
-            return;
+        onAuthStateChanged(auth, (user) => {
+            setShow(!user);
+        });
+    }, []);
+
+    const onSubmit = useCallback(async (formData: ResetPasswordFormArgs) => {
+        const { new_password } = formData;
+
+        setPending(true);
+        try {
+            console.log('Confirming password reset with code:', oobCode);
+            await confirmPasswordReset(auth, oobCode, new_password);
         }
+        catch (e) {
+            console.error(e);
+        }
+        finally {
+            setPending(false);
+            router.push('/');
+        }
+    }, [oobCode]);
 
-        const decodedToken = decodeURIComponent(token);
-        const uid = decodedToken.split(':')[0];
-        const tok = decodedToken.split(':')[1];
-
-        verifyTokenQuery.mutate({ uid: uid, token: tok });
-    }, [token]);
-
-    if (verifyTokenQuery.isLoading || verifyTokenQuery.isIdle) {
-        return <DelayedTransition pending={true}
-            position={'absolute'}
-            bottom={0}
-            left={0}
-            p={0} w={'100%'}/>;
-    }
-
-    if (verifyTokenQuery.isError) {
-        console.log('Error: ', verifyTokenQuery.error);
+    if (!show) {
         return null;
     }
 
-    if (verifyTokenQuery.isSuccess) {
+    return <div className={'grid h-full w-full place-items-center'}>
+        <div className={'flex flex-col gap-[30px] bg-neutral-800 p-[20px]'}>
 
-        if (resetPasswordQuery.isSuccess) {
-            return redirect('/');
-        }
-
-        return <div className={'grid h-full w-full place-items-center'}>
-            <div className={'flex flex-col gap-[30px] bg-neutral-800 p-[20px]'}>
-
-                <div className={'text-xl font-semibold'}>
-                    {'Set up new password'}
-                </div>
-
-                <Form<ResetPasswordFormArgs>
-                    config={resetPasswordForm}
-                    submitButtonTextKey={'SET_NEW_PASSWORD'}
-                    error={resetPasswordQuery.error?.data}
-                    disabled={resetPasswordQuery.isLoading}
-                    useCancelButton={false}
-                    onSubmit={onSubmit}/>
-
-                {!user && <NavLink className={'self-center font-semibold text-[#77a4df]'} href={'/'}>
-                    {'Back to login'}
-                </NavLink>}
-
-                <DelayedTransition pending={resetPasswordQuery.isLoading}/>
+            <div className={'text-xl font-semibold'}>
+                {'Set up new password'}
             </div>
-        </div>;
-    }
+
+            <Form<ResetPasswordFormArgs>
+                config={resetPasswordForm}
+                submitButtonTextKey={'SET_NEW_PASSWORD'}
+                error={firebaseError}
+                disabled={pending}
+                useCancelButton={false}
+                onSubmit={onSubmit}/>
+
+            <DelayedTransition pending={pending} />
+        </div>
+    </div>;
 
 };
 
-export default ResetPasswordPage;
+export default WithAuth(ResetPasswordPage, {
+    name: 'ResetPasswordPage',
+    isPublic: true,
+    redirectToHomeOnAutologin: true,
+    redirectToLoginPageOnUnauthenticated: false
+});

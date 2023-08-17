@@ -15,6 +15,7 @@ import { RegistrationFormArgs } from '@/components/Forms/formConfig.types';
 import { firebaseFieldErrorConvert, firebaseNonFieldErrorConvert } from '@/components/Forms/util';
 import { NavLink } from '@/components/NavLink/NavLink';
 import { initializeFirebase } from '@/firebase/firebaseApp';
+import WithAuth from '@/hoc/WithAuth';
 import { getUser } from '@/queries/account';
 import { QueryResponseErrorData } from '@/queries/base';
 
@@ -126,4 +127,9 @@ const SignUpPage = () => {
     </div>;
 };
 
-export default SignUpPage;
+export default WithAuth(SignUpPage, {
+    name: 'SignUpPage',
+    isPublic: true,
+    redirectToHomeOnAutologin: true,
+    redirectToLoginPageOnUnauthenticated: false
+});

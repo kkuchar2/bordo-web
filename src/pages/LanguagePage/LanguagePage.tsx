@@ -7,7 +7,6 @@ import { useTranslation } from 'react-i18next';
 
 import { showSuccessToast } from '@/components/Toast/readyToastNotifications';
 import { SUPPORTED_LANGUAGES } from '@/config';
-import WithAuth from '@/hoc/WithAuth';
 import i18n from '@/i18n';
 
 type Flag = {
@@ -124,9 +123,4 @@ const LanguagePage = () => {
     </div>;
 };
 
-LanguagePage.displayName = 'Language';
-
-export default WithAuth(LanguagePage, {
-    redirectToHomeOnAutologin: false,
-    redirectToLoginPageOnUnauthenticated: true
-}) as FC;
+export default LanguagePage;

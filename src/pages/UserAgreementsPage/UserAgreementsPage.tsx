@@ -3,6 +3,7 @@
 import { useTranslation } from 'react-i18next';
 
 import { NavLink } from '@/components/NavLink/NavLink';
+import WithAuth from '@/hoc/WithAuth';
 
 const UserAgreementsPage = () => {
     const { t } = useTranslation();
@@ -29,4 +30,9 @@ const UserAgreementsPage = () => {
     </div>;
 };
 
-export default UserAgreementsPage;
+export default WithAuth(UserAgreementsPage, {
+    name: 'UserAgreementsPage',
+    isPublic: true,
+    redirectToHomeOnAutologin: false,
+    redirectToLoginPageOnUnauthenticated: false
+});

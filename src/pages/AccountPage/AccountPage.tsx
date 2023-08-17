@@ -16,6 +16,7 @@ import EditableProperty from '@/components/EditableProperties/EditableProperty';
 import { SettingsSection } from '@/components/Settings/SettingsSection';
 import { TextAreaWithEmoji } from '@/components/TextAreaWithEmoji/TextAreaWithEmoji';
 import { initializeFirebase } from '@/firebase/firebaseApp';
+import WithAuth from '@/hoc/WithAuth';
 import { changeAbout, getUser } from '@/queries/account';
 
 const AccountPage = () => {
@@ -43,7 +44,7 @@ const AccountPage = () => {
         return null;
     }
 
-    const { username, profile, google_account } = user;
+    const { profile } = user;
 
     return <div className={'flex h-full w-[800px] flex-col items-stretch gap-[30px] px-[50px]'}>
         <h1 className={'mt-[50px] text-3xl font-semibold tracking-tighter'}>
@@ -113,4 +114,9 @@ const AccountPage = () => {
     </div>;
 };
 
-export default AccountPage;
+export default WithAuth(AccountPage, {
+    name: 'AccountPage',
+    isPublic: false,
+    redirectToHomeOnAutologin: false,
+    redirectToLoginPageOnUnauthenticated: true
+});

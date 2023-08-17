@@ -4,7 +4,6 @@ import { getAuth, signOut } from '@firebase/auth';
 import { useTranslation } from 'react-i18next';
 
 import { ProfileAvatar } from '@/components/ProfileAvatar/ProfileAvatar';
-import {  queryClient } from '@/config';
 import { initializeFirebase } from '@/firebase/firebaseApp';
 import { resetCurrentView } from '@/state/reducers/application/appSlice';
 import { useAppDispatch } from '@/state/store';
@@ -19,16 +18,15 @@ export const UserBadge = () => {
 
     const dispatch = useAppDispatch();
 
-    if (!firebaseUser) {
-        return null;
-    }
-
     const onLogoutButtonClick = useCallback(async () => {
         await signOut(auth);
         await dispatch(resetCurrentView());
         localStorage.removeItem('firebase_token');
-        queryClient.setQueryData(['user'], null);
     }, []);
+
+    if (!firebaseUser) {
+        return null;
+    }
 
     return <div className={'flex w-full gap-4 rounded-md p-4'}>
         <ProfileAvatar width={50} height={50} fill={false}/>

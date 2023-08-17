@@ -2,9 +2,9 @@ import ResetPasswordPage from '@/pages/ResetPasswordPage/ResetPasswordPage';
 
 export default function ResetPassword({ params }: {
     params: {
-        token: string,
+        oobCode: string,
     }
 }) {
-    const { token } = params;
-    return <ResetPasswordPage token={token}/>;
+    const { oobCode } = params;
+    return <ResetPasswordPage oobCode={oobCode}/>;
 }

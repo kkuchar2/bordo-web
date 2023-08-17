@@ -4,7 +4,6 @@ import React, { useCallback, useEffect, useState } from 'react';
 
 import { getAuth, GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup } from '@firebase/auth';
 import { FirebaseError } from '@firebase/util';
-import { redirect } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 
 import { DelayedTransition } from '@/components/DelayedTransition/DelayedTransition';
@@ -16,6 +15,7 @@ import { firebaseFieldErrorConvert } from '@/components/Forms/util';
 import { GoogleIcon } from '@/components/Icons/GoogleIcon';
 import { NavLink } from '@/components/NavLink/NavLink';
 import { initializeFirebase } from '@/firebase/firebaseApp';
+import WithAuth from '@/hoc/WithAuth';
 import { getUser } from '@/queries/account';
 import { QueryResponseErrorData } from '@/queries/base';
 
@@ -25,10 +25,9 @@ const IndexPage = () => {
 
     const app = initializeFirebase();
     const auth = getAuth(app);
+    const firebaseUser = auth.currentUser;
 
     const provider = new GoogleAuthProvider();
-
-    const user = auth.currentUser;
 
     const userQuery = getUser();
 
@@ -36,10 +35,10 @@ const IndexPage = () => {
     const [firebaseError, setFirebaseError] = useState<QueryResponseErrorData | null>(null);
 
     useEffect(() => {
-        if (user && !user.emailVerified && firebaseLoginPending) {
+        if (firebaseUser && !firebaseUser.emailVerified && firebaseLoginPending) {
             showVerifyAccountDialog();
         }
-    }, [user, firebaseLoginPending]);
+    }, [firebaseUser, firebaseLoginPending]);
 
     const signInWithGoogleFirebase = useCallback(async () => {
         try {
@@ -91,14 +90,6 @@ const IndexPage = () => {
         await signInEmailPasswordFirebase(formData);
     }, []);
 
-    if (userQuery.isSuccess && userQuery.data) {
-        return redirect('/home');
-    }
-
-    if (userQuery.isLoading) {
-        return null;
-    }
-
     return <div className={'grid h-full w-full place-items-center'}>
         <div className={'flex w-full flex-col gap-[30px] bg-[#2a2a2a] p-[40px] sm:w-[400px] sm:rounded-md'}>
 
@@ -141,4 +132,9 @@ const IndexPage = () => {
     </div>;
 };
 
-export default IndexPage;
+export default WithAuth(IndexPage, {
+    name: 'IndexPage',
+    isPublic: true,
+    redirectToHomeOnAutologin: true,
+    redirectToLoginPageOnUnauthenticated: false
+});
