@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 
-import { getAuth, onAuthStateChanged, sendPasswordResetEmail } from '@firebase/auth';
+import { getAuth, sendPasswordResetEmail } from '@firebase/auth';
 import { FirebaseError } from '@firebase/util';
 import { useTranslation } from 'react-i18next';
 
@@ -26,13 +26,6 @@ const ForgotPassword = () => {
 
     const [pending, setPending] = useState(false);
     const [firebaseError, setFirebaseError] = useState<QueryResponseErrorData | null>(null);
-    const [show, setShow] = useState(false);
-
-    useEffect(() => {
-        onAuthStateChanged(auth, (user) => {
-            setShow(!user);
-        });
-    }, []);
 
     const requestPasswordReset = useCallback(async (formData: ForgotPasswordFormArgs) => {
         const { email } = formData;
@@ -53,10 +46,6 @@ const ForgotPassword = () => {
             setPending(false);
         }
     }, []);
-
-    if (!show) {
-        return null;
-    }
 
     return <div className={'grid h-full w-full place-items-center'}>
         <div className={'rounded-0 flex w-full flex-col gap-[40px] bg-[#2a2a2a] p-[40px] sm:w-[400px] sm:rounded-md'}>
@@ -95,8 +84,8 @@ const ForgotPassword = () => {
 };
 
 export default WithAuth(ForgotPassword, {
+    name: 'ForgotPassword',
     isPublic: true,
     redirectToHomeOnAutologin: true,
-    redirectToLoginPageOnUnauthenticated: false,
-    name: 'ForgotPassword'
+    redirectToLoginPageOnUnauthenticated: false
 });

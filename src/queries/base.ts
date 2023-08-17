@@ -54,6 +54,11 @@ export const getQueryInternal = <
     return useQuery<TQueryFnData, TError, TData, TQueryKey>(queryKey,
         async (): Promise<TQueryFnData> => {
             const config = await configProvider();
+            if (!config?.headers?.['Authorization']) {
+                return new Promise((resolve, reject) => {
+                    reject('Authorization header is not set');
+                });
+            }
             let response = await client.get<TQueryFnData, AxiosResponse<TQueryFnData>, TData>(endpoint, config);
             return response.data;
         }, options);
@@ -80,6 +85,11 @@ export const postQueryInternal = <
 
             try {
                 const config = await configProvider();
+                if (!config?.headers?.['Authorization']) {
+                    return new Promise((resolve, reject) => {
+                        reject('Authorization header is not set');
+                    });
+                }
                 response = await client.post<TData>(endpoint, data, config);
             }
             catch (e) {
@@ -118,6 +128,11 @@ export const putQueryInternal = <
 
             try {
                 const config = await configProvider();
+                if (!config?.headers?.['Authorization']) {
+                    return new Promise((resolve, reject) => {
+                        reject('Authorization header is not set');
+                    });
+                }
                 response = await client.put<TData>(endpoint, data, config);
             }
             catch (e) {
