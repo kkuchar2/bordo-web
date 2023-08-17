@@ -42,7 +42,7 @@ const WithAuth = (
             });
         }, []);
 
-        console.log(`[${name}]`, 'loggedIn:', loggedIn, 'show:', show, 'user', user);
+        //console.log(`[${name}]`, 'loggedIn:', loggedIn, 'show:', show, 'user', user);
 
         if (!show) {
             return null;
