@@ -42,9 +42,7 @@ const IndexPage = () => {
 
     const signInWithGoogleFirebase = useCallback(async () => {
         try {
-            const result = await signInWithPopup(auth, provider);
-            const token = await result.user.getIdToken();
-            localStorage.setItem('firebase_token', token);
+            await signInWithPopup(auth, provider);
             await userQuery.refetch();
         }
         catch (e) {
@@ -62,9 +60,7 @@ const IndexPage = () => {
     const signInEmailPasswordFirebase = useCallback(async (formData: LoginFormArgs) => {
         setFirebaseLoginPending(true);
         try {
-            const response = await signInWithEmailAndPassword(auth, formData.username_or_email, formData.password);
-            const token = await response.user.getIdToken();
-            localStorage.setItem('firebase_token', token);
+            await signInWithEmailAndPassword(auth, formData.username_or_email, formData.password);
             setFirebaseLoginPending(false);
             await userQuery.refetch();
         }

@@ -21,7 +21,6 @@ export const UserBadge = () => {
     const onLogoutButtonClick = useCallback(async () => {
         await signOut(auth);
         await dispatch(resetCurrentView());
-        localStorage.removeItem('firebase_token');
     }, []);
 
     if (!firebaseUser) {

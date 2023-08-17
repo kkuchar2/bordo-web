@@ -31,7 +31,6 @@ const RecoverEmailPage = (props: RecoverEmailPageProps) => {
             await applyActionCode(auth, oobCode);
             await signOut(auth);
             await dispatch(resetCurrentView());
-            localStorage.removeItem('firebase_token');
             showSuccessToast('Email recovered');
         }
         catch (e) {

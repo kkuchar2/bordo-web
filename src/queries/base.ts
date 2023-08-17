@@ -48,12 +48,13 @@ export const getQueryInternal = <
     TData = TQueryFnData,
     TQueryKey extends QueryKey = QueryKey,
 >(client: AxiosInstance, queryKey: TQueryKey, endpoint: string,
-    configProvider: () => AxiosRequestConfig,
+    configProvider: () => Promise<AxiosRequestConfig>,
     options?: UseQueryOptions<TQueryFnData, TError, TData, TQueryKey>) => {
 
     return useQuery<TQueryFnData, TError, TData, TQueryKey>(queryKey,
         async (): Promise<TQueryFnData> => {
-            let response = await client.get<TQueryFnData, AxiosResponse<TQueryFnData>, TData>(endpoint, configProvider());
+            const config = await configProvider();
+            let response = await client.get<TQueryFnData, AxiosResponse<TQueryFnData>, TData>(endpoint, config);
             return response.data;
         }, options);
 };
@@ -67,7 +68,7 @@ export const postQueryInternal = <
 (client: AxiosInstance,
     mutationKey: MutationKey,
     endpoint: string,
-    configProvider: () => AxiosRequestConfig,
+    configProvider: () => Promise<AxiosRequestConfig>,
     options?: Omit<
     UseMutationOptions<TData, TError, TVariables, TContext>,
     'mutationKey' | 'mutationFn'
@@ -78,7 +79,8 @@ export const postQueryInternal = <
             let response = null;
 
             try {
-                response = await client.post<TData>(endpoint, data, configProvider());
+                const config = await configProvider();
+                response = await client.post<TData>(endpoint, data, config);
             }
             catch (e) {
                 const error = e as AxiosError<QueryResponseError>;
@@ -104,7 +106,7 @@ export const putQueryInternal = <
 (client: AxiosInstance,
     mutationKey: MutationKey,
     endpoint: string,
-    configProvider: () => AxiosRequestConfig,
+    configProvider: () => Promise<AxiosRequestConfig>,
     options?: Omit<
     UseMutationOptions<TData, TError, TVariables, TContext>,
     'mutationKey' | 'mutationFn'
@@ -115,7 +117,8 @@ export const putQueryInternal = <
             let response = null;
 
             try {
-                response = await client.put<TData>(endpoint, data, configProvider());
+                const config = await configProvider();
+                response = await client.put<TData>(endpoint, data, config);
             }
             catch (e) {
                 const error = e as AxiosError<QueryResponseError>;
