@@ -5,7 +5,6 @@ import { useSelector } from 'react-redux';
 
 import { MainMenuItemComponent } from '@/components/MainMenu/MainMenuItemComponent';
 import { Group, MainMenuItem, MainMenuItemsMap, MenuItems } from '@/components/MainMenu/mainMenuItems';
-import { getUser } from '@/queries/account';
 import { currentView, storeCurrentView } from '@/state/reducers/application/appSlice';
 import { useAppDispatch } from '@/state/store';
 
@@ -18,8 +17,6 @@ const MainMenu = (props: MainMenuProps) => {
     const currentViewId = useSelector(currentView);
 
     const { items } = props;
-
-    const { data: user } = getUser();
 
     const { t } = useTranslation();
 
@@ -59,10 +56,6 @@ const MainMenu = (props: MainMenuProps) => {
                 {renderGroup(items[k])}
             </div>;
         }), [currentViewId, t]);
-
-    if (!user) {
-        return null;
-    }
 
     return <div className={'align-start relative flex w-full flex-col'}>
         <div className={'flex flex-col gap-[15px]'}>{groups}</div>
