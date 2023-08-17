@@ -7,7 +7,7 @@ import { KeyIcon } from '@heroicons/react/24/solid';
 import { useTranslation } from 'react-i18next';
 
 import {
-    showChangeEmailDialog,
+    showUpdateEmailDialog,
     showUpdatePasswordDialog,
     showDeleteAccountDialog
 } from '@/components/DialogSystem/readyDialogs';
@@ -68,9 +68,10 @@ const AccountPage = () => {
                 <EditableProperty
                     id={'email'}
                     name={t('EMAIL')}
+                    editText={'UPDATE'}
                     value={firebaseUser.email}
                     canEdit={true}
-                    showDialogFunc={showChangeEmailDialog}/>
+                    showDialogFunc={showUpdateEmailDialog}/>
                 <TextAreaWithEmoji
                     id={'about'}
                     name={t('ABOUT_ME')}

@@ -149,12 +149,12 @@ export const showChangeUsernameDialog = (args: OpenReadyDialogArgs) => {
     );
 };
 
-export const showChangeEmailDialog = (args: OpenReadyDialogArgs) => {
+export const showUpdateEmailDialog = (args: OpenReadyDialogArgs) => {
     const { initialValues } = args;
 
     store.dispatch(
         openDialog({
-            component: 'ChangePropertyDialog',
+            component: 'UpdateEmailDialog',
             props: {
                 dialog: {
                     title: 'CHANGE_EMAIL',

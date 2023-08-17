@@ -42,7 +42,6 @@ const IndexPage = () => {
     }, [user, firebaseLoginPending]);
 
     const signInWithGoogleFirebase = useCallback(async () => {
-        setFirebaseLoginPending(true);
         const result = await signInWithPopup(auth, provider);
         const currentDisplayName = result.user.displayName;
 
@@ -54,7 +53,6 @@ const IndexPage = () => {
 
         const token = await result.user.getIdToken();
         localStorage.setItem('firebase_token', token);
-        setFirebaseLoginPending(false);
         await userQuery.refetch();
     }, []);
 
@@ -134,7 +132,7 @@ const IndexPage = () => {
                 </NavLink>
             </div>
 
-            <DelayedTransition pending={firebaseLoginPending || userQuery.isFetching} />
+            <DelayedTransition pending={firebaseLoginPending || userQuery.isLoading} />
         </div>
     </div>;
 };

@@ -6,3 +6,4 @@ export * from './ServiceUnavailableDialog';
 export * from './VerifyAccountDialog';
 export * from './DisconnectGoogleDialog';
 export * from './UpdatePasswordDialog';
+export * from './UpdateEmailDialog';

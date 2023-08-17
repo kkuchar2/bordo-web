@@ -25,7 +25,8 @@ const componentMap: IDialogComponentMap = {
     ChangePropertyDialog: dialogs.ChangePropertyDialog,
     UpdatePasswordDialog: dialogs.UpdatePasswordDialog,
     ServiceUnavailableDialog: dialogs.ServiceUnavailableDialog,
-    VerifyAccountDialog: dialogs.VerifyAccountDialog
+    VerifyAccountDialog: dialogs.VerifyAccountDialog,
+    UpdateEmailDialog: dialogs.UpdateEmailDialog,
 };
 
 const Dialogs = () => {
