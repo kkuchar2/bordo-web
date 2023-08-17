@@ -15,6 +15,7 @@ import Form from '@/components/Forms/Form/Form';
 import { updatePasswordForm, updatePasswordFormSmall } from '@/components/Forms/formConfig';
 import { UpdatePasswordFormArgs, UpdatePasswordFormSmallArgs } from '@/components/Forms/formConfig.types';
 import { firebaseFieldErrorConvert } from '@/components/Forms/util';
+import { showSuccessToast } from '@/components/Toast/readyToastNotifications';
 import { initializeFirebase } from '@/firebase/firebaseApp';
 import { QueryResponseErrorData } from '@/queries/base';
 import { closeDialog } from '@/state/reducers/dialog/dialogSlice';
@@ -47,12 +48,15 @@ export const UpdatePasswordDialog = (props: DialogProps & BaseDialogProps) => {
     }, [onCancel]);
 
     const onSubmitWithGoogleProvider = useCallback(async (formData: UpdatePasswordFormSmallArgs) => {
+        if (!firebaseUser) return;
+
         setPending(true);
 
         try {
             await reauthenticateWithPopup(firebaseUser, new GoogleAuthProvider());
             await updatePassword(firebaseUser, formData.new_password);
-            dispatch(closeDialog());
+            await dispatch(closeDialog());
+            showSuccessToast('Password updated');
         }
         catch (e) {
             const firebaseError = e as FirebaseError;
@@ -66,6 +70,10 @@ export const UpdatePasswordDialog = (props: DialogProps & BaseDialogProps) => {
     }, [firebaseUser]);
 
     const onSubmitWithEmailPasswordAccount = useCallback(async (formData: UpdatePasswordFormArgs) => {
+
+        if (!firebaseUser) return;
+        if (!firebaseUser.email) return;
+
         setPending(true);
 
         const { current_password } = formData;
@@ -75,7 +83,8 @@ export const UpdatePasswordDialog = (props: DialogProps & BaseDialogProps) => {
         try {
             await reauthenticateWithCredential(firebaseUser, credential);
             await updatePassword(firebaseUser, formData.new_password);
-            dispatch(closeDialog());
+            await dispatch(closeDialog());
+            showSuccessToast('Password updated');
         }
         catch (e) {
             const firebaseError = e as FirebaseError;
