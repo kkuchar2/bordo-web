@@ -1,8 +1,10 @@
-import React, { ComponentType } from 'react';
+import React, { ComponentType, useEffect } from 'react';
 
-import { redirect } from 'next/navigation';
+import { getAuth } from '@firebase/auth';
+import { redirect, useRouter } from 'next/navigation';
 
 import { DelayedTransition } from '@/components/DelayedTransition/DelayedTransition';
+import { initializeFirebase } from '@/firebase/firebaseApp';
 import { getUser } from '@/queries/account';
 
 interface WithAuthProps {
@@ -14,16 +16,26 @@ interface WithAuthProps {
 const WithAuth = (WrappedComponent: ComponentType, withAuthProps: WithAuthProps) => {
     const wrappedComponent = (props: any) => {
 
-        const { isLoading, isSuccess, isError, data: user } = getUser();
+        const app = initializeFirebase();
+        const auth = getAuth(app);
+
+        const { isLoading, isSuccess, data: user } = getUser();
+
+        const { redirectToHomeOnAutologin, redirectToLoginPageOnUnauthenticated } = withAuthProps;
+
+        const router = useRouter();
+
+        useEffect(() => {
+            auth.onAuthStateChanged((user) => {
+                if (!user && redirectToLoginPageOnUnauthenticated) {
+                    router.push('/');
+                }
+            });
+        }, []);
 
         if (!user && isLoading) {
             return <DelayedTransition pending={true}/>;
         }
-
-        const {
-            redirectToHomeOnAutologin,
-            redirectToLoginPageOnUnauthenticated
-        } = withAuthProps;
 
         if (redirectToHomeOnAutologin && user && isSuccess) {
             return redirect('/home');
