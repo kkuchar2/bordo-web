@@ -1,12 +1,13 @@
 import React, { useCallback } from 'react';
 
 import { getAuth, signOut } from '@firebase/auth';
-import { useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 
 import { ProfileAvatar } from '@/components/ProfileAvatar/ProfileAvatar';
 import {  queryClient } from '@/config';
 import { initializeFirebase } from '@/firebase/firebaseApp';
+import { resetCurrentView } from '@/state/reducers/application/appSlice';
+import { useAppDispatch } from '@/state/store';
 
 export const UserBadge = () => {
 
@@ -14,9 +15,9 @@ export const UserBadge = () => {
 
     const app = initializeFirebase();
     const auth = getAuth(app);
-    const router = useRouter();
-
     const firebaseUser = auth.currentUser;
+
+    const dispatch = useAppDispatch();
 
     if (!firebaseUser) {
         return null;
@@ -24,9 +25,9 @@ export const UserBadge = () => {
 
     const onLogoutButtonClick = useCallback(async () => {
         await signOut(auth);
+        await dispatch(resetCurrentView());
         localStorage.removeItem('firebase_token');
         queryClient.setQueryData(['user'], null);
-        router.push('/');
     }, []);
 
     return <div className={'flex w-full gap-4 rounded-md p-4'}>

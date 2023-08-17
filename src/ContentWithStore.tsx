@@ -1,36 +1,55 @@
 'use client';
 
-import React, { ReactNode, useMemo } from 'react';
+import React, { ReactNode, useEffect, useMemo, useState } from 'react';
 
+import { getAuth } from '@firebase/auth';
+import { usePathname } from 'next/navigation';
 import { Toaster } from 'react-hot-toast';
-import { useSelector } from 'react-redux';
 
 import Dialogs from '@/components/DialogSystem/Dialogs';
 import MainMenu from '@/components/MainMenu/MainMenu';
 import { mainMenuItems } from '@/components/MainMenu/mainMenuItems';
 import { UserBadge } from '@/components/UserStatusBadge/UserBadge';
-import { getUser } from '@/queries/account';
-import { currentView } from '@/state/reducers/application/appSlice';
+import { initializeFirebase } from '@/firebase/firebaseApp';
 
 type ContentWithStoreProps = {
     children: ReactNode;
 }
 
+const disallowedSidebarLocations = [
+    '/',
+    '/signup',
+    '/forgot-password',
+    '/reset-password',
+    '/userAgreement',
+];
+
 export const ContentWithStore = (props: ContentWithStoreProps) => {
+    const app = initializeFirebase();
+    const auth = getAuth(app);
 
-    const currentViewId = useSelector(currentView);
+    const pathname = usePathname();
 
-    const { isLoading, data: user } = getUser();
+    const [showSideBar, setShowSideBar] = useState(false);
+
+    useEffect(() => {
+        auth.onAuthStateChanged((user) => {
+            setShowSideBar(!!user);
+        });
+    }, []);
 
     const sideBar = useMemo(() => {
-        if (isLoading || !user || location.pathname.startsWith('/resetPassword') || location.pathname.startsWith('/verify-email')) {
-            return null;
-        }
+        if (!showSideBar) return null;
+
+        if (!pathname) return null;
+
+        if (disallowedSidebarLocations.includes(pathname)) return null;
+
         return <div className={'flex w-[330px] flex-col gap-[50px] bg-black/10 p-[20px]'}>
             <UserBadge />
-            <MainMenu items={mainMenuItems} currentViewId={currentViewId}/>
+            <MainMenu items={mainMenuItems} />
         </div>;
-    }, [user, location, currentViewId]);
+    }, [showSideBar, pathname]);
 
     return <div className={'text-white'}>
         <Toaster/>

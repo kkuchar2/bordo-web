@@ -1,19 +1,22 @@
 import { ReactNode, useCallback, useMemo } from 'react';
 
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
 
 import { MainMenuItemComponent } from '@/components/MainMenu/MainMenuItemComponent';
 import { Group, MainMenuItem, MainMenuItemsMap, MenuItems } from '@/components/MainMenu/mainMenuItems';
 import { getUser } from '@/queries/account';
+import { currentView } from '@/state/reducers/application/appSlice';
 
 interface MainMenuProps {
-    items: MenuItems,
-    currentViewId: string,
+    items: MenuItems
 }
 
 const MainMenu = (props: MainMenuProps) => {
 
-    const { items, currentViewId } = props;
+    const currentViewId = useSelector(currentView);
+
+    const { items } = props;
 
     const { data: user } = getUser();
 
