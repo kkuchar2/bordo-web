@@ -110,7 +110,7 @@ const IndexPage = () => {
                 submitButtonClassName={'bg-[#77a4df]/80 hover:bg-[#77a4df] text-white py-3 px-4 rounded-sm font-normal disabled:opacity-50 disabled:cursor-not-allowed'}
                 error={firebaseError || userQuery.error || {}}
                 afterFieldsContent={() => {
-                    return <NavLink className={'text-sm font-semibold text-[#77a4df]'} href={'/forgotPassword'}>
+                    return <NavLink className={'text-sm font-semibold text-[#77a4df] hover:underline'} href={'/forgotPassword'}>
                         {t('FORGOT_PASSWORD_QUESTION')}
                     </NavLink>;
                 }}
@@ -122,7 +122,7 @@ const IndexPage = () => {
                 <div className={'text-[#C7C7C7]'}>
                     {t('NEED_ACCOUNT')}
                 </div>
-                <NavLink className={'font-semibold text-[#77a4df]'} href={'/signup'}>
+                <NavLink className={'font-semibold text-[#77a4df] hover:underline'} href={'/signup'}>
                     {t('SIGN_UP')}
                 </NavLink>
             </div>

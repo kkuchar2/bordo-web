@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import { getAuth, onAuthStateChanged, sendPasswordResetEmail } from '@firebase/auth';
 import { FirebaseError } from '@firebase/util';
@@ -60,20 +60,30 @@ const ForgotPassword = () => {
 
     return <div className={'grid h-full w-full place-items-center'}>
         <div className={'rounded-0 flex w-full flex-col gap-[40px] bg-[#2a2a2a] p-[40px] sm:w-[400px] sm:rounded-md'}>
+
+            <div className={'flex flex-col gap-4'}>
+                <div className={'text-center text-2xl tracking-tighter'}>
+                    {t('RESET_PASSWORD')}
+                </div>
+
+                <div className={'text-center text-sm'}>
+                    {t('RESET_PASSWORD_DESCRIPTION')}
+                </div>
+            </div>
+
             <div className={'flex flex-col gap-[20px]'}>
                 <Form<ForgotPasswordFormArgs>
                     config={forgotPasswordForm}
-                    title={t('RESET_PASSWORD')}
-                    description={t('RESET_PASSWORD_DESCRIPTION')}
                     submitButtonTextKey={'RESET_PASSWORD'}
+                    submitButtonClassName={'bg-[#77a4df]/80 hover:bg-[#77a4df] text-white py-3 px-4 rounded-sm font-normal disabled:opacity-50 disabled:cursor-not-allowed'}
                     error={firebaseError}
                     disabled={pending}
                     useCancelButton={false}
                     onSubmit={requestPasswordReset}
                 />
 
-                <div className={'flex flex-col items-center justify-center gap-[20px]'}>
-                    <NavLink className={'font-semibold text-[#77a4df]'} href={'/'}>
+                <div className={'mt-[20px] flex flex-col items-center justify-center gap-[20px] text-sm'}>
+                    <NavLink className={'font-semibold text-[#77a4df] hover:underline'} href={'/'}>
                         {t('GO_BACK')}
                     </NavLink>
                 </div>

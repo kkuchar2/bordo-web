@@ -96,7 +96,7 @@ const SignUpPage = () => {
                 <div className={'text-[#C7C7C7]'}>
                     {t('ALREADY_HAVE_ACCOUNT')}
                 </div>
-                <NavLink className={'font-semibold text-[#77a4df]'} href={'/'}>
+                <NavLink className={'font-semibold text-[#77a4df] hover:underline'} href={'/'}>
                     {t('SIGN_IN')}
                 </NavLink>
             </div>
@@ -104,7 +104,7 @@ const SignUpPage = () => {
             <div className={'flex grow flex-col justify-end'}>
                 <div className={'text-center text-sm'}>
                     {t('USER_AGREEMENTS')}
-                    <NavLink className={'p-2 font-semibold text-white'} href={'/userAgreement'}>
+                    <NavLink className={'font-semibold text-[#77a4df] hover:underline'} href={'/userAgreement'}>
                         {t('MORE')}
                     </NavLink>
                 </div>
