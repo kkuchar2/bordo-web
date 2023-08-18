@@ -14,7 +14,7 @@ const SideBar = () => {
         return null;
     }
 
-    return <div className={'flex w-[330px] flex-col gap-[50px] bg-black/10 p-[20px]'}>
+    return <div className={'flex w-[330px] flex-col gap-[50px] bg-neutral-800/95 p-[20px]'}>
         <UserBadge />
         <MainMenu items={mainMenuItems} />
     </div>;

@@ -24,7 +24,7 @@ export const ContentWithStore = (props: ContentWithStoreProps) => {
         <Toaster/>
         <div className={'flex h-screen w-full'}>
             <SideBar />
-            <div className={'h-full grow overflow-auto'}>
+            <div className={'flex grow overflow-auto'}>
                 {props.children}
             </div>
         </div>

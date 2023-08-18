@@ -4,6 +4,9 @@ module.exports = {
     darkMode: 'media',
     theme: {
         extend: {
+            backgroundImage: {
+                'hero-pattern': "url('https://www.pixelstalk.net/wp-content/uploads/2016/08/Art-Desktop-Background-For-PC.jpg')",
+            },
             keyframes: {
                 fieldError: {
                     from: {
