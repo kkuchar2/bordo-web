@@ -14,18 +14,12 @@ import {
 import { EditableProfilePictureProperty } from '@/components/EditableProperties/EditableProfilePictureProperty';
 import EditableProperty from '@/components/EditableProperties/EditableProperty';
 import { SettingsSection } from '@/components/Settings/SettingsSection';
-import { TextAreaWithEmoji } from '@/components/TextAreaWithEmoji/TextAreaWithEmoji';
 import { initializeFirebase } from '@/firebase/firebaseApp';
 import WithAuth from '@/hoc/WithAuth';
-import { changeAbout, getUser } from '@/queries/account';
 
 const AccountPage = () => {
 
     const { t } = useTranslation();
-
-    const { isLoading: isAboutSaving, mutate } = changeAbout();
-
-    const { data: user } = getUser();
 
     const app = initializeFirebase();
     const auth = getAuth(app);
@@ -34,21 +28,15 @@ const AccountPage = () => {
 
     const onDeleteAccountAction = useCallback(() => {
         showDeleteAccountDialog();
-    }, [user]);
-
-    const onAboutSave = useCallback((value: string) => {
-        mutate({ about: value });
     }, []);
 
     if (firebaseUser == null) {
         return null;
     }
 
-    const about = user?.profile?.about || '';
-
     return <div className={'flex h-full w-full bg-neutral-800'}>
-        <div className={'h-full w-full overflow-auto'}>
-            <div className={'flex max-w-[800px] flex-col gap-[30px] p-[50px]'}>
+        <div className={'flex h-full w-full items-start justify-center overflow-auto'}>
+            <div className={'flex w-[800px] flex-col gap-[30px] p-[50px]'}>
                 <h1 className={'text-3xl font-semibold tracking-tighter'}>
                     {t('ACCOUNT_SETTINGS')}
                 </h1>
@@ -72,17 +60,6 @@ const AccountPage = () => {
                             value={firebaseUser.email}
                             canEdit={true}
                             showDialogFunc={showUpdateEmailDialog}/>
-                        <TextAreaWithEmoji
-                            id={'about'}
-                            name={t('ABOUT_ME')}
-                            value={about}
-                            toolbarEnabled={true}
-                            emojiPickerEnabled={true}
-                            emojiPickerButtonTextSize={20}
-                            enableMaxCharacterCounter={true}
-                            isSaving={isAboutSaving}
-                            onSave={onAboutSave}
-                        />
                     </div>
                 </div>
 

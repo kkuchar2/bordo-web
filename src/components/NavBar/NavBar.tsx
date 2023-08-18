@@ -1,12 +1,10 @@
 import { usePathname } from 'next/navigation';
 
-import MainMenu from '@/components/MainMenu/MainMenu';
-import { mainMenuItems } from '@/components/MainMenu/mainMenuItems';
-import { UserBadge } from '@/components/UserBadge/UserBadge';
+import { InteractiveUserBadge } from '@/components/UserBadge/InteractiveUserBadge';
 import { anonymousUsersLocations } from '@/ContentWithStore';
 import WithAuth from '@/hoc/WithAuth';
 
-const SideBar = () => {
+const NavBar = () => {
 
     const pathname = usePathname();
 
@@ -14,13 +12,15 @@ const SideBar = () => {
         return null;
     }
 
-    return <div className={'flex w-[330px] flex-col gap-[50px] bg-neutral-800/95 p-[20px]'}>
-        <UserBadge />
-        <MainMenu items={mainMenuItems} />
+    return <div className={'flex w-full gap-[50px] bg-neutral-900'}>
+        <div></div>
+        <div className={'ml-auto'}>
+            <InteractiveUserBadge />
+        </div>
     </div>;
 };
 
-export default WithAuth(SideBar, {
+export default WithAuth(NavBar, {
     isPublic: false,
     redirectToHomeOnAutologin: false,
     redirectToLoginPageOnUnauthenticated: false,

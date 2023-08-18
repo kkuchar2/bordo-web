@@ -1,12 +1,10 @@
 'use client';
 
-import OpenStreetMap from '@/components/OpenStreetMap/OpenStreetMap';
 import WithAuth from '@/hoc/WithAuth';
 
 const HomePage = () => {
 
-    return <div className={'relative h-full w-full'}>
-        <OpenStreetMap />
+    return <div className={'relative h-full w-full bg-neutral-800'}>
     </div>;
 };
 
