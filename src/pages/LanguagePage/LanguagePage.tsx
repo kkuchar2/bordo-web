@@ -106,19 +106,23 @@ const LanguagePage = () => {
         setSelected(value);
     }, []);
 
-    return <div className={'flex h-full flex-col gap-[20px] p-[20px] px-[50px] pt-[50px]'}>
-        <h1 className={'text-3xl font-semibold tracking-tighter'}>
-            {t('CHANGE_LANGUAGE')}
-        </h1>
-        <div className={'flex w-[500px] max-w-[500px] flex-col gap-2 p-[10px]'}>
-            {SUPPORTED_LANGUAGES.map((value) => (
-                <RadioCard
-                    isChecked={value === selected}
-                    key={value}
-                    value={value}
-                    onChange={() => onChange(value)}
-                />
-            ))}
+    return <div className={'h-full w-full bg-neutral-800'}>
+        <div className={'h-full w-full overflow-auto'}>
+            <div className={'flex max-w-[800px] flex-col gap-[30px] p-[50px]'}>
+                <h1 className={'text-3xl font-semibold tracking-tighter'}>
+                    {t('CHANGE_LANGUAGE')}
+                </h1>
+                <div className={'flex w-[500px] max-w-[500px] flex-col gap-2 p-[10px]'}>
+                    {SUPPORTED_LANGUAGES.map((value) => (
+                        <RadioCard
+                            isChecked={value === selected}
+                            key={value}
+                            value={value}
+                            onChange={() => onChange(value)}
+                        />
+                    ))}
+                </div>
+            </div>
         </div>
     </div>;
 };
