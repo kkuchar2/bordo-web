@@ -14,7 +14,7 @@ const inter = Inter({
 export default function RootLayout({ children }: { children: ReactNode }) {
 
     return <html lang={'en'}>
-        <body className={`${inter.variable} overflow-hidden bg-hero-pattern bg-cover bg-center bg-no-repeat font-sans`}>
+        <body className={`${inter.variable} overflow-hidden bg-cover bg-center bg-no-repeat font-sans`}>
             <main className={'bg-neutral-800/80'}>
                 <Content>
                     {children}
