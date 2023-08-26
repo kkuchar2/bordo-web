@@ -12,6 +12,4 @@ const firebaseConfig = {
 
 export const app = initializeApp(firebaseConfig);
 
-export const initializeFirebase = () => {
-    return app;
-};
+export const getFirebaseApp = () => app;

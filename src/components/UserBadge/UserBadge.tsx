@@ -4,7 +4,7 @@ import { getAuth, signOut } from '@firebase/auth';
 import { useTranslation } from 'react-i18next';
 
 import { ProfileAvatar } from '@/components/ProfileAvatar/ProfileAvatar';
-import { initializeFirebase } from '@/firebase/firebaseApp';
+import { getFirebaseApp } from '@/firebase/firebaseApp';
 import { resetCurrentView } from '@/state/reducers/application/appSlice';
 import { useAppDispatch } from '@/state/store';
 
@@ -12,7 +12,7 @@ export const UserBadge = () => {
 
     const { t } = useTranslation();
 
-    const app = initializeFirebase();
+    const app = getFirebaseApp();
     const auth = getAuth(app);
     const firebaseUser = auth.currentUser;
 

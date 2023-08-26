@@ -13,7 +13,7 @@ import { registrationForm } from '@/components/Forms/formConfig';
 import { RegistrationFormArgs } from '@/components/Forms/formConfig.types';
 import { firebaseFieldErrorConvert, firebaseNonFieldErrorConvert } from '@/components/Forms/util';
 import { NavLink } from '@/components/NavLink/NavLink';
-import { initializeFirebase } from '@/firebase/firebaseApp';
+import { getFirebaseApp } from '@/firebase/firebaseApp';
 import WithAuth from '@/hoc/WithAuth';
 import { getUser } from '@/queries/account';
 import { QueryResponseErrorData } from '@/queries/base';
@@ -24,7 +24,7 @@ const SignUpPage = () => {
 
     const userQuery = getUser();
 
-    const app = initializeFirebase();
+    const app = getFirebaseApp();
     const auth = getAuth(app);
 
     const [firebaseSignUpPending, setFirebaseSignUpPending] = useState(false);

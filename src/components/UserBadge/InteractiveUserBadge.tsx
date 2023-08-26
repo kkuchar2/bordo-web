@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { HoverMenuItem } from '@/components/MainMenu/HoverMenu/HoverMenuItem';
 import { HoverMenuLinkItem } from '@/components/MainMenu/HoverMenu/HoverMenuLinkItem';
 import { ProfileAvatar } from '@/components/ProfileAvatar/ProfileAvatar';
-import { initializeFirebase } from '@/firebase/firebaseApp';
+import { getFirebaseApp } from '@/firebase/firebaseApp';
 import { resetCurrentView } from '@/state/reducers/application/appSlice';
 import { useAppDispatch } from '@/state/store';
 
@@ -14,7 +14,7 @@ export const InteractiveUserBadge = () => {
 
     const { t } = useTranslation();
 
-    const app = initializeFirebase();
+    const app = getFirebaseApp();
     const auth = getAuth(app);
     const firebaseUser = auth.currentUser;
 

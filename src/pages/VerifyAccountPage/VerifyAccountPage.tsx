@@ -6,7 +6,7 @@ import { applyActionCode, getAuth } from '@firebase/auth';
 import { useRouter } from 'next/navigation';
 
 import { showErrorToast, showSuccessToast } from '@/components/Toast/readyToastNotifications';
-import { initializeFirebase } from '@/firebase/firebaseApp';
+import { getFirebaseApp } from '@/firebase/firebaseApp';
 import WithAuth from '@/hoc/WithAuth';
 
 type VerifyAccountPageProps = {
@@ -17,7 +17,7 @@ const VerifyAccountPage = (props: VerifyAccountPageProps) => {
 
     const { oobCode } = props;
 
-    const app = initializeFirebase();
+    const app = getFirebaseApp();
     const auth = getAuth(app);
 
     const router = useRouter();

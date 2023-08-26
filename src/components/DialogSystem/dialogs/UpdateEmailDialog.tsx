@@ -15,7 +15,7 @@ import {
 } from '@/components/Forms/formConfig.types';
 import { firebaseFieldErrorConvert } from '@/components/Forms/util';
 import { showSuccessToast } from '@/components/Toast/readyToastNotifications';
-import { initializeFirebase } from '@/firebase/firebaseApp';
+import { getFirebaseApp } from '@/firebase/firebaseApp';
 import { QueryResponseErrorData } from '@/queries/base';
 import { closeDialog } from '@/state/reducers/dialog/dialogSlice';
 import { BaseDialogProps, DialogProps } from '@/state/reducers/dialog/dialogSlice.types';
@@ -29,7 +29,7 @@ export const UpdateEmailDialog = (props: DialogProps & BaseDialogProps) => {
     const [pending, setPending] = useState(false);
     const [firebaseError, setFirebaseError] = useState<QueryResponseErrorData | null>(null);
 
-    const app = initializeFirebase();
+    const app = getFirebaseApp();
     const auth = getAuth(app);
     const firebaseUser = auth.currentUser;
 

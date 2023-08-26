@@ -14,7 +14,7 @@ import { deleteAccountForm, emptyForm } from '@/components/Forms/formConfig';
 import { DeleteAccountFormArgs, EmptyFormArgs } from '@/components/Forms/formConfig.types';
 import { firebaseFieldErrorConvert } from '@/components/Forms/util';
 import { queryClient } from '@/config';
-import { initializeFirebase } from '@/firebase/firebaseApp';
+import { getFirebaseApp } from '@/firebase/firebaseApp';
 import { preDeleteAccount } from '@/queries/account';
 import { QueryResponseErrorData } from '@/queries/base';
 import { closeDialog } from '@/state/reducers/dialog/dialogSlice';
@@ -28,7 +28,7 @@ export const DeleteAccountDialog = () => {
 
     const preDeleteAccountQuery = preDeleteAccount();
 
-    const app = initializeFirebase();
+    const app = getFirebaseApp();
     const auth = getAuth(app);
     const firebaseUser = auth.currentUser;
 

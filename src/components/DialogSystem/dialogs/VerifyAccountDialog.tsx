@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 
 import { DelayedTransition } from '@/components/DelayedTransition/DelayedTransition';
 import { showSuccessToast } from '@/components/Toast/readyToastNotifications';
-import { initializeFirebase } from '@/firebase/firebaseApp';
+import { getFirebaseApp } from '@/firebase/firebaseApp';
 import { resendRegistrationEmail } from '@/queries/account';
 
 const COOLDOWN = 60 * 1000;
@@ -33,7 +33,7 @@ export const VerifyAccountDialog = () => {
 
     const { t } = useTranslation();
 
-    const app = initializeFirebase();
+    const app = getFirebaseApp();
     const auth = getAuth(app);
 
     const user = auth.currentUser;

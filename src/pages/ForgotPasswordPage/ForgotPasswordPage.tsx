@@ -13,13 +13,13 @@ import { forgotPasswordForm } from '@/components/Forms/formConfig';
 import { ForgotPasswordFormArgs } from '@/components/Forms/formConfig.types';
 import { firebaseFieldErrorConvert } from '@/components/Forms/util';
 import { NavLink } from '@/components/NavLink/NavLink';
-import { initializeFirebase } from '@/firebase/firebaseApp';
+import { getFirebaseApp } from '@/firebase/firebaseApp';
 import WithAuth from '@/hoc/WithAuth';
 import { QueryResponseErrorData } from '@/queries/base';
 
 const ForgotPassword = () => {
 
-    const app = initializeFirebase();
+    const app = getFirebaseApp();
     const auth = getAuth(app);
 
     const { t } = useTranslation();

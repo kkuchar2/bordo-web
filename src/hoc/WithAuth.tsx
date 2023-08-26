@@ -4,7 +4,7 @@ import { getAuth } from '@firebase/auth';
 import { redirect } from 'next/navigation';
 
 import { DelayedTransition } from '@/components/DelayedTransition/DelayedTransition';
-import { initializeFirebase } from '@/firebase/firebaseApp';
+import { getFirebaseApp } from '@/firebase/firebaseApp';
 
 interface WithAuthProps {
     name?: string;
@@ -19,7 +19,7 @@ const WithAuth = (
 ) => {
     const wrappedComponent = (props: any) => {
 
-        const app = initializeFirebase();
+        const app = getFirebaseApp();
         const auth = getAuth(app);
         const user = auth.currentUser;
 

@@ -6,7 +6,7 @@ import { applyActionCode, getAuth, signOut } from '@firebase/auth';
 import { useRouter } from 'next/navigation';
 
 import { showErrorToast, showSuccessToast } from '@/components/Toast/readyToastNotifications';
-import { initializeFirebase } from '@/firebase/firebaseApp';
+import { getFirebaseApp } from '@/firebase/firebaseApp';
 import WithAuth from '@/hoc/WithAuth';
 import { resetCurrentView } from '@/state/reducers/application/appSlice';
 import { useAppDispatch } from '@/state/store';
@@ -19,7 +19,7 @@ const RecoverEmailPage = (props: RecoverEmailPageProps) => {
 
     const { oobCode } = props;
 
-    const app = initializeFirebase();
+    const app = getFirebaseApp();
     const auth = getAuth(app);
 
     const router = useRouter();

@@ -10,7 +10,7 @@ import { DelayedTransition } from '@/components/DelayedTransition/DelayedTransit
 import Form from '@/components/Forms/Form/Form';
 import { resetPasswordForm } from '@/components/Forms/formConfig';
 import { ResetPasswordFormArgs } from '@/components/Forms/formConfig.types';
-import { initializeFirebase } from '@/firebase/firebaseApp';
+import { getFirebaseApp } from '@/firebase/firebaseApp';
 import WithAuth from '@/hoc/WithAuth';
 import { QueryResponseErrorData } from '@/queries/base';
 
@@ -24,7 +24,7 @@ const ResetPasswordPage = (props: ResetPasswordPageProps) => {
 
     const { t } = useTranslation();
 
-    const app = initializeFirebase();
+    const app = getFirebaseApp();
     const auth = getAuth(app);
 
     const [pending, setPending] = useState(false);

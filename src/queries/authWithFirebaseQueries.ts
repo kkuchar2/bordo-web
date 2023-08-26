@@ -5,11 +5,11 @@ import { UseQueryOptions, UseQueryResult } from '@tanstack/react-query/src/types
 import { AxiosRequestConfig } from 'axios';
 
 import { ApiClientWithFirebase } from '@/client';
-import { initializeFirebase } from '@/firebase/firebaseApp';
+import { getFirebaseApp } from '@/firebase/firebaseApp';
 import { getQueryInternal, postQueryInternal, putQueryInternal, QueryResponseError } from '@/queries/base';
 
 const defaultConfigProvider = async () : Promise<AxiosRequestConfig> => {
-    const app = initializeFirebase();
+    const app = getFirebaseApp();
     const auth = getAuth(app);
     const firebaseUser = auth.currentUser;
 

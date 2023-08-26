@@ -14,7 +14,7 @@ import { LoginFormArgs } from '@/components/Forms/formConfig.types';
 import { firebaseFieldErrorConvert } from '@/components/Forms/util';
 import { GoogleIcon } from '@/components/Icons/GoogleIcon';
 import { NavLink } from '@/components/NavLink/NavLink';
-import { initializeFirebase } from '@/firebase/firebaseApp';
+import { getFirebaseApp } from '@/firebase/firebaseApp';
 import WithAuth from '@/hoc/WithAuth';
 import { getUser } from '@/queries/account';
 import { QueryResponseErrorData } from '@/queries/base';
@@ -23,7 +23,7 @@ const IndexPage = () => {
 
     const { t } = useTranslation();
 
-    const app = initializeFirebase();
+    const app = getFirebaseApp();
     const auth = getAuth(app);
     const firebaseUser = auth.currentUser;
 

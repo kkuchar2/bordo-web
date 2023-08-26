@@ -14,14 +14,14 @@ import {
 import { EditableProfilePictureProperty } from '@/components/EditableProperties/EditableProfilePictureProperty';
 import EditableProperty from '@/components/EditableProperties/EditableProperty';
 import { SettingsSection } from '@/components/Settings/SettingsSection';
-import { initializeFirebase } from '@/firebase/firebaseApp';
+import { getFirebaseApp } from '@/firebase/firebaseApp';
 import WithAuth from '@/hoc/WithAuth';
 
 const AccountPage = () => {
 
     const { t } = useTranslation();
 
-    const app = initializeFirebase();
+    const app = getFirebaseApp();
     const auth = getAuth(app);
 
     const firebaseUser = auth.currentUser;
