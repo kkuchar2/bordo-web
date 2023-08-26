@@ -1,3 +1,5 @@
+import { HomeIcon } from '@heroicons/react/24/solid';
+import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 import { InteractiveUserBadge } from '@/components/UserBadge/InteractiveUserBadge';
@@ -12,8 +14,10 @@ const NavBar = () => {
         return null;
     }
 
-    return <div className={'flex w-full gap-[50px] bg-neutral-900'}>
-        <div></div>
+    return <div className={'flex w-full items-center gap-[50px] bg-neutral-900'}>
+        <Link href={'/home'}>
+            <HomeIcon className={'ml-[20px] h-6 w-6 text-white/80 hover:text-white'}/>
+        </Link>
         <div className={'ml-auto'}>
             <InteractiveUserBadge />
         </div>
