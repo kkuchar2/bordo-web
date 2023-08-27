@@ -32,12 +32,12 @@ export const SentEmailDialog = (props: BaseDialogProps & DialogProps<SentEmailDi
 
     const button = useCallback((onClick: () => void, text: string) => {
         return <button
-            className={'rounded-full bg-white/5 px-5 py-2 hover:bg-white/10'}
+            className={'rounded-md bg-white/5 px-5 py-2 hover:bg-white/10'}
             onClick={onClick}>{t(text)}
         </button>;
     }, []);
 
-    return <div className={'flex h-full w-full items-end justify-end p-10'}>
+    return <div className={'flex w-full items-end justify-end'}>
         {showSignInButton && button(onSignInClick, 'SIGN_IN')}
         {showGotItButton && button(onGotItClick, 'GOT_IT')}
     </div>;

@@ -7,14 +7,10 @@ export const NewPasswordSchema = string()
 
 export const ConfirmPasswordSchema = (reference: string) => string()
     .required('Password confirmation is required')
-    .oneOf([ref(reference), null], 'Passwords do not match');
+    .oneOf([ref(reference)], 'PASSWORDS_MUST_MATCH');
 
 export const RequiredStringSchema = string()
     .required('FIELD_REQUIRED');
-
-export const RequiredArraySchema = string()
-    .required('FIELD_REQUIRED')
-    .min(1, 'FIELD_REQUIRED');
 
 export const RequiredCurrentPasswordSchema = string()
     .required('CURRENT_PASSWORD_REQUIRED');

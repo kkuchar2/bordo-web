@@ -87,6 +87,7 @@
   "PAGE_NOT_FOUND": "Page not found",
   "This field may not be blank.": "This field may not be blank.",
   "PASSWORD": "Password",
+  "PASSWORDS_MUST_MATCH": "Passwords must match",
   "PASSWORD_AND_AUTHENTICATION": "Password and authentication",
   "PASSWORD_CREATE_MAIL_SENT_DESCRIPTION": "We've sent you an email with a link to create your new password. Please check your inbox.",
   "PASSWORD_CREATE_MAIL_SENT_TITLE": "Check your email",
