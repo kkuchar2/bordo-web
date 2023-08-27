@@ -20,7 +20,7 @@ export const RequiredCurrentPasswordSchema = string()
     .required('CURRENT_PASSWORD_REQUIRED');
 
 export const EmailSchema = string()
-    .email('Please enter valid E-mail address')
+    .email('PLEASE_ENTER_VALID_EMAIL_ADDRESS')
     .required('FIELD_REQUIRED');
 
 export const UsernameSchema = string()

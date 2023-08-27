@@ -15,14 +15,6 @@ module.exports = {
                         opacity: 1,
                     }
                 },
-                fieldError: {
-                    from: {
-                        transform: 'translateY(-20px)',
-                    },
-                    to: {
-                        transform: 'translateY(0)',
-                    }
-                },
                 dialog: {
                     from: {
                         transform: 'translateY(-100px)',
@@ -33,7 +25,6 @@ module.exports = {
                 }
             },
             animation: {
-                fieldError: 'fieldError 0.3s ease forwards',
                 dialog: 'dialog 0.6s cubic-bezier(0.1, 0.5, 0.12, 1) forwards',
                 navbarMenu: 'navbarMenu 0.3s ease forwards',
             }

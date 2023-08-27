@@ -36,6 +36,7 @@ export const InputWithSmartLabel = <TFieldValues extends FieldValues>
         autoComplete,
         spellCheck = false,
         errors,
+        isValid,
         onBlur,
         onChange
     } = props;
@@ -81,7 +82,7 @@ export const InputWithSmartLabel = <TFieldValues extends FieldValues>
 
     const labelActive = value && value !== '' || focused;
 
-    return <div className={styles.inputWithSmartLabel}
+    return <div className={[styles.inputWithSmartLabel, isValid ? '' : styles.error].join(' ')}
         onMouseEnter={() => {
             setPointerWithinBounds(true);
         }}

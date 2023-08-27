@@ -4,7 +4,6 @@ import { Path } from 'react-hook-form';
 import { FieldValues } from 'react-hook-form/dist/types';
 import { object, ObjectSchema } from 'yup';
 
-import { HookFormInput, HookFormInputProps } from '@/components/FormikInput/HookFormInput';
 import {
     ChangeEmailFormArgs,
     UpdatePasswordFormArgs,
@@ -16,6 +15,7 @@ import {
     RegistrationFormArgs,
     ResetPasswordFormArgs, UpdatePasswordFormSmallArgs
 } from '@/components/Forms/formConfig.types';
+import { HookFormInput, HookFormInputProps } from '@/components/HookFormInput/HookFormInput';
 import {
     ConfirmPasswordSchema,
     EmailSchema,

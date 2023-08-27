@@ -10,8 +10,8 @@ import {
 } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { FieldErrorsComponent } from '@/components/FormikInput/FieldErrorsComponent';
 import { FieldProps } from '@/components/Forms/formConfig';
+import { FieldErrorsComponent } from '@/components/HookFormInput/FieldErrorsComponent';
 import { InputWithSmartLabel } from '@/components/InputWithSmartLabel/InputWithSmartLabel';
 
 export type HookFormInputProps<TFieldValues extends FieldValues> = FieldProps<TFieldValues> & {
@@ -48,7 +48,7 @@ export const HookFormInput = <TFieldValues extends FieldValues>
             disabled={false}
             onChange={field.onChange}
             spellCheck={false}
-            isValid={true} />
+            isValid={errors === null || Object.keys(errors).length === 0 || !(name in errors)} />
 
         {errors && <ErrorMessage
             errors={errors}
@@ -59,7 +59,7 @@ export const HookFormInput = <TFieldValues extends FieldValues>
         }
 
         {additionalFieldErrors && additionalFieldErrors.map((e, i) => {
-            return <div className={'translate-y-[-20px] animate-fieldError text-[#ff4949]'} key={i}>
+            return <div className={'text-[#ff4949]'} key={i}>
                 {t(e)}
             </div>;
         })}

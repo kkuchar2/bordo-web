@@ -13,6 +13,7 @@ const useYupValidationResolver = <TFieldValues extends FieldValues = FieldValues
 
     return useCallback(
         async (data: TFieldValues) => {
+            console.log('Resolver called');
             try {
                 const values = await validationSchema.validate(data, {
                     abortEarly: false,

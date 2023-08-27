@@ -18,7 +18,7 @@ export const FieldErrorsComponent = (props: FieldErrorsProps) => {
     }
 
     if (message) {
-        return <div className={'translate-y-[-20px] animate-fieldError text-[#ff4949]'} key={Math.random()}>
+        return <div className={'text-[#ff4949]'} key={Math.random()}>
             {t(message)}
         </div>;
     }
@@ -28,7 +28,7 @@ export const FieldErrorsComponent = (props: FieldErrorsProps) => {
     }
 
     return Object.entries(messages).map(([type, msg]) => (
-        <div className={'translate-y-[-20px] animate-fieldError text-[#ff4949]'} key={type}>
+        <div className={'text-[#ff4949]'} key={type}>
             {t(msg as string)}
         </div>
     ));

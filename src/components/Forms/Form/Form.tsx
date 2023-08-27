@@ -49,7 +49,8 @@ const Form = <TFieldValues extends FieldValues = FieldValues>(props: FormProps<T
         },
     } = useForm<TFieldValues>({
         resolver: resolver,
-        criteriaMode: 'all',
+        mode: 'onSubmit',
+        reValidateMode: 'onChange',
     });
 
     const onFormSubmitted = useCallback((values: TFieldValues) => {
@@ -119,7 +120,7 @@ const Form = <TFieldValues extends FieldValues = FieldValues>(props: FormProps<T
             {getNonFieldErrors(additionalErrors)
                 .filter((msg => msg != null && !excludeErrors?.includes(msg)))
                 .map((msg: string | null, idx: number) => {
-                    return msg && <div className={'translate-y-[-20px] animate-fieldError text-[#ff4949]'} key={idx}>
+                    return msg && <div className={'text-[#ff4949]'} key={idx}>
                         {t(msg)}
                     </div>;
                 })}
