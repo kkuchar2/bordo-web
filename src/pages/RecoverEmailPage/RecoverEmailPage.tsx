@@ -37,7 +37,7 @@ const RecoverEmailPage = (props: RecoverEmailPageProps) => {
             showErrorToast('Verification link invalid or expired');
         }
         finally {
-            router.push('/');
+            router.push('/signin');
         }
     }, []);
 

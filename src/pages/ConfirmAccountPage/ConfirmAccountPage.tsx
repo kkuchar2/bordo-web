@@ -23,7 +23,7 @@ const ConfirmAccountPage = (props: ConfirmAccountPageProps) => {
     useEffect(() => {
         if (!token) {
             showErrorToast('Verification link invalid or expired');
-            router.push('/');
+            router.push('/signin');
             return;
         }
         mutate({
@@ -34,14 +34,14 @@ const ConfirmAccountPage = (props: ConfirmAccountPageProps) => {
     useEffect(() => {
         if (isError) {
             showErrorToast('Verification link invalid or expired');
-            router.push('/');
+            router.push('/signin');
         }
     }, [isError]);
 
     useEffect(() => {
         if (isSuccess) {
             showSuccessToast('Account verified successfully');
-            router.push('/');
+            router.push('/signin');
         }
     }, [isSuccess]);
 

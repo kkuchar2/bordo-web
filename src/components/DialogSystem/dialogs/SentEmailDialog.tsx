@@ -23,7 +23,7 @@ export const SentEmailDialog = (props: BaseDialogProps & DialogProps<SentEmailDi
 
     const onSignInClick = useCallback(() => {
         dispatch(closeDialog());
-        router.push('/');
+        router.push('/signin');
     }, []);
 
     const onGotItClick = useCallback(() => {

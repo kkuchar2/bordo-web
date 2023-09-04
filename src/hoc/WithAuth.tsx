@@ -65,7 +65,7 @@ const WithAuth = (
         }
         else {
             if (redirectToLoginPageOnUnauthenticated) {
-                return redirect('/');
+                return redirect('/signin');
             }
 
             if (authPending) {

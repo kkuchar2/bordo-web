@@ -7,14 +7,14 @@ const AuthActionPage = () => {
     const searchParams = useSearchParams();
 
     if (!searchParams) {
-        return redirect('/');
+        return redirect('/signin');
     }
 
     const mode = searchParams.get('mode');
     const ooBCode = searchParams.get('oobCode');
 
     if (!mode) {
-        return redirect('/');
+        return redirect('/signin');
     }
 
     if (mode === 'verifyEmail' && ooBCode) {

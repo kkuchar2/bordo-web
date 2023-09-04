@@ -52,7 +52,7 @@ const ResetPasswordPage = (props: ResetPasswordPageProps) => {
         }
         finally {
             setPending(false);
-            router.push('/');
+            router.push('/signin');
         }
     }, [oobCode]);
 

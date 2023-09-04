@@ -11,6 +11,7 @@ type ContentWithStoreProps = {
 
 export const anonymousUsersLocations = [
     '/',
+    '/signin',
     '/signup',
     '/forgotPassword',
     '/resetPassword',
