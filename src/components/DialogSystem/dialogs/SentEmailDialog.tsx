@@ -4,22 +4,25 @@ import { useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 
 import { closeDialog } from '@/state/reducers/dialog/dialogSlice';
-import { BaseDialogProps, DialogProps } from '@/state/reducers/dialog/dialogSlice.types';
+import { DialogProps } from '@/state/reducers/dialog/dialogSlice.types';
+import { useAppDispatch } from '@/state/store';
 
 export interface SentEmailDialogProps {
     showSignInButton: boolean;
     showGotItButton: boolean;
 }
 
-export const SentEmailDialog = (props: BaseDialogProps & DialogProps<SentEmailDialogProps>) => {
+export const SentEmailDialog = (props: DialogProps<SentEmailDialogProps>) => {
 
-    const { data, dispatch } = props;
+    const { data } = props;
 
     const { t } = useTranslation();
 
     const router = useRouter();
 
     const { showSignInButton = false, showGotItButton = true } = data;
+
+    const dispatch = useAppDispatch();
 
     const onSignInClick = useCallback(() => {
         dispatch(closeDialog());

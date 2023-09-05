@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import { confirmPasswordReset, getAuth, onAuthStateChanged } from '@firebase/auth';
 import { useRouter } from 'next/navigation';
@@ -44,7 +44,6 @@ const ResetPasswordPage = (props: ResetPasswordPageProps) => {
 
         setPending(true);
         try {
-            console.log('Confirming password reset with code:', oobCode);
             await confirmPasswordReset(auth, oobCode, new_password);
         }
         catch (e) {

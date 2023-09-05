@@ -1,11 +1,11 @@
-import React, { useCallback, useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 
 import { useTranslation } from 'react-i18next';
 
 import { OpenReadyDialogArgs } from '@/components/DialogSystem/readyDialogs';
 import { Icon, IconProps } from '@/components/Icons/Icon';
 
-export interface EditablePropertyProps {
+export type EditablePropertyProps = {
     id: string;
     name: string;
     value?: string | null;

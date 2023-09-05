@@ -1,5 +1,3 @@
-// noinspection SpellCheckingInspection
-
 import { GiphyFetch } from '@giphy/js-fetch-api';
 import { QueryCache, QueryClient } from '@tanstack/react-query';
 
@@ -50,7 +48,7 @@ export const queryClient = new QueryClient({
         onSuccess: (query) => {
             //console.log(`QueryCache Success [${query.queryKey}]`, query.data);
         },
-        onError: (error, query) => {
+        onError: (error: any, query: any) => {
             //console.log(`QueryCache Error[${query.queryKey}]`, error);
 
             // if 401:

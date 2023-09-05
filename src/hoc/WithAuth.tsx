@@ -6,17 +6,15 @@ import { redirect } from 'next/navigation';
 import { DelayedTransition } from '@/components/DelayedTransition/DelayedTransition';
 import { getFirebaseApp } from '@/firebase/firebaseApp';
 
-interface WithAuthProps {
+type WithAuthProps = {
     name?: string;
     isPublic?: boolean;
     redirectToHomeOnAutologin?: boolean;
     redirectToLoginPageOnUnauthenticated?: boolean;
 }
 
-const WithAuth = (
-    WrappedComponent: ComponentType<any>,
-    withAuthProps: WithAuthProps
-) => {
+const WithAuth = (WrappedComponent: ComponentType<any>, withAuthProps: WithAuthProps) => {
+
     const wrappedComponent = (props: any) => {
 
         const app = getFirebaseApp();
@@ -29,14 +27,14 @@ const WithAuth = (
             redirectToLoginPageOnUnauthenticated = false,
         } = withAuthProps;
 
-        const [loggedIn, setLoggedIn] = useState(user !== null);
+        const [loggedIn, setLoggedIn] = useState(user && user.emailVerified);
         const [show, setShow] = useState(false);
         const [authPending, setAuthPending] = useState(true);
 
         useEffect(() => {
             auth.onAuthStateChanged((user) => {
                 setAuthPending(false);
-                setLoggedIn(user !== null);
+                setLoggedIn(user !== null && user.emailVerified);
                 setShow(true);
             });
         }, []);
@@ -48,7 +46,7 @@ const WithAuth = (
         if (isPublic) {
             if (loggedIn) {
                 if (redirectToHomeOnAutologin) {
-                    return redirect('/home');
+                    redirect('/home');
                 }
                 if (authPending) {
                     return <DelayedTransition pending={true}/>;
@@ -65,7 +63,7 @@ const WithAuth = (
         }
         else {
             if (redirectToLoginPageOnUnauthenticated) {
-                return redirect('/signin');
+                redirect('/signin');
             }
 
             if (authPending) {

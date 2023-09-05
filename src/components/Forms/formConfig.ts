@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { Path } from 'react-hook-form';
 import { FieldValues } from 'react-hook-form/dist/types';
 import { object, ObjectSchema } from 'yup';

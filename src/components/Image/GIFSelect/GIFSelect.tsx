@@ -1,4 +1,4 @@
-import React, { SyntheticEvent, useCallback, useState } from 'react';
+import { SyntheticEvent, useCallback, useState } from 'react';
 
 import { IGif } from '@giphy/js-types';
 import Image from 'next/image';

@@ -5,9 +5,9 @@ import Cropper from 'react-easy-crop';
 import { Area } from 'react-easy-crop/types';
 
 type CropProps = {
-    image: string
-    disabled?: boolean
-    onCroppedAreaChange?: (area: Area) => void
+    image: string | null;
+    disabled?: boolean;
+    onCroppedAreaChange?: (area: Area) => void;
 }
 
 import styles from './Crop.module.scss';
@@ -44,6 +44,10 @@ export const Crop = (props: CropProps) => {
 
         onCroppedAreaChange(croppedAreaPixels);
     }, [disabled, onCroppedAreaChange]);
+
+    if (!image) {
+        return null;
+    }
 
     return <div className={'flex flex-col gap-[40px]'}>
         <div className={'relative box-border flex w-full flex-col items-center justify-center'}

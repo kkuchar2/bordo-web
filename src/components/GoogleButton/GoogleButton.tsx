@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
 
 import { CredentialResponse, GoogleLogin, GoogleOAuthProvider } from '@react-oauth/google';
 import { useTranslation } from 'react-i18next';
@@ -22,7 +22,6 @@ const GoogleButton = (props: GoogleButtonProps) => {
         onSuccess,
         onError,
         useOneTap = false,
-        width,
     } = props;
 
     const { i18n } = useTranslation();

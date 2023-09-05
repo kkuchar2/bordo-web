@@ -1,7 +1,8 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { IGif } from '@giphy/js-types';
 import axios from 'axios';
+import { Area } from 'react-easy-crop/types';
 import { useTranslation } from 'react-i18next';
 
 import { ChangeAvatarModeSelector } from './ChangeAvatarModeSelector/ChangeAvatarModeSelector';
@@ -14,26 +15,29 @@ import { giphyFetch } from '@/config';
 import { changeAvatar, signAvatarUploadUrl } from '@/queries/account';
 import { SignedAvatarUploadInfo, SignedUrl } from '@/queries/account/types';
 import { changeDialog, closeDialog } from '@/state/reducers/dialog/dialogSlice';
-import { DialogProps } from '@/state/reducers/dialog/dialogSlice.types';
 import { useAppDispatch } from '@/state/store';
 
 const FILE_SIZE_LIMIT_BYTES = 5 * 1024 * 1024;
 
 type ChangeAvatarMode = 'upload' | 'gif' | null;
 
-export const ChangeAvatarDialog = (props: DialogProps) => {
+export const ChangeAvatarDialog = () => {
     const { t } = useTranslation();
 
-    const [file, setFile] = useState(null);
+    const [file, setFile] = useState<File | null>(null);
     const [mode, setMode] = useState<ChangeAvatarMode>(null);
-    const [image, setImage] = useState(null);
+    const [image, setImage] = useState<string | null>(null);
     const [extension, setExtension] = useState('.png');
 
-    const [croppedArea, setCroppedArea] = useState(null);
+    const [croppedArea, setCroppedArea] = useState<Area | null>(null);
 
     const dispatch = useAppDispatch();
 
     const changeAvatarQuery = changeAvatar();
+
+    const onCroppedAreaChange = useCallback((croppedArea: Area) => {
+        setCroppedArea(croppedArea);
+    }, []);
 
     const requestSignedUrlQuery = signAvatarUploadUrl()({
         onSuccess: (data: SignedAvatarUploadInfo) => {
@@ -90,7 +94,7 @@ export const ChangeAvatarDialog = (props: DialogProps) => {
 
     const onBack = useCallback(() => {
         setMode(null);
-        dispatch(changeDialog('CHANGE_AVATAR', 400, false, null));
+        dispatch(changeDialog('CHANGE_AVATAR', 400, false));
     }, []);
 
     useEffect(() => {
@@ -105,9 +109,17 @@ export const ChangeAvatarDialog = (props: DialogProps) => {
 
     const gifSearchOrCropContainer = useMemo(() => {
         if (mode === 'upload') {
-            return <Crop image={image} onCroppedAreaChange={setCroppedArea}/>;
+            if (!image) {
+                return null;
+            }
+            return <Crop image={image} onCroppedAreaChange={onCroppedAreaChange}/>;
         }
         else if (mode === 'gif') {
+
+            if (!giphyFetch) {
+                return null;
+            }
+
             return <GIFSelect
                 giphyFetch={giphyFetch}
                 onGifSelected={onGifSelected}
@@ -120,7 +132,14 @@ export const ChangeAvatarDialog = (props: DialogProps) => {
         dispatch(changeDialog('GIF_SELECT_TITLE', 500, true, onBack));
     }, [onBack]);
 
-    const onFileSelected = useCallback((e) => {
+    const onFileReaderLoad = useCallback((e: ProgressEvent<FileReader>) => {
+        if (!e.target) {
+            return;
+        }
+        setImage(e.target.result as string);
+    }, []);
+
+    const onFileSelected = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
         const files = e.target.files;
 
         if (files && files.length > 0) {
@@ -133,7 +152,7 @@ export const ChangeAvatarDialog = (props: DialogProps) => {
 
             if (ext !== '.gif') {
                 reader.readAsDataURL(file);
-                reader.addEventListener('load', () => setImage(reader.result));
+                reader.addEventListener('load', onFileReaderLoad);
             }
         }
 
@@ -146,6 +165,11 @@ export const ChangeAvatarDialog = (props: DialogProps) => {
 
     const onConfirmClick = useCallback(() => {
         if (extension === '.gif') {
+
+            if (!file) {
+                return;
+            }
+
             const blob = file.slice(0, file.size, 'image/gif');
 
             // Validate size on client side
@@ -156,7 +180,6 @@ export const ChangeAvatarDialog = (props: DialogProps) => {
                 return;
             }
         }
-        console.log('Requesting signed url');
         requestSignedUrlQuery.mutate({ file_extension: extension.slice(1) });
     }, [image, croppedArea, extension, file, uploadToStaticStorage]);
 

@@ -1,6 +1,6 @@
 import { Icon, IconProps } from '@/components/Icons/Icon';
 
-type HoverMenuItemProps = {
+export type HoverMenuItemProps = {
     title: string;
     onClick?: () => void;
     icon?: IconProps;

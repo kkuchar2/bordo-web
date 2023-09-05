@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import { useCallback, useState } from 'react';
 
 import {
     EmailAuthProvider,
@@ -18,16 +18,19 @@ import { showSuccessToast } from '@/components/Toast/readyToastNotifications';
 import { getFirebaseApp } from '@/firebase/firebaseApp';
 import { QueryResponseErrorData } from '@/queries/base';
 import { closeDialog } from '@/state/reducers/dialog/dialogSlice';
-import { BaseDialogProps, DialogProps } from '@/state/reducers/dialog/dialogSlice.types';
+import { DialogProps } from '@/state/reducers/dialog/dialogSlice.types';
+import { useAppDispatch } from '@/state/store';
 
-export const UpdateEmailDialog = (props: DialogProps & BaseDialogProps) => {
+export const UpdateEmailDialog = (props: DialogProps) => {
 
-    const { dialog, dispatch } = props;
+    const { dialog } = props;
 
     const { onCancel } = dialog;
 
     const [pending, setPending] = useState(false);
     const [firebaseError, setFirebaseError] = useState<QueryResponseErrorData | null>(null);
+
+    const dispatch = useAppDispatch();
 
     const app = getFirebaseApp();
     const auth = getAuth(app);

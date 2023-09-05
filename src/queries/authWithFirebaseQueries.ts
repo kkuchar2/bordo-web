@@ -13,7 +13,7 @@ const defaultConfigProvider = async () : Promise<AxiosRequestConfig> => {
     const auth = getAuth(app);
     const firebaseUser = auth.currentUser;
 
-    const token = firebaseUser ? await firebaseUser.getIdToken(true) : null;
+    const token = firebaseUser && await firebaseUser.getIdToken(true);
 
     const config : AxiosRequestConfig = {
         headers: {}

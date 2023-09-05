@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 
 import { GifOverlayProps, Grid } from '@giphy/react-components';
 

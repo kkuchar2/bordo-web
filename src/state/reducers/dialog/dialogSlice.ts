@@ -1,17 +1,13 @@
 import { createSlice, Dispatch, PayloadAction } from '@reduxjs/toolkit';
 
-import { DialogSliceState, IDialogComponentProps, ShowDialogArgs } from './dialogSlice.types';
+import { DialogSliceState, DialogComponentProps, ShowDialogArgs } from './dialogSlice.types';
 
 const defaultDialogState: DialogSliceState = {
     opened: false,
     component: '',
     componentProps: {
-        dialog: {
-            title: 'Default dialog',
-            description: null,
-            closeable: true
-        },
-        data: null
+        dialog: {},
+        data: null,
     }
 };
 
@@ -27,7 +23,7 @@ const dialogSlice = createSlice({
             state.componentProps.data = { ...state.componentProps.data, ...action.payload.props.data };
         },
         onCloseDialog: () => defaultDialogState,
-        onDialogPropsChange: (state, action: PayloadAction<IDialogComponentProps>) => {
+        onDialogPropsChange: (state, action: PayloadAction<DialogComponentProps>) => {
             state.componentProps = {
                 ...state.componentProps,
                 dialog: {
@@ -56,14 +52,6 @@ export const closeDialog = () => {
     return async (dispatch: Dispatch) => dispatch(onCloseDialog());
 };
 
-export const changeDialogTitle = (newTitle: string) => {
-    return async (dispatch: Dispatch) => {
-        dispatch(onDialogPropsChange({
-            title: newTitle
-        }));
-    };
-};
-
 export const changeDialog = (newTitle: string, newWidth: number, arrowBack?: boolean, onBack?: () => void) => {
     return async (dispatch: Dispatch) => {
         dispatch(onDialogPropsChange({
@@ -71,12 +59,6 @@ export const changeDialog = (newTitle: string, newWidth: number, arrowBack?: boo
             arrowBack: arrowBack,
             onBack: onBack
         }));
-    };
-};
-
-export const setCloseable = (closeable: boolean) => {
-    return async (dispatch: Dispatch) => {
-        dispatch(onDialogCloseableChange(closeable));
     };
 };
 

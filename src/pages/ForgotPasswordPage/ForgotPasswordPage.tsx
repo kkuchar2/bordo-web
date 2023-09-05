@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useCallback, useState } from 'react';
+import { useCallback, useState } from 'react';
 
 import { getAuth, sendPasswordResetEmail } from '@firebase/auth';
 import { FirebaseError } from '@firebase/util';

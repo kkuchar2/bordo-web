@@ -27,21 +27,6 @@ export type QueryResponseError = {
     status: number;
 }
 
-export const AxiosConfigs = {
-    // Do not send and receive cookies.
-    NO_CREDENTIALS: { withCredentials: false },
-
-    //Send and receive all cookies
-    WITH_CREDENTIALS: { withCredentials: true },
-
-    // Send and receive all cookies + CSRF token in the header.
-    WITH_CREDENTIALS_AND_CSRF: {
-        withCredentials: true,
-        xsrfCookieName: 'csrftoken',
-        xsrfHeaderName: 'X-CSRFTOKEN'
-    },
-};
-
 export const getQueryInternal = <
     TQueryFnData = unknown,
     TError = unknown,
@@ -81,8 +66,6 @@ export const postQueryInternal = <
 
     return useMutation<TData, TError, TVariables, TContext>(mutationKey,
         async (data): Promise<TData> => {
-            let response = null;
-
             try {
                 const config = await configProvider();
                 if (!config?.headers?.['Authorization']) {
@@ -90,7 +73,8 @@ export const postQueryInternal = <
                         reject('Authorization header is not set');
                     });
                 }
-                response = await client.post<TData>(endpoint, data, config);
+                const response = await client.post<TData>(endpoint, data, config);
+                return response.data;
             }
             catch (e) {
                 const error = e as AxiosError<QueryResponseError>;
@@ -103,7 +87,6 @@ export const postQueryInternal = <
                 const status = response.status;
                 throw { message, data, status } as QueryResponseError;
             }
-            return response.data;
         }, options);
 };
 
@@ -124,8 +107,6 @@ export const putQueryInternal = <
 
     return useMutation<TData, TError, TVariables, TContext>(mutationKey,
         async (data): Promise<TData> => {
-            let response = null;
-
             try {
                 const config = await configProvider();
                 if (!config?.headers?.['Authorization']) {
@@ -133,7 +114,8 @@ export const putQueryInternal = <
                         reject('Authorization header is not set');
                     });
                 }
-                response = await client.put<TData>(endpoint, data, config);
+                const response = await client.put<TData>(endpoint, data, config);
+                return response.data;
             }
             catch (e) {
                 const error = e as AxiosError<QueryResponseError>;
@@ -146,6 +128,5 @@ export const putQueryInternal = <
                 const status = response.status;
                 throw { message, data, status } as QueryResponseError;
             }
-            return response.data;
         }, options);
 };

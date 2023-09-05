@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 
 import {
     deleteUser, EmailAuthProvider,
@@ -13,9 +13,8 @@ import Form from '@/components/Forms/Form/Form';
 import { deleteAccountForm, emptyForm } from '@/components/Forms/formConfig';
 import { DeleteAccountFormArgs, EmptyFormArgs } from '@/components/Forms/formConfig.types';
 import { firebaseFieldErrorConvert } from '@/components/Forms/util';
-import { queryClient } from '@/config';
 import { getFirebaseApp } from '@/firebase/firebaseApp';
-import { preDeleteAccount } from '@/queries/account';
+import { deleteAccount } from '@/queries/account';
 import { QueryResponseErrorData } from '@/queries/base';
 import { closeDialog } from '@/state/reducers/dialog/dialogSlice';
 import { useAppDispatch } from '@/state/store';
@@ -26,7 +25,7 @@ export const DeleteAccountDialog = () => {
 
     const dispatch = useAppDispatch();
 
-    const preDeleteAccountQuery = preDeleteAccount();
+    const deleteAccountQuery = deleteAccount();
 
     const app = getFirebaseApp();
     const auth = getAuth(app);
@@ -36,7 +35,6 @@ export const DeleteAccountDialog = () => {
     const [firebaseError, setFirebaseError] = useState<QueryResponseErrorData | null>(null);
 
     const isGoogleProvider = firebaseUser?.providerData[0].providerId === 'google.com';
-
     const isPasswordProvider = firebaseUser?.providerData[0].providerId === 'password';
 
     const onSubmit = useCallback(async (formData: DeleteAccountFormArgs) => {
@@ -45,19 +43,12 @@ export const DeleteAccountDialog = () => {
 
         const { current_password } = formData;
 
-        setPending(true);
-
         const credential = EmailAuthProvider.credential(firebaseUser.email, current_password);
 
-        try {
-            await preDeleteAccountQuery.mutateAsync({});
-        }
-        catch (e) {
-            console.error(e);
-            return;
-        }
+        setPending(true);
 
         try {
+            await deleteAccountQuery.mutateAsync({});
             await reauthenticateWithCredential(firebaseUser, credential);
             await deleteUser(firebaseUser);
             dispatch(closeDialog());
@@ -69,9 +60,9 @@ export const DeleteAccountDialog = () => {
                 setFirebaseError(firebaseFieldErrorConvert(firebaseError.code, 'current_password'));
             }
         }
-
-        setPending(false);
-
+        finally {
+            setPending(false);
+        }
     }, [firebaseUser]);
 
     const onSubmitWithGoogleProvider = useCallback(async () => {
@@ -79,17 +70,9 @@ export const DeleteAccountDialog = () => {
         setPending(true);
 
         try {
-            await preDeleteAccountQuery.mutateAsync({});
-        }
-        catch (e) {
-            console.error(e);
-            return;
-        }
-
-        try {
+            await deleteAccountQuery.mutateAsync({});
             await reauthenticateWithPopup(firebaseUser, new GoogleAuthProvider());
             await deleteUser(firebaseUser);
-            queryClient.setQueryData(['user'], null);
             dispatch(closeDialog());
         }
         catch (e) {
@@ -105,12 +88,6 @@ export const DeleteAccountDialog = () => {
         dispatch(closeDialog());
     }, []);
 
-    useEffect(() => {
-        if (preDeleteAccountQuery.isSuccess) {
-            dispatch(closeDialog());
-        }
-    }, [preDeleteAccountQuery.isSuccess]);
-
     return <div className={'flex max-w-[400px] flex-col gap-5'}>
         <div className={'rounded-md bg-red-800/20 p-4 text-sm font-medium'}>
             {t('DELETE_ACCOUNT_WARNING')}
@@ -118,10 +95,10 @@ export const DeleteAccountDialog = () => {
 
         {isPasswordProvider && <Form<DeleteAccountFormArgs>
             config={deleteAccountForm}
-            error={preDeleteAccountQuery.error?.data || firebaseError}
+            error={deleteAccountQuery.error?.data || firebaseError}
             submitButtonClassName={'rounded-md bg-white/5 px-5 py-2 text-sm font-medium text-red-500 hover:bg-white/10 hover:text-red-600'}
             submitButtonTextKey={'DELETE_ACCOUNT_PERMANENTLY'}
-            disabled={preDeleteAccountQuery.isLoading || pending}
+            disabled={deleteAccountQuery.isLoading || pending}
             onCancel={onCancelRequest}
             onSubmit={onSubmit}
             initialValues={{
@@ -140,6 +117,6 @@ export const DeleteAccountDialog = () => {
             initialValues={{}}
         />}
 
-        <DelayedTransition pending={preDeleteAccountQuery.isLoading || pending} />
+        <DelayedTransition pending={deleteAccountQuery.isLoading || pending} />
     </div>;
 };

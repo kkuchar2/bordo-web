@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 
 import { FieldValues } from 'react-hook-form/dist/types';
 
@@ -6,7 +6,8 @@ import { DelayedTransition } from '@/components/DelayedTransition/DelayedTransit
 import Form from '@/components/Forms/Form/Form';
 import { FormConfig } from '@/components/Forms/formConfig';
 import { closeDialog } from '@/state/reducers/dialog/dialogSlice';
-import { BaseDialogProps, DialogProps } from '@/state/reducers/dialog/dialogSlice.types';
+import { DialogProps } from '@/state/reducers/dialog/dialogSlice.types';
+import { useAppDispatch } from '@/state/store';
 
 export interface ChangePropertyDialogProps<TFieldValues extends FieldValues> {
     queryFunction: any;
@@ -16,16 +17,18 @@ export interface ChangePropertyDialogProps<TFieldValues extends FieldValues> {
 }
 
 export const ChangePropertyDialog = <TFieldValues extends FieldValues>(
-    props: DialogProps<ChangePropertyDialogProps<TFieldValues>> & BaseDialogProps
+    props: DialogProps<ChangePropertyDialogProps<TFieldValues>>
 ) => {
 
-    const { dialog, data, dispatch } = props;
+    const { dialog, data } = props;
 
     const { onCancel } = dialog;
 
     const { formConfig, queryFunction, initialValues, propertyName } = data;
 
     const query = queryFunction();
+
+    const dispatch = useAppDispatch();
 
     useEffect(() => {
         if (query.isSuccess) {

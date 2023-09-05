@@ -1,7 +1,6 @@
 import { IconProps } from '@/components/Icons/Icon';
-import { AppDispatch } from '@/state/store';
 
-export interface IDialogComponentProps {
+export type DialogComponentProps = {
     title?: string;
     description?: string;
     icon?: IconProps;
@@ -12,22 +11,18 @@ export interface IDialogComponentProps {
     arrowBack?: boolean;
 }
 
-export interface BaseDialogProps {
-    dispatch: AppDispatch
-}
-
-export interface DialogProps<T = any> {
-    dialog: IDialogComponentProps,
+export type DialogProps<T = any> = {
+    dialog: DialogComponentProps;
     data: T;
 }
 
-export interface DialogSliceState {
+export type DialogSliceState = {
     opened: boolean,
     component: string,
-    componentProps: DialogProps & BaseDialogProps
+    componentProps: DialogProps
 }
 
-export interface ShowDialogArgs<T = any> {
+export type ShowDialogArgs<T = any> = {
     // Describes key that will point to displayed component
     component: string,
 

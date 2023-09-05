@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useCallback, useState } from 'react';
+import { useCallback, useState } from 'react';
 
 import { createUserWithEmailAndPassword, getAuth, sendEmailVerification, updateProfile } from '@firebase/auth';
 import { FirebaseError } from '@firebase/util';
@@ -53,7 +53,6 @@ const SignUpPage = () => {
             const firebaseError = e as FirebaseError;
 
             if (firebaseError.code === 'auth/email-already-in-use') {
-                console.log('email already in use');
                 setFirebaseError(firebaseFieldErrorConvert(firebaseError.code, 'email'));
             }
             else if (firebaseError.code === 'auth/invalid-email') {
