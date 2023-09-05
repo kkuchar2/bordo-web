@@ -53,6 +53,7 @@
     "@typescript-eslint/eslint-plugin": "^6.4.1",
     "@typescript-eslint/parser": "^6.4.1",
     "autoprefixer": "^10.4.15",
+    "encoding": "^0.1.13",
     "eslint": "^8.48.0",
     "eslint-config-next": "^13.4.19",
     "eslint-plugin-babel": "^5.3.1",
