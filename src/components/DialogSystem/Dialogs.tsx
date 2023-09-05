@@ -144,7 +144,7 @@ const Dialogs = () => {
                 </div>}
             </div>
             <div className={'flex w-full p-[20px] pt-0'}>
-                <Component dispatch={dispatch} t={t} {...componentProps} />
+                <Component t={t} {...componentProps} />
             </div>
         </div>;
     }, [componentProps, t]);
