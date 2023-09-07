@@ -66,11 +66,13 @@ export const EditImageDialog = (props: DialogProps<EditImageDialogProps>) => {
 
         const formData = new FormData();
         Object.keys(fields).forEach((key) => formData.append(key, fields[key]));
+        formData.append('Content-Type', 'image/png');
+        formData.append('Cache-Control', 'max-age=604800, no-transform');
         formData.append('file', blob);
 
         await axios.post(signedUrl.url, formData, {
             headers: {
-                'Content-Type': 'multipart/form-data',
+                'Content-Type': 'multipart/form-data'
             }
         });
         await changeAvatarQuery.mutateAsync({ avatar: file_path });
