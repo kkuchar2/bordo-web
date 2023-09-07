@@ -74,9 +74,9 @@ const SignUpPage = () => {
         await signupFirebaseFirebase(formData);
     }, []);
 
-    return <div className={'grid h-full w-full place-items-center'}>
+    return <div className={'flex h-full w-full items-center justify-center bg-[#2a2a2a] md:bg-transparent'}>
         <div
-            className={'flex w-full flex-col gap-[30px] rounded-none bg-[#2a2a2a] p-[40px] sm:w-[400px] sm:rounded-md'}>
+            className={'flex w-full flex-col gap-[30px] rounded-none bg-[#2a2a2a] p-[20px] sm:w-[400px] sm:rounded-md'}>
 
             <div className={'text-center text-2xl tracking-tighter'}>
                 {t('REGISTRATION')}

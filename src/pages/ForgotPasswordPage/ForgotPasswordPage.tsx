@@ -47,11 +47,11 @@ const ForgotPassword = () => {
         }
     }, []);
 
-    return <div className={'grid h-full w-full place-items-center'}>
-        <div className={'rounded-0 flex w-full flex-col gap-[40px] bg-[#2a2a2a] p-[40px] sm:w-[400px] sm:rounded-md'}>
+    return <div className={'flex h-full w-full items-center justify-center bg-[#2a2a2a] md:bg-transparent'}>
+        <div className={'rounded-0 flex w-full flex-col gap-[40px] bg-[#2a2a2a] p-[20px] sm:w-[400px] sm:rounded-md'}>
 
             <div className={'flex flex-col gap-4'}>
-                <div className={'text-center text-2xl tracking-tighter'}>
+                <div className={'text-center text-2xl font-semibold tracking-tighter'}>
                     {t('RESET_PASSWORD')}
                 </div>
 
@@ -77,7 +77,7 @@ const ForgotPassword = () => {
                     </NavLink>
                 </div>
 
-                <DelayedTransition pending={pending} />
+                <DelayedTransition pending={pending}/>
             </div>
         </div>
     </div>;

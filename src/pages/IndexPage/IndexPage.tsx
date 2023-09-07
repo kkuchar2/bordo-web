@@ -86,16 +86,12 @@ const IndexPage = () => {
         await signInEmailPasswordFirebase(formData);
     }, []);
 
-    return <div className={'grid h-full w-full place-items-center'}>
-        <div className={'flex w-full flex-col gap-[20px] bg-[#2a2a2a] p-[40px] sm:w-[400px] sm:rounded-md'}>
+    return <div className={'flex h-full w-full items-center justify-center bg-[#2a2a2a] md:bg-transparent'}>
+        <div className={'flex w-full flex-col gap-[20px] bg-[#2a2a2a] p-[20px] sm:w-[400px] sm:rounded-md'}>
 
             <div className={'flex flex-col gap-4'}>
-                <div className={'text-center text-2xl tracking-tighter'}>
-                    {t('WELCOME')}
-                </div>
-
-                <div className={'text-center text-sm'}>
-                    {t('LOGIN_MESSAGE')}
+                <div className={'text-center text-2xl font-semibold tracking-tighter'}>
+                    {t('LOGIN_TO_YOUR_ACCOUNT')}
                 </div>
             </div>
 
@@ -106,7 +102,8 @@ const IndexPage = () => {
                 submitButtonClassName={'bg-[#77a4df]/80 hover:bg-[#77a4df] text-white py-3 px-4 rounded-sm font-normal disabled:opacity-50 disabled:cursor-not-allowed'}
                 error={firebaseError || userQuery.error || {}}
                 afterFieldsContent={() => {
-                    return <NavLink className={'text-sm font-semibold text-[#77a4df] hover:underline'} href={'/forgotPassword'}>
+                    return <NavLink className={'text-sm font-semibold text-[#77a4df] hover:underline'}
+                        href={'/forgotPassword'}>
                         {t('FORGOT_PASSWORD_QUESTION')}
                     </NavLink>;
                 }}
@@ -124,9 +121,9 @@ const IndexPage = () => {
             </div>
 
             <div className={'flex w-full items-center gap-3'}>
-                <div className={'h-[1px] grow bg-[#C7C7C7]/40'} />
+                <div className={'h-[1px] grow bg-[#C7C7C7]/40'}/>
                 <div className={'text-xs font-semibold text-white/60'}>{t('OR')}</div>
-                <div className={'h-[1px] grow bg-[#C7C7C7]/40'} />
+                <div className={'h-[1px] grow bg-[#C7C7C7]/40'}/>
             </div>
 
             <button
@@ -136,7 +133,7 @@ const IndexPage = () => {
                 {'Continue with Google'}
             </button>
 
-            <DelayedTransition pending={firebaseLoginPending || userQuery.isLoading} />
+            <DelayedTransition pending={firebaseLoginPending || userQuery.isLoading}/>
         </div>
     </div>;
 };
