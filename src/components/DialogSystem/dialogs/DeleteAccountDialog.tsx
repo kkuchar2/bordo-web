@@ -1,9 +1,12 @@
 import { useCallback, useState } from 'react';
 
 import {
-    deleteUser, EmailAuthProvider,
+    deleteUser,
+    EmailAuthProvider,
     getAuth,
-    GoogleAuthProvider, reauthenticateWithCredential, reauthenticateWithPopup
+    GoogleAuthProvider,
+    reauthenticateWithCredential,
+    reauthenticateWithPopup
 } from '@firebase/auth';
 import { FirebaseError } from '@firebase/util';
 import { useTranslation } from 'react-i18next';
@@ -88,7 +91,7 @@ export const DeleteAccountDialog = () => {
         dispatch(closeDialog());
     }, []);
 
-    return <div className={'flex max-w-[400px] flex-col gap-5'}>
+    return <div className={'flex flex-col gap-5'}>
         <div className={'rounded-md bg-red-800/20 p-4 text-sm font-medium'}>
             {t('DELETE_ACCOUNT_WARNING')}
         </div>
@@ -117,6 +120,6 @@ export const DeleteAccountDialog = () => {
             initialValues={{}}
         />}
 
-        <DelayedTransition pending={deleteAccountQuery.isLoading || pending} />
+        <DelayedTransition pending={deleteAccountQuery.isLoading || pending}/>
     </div>;
 };

@@ -1,10 +1,8 @@
-import { ExclamationCircleIcon } from '@heroicons/react/24/outline';
-import { EnvelopeIcon, KeyIcon, TrashIcon, UsersIcon } from '@heroicons/react/24/solid';
+import { EnvelopeIcon, KeyIcon, TrashIcon } from '@heroicons/react/24/solid';
 
 import { SentEmailDialogArgs } from './readyDialogs.types';
 
 import { changeEmailForm } from '@/components/Forms/formConfig';
-import { GoogleIcon } from '@/components/Icons/GoogleIcon';
 import { changeEmail } from '@/queries/account';
 import { openDialog } from '@/state/reducers/dialog/dialogSlice';
 import { store } from '@/state/store';
@@ -43,18 +41,6 @@ export const showDialogAfterPasswordResetRequest = () => {
     });
 };
 
-export const showDialogAfterFirstPasswordSetupRequest = () => {
-    return showSentEmailDialog({
-        component: 'SentEmailDialog',
-        title: 'PASSWORD_CREATE_MAIL_SENT_TITLE',
-        description: 'PASSWORD_CREATE_MAIL_SENT_DESCRIPTION',
-        closeable: true,
-        data: {
-            showSignInButton: false
-        }
-    });
-};
-
 export const showSentEmailDialog = <T = any>(args: SentEmailDialogArgs<T>) => {
     const { component, title, description, closeable, data } = args;
 
@@ -69,7 +55,8 @@ export const showSentEmailDialog = <T = any>(args: SentEmailDialogArgs<T>) => {
                         color: '#24a0ed'
                     },
                     description: description,
-                    closeable: closeable
+                    closeable: closeable,
+                    maxWidth: 400
                 },
                 data: data
             }
@@ -180,6 +167,7 @@ export const showUpdateEmailDialog = (args: OpenReadyDialogArgs) => {
                 dialog: {
                     title: 'CHANGE_EMAIL',
                     description: 'CHANGE_EMAIL_DESCRIPTION',
+                    maxWidth: 400,
                     icon: {
                         component: EnvelopeIcon,
                         color: '#8ed3ed'
@@ -204,30 +192,11 @@ export const showUpdatePasswordDialog = (args: OpenReadyDialogArgs) => {
                 dialog: {
                     title: 'UPDATE_PASSWORD',
                     description: 'CHANGE_PASSWORD_DESCRIPTION',
+                    maxWidth: 400,
                     icon: {
                         component: KeyIcon,
                         color: '#ffb700'
                     },
-                },
-                data: {}
-            }
-        })
-    );
-};
-
-export const showServiceUnavailableDialog = () => {
-    store.dispatch(
-        openDialog({
-            component: 'ServiceUnavailableDialog',
-            props: {
-                dialog: {
-                    title: 'SERVICE_UNAVAILABLE_TITLE',
-                    description: 'SERVICE_UNAVAILABLE_DESCRIPTION',
-                    icon: {
-                        component: ExclamationCircleIcon,
-                        color: '#ca1717'
-                    },
-                    closeable: true
                 },
                 data: {}
             }
@@ -243,45 +212,10 @@ export const showDeleteAccountDialog = () => {
                 dialog: {
                     title: 'DELETE_ACCOUNT',
                     description: '',
+                    maxWidth: 400,
                     icon: {
                         component: TrashIcon,
                         color: '#ca3535'
-                    },
-                },
-                data: {}
-            }
-        })
-    );
-};
-
-export const showCreateGroupDialog = () => {
-    store.dispatch(
-        openDialog({
-            component: 'CreateGroupDialog',
-            props: {
-                dialog: {
-                    title: 'CREATE_GROUP',
-                    description: 'CREATE_GROUP_DESCRIPTION',
-                    icon: {
-                        component: UsersIcon,
-                        color: '#24a0ed'
-                    }
-                },
-                data: {}
-            }
-        })
-    );
-};
-
-export const showDisconnectGoogleDialog = () => {
-    store.dispatch(
-        openDialog({
-            component: 'DisconnectGoogleDialog',
-            props: {
-                dialog: {
-                    title: 'DISCONNECT_GOOGLE_ACCOUNT',
-                    icon: {
-                        component: GoogleIcon
                     },
                 },
                 data: {}

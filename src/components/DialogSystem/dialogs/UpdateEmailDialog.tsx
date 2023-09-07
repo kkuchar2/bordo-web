@@ -1,18 +1,12 @@
 import { useCallback, useState } from 'react';
 
-import {
-    EmailAuthProvider,
-    getAuth,
-    reauthenticateWithCredential, updateEmail
-} from '@firebase/auth';
+import { EmailAuthProvider, getAuth, reauthenticateWithCredential, updateEmail } from '@firebase/auth';
 import { FirebaseError } from '@firebase/util';
 
 import { DelayedTransition } from '@/components/DelayedTransition/DelayedTransition';
 import Form from '@/components/Forms/Form/Form';
 import { changeEmailForm } from '@/components/Forms/formConfig';
-import {
-    ChangeEmailFormArgs
-} from '@/components/Forms/formConfig.types';
+import { ChangeEmailFormArgs } from '@/components/Forms/formConfig.types';
 import { firebaseFieldErrorConvert } from '@/components/Forms/util';
 import { showSuccessToast } from '@/components/Toast/readyToastNotifications';
 import { getFirebaseApp } from '@/firebase/firebaseApp';
@@ -76,7 +70,7 @@ export const UpdateEmailDialog = (props: DialogProps) => {
         setPending(false);
     }, [firebaseUser]);
 
-    return <div className={'w-full min-w-[400px]'}>
+    return <div>
         <Form<ChangeEmailFormArgs>
             config={changeEmailForm}
             className={'w-full'}

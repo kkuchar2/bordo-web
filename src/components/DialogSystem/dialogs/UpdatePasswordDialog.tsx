@@ -103,7 +103,7 @@ export const UpdatePasswordDialog = (props: DialogProps) => {
         setPending(false);
     }, [firebaseUser]);
 
-    return <div className={'w-full min-w-[400px]'}>
+    return <div>
         {isGoogleProvider && <Form<UpdatePasswordFormSmallArgs>
             config={updatePasswordFormSmall}
             className={'w-full'}
@@ -116,7 +116,7 @@ export const UpdatePasswordDialog = (props: DialogProps) => {
             }}
             disabled={false}
             onCancel={onCancelRequest}
-            onSubmit={onSubmitWithGoogleProvider}/> }
+            onSubmit={onSubmitWithGoogleProvider}/>}
 
         {isPasswordProvider && <Form<UpdatePasswordFormArgs>
             config={updatePasswordForm}
@@ -131,7 +131,7 @@ export const UpdatePasswordDialog = (props: DialogProps) => {
             }}
             disabled={false}
             onCancel={onCancelRequest}
-            onSubmit={onSubmitWithEmailPasswordAccount}/> }
+            onSubmit={onSubmitWithEmailPasswordAccount}/>}
 
         <DelayedTransition pending={pending}/>
     </div>;
