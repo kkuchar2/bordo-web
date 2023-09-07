@@ -95,7 +95,7 @@ const SignUpPage = () => {
                 <div className={'text-[#C7C7C7]'}>
                     {t('ALREADY_HAVE_ACCOUNT')}
                 </div>
-                <NavLink className={'font-semibold text-[#77a4df] hover:underline'} href={'/'}>
+                <NavLink className={'font-semibold text-[#77a4df] hover:underline'} href={'/signin'}>
                     {t('SIGN_IN')}
                 </NavLink>
             </div>
