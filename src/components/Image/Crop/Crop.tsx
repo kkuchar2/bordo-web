@@ -4,13 +4,13 @@ import { PhotoIcon } from '@heroicons/react/24/solid';
 import Cropper from 'react-easy-crop';
 import { Area } from 'react-easy-crop/types';
 
+import styles from './Crop.module.scss';
+
 type CropProps = {
     image: string | null;
     disabled?: boolean;
     onCroppedAreaChange?: (area: Area) => void;
 }
-
-import styles from './Crop.module.scss';
 
 export const Crop = (props: CropProps) => {
 
@@ -49,7 +49,7 @@ export const Crop = (props: CropProps) => {
         return null;
     }
 
-    return <div className={'flex flex-col gap-[40px]'}>
+    return <div className={'flex flex-col gap-[20px]'}>
         <div className={'relative box-border flex w-full flex-col items-center justify-center'}
             style={{
                 width: image ? '100%' : 200,
@@ -63,13 +63,13 @@ export const Crop = (props: CropProps) => {
                 aspect={1}
                 minZoom={1}
                 maxZoom={10}
-                objectFit={'vertical-cover'}
+                objectFit={'horizontal-cover'}
                 showGrid={false}
                 onZoomChange={onZoomChange}
                 onCropComplete={onCropComplete}
                 onCropChange={setCrop}/>
         </div>
-        <div className={'flex w-full items-center justify-center gap-[20px] p-[40px]'}>
+        <div className={'mb-[10px] flex w-full items-center justify-center gap-[20px]'}>
             <PhotoIcon width={30} height={30}/>
             <input type={'range'}
                 className={styles.slider}

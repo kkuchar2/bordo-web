@@ -3,9 +3,9 @@ import { EnvelopeIcon, KeyIcon, TrashIcon, UsersIcon } from '@heroicons/react/24
 
 import { SentEmailDialogArgs } from './readyDialogs.types';
 
-import { changeEmailForm, changeUsernameForm } from '@/components/Forms/formConfig';
+import { changeEmailForm } from '@/components/Forms/formConfig';
 import { GoogleIcon } from '@/components/Icons/GoogleIcon';
-import { changeEmail, changeUsername } from '@/queries/account';
+import { changeEmail } from '@/queries/account';
 import { openDialog } from '@/state/reducers/dialog/dialogSlice';
 import { store } from '@/state/store';
 
@@ -112,37 +112,58 @@ export const showChangeAvatarDialog = () => {
     );
 };
 
-export const showConfirmEmailDialog = <T>(data: T) => {
-
+export const showChangeAvatarModeDialog = () => {
     store.dispatch(
         openDialog({
-            component: 'SendConfirmationMailDialog',
+            component: 'ChangeAvatarModeDialog',
             props: {
                 dialog: {
-                    title: 'Please verify your email address'
+                    title: 'CHANGE_AVATAR',
+                    description: '',
+                    maxWidth: 400
                 },
-                data: data
+                data: {}
             }
         })
     );
 };
 
-export const showChangeUsernameDialog = (args: OpenReadyDialogArgs) => {
-    const { initialValues } = args;
-
+export const showSelectGIFDialog = () => {
     store.dispatch(
         openDialog({
-            component: 'ChangePropertyDialog',
+            component: 'SelectGIFDialog',
             props: {
                 dialog: {
-                    title: 'CHANGE_USERNAME',
-                    description: 'CHANGE_USERNAME_DESCRIPTION'
+                    title: 'CHANGE_AVATAR',
+                    arrowBack: true,
+                    onBack: () => {
+                        showChangeAvatarModeDialog();
+                    },
+                    description: '',
+                    maxWidth: 500
+                },
+                data: {}
+            }
+        })
+    );
+};
+
+export const showEditImageDialog = (file: File) => {
+    store.dispatch(
+        openDialog({
+            component: 'EditImageDialog',
+            props: {
+                dialog: {
+                    title: 'CHANGE_AVATAR',
+                    arrowBack: true,
+                    onBack: () => {
+                        showChangeAvatarModeDialog();
+                    },
+                    description: '',
+                    maxWidth: 500
                 },
                 data: {
-                    formConfig: changeUsernameForm,
-                    propertyName: 'username',
-                    queryFunction: changeUsername,
-                    initialValues: initialValues
+                    file: file
                 }
             }
         })

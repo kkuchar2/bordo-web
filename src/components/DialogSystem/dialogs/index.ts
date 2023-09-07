@@ -1,4 +1,6 @@
-export * from './ChangeAvatarDialog/ChangeAvatarDialog';
+export * from './ChangeAvatarDialog/ChangeAvatarModeDialog';
+export * from './ChangeAvatarDialog/EditImageDialog';
+export * from './ChangeAvatarDialog/SelectGIFDialog';
 export * from './ChangePropertyDialog';
 export * from './DeleteAccountDialog';
 export * from './SentEmailDialog';

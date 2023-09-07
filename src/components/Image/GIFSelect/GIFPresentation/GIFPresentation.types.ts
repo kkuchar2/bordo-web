@@ -8,4 +8,5 @@ export type GIFPresentationProps = {
     searchText?: string,
     giphyFetch: GiphyFetch,
     width: number,
+    screenWidth: number,
 }

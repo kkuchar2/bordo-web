@@ -1,8 +1,6 @@
 import { SignedAvatarUploadInfo, User } from './types';
 
-import {
-    showEmailChangeConfirmationSentDialog
-} from '@/components/DialogSystem/readyDialogs';
+import { showEmailChangeConfirmationSentDialog } from '@/components/DialogSystem/readyDialogs';
 import { showSuccessToast } from '@/components/Toast/readyToastNotifications';
 import { queryClient } from '@/config';
 import { getQueryFirebase, postQueryFirebase, putQueryFirebase } from '@/queries/authWithFirebaseQueries';
@@ -107,5 +105,5 @@ export const getUser = () => {
 };
 
 export const signAvatarUploadUrl = () => {
-    return postQueryFirebase<SignedAvatarUploadInfo>(['signedAvatarUploadInfo'], 'account/sign-avatar-upload-url');
+    return postQueryFirebase<SignedAvatarUploadInfo>(['signedAvatarUploadInfo'], 'account/sign-avatar-upload-url')({});
 };

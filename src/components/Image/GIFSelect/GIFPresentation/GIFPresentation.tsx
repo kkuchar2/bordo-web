@@ -7,7 +7,7 @@ import { GIFPresentationProps } from './GIFPresentation.types';
 
 export const GIFPresentation = (props: GIFPresentationProps) => {
 
-    const { searchText, onGifClick, giphyFetch, width } = props;
+    const { searchText, onGifClick, giphyFetch, width, screenWidth } = props;
 
     const getFetchFunc = useMemo(() => {
         if (!searchText || searchText.length === 0) {
@@ -22,17 +22,16 @@ export const GIFPresentation = (props: GIFPresentationProps) => {
         return null;
     }
 
-    return <div
-        className={styles.gifPresentation}
-        style={{ width: width + 20 }}>
+    return <div className={styles.gifPresentation} style={{ width: width + 20 }}>
         <Grid onGifClick={onGifClick}
             fetchGifs={getFetchFunc}
             borderRadius={10}
             width={width}
-            columns={2}
+            columns={screenWidth < 440 ? 1 : 2}
             overlay={(props: GifOverlayProps) => {
-                return <div className={'absolute inset-0 z-20 h-full w-full overflow-hidden hover:cursor-pointer hover:border-4 ' +
-                    'hover:border-blue-500 rounded-[10px]'}>
+                return <div
+                    className={'absolute inset-0 z-20 h-full w-full overflow-hidden hover:cursor-pointer hover:border-4 ' +
+                          'hover:border-blue-500 rounded-[10px]'}>
                 </div>;
             }}
             key={searchText}

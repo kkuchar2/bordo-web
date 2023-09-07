@@ -4,6 +4,7 @@ export type DialogComponentProps = {
     title?: string;
     description?: string;
     icon?: IconProps;
+    maxWidth?: number;
     onCancel?: () => void;
     onBack?: () => void;
     onConfirm?: () => void;
