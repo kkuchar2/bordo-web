@@ -57,7 +57,7 @@ const AccountPage = () => {
                 <EditableProperty
                     id={'email'}
                     name={t('EMAIL')}
-                    value={email.email}
+                    value={email}
                     canEdit={true}
                     passwordRequired={true}
                     showDialogFunc={showChangeEmailDialog}/>

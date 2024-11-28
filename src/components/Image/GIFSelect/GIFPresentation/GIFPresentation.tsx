@@ -1,5 +1,6 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 
+import { GifsResult, GiphyFetch } from '@giphy/js-fetch-api';
 import { GifOverlayProps, Grid } from '@giphy/react-components';
 
 import styles from './GIFPresentation.module.scss';
@@ -9,14 +10,14 @@ export const GIFPresentation = (props: GIFPresentationProps) => {
 
     const { searchText, onGifClick, giphyFetch, width } = props;
 
-    const getFetchFunc = useMemo(() => {
+    const getFetchFunc = (gFetch: GiphyFetch) : (offset: number) => Promise<GifsResult> => {
         if (!searchText || searchText.length === 0) {
-            return (offset: number) => giphyFetch.trending({ offset, limit: 10 });
+            return (offset: number) => gFetch.trending({ offset, limit: 10 });
         }
         else {
-            return (offset: number) => giphyFetch.search(searchText, { offset, limit: 10 });
+            return (offset: number) => gFetch.search(searchText, { offset, limit: 10 });
         }
-    }, [searchText]);
+    };
 
     if (!giphyFetch) {
         return null;
@@ -26,7 +27,7 @@ export const GIFPresentation = (props: GIFPresentationProps) => {
         className={styles.gifPresentation}
         style={{ width: width + 20 }}>
         <Grid onGifClick={onGifClick}
-            fetchGifs={getFetchFunc}
+            fetchGifs={getFetchFunc(giphyFetch)}
             borderRadius={10}
             width={width}
             columns={2}

@@ -9,8 +9,12 @@ export type RegistrationFormArgs = {
     password: string;
 }
 
-export type ForgotPasswordFormArgs = {
+export type EmailArgs = {
     email: string;
+}
+
+export type ChangeAvatarFormArgs = {
+    avatar: string
 }
 
 export type CreateNewPasswordFormArgs = {
@@ -33,13 +37,24 @@ export type ResetPasswordFormArgs = {
     new_password_confirm: string;
 }
 
+export type TokenData = {
+    uid: string;
+    token: string;
+}
+
+export type KeyData = {
+    key: string;
+}
+
+export type ResetPasswordRequestData = ResetPasswordFormArgs & TokenData
+
 export type ChangePasswordFormArgs = {
     current_password: string;
     new_password: string;
     new_password_confirm: string;
 }
 
-export type DeleteAccountFormArgs = {
+export type CurrentPasswordArgs = {
     current_password: string;
 }
 

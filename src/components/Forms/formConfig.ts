@@ -9,9 +9,9 @@ import {
     ChangeEmailFormArgs,
     ChangePasswordFormArgs,
     ChangeUsernameFormArgs,
-    DeleteAccountFormArgs,
+    CurrentPasswordArgs,
+    EmailArgs,
     EmptyFormArgs,
-    ForgotPasswordFormArgs,
     LoginFormArgs,
     RegistrationFormArgs,
     ResetPasswordFormArgs
@@ -110,7 +110,7 @@ export const registrationForm: FormConfig<RegistrationFormArgs> = {
     })
 };
 
-export const forgotPasswordForm: FormConfig<ForgotPasswordFormArgs> = {
+export const forgotPasswordForm: FormConfig<EmailArgs> = {
     fields: [
         {
             id: 'email',
@@ -120,7 +120,7 @@ export const forgotPasswordForm: FormConfig<ForgotPasswordFormArgs> = {
             placeholder: 'ENTER_EMAIL_INPUT_PLACEHOLDER',
             required: true,
             autoComplete: 'email',
-            component: HookFormInput<ForgotPasswordFormArgs>
+            component: HookFormInput<EmailArgs>
         }
     ],
     validationSchema: object({
@@ -255,7 +255,7 @@ export const changePasswordForm: FormConfig<ChangePasswordFormArgs> = {
     })
 };
 
-export const deleteAccountForm: FormConfig<DeleteAccountFormArgs> = {
+export const deleteAccountForm: FormConfig<CurrentPasswordArgs> = {
     fields: [
         {
             id: 'current_password',
@@ -265,7 +265,7 @@ export const deleteAccountForm: FormConfig<DeleteAccountFormArgs> = {
             placeholder: 'CURRENT_PASSWORD_ENTER',
             required: true,
             autoComplete: 'current-password',
-            component: HookFormInput<DeleteAccountFormArgs>
+            component: HookFormInput<CurrentPasswordArgs>
         },
     ],
     validationSchema: object({

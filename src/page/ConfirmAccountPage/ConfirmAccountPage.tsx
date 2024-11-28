@@ -18,7 +18,7 @@ const ConfirmAccountPage = (props: ConfirmAccountPageProps) => {
 
     const router = useRouter();
 
-    const { isLoading, isError, isSuccess, mutate } = confirmAccount();
+    const confirmAccountQuery = confirmAccount();
 
     useEffect(() => {
         if (!token) {
@@ -26,26 +26,26 @@ const ConfirmAccountPage = (props: ConfirmAccountPageProps) => {
             router.push('/');
             return;
         }
-        mutate({
+        confirmAccountQuery.mutate({
             key: decodeURIComponent(token),
         });
     }, [token]);
 
     useEffect(() => {
-        if (isError) {
+        if (confirmAccountQuery.isError) {
             showErrorToast('Verification link invalid or expired');
             router.push('/');
         }
-    }, [isError]);
+    }, [confirmAccountQuery.isError]);
 
     useEffect(() => {
-        if (isSuccess) {
+        if (confirmAccountQuery.isSuccess) {
             showSuccessToast('Account verified successfully');
             router.push('/');
         }
-    }, [isSuccess]);
+    }, [confirmAccountQuery.isSuccess]);
 
-    return <DelayedTransition pending={isLoading}/>;
+    return <DelayedTransition pending={confirmAccountQuery.isPending}/>;
 };
 
 export default ConfirmAccountPage;

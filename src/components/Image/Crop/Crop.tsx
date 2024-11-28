@@ -4,13 +4,13 @@ import { PhotoIcon } from '@heroicons/react/24/solid';
 import Cropper from 'react-easy-crop';
 import { Area } from 'react-easy-crop/types';
 
+import styles from './Crop.module.scss';
+
 type CropProps = {
-    image: string
+    image: string | null
     disabled?: boolean
     onCroppedAreaChange?: (area: Area) => void
 }
-
-import styles from './Crop.module.scss';
 
 export const Crop = (props: CropProps) => {
 
@@ -44,6 +44,11 @@ export const Crop = (props: CropProps) => {
 
         onCroppedAreaChange(croppedAreaPixels);
     }, [disabled, onCroppedAreaChange]);
+
+    if (!image) {
+        console.error('No image provided to Crop component');
+        return null;
+    }
 
     return <div className={'flex flex-col gap-[40px]'}>
         <div className={'relative box-border flex w-full flex-col items-center justify-center'}

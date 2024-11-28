@@ -251,7 +251,7 @@ export const TextAreaWithEmoji = (props: TextAreaWithEmojiProps) => {
             <textarea
                 ref={textAreaRef}
                 id={id}
-                className={'text-md h-full w-full resize-none bg-transparent bg-none p-3 font-medium text-white/80 outline-none'}
+                className={'text-md size-full resize-none bg-transparent bg-none p-3 font-medium text-white/80 outline-none'}
                 placeholder={placeholder}
                 maxLength={maxLength}
                 spellCheck={false}

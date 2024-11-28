@@ -55,19 +55,20 @@ export const postQuery = <TData = unknown, TError = unknown, TVariables = void>
     };
 };
 
-export const authPostQuery = <TResponseData = unknown, TError = unknown, TRequestData = void>
+export const authPostQuery = <TResponse = unknown, TError = unknown, TRequestData = void>
     (
         key: MutationKey,
         endpoint: string
     ) => {
-    return (options?: UseMutationOptions<TResponseData, TError, TRequestData>) => {
-        return postQueryInternal<TResponseData, TError, TRequestData>
+    return (options?: UseMutationOptions<TResponse, TError, TRequestData>, onSuccess?: (data: TResponse) => void) => {
+        return postQueryInternal<TResponse, TError, TRequestData>
         (
             ApiClient,
             key,
             endpoint,
             () => AxiosConfigs.WITH_CREDENTIALS_AND_CSRF,
-            options
+            options,
+            onSuccess
         );
     };
 };

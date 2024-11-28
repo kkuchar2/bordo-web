@@ -91,7 +91,7 @@ const Dialogs = () => {
 
         if (arrowBack) {
             return <ButtonWithIcon title={'Back'}
-                className={'h-[40px] w-[40px]'}
+                className={'size-[40px]'}
                 iconColor={'rgba(255,255,255,0.48)'}
                 iconColorHover={'white'}
                 icon={{
@@ -114,7 +114,7 @@ const Dialogs = () => {
                 </div>}
             {title && <div className={'grow font-bold'}>{t(title)}</div>}
             <ButtonWithIcon title={'Close'}
-                className={'h-[40px] w-[40px]'}
+                className={'size-[40px]'}
                 iconColor={'rgba(255,255,255,0.48)'}
                 iconColorHover={'white'}
                 icon={{
@@ -143,7 +143,7 @@ const Dialogs = () => {
                 </div>}
             </div>
             <div className={'flex w-full p-[20px] pt-0'}>
-                <Component dispatch={dispatch} t={t} {...componentProps} />
+                <Component t={t} {...componentProps} />
             </div>
         </div>;
     }, [componentProps, t]);
@@ -158,7 +158,7 @@ const Dialogs = () => {
     }
 
     return <div
-        className={'dialogScene absolute left-0 top-0 z-[1] box-border flex h-full w-full items-center justify-center bg-[rgba(30,30,30,0.8)] backdrop-blur-[5px]'}
+        className={'dialogScene absolute left-0 top-0 z-[1] box-border flex size-full items-center justify-center bg-[rgba(30,30,30,0.8)] backdrop-blur-[5px]'}
         onMouseDown={onClick}>
         {dialog}
     </div>;

@@ -19,7 +19,7 @@ export const EmojiButton = (props: EmojiButtonProps) => {
     }, []);
 
     return <button
-        className={'h-[50px] w-[50px] bg-transparent text-xl hover:scale-125'}
+        className={'size-[50px] bg-transparent text-xl hover:scale-125'}
         onMouseEnter={onMouseEnter}
         title={title}
         onClick={onClick}>

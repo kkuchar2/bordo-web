@@ -6,7 +6,8 @@ import { DelayedTransition } from '@/components/DelayedTransition/DelayedTransit
 import Form from '@/components/Forms/Form/Form';
 import { FormConfig } from '@/components/Forms/formConfig';
 import { closeDialog } from '@/state/reducers/dialog/dialogSlice';
-import { BaseDialogProps, DialogProps } from '@/state/reducers/dialog/dialogSlice.types';
+import { DialogProps } from '@/state/reducers/dialog/dialogSlice.types';
+import { useAppDispatch } from '@/state/store';
 
 export interface ChangePropertyDialogProps<TFieldValues extends FieldValues> {
     queryFunction: any;
@@ -16,16 +17,18 @@ export interface ChangePropertyDialogProps<TFieldValues extends FieldValues> {
 }
 
 export const ChangePropertyDialog = <TFieldValues extends FieldValues>(
-    props: DialogProps<ChangePropertyDialogProps<TFieldValues>> & BaseDialogProps
+    props: DialogProps<ChangePropertyDialogProps<TFieldValues>>
 ) => {
 
-    const { dialog, data, dispatch } = props;
+    const { dialog, data } = props;
 
     const { onCancel } = dialog;
 
     const { formConfig, queryFunction, initialValues, propertyName } = data;
 
     const query = queryFunction();
+
+    const dispatch = useAppDispatch();
 
     useEffect(() => {
         if (query.isSuccess) {
@@ -52,7 +55,7 @@ export const ChangePropertyDialog = <TFieldValues extends FieldValues>(
             className={'w-full'}
             submitButtonTextKey={'CONFIRM'}
             submitButtonClassName={'rounded-md bg-white/5 px-5 py-2 text-sm font-medium text-white hover:bg-white/10'}
-            error={query.error?.data}
+            validationResponse={query.error?.validationResponse}
             initialValues={initialValues}
             disabled={query.isLoading}
             onCancel={onCancelRequest}

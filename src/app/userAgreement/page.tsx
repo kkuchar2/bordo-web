@@ -1,4 +1,4 @@
-import UserAgreementsPage from '@/pages/UserAgreementsPage/UserAgreementsPage';
+import UserAgreementsPage from '@/page/UserAgreementsPage/UserAgreementsPage';
 
 export default function UserAgreement() {
     return <UserAgreementsPage/>;

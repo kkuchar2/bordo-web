@@ -1,10 +1,12 @@
-import ResetPasswordPage from '@/pages/ResetPasswordPage/ResetPasswordPage';
+import { use } from 'react';
 
-export default function ResetPassword({ params }: {
-    params: {
-        token: string,
-    }
-}) {
-    const { token } = params;
+import ResetPasswordPage from '@/page/ResetPasswordPage/ResetPasswordPage';
+
+type ResetPasswordProps = Promise<{
+    token: string;
+}>
+
+export default function ResetPassword(props: { params: ResetPasswordProps }) {
+    const { token } = use(props.params);
     return <ResetPasswordPage token={token}/>;
 }

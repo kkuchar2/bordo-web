@@ -1,10 +1,12 @@
-import ConfirmAccountPage from '@/pages/ConfirmAccountPage/ConfirmAccountPage';
+import { use } from 'react';
 
-export default function VerifyEmail({ params }: {
-    params: {
-        token: string,
-    }
-}) {
-    const { token } = params;
+import ConfirmAccountPage from '@/page/ConfirmAccountPage/ConfirmAccountPage';
+
+type VerifyEmailProps = Promise<{
+    token: string;
+}>
+
+export default function VerifyEmail(props: { params: VerifyEmailProps }) {
+    const { token } = use(props.params);
     return <ConfirmAccountPage token={token}/>;
 }

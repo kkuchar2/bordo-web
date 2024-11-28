@@ -5,7 +5,7 @@ export interface UserAuth {
 
 export interface EmailAddress {
     email: string;
-    verified: boolean;
+    // verified: boolean;
 }
 
 export interface Friend {
@@ -35,6 +35,7 @@ export interface UserInfo {
 export interface NewUserInfo {
     email: string,
     username: string
+    profile: UserProfile,
 }
 
 export type User = UserAuth & UserInfo;
@@ -49,4 +50,8 @@ export type SignedUrl = {
 export type SignedAvatarUploadInfo = {
     signed_url: SignedUrl;
     file_path: string;
+}
+
+export type SignAvatarRequestData = {
+    file_extension: string;
 }

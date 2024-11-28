@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { IGif } from '@giphy/js-types';
 import axios from 'axios';
+import { Area } from 'react-easy-crop/types';
 import { useTranslation } from 'react-i18next';
 
 import { ChangeAvatarModeSelector } from './ChangeAvatarModeSelector/ChangeAvatarModeSelector';
@@ -22,43 +23,43 @@ const FILE_SIZE_LIMIT_BYTES = 5 * 1024 * 1024;
 type ChangeAvatarMode = 'upload' | 'gif' | null;
 
 export const ChangeAvatarDialog = (props: DialogProps) => {
+
     const { t } = useTranslation();
 
-    const [file, setFile] = useState(null);
+    const [file, setFile] = useState<File | null>(null);
     const [mode, setMode] = useState<ChangeAvatarMode>(null);
-    const [image, setImage] = useState(null);
+    const [image, setImage] = useState<string | null>(null);
     const [extension, setExtension] = useState('.png');
 
-    const [croppedArea, setCroppedArea] = useState(null);
+    const [croppedArea, setCroppedArea] = useState<Area | null>(null);
 
     const dispatch = useAppDispatch();
 
     const changeAvatarQuery = changeAvatar();
 
-    const requestSignedUrlQuery = signAvatarUploadUrl()({
-        onSuccess: (data: SignedAvatarUploadInfo) => {
-            const { signed_url, file_path } = data;
+    const requestSignedUrlQuery = signAvatarUploadUrl()({}, (data: SignedAvatarUploadInfo) => {
 
-            if (!signed_url) {
-                return;
-            }
+        const { signed_url, file_path } = data;
 
-            if (mode === 'upload') {
-                generateCroppedImageFile(image, croppedArea)
-                    .then((blob) => {
-                        console.log('Blob generated: ', blob);
-                        uploadToStaticStorage(blob, signed_url, file_path)
-                            .then(() => {
-                                console.log('File uploaded successfully');
-                            })
-                            .catch((error) => {
-                                console.error('Error uploading file: ', error);
-                            });
-                    })
-                    .catch((error) => {
-                        console.error('Error generating blob: ', error);
-                    });
-            }
+        if (!signed_url) {
+            return;
+        }
+
+        if (mode === 'upload') {
+            generateCroppedImageFile(image, croppedArea)
+                .then((blob) => {
+                    console.log('Blob generated: ', blob);
+                    uploadToStaticStorage(blob, signed_url, file_path)
+                        .then(() => {
+                            console.log('File uploaded successfully');
+                        })
+                        .catch((error) => {
+                            console.error('Error uploading file: ', error);
+                        });
+                })
+                .catch((error) => {
+                    console.error('Error generating blob: ', error);
+                });
         }
     });
 
@@ -90,7 +91,7 @@ export const ChangeAvatarDialog = (props: DialogProps) => {
 
     const onBack = useCallback(() => {
         setMode(null);
-        dispatch(changeDialog('CHANGE_AVATAR', 400, false, null));
+        dispatch(changeDialog('CHANGE_AVATAR', 400, false));
     }, []);
 
     useEffect(() => {
@@ -111,16 +112,16 @@ export const ChangeAvatarDialog = (props: DialogProps) => {
             return <GIFSelect
                 giphyFetch={giphyFetch}
                 onGifSelected={onGifSelected}
-                pending={changeAvatarQuery.isLoading}/>;
+                pending={changeAvatarQuery.isPending}/>;
         }
-    }, [mode, image, onGifSelected, changeAvatarQuery.isLoading]);
+    }, [mode, image, onGifSelected, changeAvatarQuery.isPending]);
 
     const onAnimatedAvatarSelect = useCallback(() => {
         setMode('gif');
         dispatch(changeDialog('GIF_SELECT_TITLE', 500, true, onBack));
     }, [onBack]);
 
-    const onFileSelected = useCallback((e) => {
+    const onFileSelected = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
         const files = e.target.files;
 
         if (files && files.length > 0) {
@@ -133,6 +134,7 @@ export const ChangeAvatarDialog = (props: DialogProps) => {
 
             if (ext !== '.gif') {
                 reader.readAsDataURL(file);
+                // @ts-ignore TODO: fix this
                 reader.addEventListener('load', () => setImage(reader.result));
             }
         }
@@ -145,7 +147,7 @@ export const ChangeAvatarDialog = (props: DialogProps) => {
     }, []);
 
     const onConfirmClick = useCallback(() => {
-        if (extension === '.gif') {
+        if (extension === '.gif' && file) {
             const blob = file.slice(0, file.size, 'image/gif');
 
             // Validate size on client side
@@ -193,6 +195,6 @@ export const ChangeAvatarDialog = (props: DialogProps) => {
 
         {gifSearchOrCropContainer}
         {renderButtons}
-        <DelayedTransition pending={changeAvatarQuery.isLoading}/>
+        <DelayedTransition pending={changeAvatarQuery.isPending}/>
     </div>;
 };

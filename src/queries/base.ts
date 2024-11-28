@@ -122,10 +122,12 @@ export const postQueryInternal = <TResponse = unknown, TError = unknown, TVariab
         mutationKey: MutationKey,
         route: string,
         axiosConfigProvider: () => AxiosRequestConfig,
-        options?: UseMutationOptions<TResponse, TError, TVariables>
+        options?: UseMutationOptions<TResponse, TError, TVariables>,
+        onSuccess?: (data: TResponse) => void
     ) => {
     return useMutation<TResponse, TError, TVariables>({
         mutationKey: mutationKey,
+        onSuccess: onSuccess,
         mutationFn: async (data): Promise<TResponse> => {
             try {
                 return (await client.post<TResponse>(route, data, axiosConfigProvider())).data;

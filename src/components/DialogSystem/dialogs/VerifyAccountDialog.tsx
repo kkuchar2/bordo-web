@@ -7,7 +7,7 @@ import { resendRegistrationEmail } from '@/queries/account';
 import { DialogProps } from '@/state/reducers/dialog/dialogSlice.types';
 
 export interface VerifyAccountDialogProps {
-    usernameOrEmail: string;
+    email: string;
 }
 
 export const VerifyAccountDialog = (props: DialogProps<VerifyAccountDialogProps>) => {
@@ -20,23 +20,23 @@ export const VerifyAccountDialog = (props: DialogProps<VerifyAccountDialogProps>
         return null;
     }
 
-    const { usernameOrEmail } = data;
+    const { email } = data;
 
     const query = resendRegistrationEmail();
 
     const onResendEmailClick = useCallback(() => {
-        if (usernameOrEmail) {
-            query.mutate({ username_or_email: usernameOrEmail });
+        if (email) {
+            query.mutate({ email: email });
         }
-    }, [usernameOrEmail]);
+    }, [email]);
 
     return <div className={'flex w-full flex-col items-center justify-end gap-[20px] p-[10px]'}>
         <button
             className={'rounded-full bg-white/5 px-5 py-2 hover:bg-white/10'}
-            disabled={query.isLoading}
+            disabled={query.isPending}
             onClick={onResendEmailClick}>
             {t('RESEND_VERIFICATION_EMAIL')}
         </button>
-        <DelayedTransition pending={query.isLoading}/>
+        <DelayedTransition pending={query.isPending}/>
     </div>;
 };

@@ -7,7 +7,7 @@ import { NavLink } from '@/components/NavLink/NavLink';
 const UserAgreementsPage = () => {
     const { t } = useTranslation();
 
-    return <div className={'grid h-full w-full place-items-center'}>
+    return <div className={'grid size-full place-items-center'}>
         <div className={'flex flex-col items-center gap-[20px] p-[20px]'}>
             <h1 className={'text-4xl'}>
                 {'User Agreement'}

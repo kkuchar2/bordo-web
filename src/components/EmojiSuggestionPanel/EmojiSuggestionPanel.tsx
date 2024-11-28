@@ -64,7 +64,7 @@ export const EmojiSuggestionPanel = (props: EmojiSuggestionPanelProps) => {
         };
     }, [focusedIndex, availableEmojis, onClose, onSelect]);
 
-    return <div className={'absolute bottom-full left-0 z-[1] box-border w-[75%] max-w-[300px] bg-[#1e1e1e]'}>
+    return <div className={'absolute bottom-full left-0 z-[1] box-border w-3/4 max-w-[300px] bg-[#1e1e1e]'}>
         {availableEmojis.map((emoji, index) => {
             return <div key={index}
                 className={'h-[35px] box-border flex items-center justify-start gap-[10px] px-3 hover:bg-neutral-800 hover:cursor-pointer hover:text-white '

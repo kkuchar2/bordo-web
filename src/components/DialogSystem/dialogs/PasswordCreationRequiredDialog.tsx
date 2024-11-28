@@ -7,22 +7,27 @@ import { resetPasswordForm } from '@/components/Forms/formConfig';
 import { CreateNewPasswordFormArgs } from '@/components/Forms/formConfig.types';
 import { createNewPassword } from '@/queries/account';
 import { closeDialog, setCloseable } from '@/state/reducers/dialog/dialogSlice';
-import { BaseDialogProps, DialogProps } from '@/state/reducers/dialog/dialogSlice.types';
+import { DialogProps } from '@/state/reducers/dialog/dialogSlice.types';
+import { useAppDispatch } from '@/state/store';
 
-export const PasswordCreationRequiredDialog = (props: DialogProps & BaseDialogProps) => {
+export const PasswordCreationRequiredDialog = (props: DialogProps) => {
 
-    const { dialog, dispatch } = props;
+    const { dialog  } = props;
+
     const { onCancel } = dialog;
-    const { isLoading, error, isError, data, isSuccess, mutate } = createNewPassword();
+
+    const createNewPasswordQuery = createNewPassword();
+
+    const dispatch = useAppDispatch();
 
     useEffect(() => {
-        if (isSuccess) {
+        if (createNewPasswordQuery.isSuccess) {
             showDialogAfterFirstPasswordSetupRequest();
         }
-        else if (isError) {
+        else if (createNewPasswordQuery.isError) {
             dispatch(closeDialog());
         }
-    }, [isSuccess]);
+    }, [createNewPasswordQuery]);
 
     const onCancelRequest = useCallback(() => {
         if (onCancel) {
@@ -33,9 +38,9 @@ export const PasswordCreationRequiredDialog = (props: DialogProps & BaseDialogPr
         }
     }, [onCancel]);
 
-    const onSubmit = useCallback(() => {
+    const onSubmit = useCallback(async (formData: CreateNewPasswordFormArgs) => {
         dispatch(setCloseable(false));
-        mutate({});
+        createNewPasswordQuery.mutate(formData);
     }, []);
 
     return <div className={'flex w-full flex-col gap-3'}>
@@ -43,13 +48,13 @@ export const PasswordCreationRequiredDialog = (props: DialogProps & BaseDialogPr
             config={resetPasswordForm}
             submitButtonTextKey={'SET_NEW_PASSWORD'}
             useCancelButton={false}
-            disabled={isLoading}
+            disabled={createNewPasswordQuery.isPending}
             onCancel={onCancelRequest}
             onSubmit={onSubmit}
             initialValues={{
                 new_password: '',
                 new_password_confirm: ''
             }}/>
-        <DelayedTransition pending={isLoading}/>
+        <DelayedTransition pending={createNewPasswordQuery.isPending}/>
     </div>;
 };

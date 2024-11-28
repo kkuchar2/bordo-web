@@ -28,7 +28,7 @@ export const Content = (props: ContentProps) => {
     return <Provider store={store}>
         <QueryClientProvider client={queryClient}>
             {process.env.NODE_ENV == 'development' &&
-                <ReactQueryDevtools initialIsOpen={false} position={'top-right'}/>}
+                <ReactQueryDevtools initialIsOpen={false} buttonPosition={'top-right'}/>}
             <ContentWithStore>
                 {props.children}
             </ContentWithStore>

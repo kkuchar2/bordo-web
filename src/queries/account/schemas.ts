@@ -1,11 +1,6 @@
 import { boolean, object, ObjectSchema, string } from 'yup';
 
-import { EmailAddress, Friend, GoogleAccountInfo, UserInfo, UserProfile } from './types';
-
-export const UserEmailSchema: ObjectSchema<EmailAddress> = object({
-    email: string().required(),
-    verified: boolean().required(),
-});
+import { Friend, GoogleAccountInfo, NewUserInfo, UserProfile } from './types';
 
 export const FriendSchema: ObjectSchema<Friend> = object({
     id: string().required(),
@@ -22,11 +17,8 @@ export const GoogleAccountInfoSchema: ObjectSchema<GoogleAccountInfo> = object({
     email: string().required()
 });
 
-export const UserInfoSchema: ObjectSchema<UserInfo> = object({
-    email: UserEmailSchema.required(),
+export const UserInfoSchema: ObjectSchema<NewUserInfo> = object({
+    email: string().required(),
     username: string().required(),
     profile: UserProfileSchema.required(),
-    role: string().optional(),
-    google_account: GoogleAccountInfoSchema.optional(),
-    has_usable_password: boolean().optional()
 });

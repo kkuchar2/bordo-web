@@ -1,4 +1,4 @@
-import ForgotPasswordPage from '@/pages/ForgotPasswordPage/ForgotPasswordPage';
+import ForgotPasswordPage from '@/page/ForgotPasswordPage/ForgotPasswordPage';
 
 export default function ForgotPassword() {
     return <ForgotPasswordPage/>;

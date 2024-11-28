@@ -22,7 +22,7 @@ export const ChangeAvatarModeSelector = (props: ChangeAvatarModeSelectorProps) =
     return <div className={'flex items-center justify-center gap-[20px]'}>
         <div className={'flex flex-col items-center justify-center gap-[20px]'}>
             <button onClick={openFileSelectionWindow}
-                className={'flex h-[150px] w-[150px] flex-col items-center justify-center gap-[20px] rounded-full'}>
+                className={'flex size-[150px] flex-col items-center justify-center gap-[20px] rounded-full'}>
                 <CloudArrowUpIcon width={40} color={'#bebebe'}/>
             </button>
             <input type={'file'} accept={'image/*'} ref={inputRef} onChange={onFileSelected} className={'hidden'}/>
@@ -33,7 +33,7 @@ export const ChangeAvatarModeSelector = (props: ChangeAvatarModeSelectorProps) =
 
         <div className={'flex flex-col items-center justify-center gap-[20px]'}>
             <button onClick={onAnimatedAvatarSelected}
-                className={'flex h-[150px] w-[150px] flex-col items-center justify-center gap-[20px] rounded-full'}>
+                className={'flex size-[150px] flex-col items-center justify-center gap-[20px] rounded-full'}>
 
                 <div className={styles.selectGifCircle}>
                     <Image

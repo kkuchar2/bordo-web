@@ -1,12 +1,22 @@
 import { authGetQuery, authPostQuery, authPutQuery, postQuery } from '../queries';
 
-import { SignedAvatarUploadInfo, User } from './types';
+import { NewUserInfo, SignAvatarRequestData, SignedAvatarUploadInfo } from './types';
 
 import {
     showEmailChangeConfirmationSentDialog,
     showRegistrationCompleteDialog
 } from '@/components/DialogSystem/readyDialogs';
-import { LoginFormArgs, RegistrationFormArgs } from '@/components/Forms/formConfig.types';
+import {
+    ChangeAvatarFormArgs,
+    CreateNewPasswordFormArgs,
+    CurrentPasswordArgs,
+    EmailArgs,
+    KeyData,
+    LoginFormArgs,
+    RegistrationFormArgs,
+    ResetPasswordRequestData,
+    TokenData
+} from '@/components/Forms/formConfig.types';
 import { showSuccessToast } from '@/components/Toast/readyToastNotifications';
 import { queryClient } from '@/config';
 import { QueryResponseError } from '@/queries/base';
@@ -45,7 +55,8 @@ export const changePassword = () => {
 };
 
 export const changeAvatar = () => {
-    return authPostQuery(['changeAvatar'], 'account/change-avatar')({
+    return authPostQuery<unknown, QueryResponseError, ChangeAvatarFormArgs>
+    (['changeAvatar'], 'account/change-avatar')({
         onSuccess: () => {
             invalidateUserQueries();
             store.dispatch(closeDialog());
@@ -53,12 +64,8 @@ export const changeAvatar = () => {
     });
 };
 
-type ForgotPasswordArgs = {
-    email: string;
-}
-
 export const forgotPassword = () => {
-    return authPostQuery<unknown, unknown, ForgotPasswordArgs>
+    return authPostQuery<unknown, QueryResponseError, EmailArgs>
     (['forgotPassword'], 'account/forgot-password')({});
 };
 
@@ -96,7 +103,8 @@ export const logout = () => {
 };
 
 export const deleteAccount = () => {
-    return authPostQuery(['deleteAccount'], 'account/delete-account')({
+    return authPostQuery <unknown, QueryResponseError, CurrentPasswordArgs>
+    (['deleteAccount'], 'account/delete-account')({
         onSuccess: () => {
             queryClient.setQueryData(['user'], null);
         }
@@ -128,15 +136,18 @@ export const googleConnect = () => {
 };
 
 export const createNewPassword = () => {
-    return authPostQuery(['createNewPassword'], 'account/create-new-password')({});
+    return authPostQuery<unknown, QueryResponseError, CreateNewPasswordFormArgs>
+    (['createNewPassword'], 'account/create-new-password')({});
 };
 
 export const verifyResetPasswordToken = () => {
-    return authPostQuery(['verifyResetPasswordToken'], 'account/verify-reset-password-token')({});
+    return authPostQuery<unknown, QueryResponseError, TokenData>
+    (['verifyResetPasswordToken'], 'account/verify-reset-password-token')({});
 };
 
 export const confirmAccount = () => {
-    return postQuery(['confirmAccount'], 'account/verify-email')({
+    return postQuery <unknown, QueryResponseError, KeyData>
+    (['confirmAccount'], 'account/verify-email')({
         onSuccess: () => {
             showSuccessToast('An email has been verified');
             invalidateUserQueries();
@@ -145,15 +156,18 @@ export const confirmAccount = () => {
 };
 
 export const resendRegistrationEmail = () => {
-    return authPostQuery(['resendRegistrationEmail'], 'account/resend-email')({});
+    return authPostQuery <unknown, QueryResponseError, EmailArgs>
+    (['resendRegistrationEmail'], 'account/resend-email')({});
 };
 
 export const resetPassword = () => {
-    return authPostQuery(['resetPassword'], 'account/reset-password')({});
+    return authPostQuery<unknown, QueryResponseError, ResetPasswordRequestData>
+    (['resetPassword'], 'account/reset-password')({});
 };
 
 export const googleDisconnect = () => {
-    return authPostQuery(['googleDisconnect'], 'account/google-disconnect')({
+    return authPostQuery<unknown, QueryResponseError, CurrentPasswordArgs>
+    (['googleDisconnect'], 'account/google-disconnect')({
         onSuccess: () => {
             store.dispatch(closeDialog());
             invalidateUserQueries();
@@ -162,9 +176,10 @@ export const googleDisconnect = () => {
 };
 
 export const getUser = () => {
-    return authGetQuery<User>(['user'], '/user')();
+    return authGetQuery<NewUserInfo>(['user'], '/user')();
 };
 
 export const signAvatarUploadUrl = () => {
-    return authPostQuery<SignedAvatarUploadInfo>(['signedAvatarUploadInfo'], 'account/sign-avatar-upload-url');
+    return authPostQuery<SignedAvatarUploadInfo, QueryResponseError, SignAvatarRequestData>
+    (['signedAvatarUploadInfo'], 'account/sign-avatar-upload-url');
 };

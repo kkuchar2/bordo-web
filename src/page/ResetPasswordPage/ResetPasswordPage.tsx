@@ -3,7 +3,6 @@
 import { useCallback, useEffect } from 'react';
 
 import { redirect } from 'next/navigation';
-import { useTranslation } from 'react-i18next';
 
 import { DelayedTransition } from '@/components/DelayedTransition/DelayedTransition';
 import Form from '@/components/Forms/Form/Form';
@@ -17,8 +16,6 @@ type ResetPasswordPageProps = {
 }
 
 const ResetPasswordPage = (props: ResetPasswordPageProps) => {
-
-    const { t } = useTranslation();
 
     const { token } = props;
 
@@ -42,8 +39,8 @@ const ResetPasswordPage = (props: ResetPasswordPageProps) => {
         const tok = decodedToken.split(':')[1];
 
         resetPasswordQuery.mutate({
-            new_password1: new_password,
-            new_password2: new_password_confirm,
+            new_password,
+            new_password_confirm,
             uid: uid,
             token: tok
         });
@@ -62,12 +59,8 @@ const ResetPasswordPage = (props: ResetPasswordPageProps) => {
         verifyTokenQuery.mutate({ uid: uid, token: tok });
     }, [token]);
 
-    if (verifyTokenQuery.isLoading || verifyTokenQuery.isIdle) {
-        return <DelayedTransition pending={true}
-            position={'absolute'}
-            bottom={0}
-            left={0}
-            p={0} w={'100%'}/>;
+    if (verifyTokenQuery.isPending || verifyTokenQuery.isIdle) {
+        return <DelayedTransition pending={true} />;
     }
 
     if (verifyTokenQuery.isError) {
@@ -81,7 +74,7 @@ const ResetPasswordPage = (props: ResetPasswordPageProps) => {
             return redirect('/');
         }
 
-        return <div className={'grid h-full w-full place-items-center'}>
+        return <div className={'grid size-full place-items-center'}>
             <div className={'flex flex-col gap-[30px] bg-neutral-800 p-[20px]'}>
 
                 <div className={'text-xl font-semibold'}>
@@ -91,8 +84,8 @@ const ResetPasswordPage = (props: ResetPasswordPageProps) => {
                 <Form<ResetPasswordFormArgs>
                     config={resetPasswordForm}
                     submitButtonTextKey={'SET_NEW_PASSWORD'}
-                    error={resetPasswordQuery.error?.data}
-                    disabled={resetPasswordQuery.isLoading}
+                    validationResponse={resetPasswordQuery.error?.validationResponse}
+                    disabled={resetPasswordQuery.isPending}
                     useCancelButton={false}
                     onSubmit={onSubmit}/>
 
@@ -100,7 +93,7 @@ const ResetPasswordPage = (props: ResetPasswordPageProps) => {
                     {'Back to login'}
                 </NavLink>}
 
-                <DelayedTransition pending={resetPasswordQuery.isLoading}/>
+                <DelayedTransition pending={resetPasswordQuery.isPending}/>
             </div>
         </div>;
     }

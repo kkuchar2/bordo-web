@@ -45,7 +45,7 @@ const MainMenu = (props: MainMenuProps) => {
     const groups = useMemo(() => Object.keys(items)
         .map((k, idx) => {
             return <div className={'flex flex-col gap-2'} key={idx}>
-                {idx > 0 && <div className={'ml-2 h-[1px] w-[80%] bg-white/20'}/>}
+                {idx > 0 && <div className={'ml-2 h-px w-4/5 bg-white/20'}/>}
                 {renderGroup(items[k])}
             </div>;
         }), [currentViewId, t]);

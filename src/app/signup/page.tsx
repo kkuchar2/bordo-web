@@ -1,4 +1,4 @@
-import SignUpPage from '@/pages/SignUpPage/SignUpPage';
+import SignUpPage from '@/page/SignUpPage/SignUpPage';
 
 export default function SignUp() {
     return <SignUpPage/>;

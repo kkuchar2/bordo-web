@@ -13,7 +13,7 @@ type ProfileAvatarProps = {
 export const ProfileAvatar = ({ width = 150, height = 150, fill = false }: ProfileAvatarProps) => {
     const { data: user } = getUser();
 
-    if (!user || !user.email || !user.email.email) {
+    if (!user || !user.email) {
         return <DefaultPlaceholder width={width} height={height}/>;
     }
 
@@ -24,7 +24,7 @@ export const ProfileAvatar = ({ width = 150, height = 150, fill = false }: Profi
     if (!src) {
         return (
             <LetterPlaceHolder
-                letter={email.email[0].toUpperCase()}
+                letter={email[0].toUpperCase()}
                 width={width}
                 height={height}
             />

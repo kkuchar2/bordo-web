@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { DelayedTransition } from '@/components/DelayedTransition/DelayedTransition';
 import Form from '@/components/Forms/Form/Form';
 import { deleteAccountForm } from '@/components/Forms/formConfig';
-import { DeleteAccountFormArgs } from '@/components/Forms/formConfig.types';
+import { CurrentPasswordArgs } from '@/components/Forms/formConfig.types';
 import { googleDisconnect } from '@/queries/account';
 import { closeDialog } from '@/state/reducers/dialog/dialogSlice';
 import { useAppDispatch } from '@/state/store';
@@ -16,10 +16,10 @@ export const DisconnectGoogleDialog = () => {
 
     const dispatch = useAppDispatch();
 
-    const { isLoading, error, mutate } = googleDisconnect();
+    const googleDisconnectQuery = googleDisconnect();
 
     const onSubmit = useCallback((formData: any) => {
-        mutate({ ...formData });
+        googleDisconnectQuery.mutate({ ...formData });
     }, []);
 
     const onCancelRequest = useCallback(() => {
@@ -33,14 +33,14 @@ export const DisconnectGoogleDialog = () => {
             </div>
         </div>
 
-        <Form<DeleteAccountFormArgs>
+        <Form<CurrentPasswordArgs>
             config={deleteAccountForm}
-            error={error?.data}
+            validationResponse={googleDisconnectQuery?.error?.validationResponse}
             submitButtonTextKey={'DISCONNECT_ACCOUNT'}
             submitButtonClassName={'rounded-md bg-white/5 px-5 py-2 text-sm font-medium text-white-50 hover:bg-white/10'}
-            disabled={isLoading}
+            disabled={googleDisconnectQuery.isPending}
             onCancel={onCancelRequest}
             onSubmit={onSubmit}/>
-        <DelayedTransition pending={isLoading}/>
+        <DelayedTransition pending={googleDisconnectQuery.isPending}/>
     </div>;
 };

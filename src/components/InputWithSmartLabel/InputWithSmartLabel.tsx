@@ -24,7 +24,7 @@ type InputWithSmartLabelProps<TFieldValues extends FieldValues> = {
 }
 
 export const InputWithSmartLabel = <TFieldValues extends FieldValues>
-(props: InputWithSmartLabelProps<TFieldValues>) => {
+    (props: InputWithSmartLabelProps<TFieldValues>) => {
 
     const {
         id,

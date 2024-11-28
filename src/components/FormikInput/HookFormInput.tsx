@@ -1,13 +1,7 @@
 import React, { ReactElement } from 'react';
 
 import { ErrorMessage } from '@hookform/error-message';
-import {
-    ControllerFieldState,
-    ControllerRenderProps,
-    FieldValues,
-    Path,
-    UseFormStateReturn
-} from 'react-hook-form';
+import { ControllerFieldState, ControllerRenderProps, FieldValues, Path, UseFormStateReturn } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { FieldErrorsComponent } from '@/components/FormikInput/FieldErrorsComponent';
@@ -22,7 +16,7 @@ export type HookFormInputProps<TFieldValues extends FieldValues> = FieldProps<TF
 }
 
 export const HookFormInput = <TFieldValues extends FieldValues>
-(props: HookFormInputProps<TFieldValues>): ReactElement => {
+    (props: HookFormInputProps<TFieldValues>): ReactElement => {
 
     const {
         field,
