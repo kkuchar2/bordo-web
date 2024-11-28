@@ -1,44 +1,25 @@
 import React, { useCallback } from 'react';
 
-import { getAuth, signOut } from '@firebase/auth';
 import { useTranslation } from 'react-i18next';
 
 import { ProfileAvatar } from '@/components/ProfileAvatar/ProfileAvatar';
-import { isFirebaseAuthEnabled, queryClient } from '@/config';
-import { initializeFirebase } from '@/firebase/firebaseApp';
 import { logout } from '@/queries/account';
-import { UserInfo } from '@/queries/account/types';
+import { NewUserInfo } from '@/queries/account/types';
 
 type UserBadgeProps = {
-    user: UserInfo;
+    user: NewUserInfo;
 }
 
 export const UserBadge = (props: UserBadgeProps) => {
 
     const { user } = props;
 
-    const { mutate: performLogout } = logout();
+    const logoutQuery = logout();
 
     const { t } = useTranslation();
 
-    const firebaseAuthEnabled = isFirebaseAuthEnabled();
-
-    const app = initializeFirebase();
-    const auth = getAuth(app);
-
-    if (!user) {
-        return null;
-    }
-
     const onLogoutButtonClick = useCallback(async () => {
-        if (firebaseAuthEnabled) {
-            await signOut(auth);
-            localStorage.removeItem('firebase_token');
-            queryClient.setQueryData(['user'], null);
-        }
-        else {
-            performLogout({});
-        }
+        logoutQuery.mutate();
     }, []);
 
     return <div className={'flex w-full gap-4 rounded-md p-4'}>
@@ -48,7 +29,7 @@ export const UserBadge = (props: UserBadgeProps) => {
                 {user.username}
             </div>
             <div className={'text-[12px] text-white/80'}>
-                {user.email.email}
+                {user.email}
             </div>
             <div className={'flex justify-end pt-2'}>
                 <button

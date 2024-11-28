@@ -2,11 +2,9 @@
 
 import { FC, useCallback } from 'react';
 
-import { getAuth } from '@firebase/auth';
 import { KeyIcon } from '@heroicons/react/24/solid';
 import { useTranslation } from 'react-i18next';
 
-import { GoogleAccountConnection } from '@/components/ConnectedAccount/GoogleAccountConnection';
 import {
     showChangeEmailDialog,
     showChangePasswordDialog,
@@ -16,40 +14,28 @@ import {
 import { EditableProfilePictureProperty } from '@/components/EditableProperties/EditableProfilePictureProperty';
 import EditableProperty from '@/components/EditableProperties/EditableProperty';
 import { SettingsSection } from '@/components/Settings/SettingsSection';
-import { TextAreaWithEmoji } from '@/components/TextAreaWithEmoji/TextAreaWithEmoji';
 import { queryClient } from '@/config';
-import { initializeFirebase } from '@/firebase/firebaseApp';
 import WithAuth from '@/hoc/WithAuth';
-import { changeAbout, getUser } from '@/queries/account';
+import { getUser } from '@/queries/account';
 import { User } from '@/queries/account/types';
 
 const AccountPage = () => {
 
     const { t } = useTranslation();
 
-    const { isLoading: isAboutSaving, mutate } = changeAbout();
-
     const hasUsablePassword = queryClient.getQueryData<User>(['user'])?.has_usable_password;
 
     const { data: user } = getUser();
-
-    const app = initializeFirebase();
-    const auth = getAuth(app);
-    const firebaseUser = auth.currentUser;
 
     const onDeleteAccountAction = useCallback(() => {
         showDeleteAccountDialog();
     }, [user]);
 
-    const onAboutSave = useCallback((value: string) => {
-        mutate({ about: value });
-    }, []);
-
     if (user == null) {
         return;
     }
 
-    const { username, email, profile, google_account } = user;
+    const { username, email } = user;
 
     return <div className={'flex h-full w-[800px] flex-col items-stretch gap-[30px] px-[50px]'}>
         <h1 className={'mt-[50px] text-3xl font-semibold tracking-tighter'}>
@@ -64,7 +50,7 @@ const AccountPage = () => {
                 <EditableProperty
                     id={'username'}
                     name={t('USERNAME')}
-                    value={username || firebaseUser?.displayName}
+                    value={username}
                     canEdit={true}
                     passwordRequired={true}
                     showDialogFunc={showChangeUsernameDialog}/>
@@ -75,17 +61,6 @@ const AccountPage = () => {
                     canEdit={true}
                     passwordRequired={true}
                     showDialogFunc={showChangeEmailDialog}/>
-                <TextAreaWithEmoji
-                    id={'about'}
-                    name={t('ABOUT_ME')}
-                    value={profile.about}
-                    toolbarEnabled={true}
-                    emojiPickerEnabled={true}
-                    emojiPickerButtonTextSize={20}
-                    enableMaxCharacterCounter={true}
-                    isSaving={isAboutSaving}
-                    onSave={onAboutSave}
-                />
             </div>
         </div>
 
@@ -107,14 +82,9 @@ const AccountPage = () => {
                 />
             </SettingsSection>
 
-            <SettingsSection title={t('SOCIAL_ACCOUNTS')}>
-                <div className={'flex w-full items-center justify-end'}>
-                    <GoogleAccountConnection connection={google_account}/>
-                </div>
-            </SettingsSection>
-
             <SettingsSection title={t('ACCOUNT')}>
-                <button className={'rounded-md bg-white/5 px-5 py-2 text-sm font-medium text-red-500 hover:bg-white/10 hover:text-red-600'}
+                <button
+                    className={'rounded-md bg-white/5 px-5 py-2 text-sm font-medium text-red-500 hover:bg-white/10 hover:text-red-600'}
                     onClick={onDeleteAccountAction}>
                     {t('DELETE_ACCOUNT')}
                 </button>

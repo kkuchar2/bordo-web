@@ -13,7 +13,7 @@ export interface IDialogComponentProps {
 }
 
 export interface BaseDialogProps {
-    dispatch: AppDispatch
+    dispatch?: AppDispatch
 }
 
 export interface DialogProps<T = any> {

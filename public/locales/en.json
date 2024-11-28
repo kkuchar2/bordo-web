@@ -46,6 +46,8 @@
   "ENTER_NEW_USERNAME_INPUT_PLACEHOLDER": "Enter new username",
   "ENTER_PASSWORD": "Enter password",
   "ENTER_USERNAME_INPUT_PLACEHOLDER": "Username",
+  "ENTER_EMAIL_INPUT_PLACEHOLDER": "E-mail address",
+  "ENTER_VALID_EMAIL": "Please enter valid E-mail address",
   "ENTER_USERNAME_OR_EMAIL_INPUT_PLACEHOLDER": "E-mail address or username",
   "Enter a valid email address.": "Enter a valid email address.",
   "FIELD_REQUIRED": "This field is required",

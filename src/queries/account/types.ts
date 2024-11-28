@@ -32,6 +32,11 @@ export interface UserInfo {
     has_usable_password: boolean;
 }
 
+export interface NewUserInfo {
+    email: string,
+    username: string
+}
+
 export type User = UserAuth & UserInfo;
 
 export type SignedUrl = {

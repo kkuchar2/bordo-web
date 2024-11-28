@@ -5,7 +5,6 @@ import { FC } from 'react';
 import WithAuth from '@/hoc/WithAuth';
 
 const HomePage = () => {
-
     return <div>
         {'Home'}
     </div>;

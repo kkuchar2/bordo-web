@@ -17,6 +17,11 @@ export const DelayedTransition = (props: DelayedTransitionProps) => {
 
     useEffect(() => {
 
+        if (!pending) {
+            setShowProgress(false);
+            return;
+        }
+
         timerRef.current = window.setTimeout(() => {
             setShowProgress(true);
         }, delay);
@@ -26,7 +31,7 @@ export const DelayedTransition = (props: DelayedTransitionProps) => {
                 clearTimeout(timerRef.current);
             }
         };
-    }, []);
+    }, [pending]);
 
     if (!pending || !showProgress) {
         return null;

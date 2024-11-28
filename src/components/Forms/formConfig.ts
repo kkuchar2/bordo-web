@@ -22,7 +22,6 @@ import {
     NewPasswordSchema,
     RequiredCurrentPasswordSchema,
     RequiredStringSchema,
-    UsernameOrEmailSchema,
     UsernameSchema
 } from '@/schema/field_schema';
 
@@ -45,11 +44,11 @@ export type FormConfig<TFieldValues extends FieldValues = FieldValues> = {
 export const loginForm: FormConfig<LoginFormArgs> = {
     fields: [
         {
-            id: 'username_or_email',
-            name: 'username_or_email',
+            id: 'email',
+            name: 'email',
             type: 'text',
-            label: 'USERNAME_OR_EMAIL',
-            placeholder: 'ENTER_USERNAME_OR_EMAIL_INPUT_PLACEHOLDER',
+            label: 'EMAIL',
+            placeholder: 'ENTER_EMAIL_INPUT_PLACEHOLDER',
             required: true,
             autoComplete: 'on',
             component: HookFormInput<LoginFormArgs>
@@ -66,7 +65,7 @@ export const loginForm: FormConfig<LoginFormArgs> = {
         },
     ],
     validationSchema: object({
-        username_or_email: UsernameOrEmailSchema,
+        email: EmailSchema,
         password: RequiredStringSchema,
     })
 };

@@ -8,7 +8,7 @@ const defaultDialogState: DialogSliceState = {
     componentProps: {
         dialog: {
             title: 'Default dialog',
-            description: null,
+            description: '',
             closeable: true
         },
         data: null

@@ -7,7 +7,7 @@ export const NewPasswordSchema = string()
 
 export const ConfirmPasswordSchema = (reference: string) => string()
     .required('Password confirmation is required')
-    .oneOf([ref(reference), null], 'Passwords do not match');
+    .oneOf([ref(reference)], 'Passwords do not match');
 
 export const RequiredStringSchema = string()
     .required('FIELD_REQUIRED');
@@ -20,7 +20,7 @@ export const RequiredCurrentPasswordSchema = string()
     .required('CURRENT_PASSWORD_REQUIRED');
 
 export const EmailSchema = string()
-    .email('Please enter valid E-mail address')
+    .email('ENTER_VALID_EMAIL')
     .required('FIELD_REQUIRED');
 
 export const UsernameSchema = string()

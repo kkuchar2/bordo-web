@@ -14,30 +14,25 @@ import { forgotPassword } from '@/queries/account';
 
 const ForgotPassword = () => {
 
-    const {
-        isLoading: forgotPasswordPending,
-        error: forgotPasswordError,
-        isSuccess: forgotPasswordSuccess,
-        mutate: forgotPasswordMutate
-    } = forgotPassword();
+    const { isPending, error, isSuccess, mutate } = forgotPassword();
 
     const { t } = useTranslation();
 
     const requestPasswordReset = useCallback((formData: any) => {
         const { email } = formData;
-        forgotPasswordMutate({
+        mutate({
             email: email,
         });
     }, []);
 
     useEffect(() => {
-        if (forgotPasswordSuccess) {
+        if (isSuccess) {
             showDialogAfterPasswordResetRequest();
         }
 
-    }, [forgotPasswordSuccess, t]);
+    }, [isSuccess, t]);
 
-    return <div className={'grid h-full w-full place-items-center'}>
+    return <div className={'grid size-full place-items-center'}>
         <div className={'rounded-0 flex w-full flex-col gap-[40px] bg-[#2a2a2a] p-[40px] sm:w-[400px] sm:rounded-md'}>
             <div className={'flex flex-col gap-[20px]'}>
                 <Form<ForgotPasswordFormArgs>
@@ -45,8 +40,8 @@ const ForgotPassword = () => {
                     title={t('RESET_PASSWORD')}
                     description={t('RESET_PASSWORD_DESCRIPTION')}
                     submitButtonTextKey={'RESET_PASSWORD'}
-                    error={forgotPasswordError?.data}
-                    disabled={forgotPasswordPending}
+                    error={error?.data}
+                    disabled={isPending}
                     useCancelButton={false}
                     onSubmit={requestPasswordReset}
                 />
@@ -57,7 +52,7 @@ const ForgotPassword = () => {
                     </NavLink>
                 </div>
 
-                <DelayedTransition pending={forgotPasswordPending}/>
+                <DelayedTransition pending={isPending}/>
             </div>
         </div>
     </div>;

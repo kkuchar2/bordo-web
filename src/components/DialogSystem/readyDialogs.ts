@@ -74,8 +74,7 @@ export const showDialogAfterFirstPasswordSetupRequest = () => {
 export const showSentEmailDialog = <T = any>(args: SentEmailDialogArgs<T>) => {
     const { component, title, description, closeable, data } = args;
 
-    store.dispatch(
-        openDialog<T>({
+    store.dispatch(openDialog<T>({
             component: component,
             props: {
                 dialog: {
@@ -94,8 +93,7 @@ export const showSentEmailDialog = <T = any>(args: SentEmailDialogArgs<T>) => {
 };
 
 export const showVerifyAccountDialog = () => {
-    store.dispatch(
-        openDialog({
+    store.dispatch(openDialog({
             component: 'VerifyAccountDialog',
             props: {
                 dialog: {
@@ -114,8 +112,7 @@ export const showVerifyAccountDialog = () => {
 };
 
 export const showChangeAvatarDialog = () => {
-    store.dispatch(
-        openDialog({
+    store.dispatch(openDialog({
             component: 'ChangeAvatarDialog',
             props: {
                 dialog: {
@@ -130,8 +127,7 @@ export const showChangeAvatarDialog = () => {
 
 export const showConfirmEmailDialog = <T>(data: T) => {
 
-    store.dispatch(
-        openDialog({
+    store.dispatch(openDialog({
             component: 'SendConfirmationMailDialog',
             props: {
                 dialog: {
@@ -150,8 +146,7 @@ export const showChangeUsernameDialog = (args: OpenReadyDialogArgs) => {
         return;
     }
 
-    store.dispatch(
-        openDialog({
+    store.dispatch(openDialog({
             component: 'ChangePropertyDialog',
             props: {
                 dialog: {
@@ -176,8 +171,7 @@ export const showChangeEmailDialog = (args: OpenReadyDialogArgs) => {
         return;
     }
 
-    store.dispatch(
-        openDialog({
+    store.dispatch(openDialog({
             component: 'ChangePropertyDialog',
             props: {
                 dialog: {
@@ -206,8 +200,7 @@ export const showChangePasswordDialog = (args: OpenReadyDialogArgs) => {
         return;
     }
 
-    store.dispatch(
-        openDialog({
+    store.dispatch(openDialog({
             component: 'ChangePropertyDialog',
             props: {
                 dialog: {
@@ -229,8 +222,7 @@ export const showChangePasswordDialog = (args: OpenReadyDialogArgs) => {
 };
 
 export const showServiceUnavailableDialog = () => {
-    store.dispatch(
-        openDialog({
+    store.dispatch(openDialog({
             component: 'ServiceUnavailableDialog',
             props: {
                 dialog: {
@@ -249,8 +241,7 @@ export const showServiceUnavailableDialog = () => {
 };
 
 export const showPasswordCreationRequiredDialog = () => {
-    store.dispatch(
-        openDialog({
+    store.dispatch(openDialog({
             component: 'PasswordCreationRequiredDialog',
             props: {
                 data: {},
@@ -273,8 +264,7 @@ export const showDeleteAccountDialog = () => {
         return;
     }
 
-    store.dispatch(
-        openDialog({
+    store.dispatch(openDialog({
             component: 'DeleteAccountDialog',
             props: {
                 dialog: {
@@ -292,8 +282,7 @@ export const showDeleteAccountDialog = () => {
 };
 
 export const showCreateGroupDialog = () => {
-    store.dispatch(
-        openDialog({
+    store.dispatch(openDialog({
             component: 'CreateGroupDialog',
             props: {
                 dialog: {
@@ -315,8 +304,7 @@ export const showDisconnectGoogleDialog = () => {
         return;
     }
 
-    store.dispatch(
-        openDialog({
+    store.dispatch(openDialog({
             component: 'DisconnectGoogleDialog',
             props: {
                 dialog: {

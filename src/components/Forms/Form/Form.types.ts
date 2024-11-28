@@ -1,7 +1,7 @@
 import { FieldValues } from 'react-hook-form/dist/types';
 
 import { FormConfig } from '@/components/Forms/formConfig';
-import { QueryResponseErrorData } from '@/queries/base';
+import { ValidationResponse } from '@/queries/base';
 
 export interface FormProps<TFieldValues extends FieldValues = FieldValues> {
     config: FormConfig<TFieldValues>;
@@ -12,7 +12,7 @@ export interface FormProps<TFieldValues extends FieldValues = FieldValues> {
     onCancel?: any
     disabled?: boolean;
     excludeErrors?: string[];
-    error: QueryResponseErrorData | null | undefined;
+    validationResponse?: ValidationResponse;
     onChange?: (values: TFieldValues) => void;
     submitButtonTextKey?: string;
     submitButtonClassName?: string;

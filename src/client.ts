@@ -7,15 +7,11 @@ export const ApiClient = axios.create({
     baseURL: `${getEnvVar('NEXT_PUBLIC_BORDO_API_URL')}/`
 });
 
-export const ApiClientWithFirebase = axios.create({
-    baseURL: `${getEnvVar('NEXT_PUBLIC_BORDO_API_URL')}/`
-});
-
 export const refreshTokenFn = async () => {
     const response = await ApiClient.post('account/token-refresh', {}, {
         withCredentials: true,
         headers: {
-            'X-CSRFTOKEN': new Cookies().get('csrftoken'),
+            'X-XSRF-TOKEN': new Cookies().get('XSRF-TOKEN'),
         }
     });
     return response.data;
@@ -32,7 +28,8 @@ ApiClient.interceptors.response.use(
             return Promise.reject(error);
         }
 
-        if (error.response.status === 401 && !originalRequest._retry && originalRequest.url !== 'account/token-refresh') {
+        if (error.response.status === 401 && !originalRequest._retry
+            && originalRequest.url !== 'account/token-refresh' && originalRequest.url !== '/login') {
             await refreshTokenFn();
             originalRequest._retry = true;
             return ApiClient(originalRequest);

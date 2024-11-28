@@ -33,7 +33,7 @@ export const ContentWithStore = (props: ContentWithStoreProps) => {
     }, [user, location, currentViewId]);
 
     return <div className={'text-white'}>
-        <Toaster/>
+        <Toaster />
         <div className={'flex h-screen w-full'}>
             {sideBar}
             <div className={'h-full grow overflow-auto'}>

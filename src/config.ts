@@ -1,22 +1,13 @@
-// noinspection SpellCheckingInspection
-
 import { GiphyFetch } from '@giphy/js-fetch-api';
-import { QueryCache, QueryClient } from '@tanstack/react-query';
+import { MutationCache, QueryCache, QueryClient } from '@tanstack/react-query';
+import axios, { AxiosError } from 'axios';
 
 import { showErrorToast } from '@/components/Toast/readyToastNotifications';
+import { QueryResponseError } from '@/queries/base';
 
-export const environment : Record<string, string | undefined> = {
+export const environment: Record<string, string | undefined> = {
     'NEXT_PUBLIC_BORDO_API_URL': process.env.NEXT_PUBLIC_BORDO_API_URL,
-    'NEXT_PUBLIC_GIPHY_API_KEY': process.env.NEXT_PUBLIC_GIPHY_API_KEY,
-    'NEXT_PUBLIC_GOOGLE_CLIENT_ID': process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID,
-    'NEXT_PUBLIC_USE_FIREBASE_AUTH': process.env.NEXT_PUBLIC_USE_FIREBASE_AUTH || 'false',
-    'NEXT_PUBLIC_FIREBASE_API_KEY': process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
-    'NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN': process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
-    'NEXT_PUBLIC_FIREBASE_PROJECT_ID': process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
-    'NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET': process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
-    'NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID': process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
-    'NEXT_PUBLIC_FIREBASE_APP_ID': process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
-    'NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID': process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
+    'NEXT_PUBLIC_GIPHY_API_KEY': process.env.NEXT_PUBLIC_GIPHY_API_KEY
 };
 
 export const getEnvVar = (key: string): any => {
@@ -26,7 +17,7 @@ export const getEnvVar = (key: string): any => {
     return null;
 };
 
-export const missingEnvVars : string[] = [];
+export const missingEnvVars: string[] = [];
 
 for (const key in environment) {
     if (!environment[key]) {
@@ -46,29 +37,93 @@ export const giphyFetch = giphyKey ? new GiphyFetch(giphyKey) : null;
 
 export const SUPPORTED_LANGUAGES = ['en', 'pl', 'es', 'fr', 'de'];
 
-export const isFirebaseAuthEnabled = () => {
-    return process.env.NEXT_PUBLIC_USE_FIREBASE_AUTH === 'true';
-};
-
 export const queryClient = new QueryClient({
+    mutationCache: new MutationCache({
+        onError: (error: Error) => {
+            console.log('Global error handler:', error);
+
+            if (axios.isAxiosError(error)) {
+                const axiosError = error as AxiosError;
+
+                console.log('Detected Axios error code: ' + axiosError.code);
+                switch (axiosError.code) {
+                case 'ERR_FR_TOO_MANY_REDIRECTS':
+                    showErrorToast('Too many redirects');
+                    break;
+                case 'ERR_BAD_OPTION_VALUE':
+                    showErrorToast('Bad option value');
+                    break;
+                case 'ERR_BAD_OPTION':
+                    showErrorToast('Bad option');
+                    break;
+                case 'ERR_DEPRECATED':
+                    showErrorToast('Deprecated');
+                    break;
+                case 'ERR_BAD_RESPONSE':
+                    showErrorToast('Bad response');
+                    break;
+                case 'ERR_NOT_SUPPORT':
+                    showErrorToast('Not supported');
+                    break;
+                case 'ERR_INVALID_URL':
+                    showErrorToast('Invalid URL');
+                    break;
+                case 'ERR_CANCELED':
+                    showErrorToast('Canceled');
+                    break;
+                case 'ECONNABORTED':
+                    showErrorToast('Connection aborted');
+                    break;
+                case 'ETIMEDOUT':
+                    showErrorToast('Timed out');
+                    break;
+                default:
+                    showErrorToast('Error: ' + axiosError.message);
+                    break;
+                }
+                return;
+            }
+            else {
+                const queryResponseError = error as QueryResponseError;
+
+                if (!queryResponseError.validationResponse) {
+                    showErrorToast('Error: ' + queryResponseError.message);
+                }
+            }
+
+        },
+        onSuccess: (data) => {
+            console.log('Global success handler:', data);
+        },
+        onSettled: (data: unknown, error: Error | null) => {
+            console.log('Global settled handler:', { data, error });
+
+            if (axios.isAxiosError(error)) {
+                console.log('Axios error:', error.response?.data);
+            }
+        },
+        onMutate: (variables) => {
+            console.log('Global mutate handler:', variables);
+        },
+    }),
     queryCache: new QueryCache({
-        onSuccess: (query) => {
-            //console.log(`QueryCache Success [${query.queryKey}]`, query.data);
+        onSuccess: (data, query) => {
+            console.log(`QueryCache Success [${query.queryKey}]`, data);
         },
         onError: (error, query) => {
-            //console.log(`QueryCache Error[${query.queryKey}]`, error);
+            console.log(`QueryCache Error[${query.queryKey}]`, error);
 
-            // if 401:
-            if (error.status === 401) {
-                console.log('Error data: ' + error.data);
-            }
-
-            if (error.message === 'Network Error') {
-                showErrorToast('Error connecting to server');
-            }
-            else if (error.status === 500) {
-                showErrorToast('Server error');
-            }
+            // // if 401:
+            // if (error.status === 401) {
+            //     console.log('Error data: ' + error.data);
+            // }
+            //
+            // if (error.message === 'Network Error') {
+            //     showErrorToast('Error connecting to server');
+            // }
+            // else if (error.status === 500) {
+            //     showErrorToast('Server error');
+            // }
         }
     }),
     defaultOptions: {
@@ -77,8 +132,7 @@ export const queryClient = new QueryClient({
             refetchOnReconnect: true,
             refetchOnMount: true,
             retry: 0,
-            staleTime: 5 * 1000,
-            cacheTime: 120000
+            staleTime: 5 * 1000
         },
     }
 });

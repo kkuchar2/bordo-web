@@ -18,7 +18,8 @@ export const useI18n = () => {
                 },
                 saveMissing: false,
                 parseMissingKeyHandler: (key: string) => {
-                    return `NO_TRANSLATION__${key}`;
+                    // return `NO_TRANSLATION__${key}`;
+                    return key;
                 },
                 preload: SUPPORTED_LANGUAGES,
                 react: {

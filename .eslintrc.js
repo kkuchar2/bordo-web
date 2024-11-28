@@ -30,6 +30,7 @@ module.exports = {
         'plugin:tailwindcss/recommended'
     ],
     rules: {
+        'indent': ['error', 4],
         'no-multiple-empty-lines': ['error', { max: 1, maxBOF: 0, maxEOF: 0 }],
         'no-trailing-spaces': ['error', { skipBlankLines: false }],
         'comma-spacing': 'error',
@@ -49,7 +50,6 @@ module.exports = {
         'wrap-regex': 'error',
         'brace-style': [2, 'stroustrup', { allowSingleLine: true }],
         'tailwindcss/classnames-order': 'error',
-        '@typescript-eslint/indent': ['error'],
         'react/react-in-jsx-scope': 'off',
         'import/order': [
             'error',

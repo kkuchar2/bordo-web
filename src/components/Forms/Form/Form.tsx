@@ -14,7 +14,7 @@ import { useTranslation } from 'react-i18next';
 import { FormProps } from './Form.types';
 
 import useYupValidationResolver from '@/components/Forms/Form/useYupValidationResolver';
-import { getFormFieldErrors, getNonFieldErrors } from '@/components/Forms/util';
+import { getFieldValidationError, getNonFieldErrors } from '@/components/Forms/util';
 
 const Form = <TFieldValues extends FieldValues = FieldValues>(props: FormProps<TFieldValues>) => {
     const {
@@ -22,7 +22,7 @@ const Form = <TFieldValues extends FieldValues = FieldValues>(props: FormProps<T
         onSubmit,
         onCancel,
         config,
-        error,
+        validationResponse,
         disabled,
         title,
         excludeErrors,
@@ -37,7 +37,7 @@ const Form = <TFieldValues extends FieldValues = FieldValues>(props: FormProps<T
 
     const resolver = useYupValidationResolver<TFieldValues>(config.validationSchema);
 
-    const [additionalErrors, setAdditionalErrors] = useState(error);
+    const [internalValidationResponse, setInternalValidationResponse] = useState(validationResponse);
 
     const {
         control,
@@ -47,25 +47,33 @@ const Form = <TFieldValues extends FieldValues = FieldValues>(props: FormProps<T
             errors: formErrors,
         },
     } = useForm<TFieldValues>({
-        resolver: resolver,
+        resolver: undefined,
         criteriaMode: 'all',
     });
+
+    useEffect(() => {
+        console.log('render form');
+    }, []);
 
     const onFormSubmitted = useCallback((values: TFieldValues) => {
         onSubmit?.(values);
     }, [onSubmit]);
 
     useEffect(() => {
-        setAdditionalErrors(error);
-    }, [error]);
+        console.log('Maybe setting new validation response, disabled:', disabled);
+        if (!disabled) {
+            console.log('Setting new validation response');
+            setInternalValidationResponse(validationResponse);
+        }
+    }, [validationResponse, disabled]);
 
-    useEffect(() => {
-        const subscription = watch(() => {
-            // Remove additional errors when field value changes
-            setAdditionalErrors(undefined);
-        });
-        return () => subscription.unsubscribe();
-    }, [watch]);
+    // useEffect(() => {
+    //     const subscription = watch(() => {
+    //         // Remove additional errors when field value changes
+    //         setInternalValidationResponse(undefined);
+    //     });
+    //     return () => subscription.unsubscribe();
+    // }, [watch]);
 
     const renderFields = useMemo(() => {
         if (!config || !config.fields) {
@@ -96,26 +104,28 @@ const Form = <TFieldValues extends FieldValues = FieldValues>(props: FormProps<T
                                 field={field}
                                 fieldState={fieldState}
                                 formState={formState}
-                                additionalFieldErrors={getFormFieldErrors(additionalErrors, name)}
+                                additionalFieldErrors={getFieldValidationError(internalValidationResponse, name)}
                             />;
                         }}
                     />;
                 })
             }
         </div>;
-    }, [config, formErrors, disabled, initialValues, additionalErrors]);
+    }, [config, formErrors, disabled, initialValues, internalValidationResponse]);
 
     if (!config) {
         console.error('No config');
         return null;
     }
 
+    console.log('internalValidationResponse', internalValidationResponse);
+
     return <form onSubmit={handleSubmit(onFormSubmitted)}>
         <div className={[className, 'flex flex-col gap-[20px]'].join(' ')}>
             {title && <div className={'text-2xl font-semibold tracking-tight'}>{title}</div>}
             {description}
             {renderFields}
-            {getNonFieldErrors(additionalErrors)
+            {getNonFieldErrors(internalValidationResponse)
                 .filter((msg => msg != null && !excludeErrors?.includes(msg)))
                 .map((msg: string | null, idx: number) => {
                     return msg && <div className={'translate-y-[-20px] animate-fieldError text-[#ff4949]'} key={idx}>
